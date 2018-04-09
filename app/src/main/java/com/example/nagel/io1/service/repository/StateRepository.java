@@ -24,13 +24,13 @@ import javax.inject.Singleton;
 public class StateRepository {
     private Map<String,IoState> stateCache;
 
-    private final RepoDao repoDao;
+    private final StateDao stateDao;
 
     private MutableLiveData<List<IoState>> mTempListMutableLiveData;
 
     @Inject
-    public StateRepository(RepoDao repoDao) {
-        this.repoDao = repoDao;
+    public StateRepository(StateDao stateDao) {
+        this.stateDao = stateDao;
         //this.socketService = service;
         DataBus.getBus().register(this);
         //this.socketService.getStates();
@@ -68,7 +68,7 @@ public class StateRepository {
                     state = new IoState(key, null, null, data.get(key).toString());
                 }
                 stateCache.put(state.getId(),state);
-                repoDao.insert(new Repo(state.getId(),data.get(key).toString()));
+                //stateDao.insert(new State(state.getId(),data.get(key).toString()));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -103,7 +103,7 @@ public class StateRepository {
 
     public MutableLiveData<List<IoState>> getTempList(){
         updateTempList();
-        LiveData<List<Repo>> lst = repoDao.getAllRepos();
+        LiveData<List<State>> lst = stateDao.getAllStates();
         return mTempListMutableLiveData;
     }
 

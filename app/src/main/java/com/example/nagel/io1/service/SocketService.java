@@ -2,25 +2,14 @@ package com.example.nagel.io1.service;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.example.nagel.io1.service.model.IoState;
-import com.example.nagel.io1.service.repository.RepoDao;
 import com.squareup.otto.Subscribe;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
 
 import io.socket.client.Ack;
 import io.socket.client.IO;

@@ -5,13 +5,13 @@ import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 @Entity
-public class Repo {
+public class Object {
     @PrimaryKey
     @NonNull
     public final String id;
     public final String data;
 
-    public Repo(@NonNull String id, String data) {
+    public Object(@NonNull String id, String data) {
         this.id = id;
         this.data = data;
     }

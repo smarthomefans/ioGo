@@ -7,8 +7,9 @@ import android.content.Context;
 
 import com.example.nagel.io1.App;
 import com.example.nagel.io1.service.SocketService;
-import com.example.nagel.io1.service.repository.RepoDao;
-import com.example.nagel.io1.service.repository.RepoDatabase;
+import com.example.nagel.io1.service.repository.AppDatabase;
+import com.example.nagel.io1.service.repository.ObjectDao;
+import com.example.nagel.io1.service.repository.StateDao;
 import com.example.nagel.io1.service.repository.StateRepository;
 import com.example.nagel.io1.viewmodel.ListViewModel;
 import com.example.nagel.io1.viewmodel.ViewModelFactory;
@@ -37,8 +38,8 @@ public class AppModule {
 
     @Singleton
     @Provides
-    StateRepository provideStateRepository(RepoDao repoDao) {
-        return new StateRepository(repoDao);
+    StateRepository provideStateRepository(StateDao stateDao) {
+        return new StateRepository(stateDao);
     }
 
     @Provides
@@ -48,14 +49,21 @@ public class AppModule {
 
     @Singleton
     @Provides
-    RepoDatabase provideDb(App app) {
-        return Room.databaseBuilder(app, RepoDatabase.class,"repoDatabase.db").build();
+    AppDatabase provideDb(App app) {
+        return Room.databaseBuilder(app, AppDatabase.class,"appDatabase.db").build();
     }
 
     @Singleton
     @Provides
-    RepoDao provideRepoDao(RepoDatabase db) {
-        return db.getRepoDao();
+    StateDao provideStateDao(AppDatabase db) {
+        return db.getStateDao();
+    }
+
+
+    @Singleton
+    @Provides
+    ObjectDao provideObjectDao(AppDatabase db) {
+        return db.getObjectDao();
     }
 
     @Provides

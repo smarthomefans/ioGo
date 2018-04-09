@@ -11,17 +11,17 @@ import android.arch.persistence.room.Update;
 import java.util.List;
 
 @Dao
-public interface RepoDao {
+public interface ObjectDao {
 
-    @Query("SELECT * FROM repo")
-    LiveData<List<Repo>> getAllRepos();
+    @Query("SELECT * FROM object")
+    LiveData<List<Object>> getAllObjects();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Repo... repos);
+    void insert(Object... objects);
 
     @Update
-    void update(Repo... repos);
+    void update(Object... objects);
 
     @Delete
-    void delete(Repo... repos);
+    void delete(Object... objects);
 }
