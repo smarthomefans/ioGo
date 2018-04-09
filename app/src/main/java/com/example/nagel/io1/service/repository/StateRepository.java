@@ -2,6 +2,8 @@ package com.example.nagel.io1.service.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 
 import com.example.nagel.io1.service.DataBus;
 import com.example.nagel.io1.service.Events;
@@ -36,6 +38,22 @@ public class StateRepository {
         //this.socketService.getStates();
         mTempListMutableLiveData = new MutableLiveData<>();
         stateCache = new HashMap<>();
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<State> ls;
+                ls = stateDao.getAllStates();
+                if(ls != null){
+                    for (State state : ls) {
+                        stateCache.put(state.id, new IoState(state));
+                    }
+                    updateTempListFromDB();
+                }
+            }
+        });
+
+
     }
 
     //IoState state = stateCache.get(args[0].toString());
@@ -67,23 +85,39 @@ public class StateRepository {
                 }else {
                     state = new IoState(key, null, null, data.get(key).toString());
                 }
-                stateCache.put(state.getId(),state);
-                //stateDao.insert(new State(state.getId(),data.get(key).toString()));
+                //stateCache.put(state.getId(),state);
+                stateDao.insert(new State(state.getId(), state.getVal(), state.isAck(), state.getTs().getNanos(), state.getLc().getNanos(), state.getFrom(), state.getQ()));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        updateTempList();
+        updateTempListFromDB();
     }
 
-    private void updateTempList(){
+    private void updateTempListFromCache(){
         List<IoState> list = new ArrayList<>();
         for (Map.Entry<String, IoState> entry : stateCache.entrySet()) {
             if(entry.getKey().contains("temperature")){
                 list.add(entry.getValue());
             }
         }
+
+        mTempListMutableLiveData.postValue(list);
+    }
+
+    private void updateTempListFromDB(){
+        List<IoState> list = new ArrayList<>();
+        List<State> ls;
+        ls = stateDao.getAllStates();
+        if(ls != null){
+            for (State state : ls) {
+                if(state.id.contains("temperature")){
+                    list.add(new IoState(state));
+                }
+            }
+        }
+
         mTempListMutableLiveData.postValue(list);
     }
 
@@ -98,12 +132,11 @@ public class StateRepository {
         }
 
         stateCache.put(state.getId(), state);
-        updateTempList();
+        updateTempListFromCache();
     }
 
     public MutableLiveData<List<IoState>> getTempList(){
-        updateTempList();
-        LiveData<List<State>> lst = stateDao.getAllStates();
+        updateTempListFromCache();
         return mTempListMutableLiveData;
     }
 

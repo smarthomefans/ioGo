@@ -29,6 +29,7 @@ public class SocketService extends Service {
         DataBus.getBus().register(this);
 
         try {
+            //mSocket = IO.socket("http://192.168.1.33:8084/");
             mSocket = IO.socket("http://192.168.1.33:8084/");
             mSocket.on(Socket.EVENT_CONNECT, onConnect);
             mSocket.on("stateChange", onStateChange);

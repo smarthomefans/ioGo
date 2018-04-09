@@ -1,6 +1,7 @@
 package com.example.nagel.io1.view.ui;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import com.example.nagel.io1.R;
 import com.example.nagel.io1.service.DataBus;
 import com.example.nagel.io1.service.Events;
 import com.example.nagel.io1.service.SocketService;
+import com.example.nagel.io1.service.model.IoState;
 import com.example.nagel.io1.service.repository.StateRepository;
 import com.squareup.otto.Subscribe;
 
@@ -29,12 +31,19 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.android.AndroidInjection;
 
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.vi_switch) Switch wSwitch;
     @BindView(R.id.textState) TextView wTextView;
+    @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.fab_airplane) FloatingActionButton fab_airplane;
+    @BindView(R.id.fab_bike) FloatingActionButton fab_bike;
+    @BindView(R.id.fab_car) FloatingActionButton fab_car;
+
+    boolean isFABOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +58,71 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SocketService.class);
         startService(intent);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        /*fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if(!isFABOpen){
+                    showFABMenu();
+                }else{
+                    closeFABMenu();
+                }
             }
-        });
+        });*/
+    }
 
+    @OnClick(R.id.fab)
+    public void onClickFab() {
+        if(!isFABOpen){
+            showFABMenu();
+        }else{
+            closeFABMenu();
+        }
+    }
+
+    @OnClick(R.id.fab_airplane)
+    public void onClickFabAirplane() {
+        Toast.makeText(MainActivity.this,
+                "Airplane started", Toast.LENGTH_SHORT).show();
+        closeFABMenu();
+    }
+
+    @OnClick(R.id.fab_bike)
+    public void onClickFabBike() {
+        Toast.makeText(MainActivity.this,
+                "Bike started", Toast.LENGTH_SHORT).show();
+        closeFABMenu();
+    }
+
+    @OnClick(R.id.fab_car)
+    public void onClickFabCar() {
+        Toast.makeText(MainActivity.this,
+                "Car started", Toast.LENGTH_SHORT).show();
+        closeFABMenu();
+    }
+
+    private void showFABMenu(){
+        isFABOpen=true;
+        fab.setRotation(135);
+        fab_airplane.animate().translationY(-getResources().getDimension(R.dimen.standard_55));
+        fab_bike.animate().translationY(-getResources().getDimension(R.dimen.standard_105));
+        fab_car.animate().translationY(-getResources().getDimension(R.dimen.standard_155));
+    }
+
+    private void closeFABMenu(){
+        isFABOpen=false;
+        fab.setRotation(0);
+        fab_airplane.animate().translationY(0);
+        fab_bike.animate().translationY(0);
+        fab_car.animate().translationY(0);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!isFABOpen){
+            super.onBackPressed();
+        }else{
+            closeFABMenu();
+        }
     }
 
     @Override
@@ -72,7 +137,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Log.d("onStateChange", event.getId() + " => " + event.getData());
-                wTextView.setText(event.getId());
+                IoState state = new IoState(event.getId(), null, null, event.getData());
+                wTextView.setText(event.getId() + " => " + state.getVal());
                 if ("javascript.0.vi_switch".equals(event.getId())) {
                     JSONObject data = null;
                     try {

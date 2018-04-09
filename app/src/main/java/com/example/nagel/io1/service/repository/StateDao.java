@@ -14,7 +14,7 @@ import java.util.List;
 public interface StateDao {
 
     @Query("SELECT * FROM state")
-    LiveData<List<State>> getAllStates();
+    List<State> getAllStates();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(State... states);

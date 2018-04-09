@@ -21,8 +21,35 @@
     </android.support.design.widget.AppBarLayout>
 
     <include
-        layout="@layout/content_main"
-        android:layout_height="match_parent" />
+        layout="@layout/content_main" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_bike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/standard_23"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/bike" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_airplane"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/standard_23"
+        android:rotation="90"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/airplane" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_car"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/standard_23"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/car" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -30,6 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:fabSize="normal"
+        app:srcCompat="@drawable/plus" />
 
 </android.support.design.widget.CoordinatorLayout>

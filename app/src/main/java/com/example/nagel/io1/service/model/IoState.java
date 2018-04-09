@@ -1,5 +1,7 @@
 package com.example.nagel.io1.service.model;
 
+import com.example.nagel.io1.service.repository.State;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,6 +25,16 @@ public class IoState {
         this.name = name;
         this.role = role;
         this.setData(data);
+    }
+
+    public IoState(State state){
+        this.id = state.id;
+        this.val = state.val;
+        this.ack = state.ack;
+        this.ts = new Timestamp(state.ts);
+        this.lc = new Timestamp(state.lc);
+        this.from  =state.from;
+        this.q = state.q;
     }
 
     public void setData(String data) {
