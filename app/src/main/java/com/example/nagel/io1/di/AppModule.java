@@ -1,10 +1,14 @@
 package com.example.nagel.io1.di;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 
 import com.example.nagel.io1.App;
 import com.example.nagel.io1.service.SocketService;
 import com.example.nagel.io1.service.repository.StateRepository;
+import com.example.nagel.io1.viewmodel.ListViewModel;
+import com.example.nagel.io1.viewmodel.ViewModelFactory;
 
 import javax.inject.Singleton;
 
@@ -28,9 +32,21 @@ public class AppModule {
         return new SocketService();
     }
 
-    @Singleton
     @Provides
     StateRepository provideStateRepository() {
         return new StateRepository();
     }
+
+    @Provides
+    ViewModel provideListViewModel(ListViewModel viewModel) {
+        return viewModel;
+    }
+
+    @Provides
+    ViewModelProvider.Factory provideListViewModelFactory(
+            ViewModelFactory factory
+    ) {
+        return factory;
+    }
+
 }

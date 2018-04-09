@@ -21,6 +21,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+@Singleton
 public class StateRepository {
     private Map<String,IoState> stateCache;
 
@@ -29,24 +30,15 @@ public class StateRepository {
 
     private MutableLiveData<List<IoState>> mTempListMutableLiveData;
 
-    static StateRepository stateRepository;
-
+    @Inject
     public StateRepository() {
         //this.socketService = service;
         DataBus.getBus().register(this);
         //this.socketService.getStates();
         mTempListMutableLiveData = new MutableLiveData<>();
         stateCache = new HashMap<>();
-
-        //socketService.getStates();
     }
 
-    public static StateRepository getInstance(){
-        if(stateRepository == null){
-            stateRepository = new StateRepository();
-        }
-        return stateRepository;
-    }
     //IoState state = stateCache.get(args[0].toString());
      //       state.setData(args[1].toString());
       //      stateCache.put(state.getId(), state);

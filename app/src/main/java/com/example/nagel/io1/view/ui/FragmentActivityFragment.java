@@ -2,7 +2,9 @@ package com.example.nagel.io1.view.ui;
 
 
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.nagel.io1.R;
+import com.example.nagel.io1.di.Injectable;
 import com.example.nagel.io1.service.model.IoState;
 import com.example.nagel.io1.view.adapter.TemperatureListAdapter;
 import com.example.nagel.io1.viewmodel.ListViewModel;
@@ -20,19 +23,24 @@ import com.example.nagel.io1.viewmodel.ListViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjector;
+import dagger.android.support.AndroidSupportInjection;
+
 /**
  * A placeholder fragment containing a simple view.
  */
-public class FragmentActivityFragment extends Fragment {
+public class FragmentActivityFragment extends Fragment implements Injectable{
 
     private RecyclerView mRecyclerView;
     private TemperatureListAdapter mAdapter;
     private ListViewModel mViewModel;
 
-    public ArrayList<IoState> list = new ArrayList<>();
+    @Inject
+    ViewModelProvider.Factory mViewModelFactory;
 
-    public FragmentActivityFragment() {
-    }
+    public ArrayList<IoState> list = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,7 +61,7 @@ public class FragmentActivityFragment extends Fragment {
             }
         });
 
-        mViewModel = ViewModelProviders.of(this).get(ListViewModel.class);
+        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(ListViewModel.class);
 
         mViewModel.getTempList()
                 .observe(this, new Observer<List<IoState>>() {
@@ -66,5 +74,11 @@ public class FragmentActivityFragment extends Fragment {
                 });
 
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
     }
 }

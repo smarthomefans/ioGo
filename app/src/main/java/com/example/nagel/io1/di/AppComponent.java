@@ -1,7 +1,6 @@
 package com.example.nagel.io1.di;
 
 import com.example.nagel.io1.App;
-import com.example.nagel.io1.view.ui.MainActivity;
 
 import javax.inject.Singleton;
 
@@ -11,7 +10,6 @@ import dagger.android.support.AndroidSupportInjectionModule;
 
 @Singleton
 @Component(modules = {
-        /* Use AndroidInjectionModule.class if you're not using support library */
         AndroidSupportInjectionModule.class,
         AppModule.class,
         BuildersModule.class})
@@ -23,6 +21,4 @@ public interface AppComponent {
         AppComponent build();
     }
     void inject(App app);
-
-    void inject(MainActivity mainActivity);
 }

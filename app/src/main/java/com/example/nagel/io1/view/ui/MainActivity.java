@@ -15,10 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nagel.io1.App;
+import com.example.nagel.io1.R;
 import com.example.nagel.io1.service.DataBus;
 import com.example.nagel.io1.service.Events;
 import com.example.nagel.io1.service.SocketService;
-import com.example.nagel.io1.R;
 import com.example.nagel.io1.service.repository.StateRepository;
 import com.squareup.otto.Subscribe;
 
@@ -26,6 +26,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         wTextView = findViewById(R.id.textState);
         DataBus.getBus().register(this);
-
+        ((App) getApplication()).activityInjector().inject(this);
         Intent intent = new Intent(this, SocketService.class);
         startService(intent);
 

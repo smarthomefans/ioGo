@@ -1,6 +1,7 @@
 package com.example.nagel.io1.view.ui;
 
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +17,11 @@ import com.example.nagel.io1.viewmodel.ListViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+
 public class TemperatureActivity extends AppCompatActivity{
 
     public static final String TAG = TemperatureActivity.class.getSimpleName();
@@ -24,10 +30,14 @@ public class TemperatureActivity extends AppCompatActivity{
     private TemperatureListAdapter mAdapter;
     private ListViewModel mViewModel;
 
+    @Inject
+    ViewModelProvider.Factory mViewModelFactory;
+
     public ArrayList<IoState> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temperature);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -47,7 +57,7 @@ public class TemperatureActivity extends AppCompatActivity{
             }
         });
 
-        mViewModel = ViewModelProviders.of(this).get(ListViewModel.class);
+        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(ListViewModel.class);
 
         mViewModel.getTempList()
                 .observe(this, new Observer<List<IoState>>() {
