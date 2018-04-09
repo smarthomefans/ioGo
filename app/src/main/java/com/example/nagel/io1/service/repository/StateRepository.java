@@ -10,8 +10,11 @@ import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +30,7 @@ public class StateRepository {
         DataBus.getBus().register(this);
         //this.socketService.getStates();
         mTempListMutableLiveData = new MutableLiveData<>();
+        stateCache = new HashMap<>();
     }
 
     public static StateRepository getInstance(){
@@ -53,17 +57,58 @@ public class StateRepository {
     @Subscribe
     public void onStates(final Events.States event) {
         try {
-            JSONArray arr = new JSONArray(event.getData());
-
+            JSONObject data = new JSONObject(event.getData());
+            Iterator<String> iter = data.keys();
+            while (iter.hasNext()) {
+                String key = iter.next();
+                IoState state;
+                if(stateCache.containsKey(key)){
+                    state = stateCache.get(key);
+                    state.setData(data.get(key).toString());
+                }else {
+                    state = new IoState(key, null, null, data.get(key).toString());
+                }
+                stateCache.put(state.getId(),state);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        List<IoState> list = new ArrayList<>();
+        //IoState t = new IoState("ID1", "derName", "dieRolle", "{\"val\":6.12,\"ack\":true,\"ts\":1522867531113,\"q\":0,\"from\":\"system.adapter.javascript.0\",\"lc\":1520884333496}");
+        //list.add(t);
+
+        for (Map.Entry<String, IoState> entry : stateCache.entrySet()) {
+            if(entry.getKey().contains("temperature")){
+                list.add(entry.getValue());
+            }
+        }
+        mTempListMutableLiveData.postValue(list);
+    }
+
+    @Subscribe
+    public void onStateChange(final Events.StateChange event) {
+        IoState state;
+        if(stateCache.containsKey(event.getId())){
+            state = stateCache.get(event.getId());
+            state.setData(event.getData());
+        }else {
+            state = new IoState(event.getId(), null, null, event.getData());
+        }
+
+        stateCache.put(state.getId(), state);
     }
 
     public MutableLiveData<List<IoState>> getTempList(){
         List<IoState> list = new ArrayList<>();
-        IoState t = new IoState("ID1", "derName", "dieRolle", "{\"val\":6.12,\"ack\":true,\"ts\":1522867531113,\"q\":0,\"from\":\"system.adapter.javascript.0\",\"lc\":1520884333496}");
-        list.add(t);
+        //IoState t = new IoState("ID1", "derName", "dieRolle", "{\"val\":6.12,\"ack\":true,\"ts\":1522867531113,\"q\":0,\"from\":\"system.adapter.javascript.0\",\"lc\":1520884333496}");
+        //list.add(t);
+
+        for (Map.Entry<String, IoState> entry : stateCache.entrySet()) {
+            if(entry.getKey().contains("temperature")){
+                list.add(entry.getValue());
+            }
+        }
         mTempListMutableLiveData.setValue(list);
         return mTempListMutableLiveData;
     }

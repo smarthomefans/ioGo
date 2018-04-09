@@ -48,4 +48,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/showlist" />
 
+    <Button
+        android:id="@+id/showFragment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:onClick="onClickShowFragment"
+        android:text="show fragment"
+        app:layout_constraintEnd_toEndOf="@+id/showTemp"
+        app:layout_constraintStart_toStartOf="@+id/showTemp"
+        app:layout_constraintTop_toBottomOf="@+id/showTemp" />
+
 </android.support.constraint.ConstraintLayout>

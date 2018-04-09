@@ -63,12 +63,12 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.d("onStateChange", event.getId() + " => " + event.getText());
+                Log.d("onStateChange", event.getId() + " => " + event.getData());
                 wTextView.setText(event.getId());
                 if ("javascript.0.vi_switch".equals(event.getId())) {
                     JSONObject data = null;
                     try {
-                        data = new JSONObject(event.getText());
+                        data = new JSONObject(event.getData());
                         wSwitch.setChecked(data.getBoolean("val"));
                     } catch(JSONException e){
                         Log.e("onStateChange", e.getMessage());
@@ -108,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    public void onClickShowFragment(View v){
+        Intent i = new Intent(this, FragmentActivity.class);
+        startActivity(i);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

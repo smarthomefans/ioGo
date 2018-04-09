@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="56dp"
+    android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tempNameTextView"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:text="Raum Name"
-            android:textColor="@color/colorPrimary"/>
+    <TextView
+        android:id="@+id/tempNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Raum Name"
+        android:textAppearance="@android:style/TextAppearance.Material.SearchResult.Title" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="One Cuisine Type"
-            android:id="@+id/tempValueTextView"
-            android:layout_below="@+id/tempNameTextView"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:textStyle="italic"/>
+    <TextView
+        android:id="@+id/tempValueTextView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tempNameTextView"
+        android:text="143.9°C"
+        android:textAppearance="@android:style/TextAppearance.Material.Large" />
 
-    </LinearLayout>
+</LinearLayout>

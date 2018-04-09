@@ -5,15 +5,7 @@ public class Events {
     public static class StateChange {
 
         private String id;
-        private String text;
-
-        public String getText() {
-            return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
-        }
+        private String data;
 
         public String getId() {
             return id;
@@ -21,6 +13,14 @@ public class Events {
 
         public void setId(String id) {
             this.id = id;
+        }
+
+        public String getData() {
+            return data;
+        }
+
+        public void setData(String data) {
+            this.data = data;
         }
     }
 

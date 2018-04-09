@@ -47,6 +47,7 @@ public class SocketService extends Service {
         }
         mSocket.connect();
         getStates();
+        getObjects();
     }
 
     @Override
@@ -68,7 +69,7 @@ public class SocketService extends Service {
         public void call(final Object... args) {
             Events.StateChange event = new Events.StateChange();
             event.setId(args[0].toString());
-            event.setText(args[1].toString());
+            event.setData(args[1].toString());
             DataBus.getBus().post(event);
         }
     };
