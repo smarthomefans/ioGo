@@ -27,22 +27,25 @@ import org.json.JSONObject;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Switch wSwitch;
-    private TextView wTextView;
+    @BindView(R.id.vi_switch) Switch wSwitch;
+    @BindView(R.id.textState) TextView wTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        wTextView = findViewById(R.id.textState);
         DataBus.getBus().register(this);
-        ((App) getApplication()).activityInjector().inject(this);
+
         Intent intent = new Intent(this, SocketService.class);
         startService(intent);
 
@@ -90,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickSwitch(View v){
-        wSwitch = v.findViewById(R.id.vi_switch);
         String tmp = (wSwitch.isChecked()) ? "true" : "false";
 
         Events.SetState event = new Events.SetState();
@@ -104,11 +106,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickShowList(View v){
         Intent i = new Intent(this, ListActivity.class);
-        startActivity(i);
-    }
-
-    public void onClickShowTemp(View v){
-        Intent i = new Intent(this, TemperatureActivity.class);
         startActivity(i);
     }
 

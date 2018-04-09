@@ -1,11 +1,10 @@
 package com.example.nagel.io1.service.repository;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
-import com.example.nagel.io1.App;
 import com.example.nagel.io1.service.DataBus;
 import com.example.nagel.io1.service.Events;
-import com.example.nagel.io1.service.SocketService;
 import com.example.nagel.io1.service.model.IoState;
 import com.squareup.otto.Subscribe;
 
@@ -25,13 +24,13 @@ import javax.inject.Singleton;
 public class StateRepository {
     private Map<String,IoState> stateCache;
 
-
-    private SocketService socketService;
+    private final RepoDao repoDao;
 
     private MutableLiveData<List<IoState>> mTempListMutableLiveData;
 
     @Inject
-    public StateRepository() {
+    public StateRepository(RepoDao repoDao) {
+        this.repoDao = repoDao;
         //this.socketService = service;
         DataBus.getBus().register(this);
         //this.socketService.getStates();
@@ -69,6 +68,7 @@ public class StateRepository {
                     state = new IoState(key, null, null, data.get(key).toString());
                 }
                 stateCache.put(state.getId(),state);
+                repoDao.insert(new Repo(state.getId(),data.get(key).toString()));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -103,6 +103,7 @@ public class StateRepository {
 
     public MutableLiveData<List<IoState>> getTempList(){
         updateTempList();
+        LiveData<List<Repo>> lst = repoDao.getAllRepos();
         return mTempListMutableLiveData;
     }
 

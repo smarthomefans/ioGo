@@ -29,7 +29,6 @@
             android:exported="true" />
 
         <activity android:name=".view.ui.ListActivity" />
-        <activity android:name=".view.ui.TemperatureActivity" />
         <activity
             android:name=".view.ui.FragmentActivity"
             android:label="@string/title_activity_fragment"></activity>

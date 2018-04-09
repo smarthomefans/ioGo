@@ -12,6 +12,9 @@ import com.example.nagel.io1.service.model.IoState;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class TemperatureListAdapter extends RecyclerView.Adapter<TemperatureListAdapter.TemperatureViewHolder> {
     private ArrayList<IoState> mList = new ArrayList<>();
     private Context mContext;
@@ -39,15 +42,14 @@ public class TemperatureListAdapter extends RecyclerView.Adapter<TemperatureList
     }
 
     public class TemperatureViewHolder extends RecyclerView.ViewHolder {
-        private TextView mNameTextView;
-        private TextView mValueTextView;
+        @BindView(R.id.tempNameTextView)  TextView mNameTextView;
+        @BindView(R.id.tempValueTextView)  TextView mValueTextView;
         private Context mContext;
 
         public TemperatureViewHolder(View itemView) {
             super(itemView);
             mContext = itemView.getContext();
-            mNameTextView = itemView.findViewById(R.id.tempNameTextView);
-            mValueTextView = itemView.findViewById(R.id.tempValueTextView);
+            ButterKnife.bind(this, itemView);
         }
 
         public void bindTemperature(IoState state) {

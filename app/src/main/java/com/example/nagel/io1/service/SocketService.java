@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.example.nagel.io1.service.model.IoState;
+import com.example.nagel.io1.service.repository.RepoDao;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
@@ -90,11 +91,6 @@ public class SocketService extends Service {
                 DataBus.getBus().post(event);
             }
         });
-    }
-
-
-    public void getStates(Ack ack){
-        mSocket.emit("getStates", "javascript.0.*", ack);
     }
 
     private void getObjects(){

@@ -38,27 +38,13 @@
         app:layout_constraintTop_toBottomOf="@+id/vi_switch" />
 
     <Button
-        android:id="@+id/showTemp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:onClick="onClickShowTemp"
-        android:text="show temp"
-        app:layout_constraintEnd_toEndOf="@+id/showlist"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/showlist" />
-
-    <Button
         android:id="@+id/showFragment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:onClick="onClickShowFragment"
         android:text="show fragment"
-        app:layout_constraintEnd_toEndOf="@+id/showTemp"
-        app:layout_constraintStart_toStartOf="@+id/showTemp"
-        app:layout_constraintTop_toBottomOf="@+id/showTemp" />
+        app:layout_constraintTop_toBottomOf="@+id/showlist"
+        tools:layout_editor_absoluteX="8dp" />
 
 </android.support.constraint.ConstraintLayout>

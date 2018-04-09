@@ -7,13 +7,12 @@ import android.support.annotation.NonNull;
 @Entity
 public class Repo {
     @PrimaryKey
-    public final int id;
-    public final String name;
-    public final String url;
+    @NonNull
+    public final String id;
+    public final String data;
 
-    public Repo(@NonNull int id, String name, String url) {
+    public Repo(@NonNull String id, String data) {
         this.id = id;
-        this.name = name;
-        this.url = url;
+        this.data = data;
     }
 }

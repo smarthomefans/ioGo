@@ -25,7 +25,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.android.AndroidInjector;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 
 /**
@@ -33,7 +34,7 @@ import dagger.android.support.AndroidSupportInjection;
  */
 public class FragmentActivityFragment extends Fragment implements Injectable{
 
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.recyclerView) RecyclerView mRecyclerView;
     private TemperatureListAdapter mAdapter;
     private ListViewModel mViewModel;
 
@@ -46,8 +47,7 @@ public class FragmentActivityFragment extends Fragment implements Injectable{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment, container, false);
-        mRecyclerView = view.findViewById(R.id.recyclerView);
-
+        ButterKnife.bind(this, view);
         getActivity().runOnUiThread(new Runnable() {
 
             @Override
