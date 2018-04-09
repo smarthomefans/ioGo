@@ -1,4 +1,4 @@
-package com.example.nagel.io1;
+package com.example.nagel.io1.view.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nagel.io1.service.DataBus;
+import com.example.nagel.io1.service.Events;
+import com.example.nagel.io1.service.MyService;
+import com.example.nagel.io1.R;
+import com.example.nagel.io1.viewmodel.ListViewModel;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
@@ -33,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         wTextView = findViewById(R.id.textState);
 
         DataBus.getBus().register(this);
+
         Intent intent = new Intent(this, MyService.class);
         startService(intent);
 
@@ -45,6 +51,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     @Subscribe
@@ -86,6 +98,17 @@ public class MainActivity extends AppCompatActivity {
         Log.d("onClickSwitch", "new value: " + tmp);
 
     }
+
+    public void onClickShowList(View v){
+        Intent i = new Intent(this, ListActivity.class);
+        startActivity(i);
+    }
+
+    public void onClickShowTemp(View v){
+        Intent i = new Intent(this, TemperatureActivity.class);
+        startActivity(i);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

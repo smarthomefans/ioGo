@@ -1,4 +1,4 @@
-package com.example.nagel.io1;
+package com.example.nagel.io1.service;
 
 public class Events {
 

@@ -1,4 +1,4 @@
-package com.example.nagel.io1;
+package com.example.nagel.io1.service;
 
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;

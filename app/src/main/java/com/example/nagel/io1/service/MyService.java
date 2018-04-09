@@ -1,4 +1,4 @@
-package com.example.nagel.io1;
+package com.example.nagel.io1.service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -56,7 +56,8 @@ public class MyService extends Service {
             throw new RuntimeException(e);
         }
         mSocket.connect();
-
+        getStates();
+        getObjects();
     }
 
     @Override
@@ -75,6 +76,8 @@ public class MyService extends Service {
     private Emitter.Listener onStateChange = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
+            states.put(args[0].toString(), args[1].toString());
+
             Events.StateChange event = new Events.StateChange();
             event.setId(args[0].toString());
             event.setText(args[1].toString());
