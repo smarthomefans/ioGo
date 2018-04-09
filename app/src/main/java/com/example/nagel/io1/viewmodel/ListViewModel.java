@@ -15,6 +15,7 @@ public class ListViewModel extends ViewModel {
 
     public ListViewModel() {
         this.stateRepository = StateRepository.getInstance();
+
     }
 
     public MutableLiveData<List<IoState>> getTempList() {

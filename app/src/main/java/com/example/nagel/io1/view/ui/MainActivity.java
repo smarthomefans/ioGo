@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         wTextView = findViewById(R.id.textState);
-
         DataBus.getBus().register(this);
 
         Intent intent = new Intent(this, SocketService.class);

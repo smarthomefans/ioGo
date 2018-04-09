@@ -8,7 +8,6 @@ import com.example.nagel.io1.service.SocketService;
 import com.example.nagel.io1.service.model.IoState;
 import com.squareup.otto.Subscribe;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,6 +30,11 @@ public class StateRepository {
         //this.socketService.getStates();
         mTempListMutableLiveData = new MutableLiveData<>();
         stateCache = new HashMap<>();
+
+        List<Repo> allRepos = RepoDatabase
+                .getInstance(null)
+                .getRepoDao()
+                .getAllRepos();
     }
 
     public static StateRepository getInstance(){
@@ -74,10 +78,11 @@ public class StateRepository {
             e.printStackTrace();
         }
 
-        List<IoState> list = new ArrayList<>();
-        //IoState t = new IoState("ID1", "derName", "dieRolle", "{\"val\":6.12,\"ack\":true,\"ts\":1522867531113,\"q\":0,\"from\":\"system.adapter.javascript.0\",\"lc\":1520884333496}");
-        //list.add(t);
+        updateTempList();
+    }
 
+    private void updateTempList(){
+        List<IoState> list = new ArrayList<>();
         for (Map.Entry<String, IoState> entry : stateCache.entrySet()) {
             if(entry.getKey().contains("temperature")){
                 list.add(entry.getValue());
@@ -97,19 +102,11 @@ public class StateRepository {
         }
 
         stateCache.put(state.getId(), state);
+        updateTempList();
     }
 
     public MutableLiveData<List<IoState>> getTempList(){
-        List<IoState> list = new ArrayList<>();
-        //IoState t = new IoState("ID1", "derName", "dieRolle", "{\"val\":6.12,\"ack\":true,\"ts\":1522867531113,\"q\":0,\"from\":\"system.adapter.javascript.0\",\"lc\":1520884333496}");
-        //list.add(t);
-
-        for (Map.Entry<String, IoState> entry : stateCache.entrySet()) {
-            if(entry.getKey().contains("temperature")){
-                list.add(entry.getValue());
-            }
-        }
-        mTempListMutableLiveData.setValue(list);
+        updateTempList();
         return mTempListMutableLiveData;
     }
 
