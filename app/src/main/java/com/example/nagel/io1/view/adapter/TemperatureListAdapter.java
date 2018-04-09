@@ -26,7 +26,7 @@ public class TemperatureListAdapter extends RecyclerView.Adapter<TemperatureList
 
     @Override
     public TemperatureViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.temp_listitem, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.material_list, parent, false);
         TemperatureViewHolder viewHolder = new TemperatureViewHolder(view);
         return viewHolder;
     }
@@ -42,8 +42,9 @@ public class TemperatureListAdapter extends RecyclerView.Adapter<TemperatureList
     }
 
     public class TemperatureViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tempNameTextView)  TextView mNameTextView;
-        @BindView(R.id.tempValueTextView)  TextView mValueTextView;
+        @BindView(R.id.message_title)  TextView mTitle;
+        @BindView(R.id.message_subtitle)  TextView mSubtitle;
+        @BindView(R.id.value)  TextView mValue;
         private Context mContext;
 
         public TemperatureViewHolder(View itemView) {
@@ -53,8 +54,9 @@ public class TemperatureListAdapter extends RecyclerView.Adapter<TemperatureList
         }
 
         public void bindTemperature(IoState state) {
-            mNameTextView.setText(state.getId().substring(13).replace(".temperature",""));
-            mValueTextView.setText(state.getVal());
+            mTitle.setText(state.getId().substring(13).replace(".temperature",""));
+            mSubtitle.setText("Wohnzimmer");
+            mValue.setText(state.getVal() + " °C");
         }
     }
 }

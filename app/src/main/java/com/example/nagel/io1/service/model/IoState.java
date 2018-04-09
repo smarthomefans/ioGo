@@ -5,6 +5,7 @@ import com.example.nagel.io1.service.repository.State;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class IoState {
@@ -43,6 +44,12 @@ public class IoState {
             try {
                 json = new JSONObject(data);
                 this.val = json.getString("val");
+                try {
+                    float value = Float.parseFloat(this.val);
+                    this.val = String.valueOf(Math.round(value * 10) / 10);
+                }catch (Exception e){
+
+                }
                 this.ack = json.getBoolean("ack");
                 this.ts = new Timestamp(json.getInt("ts"));
                 this.lc = new Timestamp(json.getInt("lc"));

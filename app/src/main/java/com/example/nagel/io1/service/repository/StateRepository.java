@@ -98,7 +98,7 @@ public class StateRepository {
     private void updateTempListFromCache(){
         List<IoState> list = new ArrayList<>();
         for (Map.Entry<String, IoState> entry : stateCache.entrySet()) {
-            if(entry.getKey().contains("temperature")){
+            if(entry.getKey().contains(".temperature")){
                 list.add(entry.getValue());
             }
         }
