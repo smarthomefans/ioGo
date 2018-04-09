@@ -2,6 +2,7 @@ package com.example.nagel.io1.service.repository;
 
 import android.arch.lifecycle.MutableLiveData;
 
+import com.example.nagel.io1.App;
 import com.example.nagel.io1.service.DataBus;
 import com.example.nagel.io1.service.Events;
 import com.example.nagel.io1.service.SocketService;
@@ -17,9 +18,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 public class StateRepository {
     private Map<String,IoState> stateCache;
+
+
     private SocketService socketService;
+
     private MutableLiveData<List<IoState>> mTempListMutableLiveData;
 
     static StateRepository stateRepository;
@@ -31,10 +38,7 @@ public class StateRepository {
         mTempListMutableLiveData = new MutableLiveData<>();
         stateCache = new HashMap<>();
 
-        List<Repo> allRepos = RepoDatabase
-                .getInstance(null)
-                .getRepoDao()
-                .getAllRepos();
+        //socketService.getStates();
     }
 
     public static StateRepository getInstance(){

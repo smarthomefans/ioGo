@@ -19,6 +19,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -29,7 +31,6 @@ public class SocketService extends Service {
 
     public SocketService() {
     }
-
 
     @Override
     public void onCreate() {

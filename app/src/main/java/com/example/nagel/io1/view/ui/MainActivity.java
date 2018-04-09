@@ -14,14 +14,18 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nagel.io1.App;
 import com.example.nagel.io1.service.DataBus;
 import com.example.nagel.io1.service.Events;
 import com.example.nagel.io1.service.SocketService;
 import com.example.nagel.io1.R;
+import com.example.nagel.io1.service.repository.StateRepository;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickSwitch(View v){
-
         wSwitch = v.findViewById(R.id.vi_switch);
         String tmp = (wSwitch.isChecked()) ? "true" : "false";
 
