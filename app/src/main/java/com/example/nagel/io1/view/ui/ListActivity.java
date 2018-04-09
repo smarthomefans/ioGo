@@ -26,9 +26,9 @@ public class ListActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listview);
 
-        mViewModel = ViewModelProviders.of(this).get(ListViewModel.class);
+        //mViewModel = ViewModelProviders.of(this).get(ListViewModel.class);
 
-        mViewModel.getList()
+        /*mViewModel.getList()
                 .observe(this, new Observer<List<String>>() {
                     @Override
                     public void onChanged(@Nullable List<String> stringList) {
@@ -38,7 +38,7 @@ public class ListActivity extends AppCompatActivity {
                         // Assign adapter to ListView
                         listView.setAdapter(adapter);
                     }
-                });
+                });*/
 
     }
 

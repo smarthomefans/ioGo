@@ -2,23 +2,21 @@ package com.example.nagel.io1.view.ui;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.ArrayAdapter;
 
 import com.example.nagel.io1.R;
-import com.example.nagel.io1.service.model.Temperature;
+import com.example.nagel.io1.service.model.IoState;
 import com.example.nagel.io1.view.adapter.TemperatureListAdapter;
 import com.example.nagel.io1.viewmodel.ListViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TemperatureActivity extends AppCompatActivity {
+public class TemperatureActivity extends AppCompatActivity{
 
     public static final String TAG = TemperatureActivity.class.getSimpleName();
 
@@ -26,7 +24,7 @@ public class TemperatureActivity extends AppCompatActivity {
     private TemperatureListAdapter mAdapter;
     private ListViewModel mViewModel;
 
-    public ArrayList<Temperature> list = new ArrayList<>();
+    public ArrayList<IoState> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +50,9 @@ public class TemperatureActivity extends AppCompatActivity {
         mViewModel = ViewModelProviders.of(this).get(ListViewModel.class);
 
         mViewModel.getTempList()
-                .observe(this, new Observer<List<Temperature>>() {
+                .observe(this, new Observer<List<IoState>>() {
                     @Override
-                    public void onChanged(@Nullable List<Temperature> newList) {
+                    public void onChanged(@Nullable List<IoState> newList) {
                         // update UI
                         mAdapter = new TemperatureListAdapter(getApplicationContext(), (ArrayList)newList);
                         mRecyclerView.setAdapter(mAdapter);

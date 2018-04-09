@@ -16,9 +16,8 @@ import android.widget.Toast;
 
 import com.example.nagel.io1.service.DataBus;
 import com.example.nagel.io1.service.Events;
-import com.example.nagel.io1.service.MyService;
+import com.example.nagel.io1.service.SocketService;
 import com.example.nagel.io1.R;
-import com.example.nagel.io1.viewmodel.ListViewModel;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         DataBus.getBus().register(this);
 
-        Intent intent = new Intent(this, MyService.class);
+        Intent intent = new Intent(this, SocketService.class);
         startService(intent);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

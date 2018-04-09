@@ -2,9 +2,11 @@ package com.example.nagel.io1.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.example.nagel.io1.service.model.IoState;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
@@ -22,28 +24,16 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class MyService extends Service {
-
+public class SocketService extends Service {
     private Socket mSocket;
-    private Map<String,String> states;
-    private Map<String,String> objects;
-    private Map<String,List<String>> oRoles;
 
-    public MyService() {
+    public SocketService() {
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        states = new HashMap<>();
-        objects = new HashMap<>();
-        oRoles = new HashMap<>();
 
         DataBus.getBus().register(this);
 
@@ -57,7 +47,6 @@ public class MyService extends Service {
         }
         mSocket.connect();
         getStates();
-        getObjects();
     }
 
     @Override
@@ -73,11 +62,10 @@ public class MyService extends Service {
         }
     };
 
+
     private Emitter.Listener onStateChange = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            states.put(args[0].toString(), args[1].toString());
-
             Events.StateChange event = new Events.StateChange();
             event.setId(args[0].toString());
             event.setText(args[1].toString());
@@ -90,24 +78,21 @@ public class MyService extends Service {
         mSocket.emit("setState", event.getId(), event.getVal());
     }
 
-    private void getStates(){
+    public void getStates(){
         mSocket.emit("getStates", "javascript.0.*",new Ack() {
             @Override
             public void call(Object... args) {
                 Log.i("onConnect","receiving states");
-                JSONObject data = (JSONObject) args[1];
-                Iterator<String> iter = data.keys();
-                while (iter.hasNext()) {
-                    String key = iter.next();
-                    try {
-                        states.put(key, data.get(key).toString());
-                    } catch (JSONException e) {
-                        // Something went wrong!
-                    }
-                }
-                Log.i("getStates",states.size() + " states received");
+                Events.States event = new Events.States();
+                event.setData(args[1].toString());
+                DataBus.getBus().post(event);
             }
         });
+    }
+
+
+    public void getStates(Ack ack){
+        mSocket.emit("getStates", "javascript.0.*", ack);
     }
 
     private void getObjects(){
@@ -116,22 +101,12 @@ public class MyService extends Service {
             public void call(Object... args) {
                 Log.i("onConnect","receiving objects");
                 JSONObject data = (JSONObject) args[1];
-                Iterator<String> iter = data.keys();
-                while (iter.hasNext()) {
-                    String key = iter.next();
-                    try {
-                        objects.put(key, data.get(key).toString());
-                    } catch (JSONException e) {
-                        // Something went wrong!
-                    }
-                }
-                Log.i("getObjects",objects.size() + " objects received");
-                inspectObjects();
+
             }
 
         });
     }
-
+/*
     private void inspectObjects(){
         for (Map.Entry<String, String> entry : objects.entrySet()) {
             String key = entry.getKey();
@@ -160,4 +135,10 @@ public class MyService extends Service {
         }
         Log.d("inspectObjects", oRoles.size() + " roles detected");
     }
+*/
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
 }

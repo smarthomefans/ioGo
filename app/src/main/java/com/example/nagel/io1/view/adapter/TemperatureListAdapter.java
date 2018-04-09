@@ -8,15 +8,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.nagel.io1.R;
-import com.example.nagel.io1.service.model.Temperature;
+import com.example.nagel.io1.service.model.IoState;
 
 import java.util.ArrayList;
 
 public class TemperatureListAdapter extends RecyclerView.Adapter<TemperatureListAdapter.TemperatureViewHolder> {
-    private ArrayList<Temperature> mList = new ArrayList<>();
+    private ArrayList<IoState> mList = new ArrayList<>();
     private Context mContext;
 
-    public TemperatureListAdapter(Context context, ArrayList<Temperature> list) {
+    public TemperatureListAdapter(Context context, ArrayList<IoState> list) {
         mContext = context;
         mList = list;
     }
@@ -50,9 +50,9 @@ public class TemperatureListAdapter extends RecyclerView.Adapter<TemperatureList
             mValueTextView = itemView.findViewById(R.id.tempValueTextView);
         }
 
-        public void bindTemperature(Temperature temperature) {
-            mNameTextView.setText(temperature.getName());
-            mValueTextView.setText(temperature.getValue());
+        public void bindTemperature(IoState state) {
+            mNameTextView.setText(state.getName());
+            mValueTextView.setText(state.getVal());
         }
     }
 }

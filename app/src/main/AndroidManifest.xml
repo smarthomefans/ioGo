@@ -23,7 +23,7 @@
         </activity>
 
         <service
-            android:name=".service.MyService"
+            android:name=".service.SocketService"
             android:enabled="true"
             android:exported="true" />
 
