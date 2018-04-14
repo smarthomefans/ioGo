@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.nagel.io1.R;
-import com.example.nagel.io1.service.model.IoState;
+import com.example.nagel.io1.service.repository.State;
 
 import java.util.ArrayList;
 
@@ -16,10 +16,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TemperatureListAdapter extends RecyclerView.Adapter<TemperatureListAdapter.TemperatureViewHolder> {
-    private ArrayList<IoState> mList = new ArrayList<>();
+    private ArrayList<State> mList = new ArrayList<>();
     private Context mContext;
 
-    public TemperatureListAdapter(Context context, ArrayList<IoState> list) {
+    public TemperatureListAdapter(Context context, ArrayList<State> list) {
         mContext = context;
         mList = list;
     }
@@ -53,10 +53,10 @@ public class TemperatureListAdapter extends RecyclerView.Adapter<TemperatureList
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindTemperature(IoState state) {
-            mTitle.setText(state.getId().substring(13).replace(".temperature",""));
-            mSubtitle.setText("Wohnzimmer");
-            mValue.setText(state.getVal() + " °C");
+        public void bindTemperature(State state) {
+            mTitle.setText(state.id.substring(13).replace(".temperature",""));
+            mSubtitle.setText("null");
+            mValue.setText(state.val + " °C");
         }
     }
 }

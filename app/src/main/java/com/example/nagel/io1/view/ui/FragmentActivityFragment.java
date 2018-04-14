@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 
 import com.example.nagel.io1.R;
 import com.example.nagel.io1.di.Injectable;
-import com.example.nagel.io1.service.model.IoState;
+import com.example.nagel.io1.service.repository.State;
 import com.example.nagel.io1.view.adapter.TemperatureListAdapter;
 import com.example.nagel.io1.viewmodel.ListViewModel;
 
@@ -41,7 +41,7 @@ public class FragmentActivityFragment extends Fragment implements Injectable{
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
 
-    public ArrayList<IoState> list = new ArrayList<>();
+    public ArrayList<State> list = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,9 +64,9 @@ public class FragmentActivityFragment extends Fragment implements Injectable{
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(ListViewModel.class);
 
         mViewModel.getTempList()
-                .observe(this, new Observer<List<IoState>>() {
+                .observe(this, new Observer<List<State>>() {
                     @Override
-                    public void onChanged(@Nullable List<IoState> newList) {
+                    public void onChanged(@Nullable List<State> newList) {
                         // update UI
                         mAdapter = new TemperatureListAdapter(getActivity().getApplicationContext(), (ArrayList)newList);
                         mRecyclerView.setAdapter(mAdapter);

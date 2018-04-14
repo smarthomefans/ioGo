@@ -14,7 +14,7 @@ import java.util.List;
 public interface ObjectDao {
 
     @Query("SELECT * FROM object")
-    LiveData<List<Object>> getAllObjects();
+    List<Object> getAllObjects();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Object... objects);

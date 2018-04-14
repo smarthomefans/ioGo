@@ -1,10 +1,8 @@
 package com.example.nagel.io1.view.ui;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,19 +13,15 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.nagel.io1.App;
 import com.example.nagel.io1.R;
 import com.example.nagel.io1.service.DataBus;
 import com.example.nagel.io1.service.Events;
 import com.example.nagel.io1.service.SocketService;
-import com.example.nagel.io1.service.model.IoState;
-import com.example.nagel.io1.service.repository.StateRepository;
+import com.example.nagel.io1.service.repository.State;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,16 +52,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SocketService.class);
         startService(intent);
 
-        /*fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!isFABOpen){
-                    showFABMenu();
-                }else{
-                    closeFABMenu();
-                }
-            }
-        });*/
     }
 
     @OnClick(R.id.fab)
@@ -137,8 +121,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Log.d("onStateChange", event.getId() + " => " + event.getData());
-                IoState state = new IoState(event.getId(), null, null, event.getData());
-                wTextView.setText(event.getId() + " => " + state.getVal());
+                State state = new State(event.getId(), event.getData());
+                wTextView.setText(event.getId() + " => " + state.val);
                 if ("javascript.0.vi_switch".equals(event.getId())) {
                     JSONObject data = null;
                     try {
@@ -155,6 +139,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Intent intent = new Intent(this, SocketService.class);
+        stopService(intent);
         DataBus.getBus().unregister(this);
     }
 
@@ -168,11 +154,6 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("onClickSwitch", "new value: " + tmp);
 
-    }
-
-    public void onClickShowList(View v){
-        Intent i = new Intent(this, ListActivity.class);
-        startActivity(i);
     }
 
     public void onClickShowFragment(View v){
@@ -197,6 +178,8 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Toast.makeText(this,"Settings", Toast.LENGTH_LONG).show();
+            Intent i = new Intent(this, SettingsActivity.class);
+            startActivity(i);
             return true;
         }
 

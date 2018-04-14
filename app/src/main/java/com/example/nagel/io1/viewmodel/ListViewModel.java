@@ -3,14 +3,12 @@ package com.example.nagel.io1.viewmodel;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.example.nagel.io1.service.model.IoState;
+import com.example.nagel.io1.service.repository.State;
 import com.example.nagel.io1.service.repository.StateRepository;
 
 import java.util.List;
 
 import javax.inject.Inject;
-
-import dagger.android.AndroidInjection;
 
 public class ListViewModel extends ViewModel {
 
@@ -24,7 +22,7 @@ public class ListViewModel extends ViewModel {
         this.stateRepository = stateRepository;
     }
 
-    public MutableLiveData<List<IoState>> getTempList() {
+    public MutableLiveData<List<State>> getTempList() {
         return stateRepository.getTempList();
     }
 

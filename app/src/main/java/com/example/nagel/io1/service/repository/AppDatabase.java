@@ -3,9 +3,13 @@ package com.example.nagel.io1.service.repository;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
+import com.example.nagel.io1.service.Converters;
+
 @Database(entities = { State.class, Object.class}, version = 1)
+@TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "appDatabase.db";

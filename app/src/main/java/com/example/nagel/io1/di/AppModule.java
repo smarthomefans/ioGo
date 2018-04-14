@@ -9,6 +9,7 @@ import com.example.nagel.io1.App;
 import com.example.nagel.io1.service.SocketService;
 import com.example.nagel.io1.service.repository.AppDatabase;
 import com.example.nagel.io1.service.repository.ObjectDao;
+import com.example.nagel.io1.service.repository.ObjectRepository;
 import com.example.nagel.io1.service.repository.StateDao;
 import com.example.nagel.io1.service.repository.StateRepository;
 import com.example.nagel.io1.viewmodel.ListViewModel;
@@ -38,8 +39,14 @@ public class AppModule {
 
     @Singleton
     @Provides
-    StateRepository provideStateRepository(StateDao stateDao) {
-        return new StateRepository(stateDao);
+    StateRepository provideStateRepository(ObjectRepository objectRepository, StateDao stateDao) {
+        return new StateRepository(objectRepository, stateDao);
+    }
+
+    @Singleton
+    @Provides
+    ObjectRepository provideObjectRepository(ObjectDao objectDao) {
+        return new ObjectRepository(objectDao);
     }
 
     @Provides
