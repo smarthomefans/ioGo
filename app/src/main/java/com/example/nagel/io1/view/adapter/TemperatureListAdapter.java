@@ -54,9 +54,9 @@ public class TemperatureListAdapter extends RecyclerView.Adapter<TemperatureList
         }
 
         public void bindTemperature(State state) {
-            mTitle.setText(state.id.substring(13).replace(".temperature",""));
+            mTitle.setText(state.getId().substring(13).replace(".temperature",""));
             mSubtitle.setText("null");
-            mValue.setText(state.val + " °C");
+            mValue.setText(state.getVal() + " °C");
         }
     }
 }

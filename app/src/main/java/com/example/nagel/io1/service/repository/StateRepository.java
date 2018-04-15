@@ -1,5 +1,6 @@
 package com.example.nagel.io1.service.repository;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 
@@ -21,16 +22,16 @@ import javax.inject.Singleton;
 
 @Singleton
 public class StateRepository {
-    private ObjectRepository objectRepository;
-    private Map<String,State> stateCache;
+    private Map<String,MutableLiveData<State>> stateCache;
+    private Map<String,MutableLiveData<List<State>>> stateRoomCache;
 
     private final StateDao stateDao;
 
     private MutableLiveData<List<State>> mTempListMutableLiveData;
+    private MutableLiveData<List<State>> mListStates;
 
     @Inject
-    public StateRepository(ObjectRepository objectRepository, StateDao stateDao) {
-        this.objectRepository = objectRepository;
+    public StateRepository(StateDao stateDao) {
         this.stateDao = stateDao;
         DataBus.getBus().register(this);
         mTempListMutableLiveData = new MutableLiveData<>();
@@ -43,29 +44,15 @@ public class StateRepository {
                 ls = stateDao.getAllStates();
                 if(ls != null){
                     for (State state : ls) {
-                        //state.setName(objectRepository.getObject(state.id).getName());
-                        stateCache.put(state.id, state);
+                        MutableLiveData<State> mState = new MutableLiveData<>();
+                        mState.setValue(state);
+                        stateCache.put(state.getId(), mState);
                     }
                     updateTempListFromCache();
                 }
             }
         });
     }
-
-    //IoState state = stateCache.get(args[0].toString());
-     //       state.setData(args[1].toString());
-      //      stateCache.put(state.getId(), state);
-
-
-   /* public LiveData<IoState> getState(String stateId) {
-        LiveData<IoState> cached = stateCache.get(stateId);
-        if (cached != null) {
-            return cached;
-        }
-
-        socketService.getStates();
-        return null;
-    }*/
 
     @Subscribe
     public void onStates(final Events.States event) {
@@ -76,12 +63,14 @@ public class StateRepository {
                 String key = iter.next();
                 State state;
                 if(stateCache.containsKey(key)){
-                    state = stateCache.get(key);
+                    state = stateCache.get(key).getValue();
                     state.setData(data.get(key).toString());
                 }else {
                     state = new State(key, data.get(key).toString());
                 }
-                stateCache.put(state.id,state);
+                MutableLiveData<State> mState = new MutableLiveData<>();
+                mState.setValue(state);
+                stateCache.put(state.getId(), mState);
                 stateDao.insert(state);
             }
         } catch (JSONException e) {
@@ -91,34 +80,24 @@ public class StateRepository {
         updateTempListFromCache();
     }
 
-    private void updateTempListFromCache(){
-        List<State> list = new ArrayList<>();
-        List<Object> objects = objectRepository.getObjectsByRole("value.temperature");
-
-        for(Object object : objects){
-            State state = stateCache.get(object.id);
-            if(state != null) {
-                //state.setName(object.getName());
-                //state.setRole(object.getRole());
-                list.add(state);
-            }
-        }
-
-        mTempListMutableLiveData.postValue(list);
-    }
-
     @Subscribe
     public void onStateChange(final Events.StateChange event) {
         State state;
         if(stateCache.containsKey(event.getId())){
-            state = stateCache.get(event.getId());
+            state = stateCache.get(event.getId()).getValue();
             state.setData(event.getData());
         }else {
             state = new State(event.getId(), event.getData());
         }
-
-        stateCache.put(state.id, state);
+        MutableLiveData<State> mState = new MutableLiveData<>();
+        mState.setValue(state);
+        stateCache.put(state.getId(), mState);
         updateTempListFromCache();
+    }
+
+    private void updateTempListFromCache(){
+        List<State> list = new ArrayList<>();
+        mTempListMutableLiveData.postValue(list);
     }
 
     public MutableLiveData<List<State>> getTempList(){
@@ -126,4 +105,12 @@ public class StateRepository {
         return mTempListMutableLiveData;
     }
 
+    public MutableLiveData<List<State>> getStatesByRoom(String roomId){
+        if(!stateRoomCache.containsKey(roomId)){
+            MutableLiveData<List<State>> list = new MutableLiveData<>();
+            list.setValue(stateDao.getStatesByRoom(roomId).getValue());
+            stateRoomCache.put(roomId, list);
+        }
+        return stateRoomCache.get(roomId);
+    }
 }

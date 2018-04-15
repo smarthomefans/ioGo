@@ -30,7 +30,6 @@ import dagger.android.AndroidInjection;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.vi_switch) Switch wSwitch;
     @BindView(R.id.textState) TextView wTextView;
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.fab_airplane) FloatingActionButton fab_airplane;
@@ -115,45 +114,12 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Subscribe
-    public void onStateChange(final Events.StateChange event) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Log.d("onStateChange", event.getId() + " => " + event.getData());
-                State state = new State(event.getId(), event.getData());
-                wTextView.setText(event.getId() + " => " + state.val);
-                if ("javascript.0.vi_switch".equals(event.getId())) {
-                    JSONObject data = null;
-                    try {
-                        data = new JSONObject(event.getData());
-                        wSwitch.setChecked(data.getBoolean("val"));
-                    } catch(JSONException e){
-                        Log.e("onStateChange", e.getMessage());
-                    }
-                }
-            }
-        });
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         Intent intent = new Intent(this, SocketService.class);
         stopService(intent);
         DataBus.getBus().unregister(this);
-    }
-
-    public void onClickSwitch(View v){
-        String tmp = (wSwitch.isChecked()) ? "true" : "false";
-
-        Events.SetState event = new Events.SetState();
-        event.setId("javascript.0.vi_switch");
-        event.setVal(tmp);
-        DataBus.getBus().post(event);
-
-        Log.d("onClickSwitch", "new value: " + tmp);
-
     }
 
     public void onClickShowFragment(View v){

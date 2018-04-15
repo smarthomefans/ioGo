@@ -5,15 +5,9 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.example.nagel.io1.service.repository.ObjectRepository;
 import com.squareup.otto.Subscribe;
 
-import org.json.JSONObject;
-
-import java.net.Proxy;
 import java.net.URISyntaxException;
-
-import javax.inject.Inject;
 
 import io.socket.client.Ack;
 import io.socket.client.IO;

@@ -6,10 +6,11 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
-import com.example.nagel.io1.service.Converters;
+import com.example.nagel.io1.service.ListConverters;
+import com.example.nagel.io1.service.TimeConverters;
 
-@Database(entities = { State.class, Object.class}, version = 1)
-@TypeConverters({Converters.class})
+@Database(entities = { State.class, com.example.nagel.io1.service.repository.Room.class, Function.class}, version = 1)
+@TypeConverters({TimeConverters.class, ListConverters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "appDatabase.db";
@@ -30,6 +31,6 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     public abstract StateDao getStateDao();
-
-    public abstract ObjectDao getObjectDao();
+    public abstract RoomDao getRoomDao();
+    public abstract FunctionDao getFunctionDao();
 }

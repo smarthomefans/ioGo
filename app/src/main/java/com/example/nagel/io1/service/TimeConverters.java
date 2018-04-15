@@ -4,7 +4,7 @@ import android.arch.persistence.room.TypeConverter;
 
 import java.sql.Timestamp;
 
-public class Converters {
+public class TimeConverters {
     @TypeConverter
     public static Timestamp fromTimestamp(Long value) {
         return value == null ? null : new Timestamp(value);

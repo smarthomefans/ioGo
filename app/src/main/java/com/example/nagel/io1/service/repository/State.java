@@ -5,7 +5,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
-import com.example.nagel.io1.service.Converters;
+import com.example.nagel.io1.service.TimeConverters;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,17 +16,21 @@ import java.sql.Timestamp;
 public class State {
     @PrimaryKey
     @NonNull
-    public final String id;
-    public String val;
-    public boolean ack;
-    @TypeConverters(Converters.class)
-    public Timestamp ts;
-    @TypeConverters(Converters.class)
-    public Timestamp lc;
-    public String from;
-    public int q;
+    private final String id;
+    private String val;
+    private boolean ack;
+    @TypeConverters(TimeConverters.class)
+    private Timestamp ts;
+    @TypeConverters(TimeConverters.class)
+    private Timestamp lc;
+    private String from;
+    private int q;
 
-    public State(@NonNull String id, String val, boolean ack, Timestamp ts, Timestamp lc, String from, int q) {
+    private String roomId;
+    private String functionId;
+
+
+    public State(@NonNull String id, String val, boolean ack, Timestamp ts, Timestamp lc, String from, int q, String roomId, String functionId) {
         this.id = id;
         this.val = val;
         this.ack = ack;
@@ -34,6 +38,8 @@ public class State {
         this.lc = lc;
         this.from = from;
         this.q = q;
+        this.roomId = roomId;
+        this.functionId = functionId;
     }
 
     public State(@NonNull String id, String data) {
@@ -62,5 +68,42 @@ public class State {
                 e.printStackTrace();
             }
         }
+    }
+
+    @NonNull
+    public String getId() {
+        return id;
+    }
+
+    public String getVal() {
+        return val;
+    }
+
+    public boolean isAck() {
+        return ack;
+    }
+
+    public Timestamp getTs() {
+        return ts;
+    }
+
+    public Timestamp getLc() {
+        return lc;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public int getQ() {
+        return q;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public String getFunctionId() {
+        return functionId;
     }
 }
