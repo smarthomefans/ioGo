@@ -5,9 +5,20 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.example.nagel.io1.service.repository.Room;
+import com.example.nagel.io1.service.repository.RoomDao;
 import com.squareup.otto.Subscribe;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.inject.Inject;
 
 import io.socket.client.Ack;
 import io.socket.client.IO;
@@ -36,7 +47,7 @@ public class SocketService extends Service {
             mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
             mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
             mSocket.on("unauthorized", onConnectError);
-            mSocket.on("stateChange", onStateChange);
+            //mSocket.on("stateChange", onStateChange);
 
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
@@ -45,7 +56,6 @@ public class SocketService extends Service {
 
         mSocket.connect();
         getStates();
-        getObjects();
     }
 
     @Override
@@ -106,8 +116,9 @@ public class SocketService extends Service {
         });
     }
 
-    private void getObjects(){
-        mSocket.emit("getObjects", null, new Ack() {
+    @Subscribe
+    public void getObjects(final Events.getObjects event){
+        mSocket.emit("getObjectView", "system", "enum", "{'startkey': 'enum.rooms', 'endkey': 'enum.rooms'}", new Ack() {
             @Override
             public void call(Object... args) {
                 Log.i("onConnect","receiving objects");
@@ -115,39 +126,9 @@ public class SocketService extends Service {
                 event.setData(args[1].toString());
                 DataBus.getBus().post(event);
             }
-
         });
     }
-/*
-    private void inspectObjects(){
-        for (Map.Entry<String, String> entry : objects.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            JSONObject object = null;
-            JSONObject common = null;
-            String role = null;
-            ArrayList<String> list = new ArrayList<>();
 
-            try {
-                object = new JSONObject(value.toString());
-                common = object.getJSONObject("common");
-                role = common.optString("role");
-                if(role != null) {
-                    if (!oRoles.containsKey(role)) {
-                        oRoles.put(role, list);
-                    }
-                    list = (ArrayList<String>) oRoles.get(role);
-                    list.add(key);
-                    oRoles.put(role, list);
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        Log.d("inspectObjects", oRoles.size() + " roles detected");
-    }
-*/
     @Override
     public IBinder onBind(Intent intent) {
         return null;

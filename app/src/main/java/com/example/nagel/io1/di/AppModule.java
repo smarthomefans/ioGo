@@ -31,11 +31,11 @@ public class AppModule {
         return application.getApplicationContext();
     }
 
-    @Singleton
+    /*@Singleton
     @Provides
     SocketService provideSocketService() {
         return new SocketService();
-    }
+    }*/
 
     @Singleton
     @Provides

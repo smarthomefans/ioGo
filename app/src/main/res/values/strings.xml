@@ -76,4 +76,6 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_fragment">FragmentActivity</string>
     <string name="title_activity_room_overview">RoomOverviewActivity</string>
+    <string name="title_room_list">Rooms</string>
+    <string name="title_room_detail">Room Detail</string>
 </resources>

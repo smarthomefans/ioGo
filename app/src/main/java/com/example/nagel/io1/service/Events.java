@@ -73,4 +73,6 @@ public class Events {
             this.data = data;
         }
     }
+
+    public static class getObjects {}
 }

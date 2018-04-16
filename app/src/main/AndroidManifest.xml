@@ -34,9 +34,6 @@
         <activity
             android:name=".view.ui.SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity
-            android:name=".RoomOverviewActivity"
-            android:label="@string/title_activity_room_overview"></activity>
     </application>
 
 </manifest>
