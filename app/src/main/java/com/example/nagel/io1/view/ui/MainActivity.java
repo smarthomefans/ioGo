@@ -5,23 +5,15 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nagel.io1.R;
 import com.example.nagel.io1.service.DataBus;
-import com.example.nagel.io1.service.Events;
 import com.example.nagel.io1.service.SocketService;
-import com.example.nagel.io1.service.repository.State;
-import com.squareup.otto.Subscribe;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -122,8 +114,8 @@ public class MainActivity extends AppCompatActivity {
         DataBus.getBus().unregister(this);
     }
 
-    public void onClickShowFragment(View v){
-        Intent i = new Intent(this, FragmentActivity.class);
+    public void onClickRoomList(View v){
+        Intent i = new Intent(this, RoomListActivity.class);
         startActivity(i);
     }
 

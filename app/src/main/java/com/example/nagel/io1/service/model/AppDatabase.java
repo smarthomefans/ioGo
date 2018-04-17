@@ -1,4 +1,4 @@
-package com.example.nagel.io1.service.repository;
+package com.example.nagel.io1.service.model;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -6,10 +6,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
-import com.example.nagel.io1.service.ListConverters;
-import com.example.nagel.io1.service.TimeConverters;
-
-@Database(entities = { State.class, com.example.nagel.io1.service.repository.Room.class, Function.class}, version = 1)
+@Database(entities = { State.class, com.example.nagel.io1.service.model.Room.class, Function.class}, version = 1)
 @TypeConverters({TimeConverters.class, ListConverters.class})
 public abstract class AppDatabase extends RoomDatabase {
 

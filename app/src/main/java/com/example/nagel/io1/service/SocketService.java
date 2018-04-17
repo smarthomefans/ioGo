@@ -5,20 +5,9 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.example.nagel.io1.service.repository.Room;
-import com.example.nagel.io1.service.repository.RoomDao;
 import com.squareup.otto.Subscribe;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.inject.Inject;
 
 import io.socket.client.Ack;
 import io.socket.client.IO;

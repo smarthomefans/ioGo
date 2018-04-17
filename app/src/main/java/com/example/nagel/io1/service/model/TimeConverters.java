@@ -1,4 +1,4 @@
-package com.example.nagel.io1.service;
+package com.example.nagel.io1.service.model;
 
 import android.arch.persistence.room.TypeConverter;
 

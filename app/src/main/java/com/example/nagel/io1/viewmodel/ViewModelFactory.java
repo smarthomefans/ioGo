@@ -8,21 +8,16 @@ import javax.inject.Singleton;
 
 @Singleton
 public class ViewModelFactory implements ViewModelProvider.Factory {
-    private ListViewModel mViewModel;
     private RoomViewModel mRoomViewModel;
 
     @Inject
-    public ViewModelFactory(ListViewModel viewModel, RoomViewModel mRoomViewModel) {
-        this.mViewModel = viewModel;
+    public ViewModelFactory(RoomViewModel mRoomViewModel) {
         this.mRoomViewModel = mRoomViewModel;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(ListViewModel.class)) {
-            return (T) mViewModel;
-        }
         if (modelClass.isAssignableFrom(RoomViewModel.class)) {
             return (T) mRoomViewModel;
         }

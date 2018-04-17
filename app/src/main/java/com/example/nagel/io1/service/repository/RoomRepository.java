@@ -7,6 +7,10 @@ import android.util.Log;
 
 import com.example.nagel.io1.service.DataBus;
 import com.example.nagel.io1.service.Events;
+import com.example.nagel.io1.service.model.Room;
+import com.example.nagel.io1.service.model.RoomDao;
+import com.example.nagel.io1.service.model.State;
+import com.example.nagel.io1.service.model.StateDao;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
@@ -15,7 +19,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -27,12 +30,14 @@ public class RoomRepository {
     private Map<String,MutableLiveData<Room>> roomCache;
 
     private final RoomDao roomDao;
+    private final StateDao stateDao;
 
     private MutableLiveData<List<Room>> mListRooms;
 
     @Inject
-    public RoomRepository(RoomDao roomDao) {
+    public RoomRepository(RoomDao roomDao, StateDao stateDao) {
         this.roomDao = roomDao;
+        this.stateDao = stateDao;
         mListRooms = new MutableLiveData<>();
         roomCache = new HashMap<>();
 
@@ -79,9 +84,22 @@ public class RoomRepository {
                 if (item.getString("id").contains("enum.rooms.")) {
                     Room room = new Room(item.getString("id"), item.getJSONObject("value").getJSONObject("common").getString("name"), null);
                     List<String> members = new ArrayList<>();
-                    JSONObject mm = item.getJSONObject("value").getJSONObject("members");
-                    //members.add(mm.)
-                    //room.setMembers();
+                    JSONArray arrMembers = item.getJSONObject("value").getJSONObject("common").getJSONArray("members");
+                    if(arrMembers != null) {
+                        for (int j=0; j<arrMembers.length(); j++) {
+                            members.add(arrMembers.getString(j));
+
+                            State state = stateDao.getStateById(arrMembers.getString(j));
+                            if(state != null) {
+                                state.setRoomId(room.getId());
+                                stateDao.update(state);
+                            }
+                        }
+                        room.setMembers(members);
+
+
+
+                    }
                     roomDao.insert(room);
                 }
             }

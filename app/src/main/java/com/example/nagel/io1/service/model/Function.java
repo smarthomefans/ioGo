@@ -1,4 +1,4 @@
-package com.example.nagel.io1.service.repository;
+package com.example.nagel.io1.service.model;
 
 
 import android.arch.persistence.room.Entity;
@@ -6,7 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
-import com.example.nagel.io1.service.ListConverters;
+import com.example.nagel.io1.service.model.ListConverters;
 
 import java.util.List;
 

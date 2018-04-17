@@ -1,11 +1,9 @@
-package com.example.nagel.io1.service.repository;
+package com.example.nagel.io1.service.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
-
-import com.example.nagel.io1.service.TimeConverters;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +26,7 @@ public class State {
 
     private String roomId;
     private String functionId;
+    private String name;
 
 
     public State(@NonNull String id, String val, boolean ack, Timestamp ts, Timestamp lc, String from, int q, String roomId, String functionId) {
@@ -103,7 +102,19 @@ public class State {
         return roomId;
     }
 
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
     public String getFunctionId() {
         return functionId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

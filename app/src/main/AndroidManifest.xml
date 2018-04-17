@@ -29,11 +29,24 @@
             android:exported="true" />
 
         <activity
-            android:name=".view.ui.FragmentActivity"
-            android:label="@string/title_activity_fragment" />
-        <activity
             android:name=".view.ui.SettingsActivity"
             android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".view.ui.RoomListActivity"
+            android:label="@string/title_room_list"
+            android:parentActivityName=".view.ui.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.nagel.io1.view.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".view.ui.RoomDetailActivity"
+            android:label="@string/title_room_detail"
+            android:parentActivityName=".view.ui.RoomListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.nagel.io1.view.ui.RoomListActivity" />
+        </activity>
     </application>
 
 </manifest>

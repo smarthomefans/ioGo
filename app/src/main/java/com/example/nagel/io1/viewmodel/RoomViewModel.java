@@ -4,9 +4,9 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.example.nagel.io1.service.repository.Room;
+import com.example.nagel.io1.service.model.Room;
 import com.example.nagel.io1.service.repository.RoomRepository;
-import com.example.nagel.io1.service.repository.State;
+import com.example.nagel.io1.service.model.State;
 import com.example.nagel.io1.service.repository.StateRepository;
 
 import java.util.List;
@@ -28,6 +28,9 @@ public class RoomViewModel extends ViewModel {
 
     public LiveData<List<Room>> getRooms() {
         return roomRepository.getAllRooms();
+    }
+    public LiveData<Room> getRoom(String roomId) {
+        return roomRepository.getRoom(roomId);
     }
 
     public LiveData<String> getRoomName(String roomId){

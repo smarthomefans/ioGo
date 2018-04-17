@@ -6,13 +6,13 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 
 import com.example.nagel.io1.App;
-import com.example.nagel.io1.service.SocketService;
-import com.example.nagel.io1.service.repository.AppDatabase;
-import com.example.nagel.io1.service.repository.FunctionDao;
-import com.example.nagel.io1.service.repository.RoomDao;
-import com.example.nagel.io1.service.repository.StateDao;
+import com.example.nagel.io1.service.model.AppDatabase;
+import com.example.nagel.io1.service.model.FunctionDao;
+import com.example.nagel.io1.service.model.RoomDao;
+import com.example.nagel.io1.service.repository.RoomRepository;
+import com.example.nagel.io1.service.model.StateDao;
 import com.example.nagel.io1.service.repository.StateRepository;
-import com.example.nagel.io1.viewmodel.ListViewModel;
+import com.example.nagel.io1.viewmodel.RoomViewModel;
 import com.example.nagel.io1.viewmodel.ViewModelFactory;
 
 import javax.inject.Singleton;
@@ -31,20 +31,15 @@ public class AppModule {
         return application.getApplicationContext();
     }
 
-    /*@Singleton
     @Provides
-    SocketService provideSocketService() {
-        return new SocketService();
-    }*/
-
-    @Singleton
-    @Provides
-    StateRepository provideStateRepository(StateDao stateDao) {
-        return new StateRepository(stateDao);
+    ViewModelProvider.Factory provideViewModelFactory(
+            ViewModelFactory factory
+    ) {
+        return factory;
     }
 
     @Provides
-    ViewModel provideListViewModel(ListViewModel viewModel) {
+    ViewModel provideRoomViewModel(RoomViewModel viewModel) {
         return viewModel;
     }
 
@@ -52,6 +47,18 @@ public class AppModule {
     @Provides
     AppDatabase provideDb(App app) {
         return Room.databaseBuilder(app, AppDatabase.class,"appDatabase.db").build();
+    }
+
+    @Singleton
+    @Provides
+    StateRepository provideStateRepository(StateDao stateDao) {
+        return new StateRepository(stateDao);
+    }
+
+    @Singleton
+    @Provides
+    RoomRepository provideRoomRepository(RoomDao roomDao, StateDao stateDao) {
+        return new RoomRepository(roomDao, stateDao);
     }
 
     @Singleton
@@ -72,11 +79,5 @@ public class AppModule {
         return db.getFunctionDao();
     }
 
-    @Provides
-    ViewModelProvider.Factory provideListViewModelFactory(
-            ViewModelFactory factory
-    ) {
-        return factory;
-    }
 
 }

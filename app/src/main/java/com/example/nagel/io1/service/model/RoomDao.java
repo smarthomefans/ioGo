@@ -1,4 +1,4 @@
-package com.example.nagel.io1.service.repository;
+package com.example.nagel.io1.service.model;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
@@ -8,24 +8,22 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.Update;
 
-import com.example.nagel.io1.service.ListConverters;
-
 import java.util.List;
 
 @Dao
-public interface FunctionDao {
+public interface RoomDao {
 
-    @Query("SELECT * FROM function")
-    List<Function> getAllFunctions();
+    @Query("SELECT * FROM room")
+    List<Room> getAllRooms();
 
     @TypeConverters(ListConverters.class)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Function... functions);
+    void insert(Room... rooms);
 
     @TypeConverters(ListConverters.class)
     @Update
-    void update(Function... functions);
+    void update(Room... rooms);
 
     @Delete
-    void delete(Function... functions);
+    void delete(Room... rooms);
 }

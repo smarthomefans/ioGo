@@ -10,7 +10,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context=".RoomListActivity">
+    tools:context=".view.ui.RoomListActivity">
 
     <!--
     This layout is a two-pane layout for the Rooms
@@ -27,7 +27,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.example.nagel.io1.RoomListActivity"
+        tools:context="com.example.nagel.io1.view.ui.RoomListActivity"
         tools:listitem="@layout/room_list_content" />
 
     <FrameLayout

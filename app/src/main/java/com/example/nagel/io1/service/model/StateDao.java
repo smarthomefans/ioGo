@@ -1,4 +1,4 @@
-package com.example.nagel.io1.service.repository;
+package com.example.nagel.io1.service.model;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
@@ -9,8 +9,6 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.Update;
 
-import com.example.nagel.io1.service.TimeConverters;
-
 import java.util.List;
 
 @Dao
@@ -18,6 +16,9 @@ public interface StateDao {
 
     @Query("SELECT * FROM state")
     List<State> getAllStates();
+
+    @Query("SELECT * FROM state WHERE id = :id")
+    State getStateById(String id);
 
     @Query("SELECT * FROM state WHERE roomId = :roomId")
     LiveData<List<State>> getStatesByRoom(String roomId);
