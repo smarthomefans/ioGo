@@ -60,15 +60,13 @@ public class RoomListAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.room_list_content, parent, false);
+                .inflate(R.layout.room_list_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mIdView.setText(mValues.get(position).getId());
-        holder.mContentView.setText(mValues.get(position).getName());
-
+        holder.bindRoom(mValues.get(position));
         holder.itemView.setTag(mValues.get(position));
         holder.itemView.setOnClickListener(mOnClickListener);
     }
@@ -79,13 +77,15 @@ public class RoomListAdapter
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView mIdView;
-        final TextView mContentView;
+        @BindView(R.id.title)  TextView mTitle;
 
         ViewHolder(View view) {
             super(view);
-            mIdView = (TextView) view.findViewById(R.id.id_text);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            ButterKnife.bind(this, itemView);
+        }
+
+        public void bindRoom(Room room) {
+            mTitle.setText(room.getName());
         }
     }
 

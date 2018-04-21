@@ -27,6 +27,8 @@ public class State {
     private String roomId;
     private String functionId;
     private String name;
+    private String type;
+    private String role;
 
 
     public State(@NonNull String id, String val, boolean ack, Timestamp ts, Timestamp lc, String from, int q, String roomId, String functionId) {
@@ -39,11 +41,6 @@ public class State {
         this.q = q;
         this.roomId = roomId;
         this.functionId = functionId;
-    }
-
-    public State(@NonNull String id, String data) {
-        this.id = id;
-        this.setData(data);
     }
 
     public void setData(String data) {
@@ -110,11 +107,31 @@ public class State {
         return functionId;
     }
 
+    public void setFunctionId(String functionId) {
+        this.functionId = functionId;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

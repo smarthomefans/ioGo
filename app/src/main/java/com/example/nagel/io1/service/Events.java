@@ -75,4 +75,5 @@ public class Events {
     }
 
     public static class getObjects {}
+    public static class getStates {}
 }

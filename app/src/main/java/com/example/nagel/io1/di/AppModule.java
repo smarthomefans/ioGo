@@ -9,6 +9,7 @@ import com.example.nagel.io1.App;
 import com.example.nagel.io1.service.model.AppDatabase;
 import com.example.nagel.io1.service.model.FunctionDao;
 import com.example.nagel.io1.service.model.RoomDao;
+import com.example.nagel.io1.service.repository.FunctionRepository;
 import com.example.nagel.io1.service.repository.RoomRepository;
 import com.example.nagel.io1.service.model.StateDao;
 import com.example.nagel.io1.service.repository.StateRepository;
@@ -59,6 +60,12 @@ public class AppModule {
     @Provides
     RoomRepository provideRoomRepository(RoomDao roomDao, StateDao stateDao) {
         return new RoomRepository(roomDao, stateDao);
+    }
+
+    @Singleton
+    @Provides
+    FunctionRepository provideFunctionRepository(FunctionDao functionDao, StateDao stateDao) {
+        return new FunctionRepository(functionDao, stateDao);
     }
 
     @Singleton

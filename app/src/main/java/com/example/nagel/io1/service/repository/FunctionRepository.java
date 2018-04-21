@@ -7,8 +7,8 @@ import android.util.Log;
 
 import com.example.nagel.io1.service.DataBus;
 import com.example.nagel.io1.service.Events;
-import com.example.nagel.io1.service.model.Room;
-import com.example.nagel.io1.service.model.RoomDao;
+import com.example.nagel.io1.service.model.Function;
+import com.example.nagel.io1.service.model.FunctionDao;
 import com.example.nagel.io1.service.model.State;
 import com.example.nagel.io1.service.model.StateDao;
 import com.squareup.otto.Subscribe;
@@ -26,21 +26,21 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class RoomRepository {
-    public static final String TAG = "RoomRepository";
-    private Map<String,MutableLiveData<Room>> roomCache;
+public class FunctionRepository {
+    public static final String TAG = "FunctionRepository";
+    private Map<String,MutableLiveData<Function>> functionCache;
 
-    private final RoomDao roomDao;
+    private final FunctionDao functionDao;
     private final StateDao stateDao;
 
-    private MutableLiveData<List<Room>> mListRooms;
+    private MutableLiveData<List<Function>> mListFunctions;
 
     @Inject
-    public RoomRepository(RoomDao roomDao, StateDao stateDao) {
-        this.roomDao = roomDao;
+    public FunctionRepository(FunctionDao functionDao, StateDao stateDao) {
+        this.functionDao = functionDao;
         this.stateDao = stateDao;
-        mListRooms = new MutableLiveData<>();
-        roomCache = new HashMap<>();
+        mListFunctions = new MutableLiveData<>();
+        functionCache = new HashMap<>();
 
         DataBus.getBus().register(this);
 
@@ -49,17 +49,17 @@ public class RoomRepository {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                List<Room> ls;
-                ls = roomDao.getAllRooms();
-                Log.d(TAG, "Constructor roomDao.getAllRooms size:" + ls.size());
-                mListRooms.postValue(ls);
+                List<Function> ls;
+                ls = functionDao.getAllFunctions();
+                Log.d(TAG, "Constructor functionDao.getAllFunctions size:" + ls.size());
+                mListFunctions.postValue(ls);
 
                 if(ls != null){
-                    for (Room room : ls) {
-                        MutableLiveData<Room> mRoom = new MutableLiveData<>();
-                        mRoom.postValue(room);
-                        roomCache.put(room.getId(), mRoom);
-                        Log.d(TAG, "Constructor roomCache.put roomId:" + room.getId());
+                    for (Function function : ls) {
+                        MutableLiveData<Function> mFunction = new MutableLiveData<>();
+                        mFunction.postValue(function);
+                        functionCache.put(function.getId(), mFunction);
+                        Log.d(TAG, "Constructor functionCache.put functionId:" + function.getId());
                     }
                 }
             }
@@ -67,22 +67,22 @@ public class RoomRepository {
         Log.i(TAG, "Constructor created");
     }
 
-    public LiveData<Room> getRoom(String roomId){
-        if(!roomCache.containsKey(roomId)){
-            roomCache.put(roomId, new MutableLiveData<>());
-            Log.d(TAG, "getRoom roomCache.put roomId:" + roomId);
+    public LiveData<Function> getFunction(String functionId){
+        if(!functionCache.containsKey(functionId)){
+            functionCache.put(functionId, new MutableLiveData<>());
+            Log.d(TAG, "getFunction functionCache.put functionId:" + functionId);
         }
-        Log.i(TAG, "getRoom roomId:" + roomId);
-        return roomCache.get(roomId);
+        Log.i(TAG, "getFunction functionId:" + functionId);
+        return functionCache.get(functionId);
     }
 
-    public LiveData<List<Room>> getAllRooms(){
-        if(mListRooms.getValue() == null) {
-            Log.i(TAG, "getAllRooms size:0");
+    public LiveData<List<Function>> getAllFunctions(){
+        if(mListFunctions.getValue() == null) {
+            Log.i(TAG, "getAllFunctions size:0");
         }else{
-            Log.i(TAG, "getAllRooms size:" + mListRooms.getValue().size());
+            Log.i(TAG, "getAllFunctions size:" + mListFunctions.getValue().size());
         }
-        return mListRooms;
+        return mListFunctions;
     }
 
     @Subscribe
@@ -93,9 +93,9 @@ public class RoomRepository {
             Log.d(TAG,"saveObjects arr.length:" + arr.length());
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject item = arr.getJSONObject(i);
-                if (item.getString("id").contains("enum.rooms.")) {
-                    Room room = new Room(item.getString("id"), item.getJSONObject("value").getJSONObject("common").getString("name"), null);
-                    Log.d(TAG,"saveObjects roomId:" + room.getId());
+                if (item.getString("id").contains("enum.functions.")) {
+                    Function function = new Function(item.getString("id"), item.getJSONObject("value").getJSONObject("common").getString("name"), null);
+                    Log.d(TAG,"saveObjects functionId:" + function.getId());
                     List<String> members = new ArrayList<>();
                     JSONArray arrMembers = item.getJSONObject("value").getJSONObject("common").getJSONArray("members");
                     if(arrMembers != null) {
@@ -105,15 +105,15 @@ public class RoomRepository {
 
                             State state = stateDao.getStateById(arrMembers.getString(j));
                             if(state != null) {
-                                state.setRoomId(room.getId());
+                                state.setFunctionId(function.getId());
                                 stateDao.update(state);
                                 Log.d(TAG,"saveObjects stateDao.update stateId:" + state.getId());
                             }
                         }
-                        room.setMembers(members);
+                        function.setMembers(members);
                     }
-                    roomDao.insert(room);
-                    Log.d(TAG,"saveObjects roomDao.insert roomId:" + room.getId());
+                    functionDao.insert(function);
+                    Log.d(TAG,"saveObjects functionDao.insert functionId:" + function.getId());
                 }
             }
 

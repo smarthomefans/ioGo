@@ -52,11 +52,9 @@ public class RoomDetailAdapter
         @BindView(R.id.message_title)  TextView mTitle;
         @BindView(R.id.message_subtitle)  TextView mSubtitle;
         @BindView(R.id.value)  TextView mValue;
-        private Context mContext;
 
         public StateViewHolder(View itemView) {
             super(itemView);
-            mContext = itemView.getContext();
             ButterKnife.bind(this, itemView);
         }
 

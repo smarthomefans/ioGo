@@ -9,6 +9,8 @@ import com.squareup.otto.Subscribe;
 
 import java.net.URISyntaxException;
 
+import javax.inject.Singleton;
+
 import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -16,6 +18,7 @@ import io.socket.emitter.Emitter;
 
 import static android.content.ContentValues.TAG;
 
+@Singleton
 public class SocketService extends Service {
     private Socket mSocket;
 
@@ -44,7 +47,8 @@ public class SocketService extends Service {
         IO.Options opts = new IO.Options();
 
         mSocket.connect();
-        getStates();
+
+        Log.i("SocketService", "onCreate finished");
     }
 
     @Override
@@ -93,7 +97,8 @@ public class SocketService extends Service {
         mSocket.emit("setState", event.getId(), event.getVal());
     }
 
-    public void getStates(){
+    @Subscribe
+    public void getStates(final Events.getStates event){
         mSocket.emit("getStates", "javascript.0.*",new Ack() {
             @Override
             public void call(Object... args) {
