@@ -28,12 +28,12 @@ import javax.inject.Singleton;
 @Singleton
 public class RoomRepository {
     public static final String TAG = "RoomRepository";
-    private Map<String,MutableLiveData<Room>> roomCache;
+    private Map<String,LiveData<Room>> roomCache;
 
     private final RoomDao roomDao;
     private final StateDao stateDao;
 
-    private MutableLiveData<List<Room>> mListRooms;
+    private LiveData<List<Room>> mListRooms;
 
     @Inject
     public RoomRepository(RoomDao roomDao, StateDao stateDao) {
@@ -44,18 +44,16 @@ public class RoomRepository {
 
         DataBus.getBus().register(this);
 
-        DataBus.getBus().post(new Events.getObjects());
+        DataBus.getBus().post(new Events.getEnumObjects());
 
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                List<Room> ls;
-                ls = roomDao.getAllRooms();
-                Log.d(TAG, "Constructor roomDao.getAllRooms size:" + ls.size());
-                mListRooms.postValue(ls);
+                mListRooms = roomDao.getAllRooms();
 
-                if(ls != null){
-                    for (Room room : ls) {
+                if(mListRooms.getValue() != null){
+                    Log.d(TAG, "Constructor roomDao.getAllRooms size:" + mListRooms.getValue().size());
+                    for (Room room : mListRooms.getValue()) {
                         MutableLiveData<Room> mRoom = new MutableLiveData<>();
                         mRoom.postValue(room);
                         roomCache.put(room.getId(), mRoom);
@@ -69,7 +67,7 @@ public class RoomRepository {
 
     public LiveData<Room> getRoom(String roomId){
         if(!roomCache.containsKey(roomId)){
-            roomCache.put(roomId, new MutableLiveData<>());
+            roomCache.put(roomId, roomDao.getRoomById(roomId));
             Log.d(TAG, "getRoom roomCache.put roomId:" + roomId);
         }
         Log.i(TAG, "getRoom roomId:" + roomId);

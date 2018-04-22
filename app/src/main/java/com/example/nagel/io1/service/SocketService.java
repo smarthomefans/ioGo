@@ -44,7 +44,6 @@ public class SocketService extends Service {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        IO.Options opts = new IO.Options();
 
         mSocket.connect();
 
@@ -61,8 +60,6 @@ public class SocketService extends Service {
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            mSocket.emit("name","dummy");
-            mSocket.emit("authenticate");
             mSocket.emit("subscribe", "javascript.0.*");
             Log.i(TAG, "connected");
         }
@@ -111,11 +108,24 @@ public class SocketService extends Service {
     }
 
     @Subscribe
-    public void getObjects(final Events.getObjects event){
-        mSocket.emit("getObjectView", "system", "enum", "{'startkey': 'enum.rooms', 'endkey': 'enum.rooms'}", new Ack() {
+    public void getEnumObjects(final Events.getEnumObjects event){
+        mSocket.emit("getObjectView", "system", "enum", "", new Ack() {
             @Override
             public void call(Object... args) {
-                Log.i("onConnect","receiving objects");
+                Log.i("getEnumObjects","receiving objects");
+                Events.Objects event = new Events.Objects();
+                event.setData(args[1].toString());
+                DataBus.getBus().post(event);
+            }
+        });
+    }
+
+    @Subscribe
+    public void getStateObjects(final Events.getStateObjects event){
+        mSocket.emit("getObjectView", "system", "state", new Ack() {
+            @Override
+            public void call(Object... args) {
+                Log.i("getStateObjects","receiving objects");
                 Events.Objects event = new Events.Objects();
                 event.setData(args[1].toString());
                 DataBus.getBus().post(event);

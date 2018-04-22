@@ -1,5 +1,7 @@
 package com.example.nagel.io1.service.model;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -14,7 +16,10 @@ import java.util.List;
 public interface RoomDao {
 
     @Query("SELECT * FROM room")
-    List<Room> getAllRooms();
+    LiveData<List<Room>> getAllRooms();
+
+    @Query("SELECT * FROM room WHERE id = :id")
+    LiveData<Room> getRoomById(String id);
 
     @TypeConverters(ListConverters.class)
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -74,6 +74,7 @@ public class Events {
         }
     }
 
-    public static class getObjects {}
+    public static class getEnumObjects {}
+    public static class getStateObjects {}
     public static class getStates {}
 }

@@ -55,6 +55,8 @@ public class RoomDetailFragment extends Fragment implements Injectable {
     private List<State> mListStates = new ArrayList<>();
     private RoomViewModel mViewModel;
 
+    private String roomId;
+
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
 
@@ -62,12 +64,9 @@ public class RoomDetailFragment extends Fragment implements Injectable {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(RoomViewModel.class);
-
+        roomId = getArguments().getString(ARG_ROOM_ID);
         if (getArguments().containsKey(ARG_ROOM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mRoom = mViewModel.getRoom(getArguments().getString(ARG_ROOM_ID));
+            mRoom = mViewModel.getRoom(roomId);
         }
     }
 
@@ -91,7 +90,7 @@ public class RoomDetailFragment extends Fragment implements Injectable {
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(RoomViewModel.class);
 
-        mViewModel.getStates(mRoom.getValue().getId())
+        mViewModel.getStates(roomId)
                 .observe(this, new Observer<List<State>>() {
                     @Override
                     public void onChanged(@Nullable List<State> newList) {
