@@ -21,6 +21,7 @@ import static android.content.ContentValues.TAG;
 @Singleton
 public class SocketService extends Service {
     private Socket mSocket;
+    final private String TAG = "SocketService";
 
     public SocketService() {
     }
@@ -32,14 +33,14 @@ public class SocketService extends Service {
         DataBus.getBus().register(this);
 
         try {
-            mSocket = IO.socket("http://192.168.1.33:8084/");
+            mSocket = IO.socket("http://iobroker:8084/");
             //mSocket = IO.socket("https://iobroker.pro:8084");
             mSocket.on(Socket.EVENT_CONNECT, onConnect);
             mSocket.on(Socket.EVENT_DISCONNECT,onDisconnect);
             mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
             mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
             mSocket.on("unauthorized", onConnectError);
-            //mSocket.on("stateChange", onStateChange);
+            mSocket.on("stateChange", onStateChange);
 
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
@@ -47,7 +48,7 @@ public class SocketService extends Service {
 
         mSocket.connect();
 
-        Log.i("SocketService", "onCreate finished");
+        Log.i(TAG, "onCreate finished");
     }
 
     @Override
@@ -55,6 +56,7 @@ public class SocketService extends Service {
         super.onDestroy();
         mSocket.disconnect();
         DataBus.getBus().unregister(this);
+        Log.i(TAG, "onDestroy finished");
     }
 
     private Emitter.Listener onConnect = new Emitter.Listener() {
@@ -109,7 +111,7 @@ public class SocketService extends Service {
 
     @Subscribe
     public void getEnumObjects(final Events.getEnumObjects event){
-        mSocket.emit("getObjectView", "system", "enum", "", new Ack() {
+        mSocket.emit("getObjectView", "system", "enum", "{'startkey': 'enum.rooms', 'endkey': 'enum.rooms'}", new Ack() {
             @Override
             public void call(Object... args) {
                 Log.i("getEnumObjects","receiving objects");

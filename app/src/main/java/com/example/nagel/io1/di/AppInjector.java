@@ -8,7 +8,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import com.example.nagel.io1.App;
-import com.example.nagel.io1.view.ui.RoomDetailActivity;
+import com.example.nagel.io1.di.component.DaggerAppComponent;
+import com.example.nagel.io1.ui.room.RoomDetailActivity;
 
 import dagger.android.AndroidInjection;
 import dagger.android.support.AndroidSupportInjection;

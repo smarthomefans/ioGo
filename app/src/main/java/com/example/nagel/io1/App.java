@@ -3,7 +3,7 @@ package com.example.nagel.io1;
 import android.app.Activity;
 import android.app.Application;
 
-import com.example.nagel.io1.di.DaggerAppComponent;
+import com.example.nagel.io1.di.component.DaggerAppComponent;
 
 import javax.inject.Inject;
 
