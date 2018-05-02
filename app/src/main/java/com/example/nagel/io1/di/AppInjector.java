@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 
 import com.example.nagel.io1.App;
 import com.example.nagel.io1.di.component.DaggerAppComponent;
+import com.example.nagel.io1.ui.function.FunctionDetailActivity;
 import com.example.nagel.io1.ui.room.RoomDetailActivity;
 
 import dagger.android.AndroidInjection;
@@ -81,6 +82,19 @@ public class AppInjector {
         }
         if (activity instanceof RoomDetailActivity) {
             ((RoomDetailActivity) activity).getSupportFragmentManager()
+                    .registerFragmentLifecycleCallbacks(
+                            new FragmentManager.FragmentLifecycleCallbacks() {
+                                @Override
+                                public void onFragmentCreated(FragmentManager fm, Fragment f,
+                                                              Bundle savedInstanceState) {
+                                    if (f instanceof Injectable) {
+                                        AndroidSupportInjection.inject(f);
+                                    }
+                                }
+                            }, true);
+        }
+        if (activity instanceof FunctionDetailActivity) {
+            ((FunctionDetailActivity) activity).getSupportFragmentManager()
                     .registerFragmentLifecycleCallbacks(
                             new FragmentManager.FragmentLifecycleCallbacks() {
                                 @Override

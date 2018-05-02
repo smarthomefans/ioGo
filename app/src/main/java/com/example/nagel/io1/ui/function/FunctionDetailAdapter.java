@@ -1,4 +1,4 @@
-package com.example.nagel.io1.ui.room;
+package com.example.nagel.io1.ui.function;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,14 +14,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RoomDetailAdapter
-        extends RecyclerView.Adapter<RoomDetailAdapter.StateViewHolder> {
+public class FunctionDetailAdapter
+        extends RecyclerView.Adapter<FunctionDetailAdapter.StateViewHolder> {
 
-    private final RoomDetailActivity mParentActivity;
+    private final FunctionDetailActivity mParentActivity;
     private final List<State> mValues;
 
-    public RoomDetailAdapter(RoomDetailActivity parent,
-                             List<State> stateList) {
+    public FunctionDetailAdapter(FunctionDetailActivity parent,
+                                 List<State> stateList) {
         mValues = stateList;
         mParentActivity = parent;
     }

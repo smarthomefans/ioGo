@@ -23,6 +23,9 @@ public interface StateDao {
     @Query("SELECT * FROM state WHERE roomId = :roomId")
     LiveData<List<State>> getStatesByRoom(String roomId);
 
+    @Query("SELECT * FROM state WHERE functionId = :functionId")
+    LiveData<List<State>> getStatesByFunction(String functionId);
+    
     @TypeConverters(TimeConverters.class)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(State... states);

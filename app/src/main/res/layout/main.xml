@@ -18,14 +18,25 @@
     <Button
         android:id="@+id/showRoomList"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="72dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:onClick="onClickRoomList"
         android:text="room list"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textState"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textState" />
+
+    <Button
+        android:id="@+id/showFunctionList"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="function list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/showRoomList" />
 
 </android.support.constraint.ConstraintLayout>

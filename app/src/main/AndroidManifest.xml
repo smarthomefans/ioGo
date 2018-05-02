@@ -48,6 +48,23 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.nagel.io1.ui.room.RoomListActivity" />
         </activity>
+        <activity
+            android:name=".ui.function.FunctionListActivity"
+            android:label="@string/title_function_list"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.nagel.io1.ui.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.function.FunctionDetailActivity"
+            android:label="@string/title_function_detail"
+            android:parentActivityName=".ui.function.FunctionListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.nagel.io1.ui.function.FunctionListActivity" />
+        </activity>
 
         <meta-data
             android:name="preloaded_fonts"

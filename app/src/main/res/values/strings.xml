@@ -78,4 +78,7 @@
     <string name="title_activity_room_overview">RoomOverviewActivity</string>
     <string name="title_room_list">Rooms</string>
     <string name="title_room_detail">Room Detail</string>
+    <string name="title_activity_function_overview">FunctionOverviewActivity</string>
+    <string name="title_function_list">Functions</string>
+    <string name="title_function_detail">Function Detail</string>
 </resources>

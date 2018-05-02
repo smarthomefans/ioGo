@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.nagel.io1.R;
 import com.example.nagel.io1.service.DataBus;
 import com.example.nagel.io1.service.SocketService;
+import com.example.nagel.io1.ui.function.FunctionListActivity;
 import com.example.nagel.io1.ui.room.RoomListActivity;
 import com.example.nagel.io1.ui.settings.SettingsActivity;
 
@@ -25,6 +26,7 @@ import dagger.android.AndroidInjection;
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.textState) TextView wTextView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.fab_airplane) FloatingActionButton fab_airplane;
     @BindView(R.id.fab_bike) FloatingActionButton fab_bike;
@@ -39,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setLogo(R.drawable.ic_logo);
         setSupportActionBar(toolbar);
 
@@ -119,8 +120,15 @@ public class MainActivity extends AppCompatActivity {
         DataBus.getBus().unregister(this);
     }
 
-    public void onClickRoomList(View v){
+    @OnClick(R.id.showRoomList)
+    public void onClickRoomList(){
         Intent i = new Intent(this, RoomListActivity.class);
+        startActivity(i);
+    }
+
+    @OnClick(R.id.showFunctionList)
+    public void onClickFuncionList(){
+        Intent i = new Intent(this, FunctionListActivity.class);
         startActivity(i);
     }
 
