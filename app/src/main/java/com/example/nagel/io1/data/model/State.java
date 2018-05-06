@@ -29,6 +29,8 @@ public class State {
     private String name;
     private String type;
     private String role;
+    public static final String TEMP_TYPE = "value.temperature";
+    public static final String SWITCH_TYPE = "toggle_switch";
 
 
     public State(@NonNull String id, String val, boolean ack, Timestamp ts, Timestamp lc, String from, int q, String roomId, String functionId) {

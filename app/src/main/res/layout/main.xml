@@ -10,10 +10,13 @@
     tools:showIn="@layout/activity_main">
 
     <TextView
-        android:id="@+id/textState"
-        android:layout_width="368dp"
-        android:layout_height="wrap_content"
-        android:text="..."/>
+        android:id="@+id/title"
+        style="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:paddingLeft="72dp"
+        android:paddingTop="20dp"
+        android:text="HOME" />
 
     <Button
         android:id="@+id/showRoomList"
@@ -21,11 +24,10 @@
         android:layout_height="72dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="room list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textState" />
+        app:layout_constraintTop_toBottomOf="@+id/title"/>
 
     <Button
         android:id="@+id/showFunctionList"

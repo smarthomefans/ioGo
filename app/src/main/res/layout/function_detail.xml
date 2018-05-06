@@ -9,5 +9,4 @@ android:layout_height="match_parent"
 android:layout_marginLeft="16dp"
 android:layout_marginRight="16dp"
 app:layoutManager="LinearLayoutManager"
-tools:context=".ui.function.FunctionDetailActivity"
-tools:listitem="@layout/material_list" />
+tools:context=".ui.function.FunctionDetailActivity"/>

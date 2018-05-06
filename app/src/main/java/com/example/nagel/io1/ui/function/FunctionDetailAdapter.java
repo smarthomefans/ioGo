@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class FunctionDetailAdapter
-        extends RecyclerView.Adapter<FunctionDetailAdapter.StateViewHolder> {
+        extends RecyclerView.Adapter {
 
     private final FunctionDetailActivity mParentActivity;
     private final List<State> mValues;
@@ -27,15 +27,49 @@ public class FunctionDetailAdapter
     }
 
     @Override
-    public StateViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.material_list, parent, false);
-        return new StateViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View view;
+        switch (viewType) {
+            case 0:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.temp_listitem, parent, false);
+                return new TempTypeViewHolder(view);
+            case 1:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.switch_listitem, parent, false);
+                return new SwitchTypeViewHolder(view);
+        }
+        return null;
     }
 
     @Override
-    public void onBindViewHolder(final StateViewHolder holder, int position) {
-        holder.bindState(mValues.get(position));
+    public int getItemViewType(int position) {
+
+        switch (mValues.get(position).getType()) {
+            case "number":
+                return 0;
+            case "boolean":
+                return 1;
+            default:
+                return 0;
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+
+        State object = mValues.get(position);
+        if (object != null) {
+            switch (object.getType()) {
+                case "number":
+                    ((TempTypeViewHolder) holder).bindState(mValues.get(position));
+
+                    break;
+                case "boolean":
+                    ((SwitchTypeViewHolder) holder).bindState(mValues.get(position));
+
+                    break;
+            }
+        }
     }
 
     @Override
@@ -46,19 +80,36 @@ public class FunctionDetailAdapter
         return mValues.size();
     }
 
-    public class StateViewHolder extends RecyclerView.ViewHolder {
+    public class TempTypeViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.message_title)  TextView mTitle;
         @BindView(R.id.message_subtitle)  TextView mSubtitle;
         @BindView(R.id.value)  TextView mValue;
 
-        public StateViewHolder(View itemView) {
+        public TempTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
         public void bindState(State state) {
             mTitle.setText(state.getId().replace("javascript.0.",""));
-            mSubtitle.setText(state.getName());
+            mSubtitle.setText("Number" + state.getName());
+            mValue.setText(state.getVal());
+        }
+    }
+
+    public class SwitchTypeViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.message_title)  TextView mTitle;
+        @BindView(R.id.message_subtitle)  TextView mSubtitle;
+        @BindView(R.id.value)  TextView mValue;
+
+        public SwitchTypeViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        public void bindState(State state) {
+            mTitle.setText(state.getId().replace("javascript.0.",""));
+            mSubtitle.setText("Boolean" + state.getName());
             mValue.setText(state.getVal());
         }
     }

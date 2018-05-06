@@ -44,7 +44,7 @@ public class RoomRepository {
 
         DataBus.getBus().register(this);
 
-        DataBus.getBus().post(new Events.getEnumObjects());
+        DataBus.getBus().post(new Events.getEnumRooms());
 
         AsyncTask.execute(new Runnable() {
             @Override

@@ -25,14 +25,7 @@ import dagger.android.AndroidInjection;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.textState) TextView wTextView;
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.fab) FloatingActionButton fab;
-    @BindView(R.id.fab_airplane) FloatingActionButton fab_airplane;
-    @BindView(R.id.fab_bike) FloatingActionButton fab_bike;
-    @BindView(R.id.fab_car) FloatingActionButton fab_car;
-
-    boolean isFABOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,69 +34,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        toolbar.setLogo(R.drawable.ic_logo);
+        toolbar.setTitleMarginStart(200);
         setSupportActionBar(toolbar);
+        toolbar.setLogo(R.drawable.home);
 
         DataBus.getBus().register(this);
 
         Intent intent = new Intent(this, SocketService.class);
         startService(intent);
 
-    }
-
-    @OnClick(R.id.fab)
-    public void onClickFab() {
-        if(!isFABOpen){
-            showFABMenu();
-        }else{
-            closeFABMenu();
-        }
-    }
-
-    @OnClick(R.id.fab_airplane)
-    public void onClickFabAirplane() {
-        Toast.makeText(MainActivity.this,
-                "Airplane started", Toast.LENGTH_SHORT).show();
-        closeFABMenu();
-    }
-
-    @OnClick(R.id.fab_bike)
-    public void onClickFabBike() {
-        Toast.makeText(MainActivity.this,
-                "Bike started", Toast.LENGTH_SHORT).show();
-        closeFABMenu();
-    }
-
-    @OnClick(R.id.fab_car)
-    public void onClickFabCar() {
-        Toast.makeText(MainActivity.this,
-                "Car started", Toast.LENGTH_SHORT).show();
-        closeFABMenu();
-    }
-
-    private void showFABMenu(){
-        isFABOpen=true;
-        fab.setRotation(135);
-        fab_airplane.animate().translationY(-getResources().getDimension(R.dimen.standard_55));
-        fab_bike.animate().translationY(-getResources().getDimension(R.dimen.standard_105));
-        fab_car.animate().translationY(-getResources().getDimension(R.dimen.standard_155));
-    }
-
-    private void closeFABMenu(){
-        isFABOpen=false;
-        fab.setRotation(0);
-        fab_airplane.animate().translationY(0);
-        fab_bike.animate().translationY(0);
-        fab_car.animate().translationY(0);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if(!isFABOpen){
-            super.onBackPressed();
-        }else{
-            closeFABMenu();
-        }
     }
 
     @Override

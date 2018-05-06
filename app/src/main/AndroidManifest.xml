@@ -33,7 +33,6 @@
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".ui.room.RoomListActivity"
-            android:label="@string/title_room_list"
             android:parentActivityName=".ui.main.MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <meta-data
@@ -42,7 +41,6 @@
         </activity>
         <activity
             android:name=".ui.room.RoomDetailActivity"
-            android:label="@string/title_room_detail"
             android:parentActivityName=".ui.room.RoomListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -50,7 +48,6 @@
         </activity>
         <activity
             android:name=".ui.function.FunctionListActivity"
-            android:label="@string/title_function_list"
             android:parentActivityName=".ui.main.MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <meta-data
@@ -59,7 +56,6 @@
         </activity>
         <activity
             android:name=".ui.function.FunctionDetailActivity"
-            android:label="@string/title_function_detail"
             android:parentActivityName=".ui.function.FunctionListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

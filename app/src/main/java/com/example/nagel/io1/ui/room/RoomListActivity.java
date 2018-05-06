@@ -53,9 +53,6 @@ public class RoomListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        toolbar.setTitle("Raum");
-
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(RoomViewModel.class);
 
         mAdapter = new RoomListAdapter(this, list);

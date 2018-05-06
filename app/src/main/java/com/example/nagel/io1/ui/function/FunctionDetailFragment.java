@@ -64,6 +64,7 @@ public class FunctionDetailFragment extends Fragment implements Injectable {
         functionId = getArguments().getString(ARG_FUNCTION_ID);
         if (getArguments().containsKey(ARG_FUNCTION_ID)) {
             mFunction = mViewModel.getFunction(functionId);
+
         }
     }
 

@@ -8,6 +8,9 @@ import android.util.Log;
 
 import com.squareup.otto.Subscribe;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
@@ -26,6 +29,7 @@ import io.socket.emitter.Emitter;
 import io.socket.engineio.client.Transport;
 import io.socket.engineio.client.transports.WebSocket;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -40,13 +44,14 @@ public class SocketService extends Service {
     private final String baseUrl = "https://iobroker.pro";
     private String username = "nis.nagel@gmail.com";
     private String password = "socket123";
+    private final String origin = "https://iobroker.pro";
+    private final String referrer = "https://iobroker.pro/login";;
+    private final String host = "iobroker.pro";
     private Socket mSocket;
     private IO.Options opts;
     private String socketUrl;
     private String cookieUrl;
     private String cookie;
-
-    private OkHttpClient client = new OkHttpClient();
 
     public SocketService() {
         Log.i(TAG, "instance cerated");
@@ -61,7 +66,7 @@ public class SocketService extends Service {
         try {
             socketUrl = baseUrl + "/?key=nokey" + "&user=" + URLEncoder.encode(username, "UTF-8") + "&pass=" + password;
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            socketUrl = baseUrl + "/?key=nokey" + "&user=" + username + "&pass=" + password;
         }
         cookieUrl = baseUrl + "/login?app=true";
 
@@ -75,15 +80,18 @@ public class SocketService extends Service {
                 .add("username", username)
                 .add("password", password)
                 .build();
+
         Request request = new Request.Builder()
                 .url(cookieUrl)
                 .post(requestBody)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                .addHeader("Referrer", "https://iobroker.pro/login")
-                .addHeader("Host", "iobroker.pro")
-                .addHeader("Origin", baseUrl)
+                .addHeader("Referrer", referrer)
+                .addHeader("Host", host)
+                .addHeader("Origin", origin)
                 .build();
         Response response = null;
+        OkHttpClient client = new OkHttpClient();
+
         try {
             response = client.newCall(request).execute();
         } catch (IOException e) {
@@ -158,7 +166,6 @@ public class SocketService extends Service {
                     headers.put("Cookie", Arrays.asList(cookie));
                 }
             });
-
         }
     };
 
@@ -191,8 +198,15 @@ public class SocketService extends Service {
     }
 
     @Subscribe
-    public void getEnumObjects(final Events.getEnumObjects event){
-        mSocket.emit("getObjectView", "system", "enum", "{'startkey': 'enum.rooms', 'endkey': 'enum.rooms'}", new Ack() {
+    public void getEnumRooms(final Events.getEnumRooms event){
+        JSONObject json = new JSONObject();
+        try {
+            json.put("startkey", "enum.rooms.");
+            json.put("endkey", "enum.rooms.\u9999");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
             @Override
             public void call(Object... args) {
                 Log.i("getEnumObjects","receiving objects");
@@ -204,9 +218,35 @@ public class SocketService extends Service {
     }
 
     @Subscribe
+    public void getEnumFunctions(final Events.getEnumFunctions event){
+        JSONObject json = new JSONObject();
+        try {
+            json.put("startkey", "enum.functions.");
+            json.put("endkey", "enum.functions.\u9999");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
+            @Override
+            public void call(Object... args) {
+                Log.i("getEnumObjects","receiving objects");
+                Events.Objects event = new Events.Objects();
+                event.setData(args[1].toString());
+                DataBus.getBus().post(event);
+            }
+        });
+    }
+
+
     public void getStateObjects(final Events.getStateObjects event){
-        mSocket.emit("getObjectView", "system", "state", "{'startkey': 'enum.rooms', 'endkey': 'enum.rooms'}", new Ack() {
-        //mSocket.emit("getObjects", new Ack() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("startkey", "system.states.");
+            json.put("endkey", "system.states.\u9999");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mSocket.emit("getObjectView", "system", "state", json, new Ack() {
             @Override
             public void call(Object... args) {
                 Log.i("getStateObjects","receiving objects");

@@ -74,7 +74,8 @@ public class Events {
         }
     }
 
-    public static class getEnumObjects {}
+    public static class getEnumRooms {}
+    public static class getEnumFunctions {}
     public static class getStateObjects {}
     public static class getStates {}
 }

@@ -44,7 +44,7 @@ public class FunctionRepository {
 
         DataBus.getBus().register(this);
 
-        DataBus.getBus().post(new Events.getEnumObjects());
+        DataBus.getBus().post(new Events.getEnumFunctions());
 
         AsyncTask.execute(new Runnable() {
             @Override
