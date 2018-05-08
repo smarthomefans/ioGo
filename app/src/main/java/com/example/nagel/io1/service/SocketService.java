@@ -2,10 +2,13 @@ package com.example.nagel.io1.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.IBinder;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
+import com.example.nagel.io1.ui.settings.SettingsActivity;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
@@ -42,8 +45,8 @@ public class SocketService extends Service {
     final private String TAG = "SocketService";
 
     private final String baseUrl = "https://iobroker.pro";
-    private String username = "nis.nagel@gmail.com";
-    private String password = "socket123";
+    private String username;
+    private String password;
     private final String origin = "https://iobroker.pro";
     private final String referrer = "https://iobroker.pro/login";;
     private final String host = "iobroker.pro";
@@ -63,6 +66,11 @@ public class SocketService extends Service {
 
         DataBus.getBus().register(this);
 
+        SharedPreferences sharedPref =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        username = sharedPref.getString("pro_username", null);
+        password = sharedPref.getString("pro_password", null);
+
         try {
             socketUrl = baseUrl + "/?key=nokey" + "&user=" + URLEncoder.encode(username, "UTF-8") + "&pass=" + password;
         } catch (UnsupportedEncodingException e) {
@@ -70,7 +78,9 @@ public class SocketService extends Service {
         }
         cookieUrl = baseUrl + "/login?app=true";
 
-        new NetworkAsync().execute();
+        if(username != null) {
+            new NetworkAsync().execute();
+        }
 
         Log.i(TAG, "onCreate finished");
     }

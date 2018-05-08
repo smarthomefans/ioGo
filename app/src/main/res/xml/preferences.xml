@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="WIFI Connection">
+
+        <EditTextPreference
+            android:key="wifi_ssid"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="SSID Name" />
+        <EditTextPreference
+            android:defaultValue="http://iobroker:8082"
+            android:key="wifi_socket_url"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Socket URL" />
+        <EditTextPreference
+            android:key="wifi_username"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Username" />
+        <EditTextPreference
+            android:key="wifi_password"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Password" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Pro Cloud">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="use_pro_cloud"
+            android:title="use pro cloud" />
+        <EditTextPreference
+            android:key="pro_username"
+            android:selectAllOnFocus="true"
+            android:title="Username" />
+        <EditTextPreference
+            android:key="pro_password"
+            android:selectAllOnFocus="true"
+            android:title="Password" />
+    </PreferenceCategory>
+</PreferenceScreen>

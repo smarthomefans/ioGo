@@ -11,9 +11,12 @@
 
     <TextView
         android:id="@+id/title"
+        style="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title"
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:text="Function" />
+        android:paddingLeft="72dp"
+        android:paddingTop="20dp"
+        android:text="Funktionübersicht" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/function_list"
