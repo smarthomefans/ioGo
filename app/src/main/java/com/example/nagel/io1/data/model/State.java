@@ -24,7 +24,9 @@ public class State {
     private String name;
     private String type;
     private String role;
-
+    private String unit;
+    private Boolean read;
+    private Boolean write;
 
     public State(@NonNull String id, String val, boolean ack, int ts, int lc, String from, int q, String roomId, String functionId) {
         this.id = id;
@@ -51,6 +53,9 @@ public class State {
         this.name = ioObject.getCommonName();
         this.type = ioObject.getCommonType();
         this.role = ioObject.getCommonRole();
+        this.unit = ioObject.getCommonUnit();
+        this.read = ioObject.isCommonRead();
+        this.write = ioObject.isCommonWrite();
     }
 
     @NonNull
@@ -120,5 +125,29 @@ public class State {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public Boolean getRead() {
+        return read;
+    }
+
+    public void setRead(Boolean read) {
+        this.read = read;
+    }
+
+    public Boolean getWrite() {
+        return write;
+    }
+
+    public void setWrite(Boolean write) {
+        this.write = write;
     }
 }

@@ -49,11 +49,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class SocketService extends Service {
+public class SocketService extends Service implements SharedPreferences.OnSharedPreferenceChangeListener{
     final private String TAG = "SocketService";
 
     private Socket mSocket;
     private String cookie;
+
+    SharedPreferences sharedPref;
 
     @Inject
     public FunctionRepository functionRepository;
@@ -74,6 +76,8 @@ public class SocketService extends Service {
         super.onCreate();
 
         DataBus.getBus().register(this);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPref.registerOnSharedPreferenceChangeListener(this);
 
         new NetworkAsync().execute();
 
@@ -81,8 +85,6 @@ public class SocketService extends Service {
     }
 
     private void init(){
-        SharedPreferences sharedPref =
-                PreferenceManager.getDefaultSharedPreferences(this);
         Boolean isProEnabled = sharedPref.getBoolean("pro_cloud_enabled",false);
         if(isProEnabled) {
             String username = sharedPref.getString("pro_username", null);
@@ -92,7 +94,6 @@ public class SocketService extends Service {
             String ssid = sharedPref.getString("wifi_ssid", null);
             String url = sharedPref.getString("wifi_url", null);
             init_wifi(ssid,url);
-
         }
     }
 
@@ -327,7 +328,7 @@ public class SocketService extends Service {
 
     private Boolean isConnected(){
         if(mSocket == null){
-            init();
+            new NetworkAsync().execute();
         }
         return (mSocket != null && mSocket.connected());
     }
@@ -336,13 +337,20 @@ public class SocketService extends Service {
         return null;
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        new NetworkAsync().execute();
+    }
+
     class NetworkAsync extends AsyncTask<Void, Integer, String>
     {
         String TAG = getClass().getSimpleName();
 
         protected String doInBackground(Void...arg0) {
             Log.d(TAG + " DoINBackGround","On doInBackground...");
-
+            if(isConnected()){
+                mSocket.disconnect();
+            }
             init();
 
             return "You are at PostExecute";
