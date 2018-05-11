@@ -7,7 +7,7 @@ import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 @Database(entities = { State.class, com.example.nagel.io1.data.model.Room.class, Function.class}, version = 1)
-@TypeConverters({TimeConverters.class, ListConverters.class})
+@TypeConverters({ListConverters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "appDatabase.db";

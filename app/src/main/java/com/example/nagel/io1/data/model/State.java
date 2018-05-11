@@ -2,13 +2,10 @@ package com.example.nagel.io1.data.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.sql.Timestamp;
+import com.example.nagel.io1.data.IoObject;
+import com.example.nagel.io1.data.IoState;
 
 @Entity
 public class State {
@@ -17,10 +14,8 @@ public class State {
     private final String id;
     private String val;
     private boolean ack;
-    @TypeConverters(TimeConverters.class)
-    private Timestamp ts;
-    @TypeConverters(TimeConverters.class)
-    private Timestamp lc;
+    private int ts;
+    private int lc;
     private String from;
     private int q;
 
@@ -29,11 +24,9 @@ public class State {
     private String name;
     private String type;
     private String role;
-    public static final String TEMP_TYPE = "value.temperature";
-    public static final String SWITCH_TYPE = "toggle_switch";
 
 
-    public State(@NonNull String id, String val, boolean ack, Timestamp ts, Timestamp lc, String from, int q, String roomId, String functionId) {
+    public State(@NonNull String id, String val, boolean ack, int ts, int lc, String from, int q, String roomId, String functionId) {
         this.id = id;
         this.val = val;
         this.ack = ack;
@@ -45,27 +38,19 @@ public class State {
         this.functionId = functionId;
     }
 
-    public void setData(String data) {
-        JSONObject json;
-        if (data != null) {
-            try {
-                json = new JSONObject(data);
-                this.val = json.getString("val");
-                try {
-                    float value = Float.parseFloat(this.val);
-                    this.val = String.valueOf(Math.round(value * 10) / 10);
-                }catch (Exception e){
+    public void update(IoState ioState) {
+        this.val = ioState.getVal();
+        this.ack = ioState.isAck();
+        this.ts = ioState.getTs();
+        this.lc = ioState.getLc();
+        this.from = ioState.getFrom();
+        this.q = ioState.getQ();
+    }
 
-                }
-                this.ack = json.getBoolean("ack");
-                this.ts = new Timestamp(json.getInt("ts"));
-                this.lc = new Timestamp(json.getInt("lc"));
-                this.from = json.getString("from");
-                this.q = json.getInt("q");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+    public void update(IoObject ioObject) {
+        this.name = ioObject.getCommonName();
+        this.type = ioObject.getCommonType();
+        this.role = ioObject.getCommonRole();
     }
 
     @NonNull
@@ -81,11 +66,11 @@ public class State {
         return ack;
     }
 
-    public Timestamp getTs() {
+    public int getTs() {
         return ts;
     }
 
-    public Timestamp getLc() {
+    public int getLc() {
         return lc;
     }
 

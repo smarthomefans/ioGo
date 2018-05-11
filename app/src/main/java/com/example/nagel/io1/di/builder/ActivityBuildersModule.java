@@ -15,7 +15,7 @@ import dagger.android.ContributesAndroidInjector;
  * Binds all sub-components within the app.
  */
 @Module
-public abstract class BuildersModule {
+public abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector(modules = AppModule.class)
     abstract MainActivity bindMainActivity();

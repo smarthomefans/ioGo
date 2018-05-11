@@ -1,8 +1,13 @@
 package com.example.nagel.io1.ui.main;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.nagel.io1.R;
 import com.example.nagel.io1.service.DataBus;
+import com.example.nagel.io1.service.Events;
 import com.example.nagel.io1.service.SocketService;
 import com.example.nagel.io1.ui.function.FunctionListActivity;
 import com.example.nagel.io1.ui.room.RoomListActivity;
@@ -46,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
+        Notification notification = new Notification.Builder(this).setSmallIcon(R.drawable.bike).build();
     }
 
     @Override
@@ -57,8 +64,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Intent intent = new Intent(this, SocketService.class);
-        stopService(intent);
         DataBus.getBus().unregister(this);
     }
 
@@ -72,6 +77,14 @@ public class MainActivity extends AppCompatActivity {
     public void onClickFuncionList(){
         Intent i = new Intent(this, FunctionListActivity.class);
         startActivity(i);
+    }
+
+    @OnClick(R.id.syncObjects)
+    public void onClickSyncObjects(){
+        DataBus.getBus().post(new Events.getEnumRooms());
+        DataBus.getBus().post(new Events.getEnumFunctions());
+        DataBus.getBus().post(new Events.getStates());
+        DataBus.getBus().post(new Events.getObjects());
     }
 
     @Override

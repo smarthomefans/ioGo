@@ -1,5 +1,6 @@
 package com.example.nagel.io1.data.model;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -14,7 +15,10 @@ import java.util.List;
 public interface FunctionDao {
 
     @Query("SELECT * FROM function")
-    List<Function> getAllFunctions();
+    LiveData<List<Function>> getAllFunctions();
+
+    @Query("SELECT * FROM function WHERE id = :id")
+    LiveData<Function> getFunctionById(String id);
 
     @TypeConverters(ListConverters.class)
     @Insert(onConflict = OnConflictStrategy.REPLACE)

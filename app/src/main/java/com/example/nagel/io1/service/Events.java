@@ -2,28 +2,6 @@ package com.example.nagel.io1.service;
 
 public class Events {
 
-    public static class StateChange {
-
-        private String id;
-        private String data;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getData() {
-            return data;
-        }
-
-        public void setData(String data) {
-            this.data = data;
-        }
-    }
-
     public static class SetState {
 
         private String id;
@@ -47,35 +25,8 @@ public class Events {
 
     }
 
-
-    public static class States {
-
-        private String data;
-
-        public String getData() {
-            return data;
-        }
-
-        public void setData(String data) {
-            this.data = data;
-        }
-    }
-
-    public static class Objects {
-
-        private String data;
-
-        public String getData() {
-            return data;
-        }
-
-        public void setData(String data) {
-            this.data = data;
-        }
-    }
-
     public static class getEnumRooms {}
     public static class getEnumFunctions {}
-    public static class getStateObjects {}
     public static class getStates {}
+    public static class getObjects {}
 }

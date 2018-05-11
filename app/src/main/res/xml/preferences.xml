@@ -14,28 +14,21 @@
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="Socket URL" />
-        <EditTextPreference
-            android:key="wifi_username"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="Username" />
-        <EditTextPreference
-            android:key="wifi_password"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="Password" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Pro Cloud">
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="use_pro_cloud"
-            android:title="use pro cloud" />
+            android:key="pro_cloud_enabled"
+            android:title="Use ioBroker.pro" />
         <EditTextPreference
+            android:editable="false"
+            android:inputType="textEmailAddress"
             android:key="pro_username"
             android:selectAllOnFocus="true"
             android:title="Username" />
         <EditTextPreference
+            android:inputType="textPassword"
             android:key="pro_password"
             android:selectAllOnFocus="true"
             android:title="Password" />
