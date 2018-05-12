@@ -1,13 +1,11 @@
 package com.example.nagel.io1.data;
 
-import java.sql.Timestamp;
-
 public class IoState {
     private String id;
     private String val;
     private boolean ack;
-    private int ts;
-    private int lc;
+    private long ts;
+    private long lc;
     private String from;
     private int q;
 
@@ -35,19 +33,19 @@ public class IoState {
         this.ack = ack;
     }
 
-    public int getTs() {
+    public long getTs() {
         return ts;
     }
 
-    public void setTs(int ts) {
+    public void setTs(long ts) {
         this.ts = ts;
     }
 
-    public int getLc() {
+    public long getLc() {
         return lc;
     }
 
-    public void setLc(int lc) {
+    public void setLc(long lc) {
         this.lc = lc;
     }
 

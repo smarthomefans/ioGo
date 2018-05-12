@@ -71,7 +71,7 @@ public class RoomRepository {
                 Room room = new Room(ioEnum.getId(), ioEnum.getName(), ioEnum.getMembers());
                 roomDao.insert(room);
                 for (int j = 0; j < ioEnum.getMembers().size(); j++) {
-                    State state = stateDao.getStateById(ioEnum.getMembers().get(j)).getValue();
+                    State state = stateDao.getStateById(ioEnum.getMembers().get(j));
                     if (state != null) {
                         state.setRoomId(room.getId());
                         stateDao.update(state);

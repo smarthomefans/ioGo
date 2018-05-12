@@ -66,6 +66,9 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     @Inject
     public StateRepository stateRepository;
 
+    @Inject
+    public AppDatabase appDatabase;
+
     public SocketService() {
         Log.i(TAG, "instance cerated");
     }
@@ -237,7 +240,13 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     private Emitter.Listener onStateChange = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            stateRepository.saveState(args[0].toString(), args[1].toString());
+            if(args[0] != null) {
+                if(args[1] != null) {
+                    stateRepository.saveState(args[0].toString(), args[1].toString());
+                }else{
+                    Log.w(TAG,"onStateChange: state deleted: "+args[0].toString());
+                }
+            }
         }
     };
 
@@ -249,7 +258,59 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     }
 
     @Subscribe
-    public void getStates(final Events.getStates event){
+    public void sync(final Events.sync event){
+        if(isConnected()) {
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    appDatabase.clearAllTables();
+                    getEnumRooms();
+                }
+            });
+        }
+    }
+
+    public void getEnumRooms(){
+        if(isConnected()) {
+            JSONObject json = new JSONObject();
+            try {
+                json.put("startkey", "enum.rooms.");
+                json.put("endkey", "enum.rooms.\u9999");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    Log.i(TAG,"getEnumRooms: receiving objects");
+                    roomRepository.saveObjects(args[1].toString());
+                    getEnumFunctions();
+                }
+            });
+        }
+    }
+
+    public void getEnumFunctions(){
+        if(isConnected()) {
+            JSONObject json = new JSONObject();
+            try {
+                json.put("startkey", "enum.functions.");
+                json.put("endkey", "enum.functions.\u9999");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    Log.i(TAG,"getEnumFunctions: receiving objects");
+                    functionRepository.saveObjects(args[1].toString());
+                    getStates();
+                }
+            });
+        }
+    }
+
+    public void getStates(){
         if(isConnected()) {
             AsyncTask.execute(new Runnable() {
                 @Override
@@ -264,8 +325,9 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                     mSocket.emit("getStates", json, new Ack() {
                         @Override
                         public void call(Object... args) {
-                            Log.i("onConnect", "receiving states");
+                            Log.i(TAG,"getStates: receiving states");
                             stateRepository.saveStates(args[1].toString());
+                            getObjects();
                         }
                     });
                 }
@@ -273,54 +335,13 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }
     }
 
-    @Subscribe
-    public void getObjects(final Events.getObjects event){
+    public void getObjects(){
         if(isConnected()) {
             mSocket.emit("getObjects", null, new Ack() {
                 @Override
                 public void call(Object... args) {
-                    Log.i("getEnumObjects", "receiving objects");
+                    Log.i(TAG,"getObjects: receiving objects");
                     stateRepository.saveObjects(args[1].toString());
-                }
-            });
-        }
-    }
-
-    @Subscribe
-    public void getEnumRooms(final Events.getEnumRooms event){
-        if(isConnected()) {
-            JSONObject json = new JSONObject();
-            try {
-                json.put("startkey", "enum.rooms.");
-                json.put("endkey", "enum.rooms.\u9999");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    Log.i("getEnumObjects", "receiving objects");
-                    roomRepository.saveObjects(args[1].toString());
-                }
-            });
-        }
-    }
-
-    @Subscribe
-    public void getEnumFunctions(final Events.getEnumFunctions event){
-        if(isConnected()) {
-            JSONObject json = new JSONObject();
-            try {
-                json.put("startkey", "enum.functions.");
-                json.put("endkey", "enum.functions.\u9999");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    Log.i("getEnumObjects", "receiving objects");
-                    functionRepository.saveObjects(args[1].toString());
                 }
             });
         }

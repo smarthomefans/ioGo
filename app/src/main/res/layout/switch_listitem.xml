@@ -57,16 +57,13 @@
         android:textColor="@android:color/secondary_text_dark"
         android:textSize="14sp" />
 
-    <TextView
+    <Switch
         android:id="@+id/value"
         android:layout_width="60dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="21.5°C"/>
+        android:gravity="center" />
+
 </RelativeLayout>

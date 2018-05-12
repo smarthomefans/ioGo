@@ -24,7 +24,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class StateRepository {
-    public static final String TAG = "StateRepository";
+    private static final String TAG = "StateRepository";
     private Map<String,LiveData<State>> stateCache;
     private Map<String,LiveData<List<State>>> stateRoomCache;
     private Map<String,LiveData<List<State>>> stateFunctionCache;
@@ -60,13 +60,18 @@ public class StateRepository {
     }
 
     public void saveState(String id, String data) {
-        State state = stateDao.getStateById(id).getValue();
-        if(state != null) {
-            IoState ioState = gson.fromJson(data, IoState.class);
+        State state = stateDao.getStateById(id);
+        IoState ioState = gson.fromJson(data, IoState.class);
+        if(state == null) {
+            state = new State(id);
+            state.update(ioState);
+            stateDao.insert(state);
+        }else {
             state.update(ioState);
             stateDao.update(state);
-            Log.i(TAG,"saveState stateId:" + state.getId());
         }
+        Log.i(TAG,"saveState stateId:" + state.getId());
+
     }
 
     public List<State> getAllStates(){
@@ -95,7 +100,7 @@ public class StateRepository {
 
     public LiveData<State> getState(String id){
         if(!stateCache.containsKey(id)){
-            LiveData<State> state = stateDao.getStateById(id);
+            LiveData<State> state = stateDao.getLStateById(id);
             stateCache.put(id, state);
         }
         return stateCache.get(id);
@@ -106,9 +111,15 @@ public class StateRepository {
             JSONObject obj = new JSONObject(data);
             List<State> states = stateDao.getAllStates();
             for(State state : states){
-                IoObject ioObject = gson.fromJson(obj.getJSONObject(state.getId()).toString(), IoObject.class);
-                state.update(ioObject);
-                stateDao.update(state);
+                JSONObject json = obj.optJSONObject(state.getId());
+                if(json != null) {
+                    IoObject ioObject = gson.fromJson(json.toString(), IoObject.class);
+                    state.update(ioObject);
+                    stateDao.update(state);
+                }else{
+                    stateDao.delete(state);
+                    Log.w(TAG,"saveObjects: Object not found: "+state.getId());
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();

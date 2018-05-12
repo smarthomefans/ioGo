@@ -59,7 +59,12 @@ public class RoomDetailAdapter
         public void bindState(State state) {
             mTitle.setText(state.getId().replace("javascript.0.",""));
             mSubtitle.setText(state.getName());
-            mValue.setText(state.getVal()+state.getUnit());
+
+            if(state.getUnit() != null) {
+                mValue.setText(state.getVal() + state.getUnit());
+            }else{
+                mValue.setText(state.getVal());
+            }
         }
     }
 }

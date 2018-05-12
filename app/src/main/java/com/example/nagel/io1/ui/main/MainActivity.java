@@ -81,10 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.syncObjects)
     public void onClickSyncObjects(){
-        DataBus.getBus().post(new Events.getEnumRooms());
-        DataBus.getBus().post(new Events.getEnumFunctions());
-        DataBus.getBus().post(new Events.getStates());
-        DataBus.getBus().post(new Events.getObjects());
+        DataBus.getBus().post(new Events.sync());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.nagel.io1.data.model;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -14,8 +15,8 @@ public class State {
     private final String id;
     private String val;
     private boolean ack;
-    private int ts;
-    private int lc;
+    private long ts;
+    private long lc;
     private String from;
     private int q;
 
@@ -28,7 +29,12 @@ public class State {
     private Boolean read;
     private Boolean write;
 
-    public State(@NonNull String id, String val, boolean ack, int ts, int lc, String from, int q, String roomId, String functionId) {
+    @Ignore
+    public State(@NonNull String id) {
+        this.id = id;
+    }
+
+    public State(@NonNull String id, String val, boolean ack, long ts, long lc, String from, int q, String roomId, String functionId) {
         this.id = id;
         this.val = val;
         this.ack = ack;
@@ -71,11 +77,11 @@ public class State {
         return ack;
     }
 
-    public int getTs() {
+    public long getTs() {
         return ts;
     }
 
-    public int getLc() {
+    public long getLc() {
         return lc;
     }
 

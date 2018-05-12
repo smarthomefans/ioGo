@@ -20,7 +20,10 @@ public interface StateDao {
     List<String> getAllStateIds();
 
     @Query("SELECT * FROM state WHERE id = :id")
-    LiveData<State> getStateById(String id);
+    LiveData<State> getLStateById(String id);
+
+    @Query("SELECT * FROM state WHERE id = :id")
+    State getStateById(String id);
 
     @Query("SELECT * FROM state WHERE roomId = :roomId")
     LiveData<List<State>> getStatesByRoom(String roomId);

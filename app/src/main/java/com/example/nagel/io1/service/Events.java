@@ -25,8 +25,6 @@ public class Events {
 
     }
 
-    public static class getEnumRooms {}
-    public static class getEnumFunctions {}
-    public static class getStates {}
-    public static class getObjects {}
+    public static class sync {}
+
 }

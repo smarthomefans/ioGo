@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.nagel.io1.data.IoEnum;
 import com.example.nagel.io1.data.IoObject;
+import com.example.nagel.io1.data.model.AppDatabase;
 import com.example.nagel.io1.data.model.Function;
 import com.example.nagel.io1.data.model.FunctionDao;
 import com.example.nagel.io1.data.model.State;
@@ -60,6 +61,7 @@ public class FunctionRepository {
 
         JSONObject obj = null;
         JSONArray arr = null;
+
         try {
             obj = new JSONObject(data);
             arr = obj.optJSONArray("rows");
@@ -69,7 +71,7 @@ public class FunctionRepository {
                 Function function = new Function(ioEnum.getId(), ioEnum.getName(), ioEnum.getMembers());
                 functionDao.insert(function);
                 for (int j = 0; j < ioEnum.getMembers().size(); j++) {
-                    State state = stateDao.getStateById(ioEnum.getMembers().get(j)).getValue();
+                    State state = stateDao.getStateById(ioEnum.getMembers().get(j));
                     if (state != null) {
                         state.setFunctionId(function.getId());
                         stateDao.update(state);

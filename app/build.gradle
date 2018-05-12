@@ -61,11 +61,11 @@ dependencies {
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.3'
 
     // DAGGER
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
-    implementation 'com.google.dagger:dagger:2.11'
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
-    implementation 'com.google.dagger:dagger-android-support:2.11'
-    implementation 'com.google.dagger:dagger-android:2.11'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
+    implementation 'com.google.dagger:dagger:2.14.1'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.14.1'
+    implementation 'com.google.dagger:dagger-android-support:2.14.1'
+    implementation 'com.google.dagger:dagger-android:2.14.1'
 
     // BUTTERKNIFE
     implementation 'com.jakewharton:butterknife:8.5.1'

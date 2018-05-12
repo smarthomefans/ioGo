@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.nagel.io1.R;
@@ -100,7 +101,7 @@ public class FunctionDetailAdapter
     public class SwitchTypeViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.message_title)  TextView mTitle;
         @BindView(R.id.message_subtitle)  TextView mSubtitle;
-        @BindView(R.id.value)  TextView mValue;
+        @BindView(R.id.value)  Switch mValue;
 
         public SwitchTypeViewHolder(View itemView) {
             super(itemView);
@@ -109,8 +110,8 @@ public class FunctionDetailAdapter
 
         public void bindState(State state) {
             mTitle.setText(state.getId().replace("javascript.0.",""));
-            mSubtitle.setText("Boolean" + state.getName());
-            mValue.setText(state.getVal());
+            mSubtitle.setText(state.getName());
+            mValue.setChecked("true".equals(state.getVal()));
         }
     }
 }
