@@ -56,7 +56,7 @@ public class StateRepository {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.i(TAG,"onStates finished");
+        Log.i(TAG,"saveStates finished");
     }
 
     public void saveState(String id, String data) {

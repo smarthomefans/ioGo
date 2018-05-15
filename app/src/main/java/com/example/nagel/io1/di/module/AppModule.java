@@ -8,7 +8,9 @@ import android.content.Context;
 import com.example.nagel.io1.App;
 import com.example.nagel.io1.data.model.AppDatabase;
 import com.example.nagel.io1.data.model.FunctionDao;
+import com.example.nagel.io1.data.model.FunctionStateDao;
 import com.example.nagel.io1.data.model.RoomDao;
+import com.example.nagel.io1.data.model.RoomStateDao;
 import com.example.nagel.io1.data.repository.FunctionRepository;
 import com.example.nagel.io1.data.repository.RoomRepository;
 import com.example.nagel.io1.data.model.StateDao;
@@ -64,14 +66,14 @@ public class AppModule {
 
     @Singleton
     @Provides
-    RoomRepository provideRoomRepository(RoomDao roomDao, StateDao stateDao) {
-        return new RoomRepository(roomDao, stateDao);
+    RoomRepository provideRoomRepository(RoomDao roomDao, RoomStateDao roomStateDao) {
+        return new RoomRepository(roomDao, roomStateDao);
     }
 
     @Singleton
     @Provides
-    FunctionRepository provideFunctionRepository(FunctionDao functionDao, StateDao stateDao) {
-        return new FunctionRepository(functionDao, stateDao);
+    FunctionRepository provideFunctionRepository(FunctionDao functionDao, FunctionStateDao functionStateDao) {
+        return new FunctionRepository(functionDao, functionStateDao);
     }
 
     @Singleton
@@ -92,5 +94,15 @@ public class AppModule {
         return db.getFunctionDao();
     }
 
+    @Singleton
+    @Provides
+    FunctionStateDao provideFunctionStateDao(AppDatabase db) {
+        return db.getFunctionStateDao();
+    }
 
+    @Singleton
+    @Provides
+    RoomStateDao provideRoomStateDao(AppDatabase db) {
+        return db.getRoomStateDao();
+    }
 }

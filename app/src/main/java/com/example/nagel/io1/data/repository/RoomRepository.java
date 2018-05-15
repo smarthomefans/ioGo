@@ -1,14 +1,13 @@
 package com.example.nagel.io1.data.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
 import com.example.nagel.io1.data.IoEnum;
 import com.example.nagel.io1.data.model.Room;
 import com.example.nagel.io1.data.model.RoomDao;
-import com.example.nagel.io1.data.model.State;
-import com.example.nagel.io1.data.model.StateDao;
+import com.example.nagel.io1.data.model.RoomState;
+import com.example.nagel.io1.data.model.RoomStateDao;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -16,7 +15,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,14 +28,14 @@ public class RoomRepository {
     private Map<String,LiveData<Room>> roomCache;
 
     private final RoomDao roomDao;
-    private final StateDao stateDao;
+    private final RoomStateDao roomStateDao;
 
     private LiveData<List<Room>> mListRooms;
 
     @Inject
-    public RoomRepository(RoomDao roomDao, StateDao stateDao) {
+    public RoomRepository(RoomDao roomDao, RoomStateDao roomStateDao) {
         this.roomDao = roomDao;
-        this.stateDao = stateDao;
+        this.roomStateDao = roomStateDao;
         roomCache = new HashMap<>();
     }
 
@@ -56,6 +54,10 @@ public class RoomRepository {
         return mListRooms;
     }
 
+    public List<String> getAllStateIds(){
+        return roomStateDao.getAllStateIds();
+    }
+
     public void saveObjects(String data){
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
@@ -71,15 +73,8 @@ public class RoomRepository {
                 Room room = new Room(ioEnum.getId(), ioEnum.getName(), ioEnum.getMembers());
                 roomDao.insert(room);
                 for (int j = 0; j < ioEnum.getMembers().size(); j++) {
-                    State state = stateDao.getStateById(ioEnum.getMembers().get(j));
-                    if (state != null) {
-                        state.setRoomId(room.getId());
-                        stateDao.update(state);
-                        Log.d(TAG, "saveObjects stateDao.update stateId:" + state.getId());
-                    }else{
-                        state = new State(ioEnum.getMembers().get(j), null, false, 0, 0, null,0, ioEnum.getId(), null);
-                        stateDao.insert(state);
-                    }
+                    RoomState roomState = new RoomState(room.getId(),ioEnum.getMembers().get(j));
+                    roomStateDao.insert(roomState);
                 }
 
                 Log.d(TAG, "saveObjects getId:" + ioEnum.getId());

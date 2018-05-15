@@ -1,14 +1,16 @@
 package com.example.nagel.io1.data.model;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import com.example.nagel.io1.data.IoObject;
 import com.example.nagel.io1.data.IoState;
 
-@Entity
+@Entity(tableName = "state", indices = {@Index(value = {"id"},unique = true)})
 public class State {
     @PrimaryKey
     @NonNull
@@ -20,8 +22,6 @@ public class State {
     private String from;
     private int q;
 
-    private String roomId;
-    private String functionId;
     private String name;
     private String type;
     private String role;
@@ -34,7 +34,7 @@ public class State {
         this.id = id;
     }
 
-    public State(@NonNull String id, String val, boolean ack, long ts, long lc, String from, int q, String roomId, String functionId) {
+    public State(@NonNull String id, String val, boolean ack, long ts, long lc, String from, int q) {
         this.id = id;
         this.val = val;
         this.ack = ack;
@@ -42,8 +42,6 @@ public class State {
         this.lc = lc;
         this.from = from;
         this.q = q;
-        this.roomId = roomId;
-        this.functionId = functionId;
     }
 
     public void update(IoState ioState) {
@@ -91,22 +89,6 @@ public class State {
 
     public int getQ() {
         return q;
-    }
-
-    public String getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
-    }
-
-    public String getFunctionId() {
-        return functionId;
-    }
-
-    public void setFunctionId(String functionId) {
-        this.functionId = functionId;
     }
 
     public String getName() {

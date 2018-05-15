@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -263,7 +264,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    appDatabase.clearAllTables();
+                    //appDatabase.clearAllTables();
                     getEnumRooms();
                 }
             });
@@ -318,9 +319,14 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                     //List<String> stateIds = stateRepository.getAllStateIds();
                     //JSONArray json = new JSONArray(stateIds);
                     JSONArray json = new JSONArray();
-                    List<State> states = stateRepository.getAllStates();
-                    for(int i = 0; i<states.size();i++){
-                        json.put(states.get(i).getId());
+                    List<String> functionStateIds = functionRepository.getAllStateIds();
+                    List<String> roomStateIds = roomRepository.getAllStateIds();
+                    for(String s: roomStateIds){
+                        if(!functionStateIds.contains(s))
+                            functionStateIds.add(s);
+                    }
+                    for(int i = 0; i<functionStateIds.size();i++){
+                        json.put(functionStateIds.get(i));
                     }
                     mSocket.emit("getStates", json, new Ack() {
                         @Override

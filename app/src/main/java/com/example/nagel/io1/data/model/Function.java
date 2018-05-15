@@ -2,13 +2,14 @@ package com.example.nagel.io1.data.model;
 
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
 import java.util.List;
 
-@Entity
+@Entity(tableName = "function", indices = {@Index(value = {"id"},unique = true)})
 public class Function {
     @PrimaryKey
     @NonNull

@@ -18,8 +18,6 @@ public class FunctionViewModel extends ViewModel {
     private FunctionRepository functionRepository;
     private StateRepository stateRepository;
 
-    private MutableLiveData<String> mFunctionName;
-
     @Inject
     public FunctionViewModel(FunctionRepository functionRepository, StateRepository stateRepository) {
         this.functionRepository = functionRepository;
@@ -29,13 +27,9 @@ public class FunctionViewModel extends ViewModel {
     public LiveData<List<Function>> getFunctions() {
         return functionRepository.getAllFunctions();
     }
+
     public LiveData<Function> getFunction(String functionId) {
         return functionRepository.getFunction(functionId);
-    }
-
-    public LiveData<String> getFunctionName(String functionId){
-        mFunctionName.setValue(functionRepository.getFunction(functionId).getValue().getName());
-        return mFunctionName;
     }
 
     public LiveData<List<State>> getStates(String functionId) {

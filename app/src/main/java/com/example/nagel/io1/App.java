@@ -3,8 +3,14 @@ package com.example.nagel.io1;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Service;
+import android.content.Intent;
+import android.os.Environment;
+import android.util.Log;
 
 import com.example.nagel.io1.di.component.DaggerAppComponent;
+
+import java.io.File;
+import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -29,6 +35,7 @@ public class App extends Application implements HasActivityInjector, HasServiceI
                 .application(this)
                 .build()
                 .inject(this);
+
     }
 
     @Override
@@ -40,4 +47,5 @@ public class App extends Application implements HasActivityInjector, HasServiceI
     public AndroidInjector<Service> serviceInjector() {
         return dispatchingServiceInjector;
     }
+
 }

@@ -8,6 +8,8 @@ import com.example.nagel.io1.data.IoObject;
 import com.example.nagel.io1.data.model.AppDatabase;
 import com.example.nagel.io1.data.model.Function;
 import com.example.nagel.io1.data.model.FunctionDao;
+import com.example.nagel.io1.data.model.FunctionState;
+import com.example.nagel.io1.data.model.FunctionStateDao;
 import com.example.nagel.io1.data.model.State;
 import com.example.nagel.io1.data.model.StateDao;
 import com.google.gson.Gson;
@@ -31,12 +33,12 @@ public class FunctionRepository {
     private Map<String, LiveData<Function>> functionCache;
     private LiveData<List<Function>> mListFunctions;
     private final FunctionDao functionDao;
-    private final StateDao stateDao;
+    private final FunctionStateDao functionStateDao;
 
     @Inject
-    public FunctionRepository(FunctionDao functionDao, StateDao stateDao) {
+    public FunctionRepository(FunctionDao functionDao, FunctionStateDao functionStateDao) {
         this.functionDao = functionDao;
-        this.stateDao = stateDao;
+        this.functionStateDao = functionStateDao;
         functionCache = new HashMap<>();
     }
 
@@ -55,6 +57,10 @@ public class FunctionRepository {
         return mListFunctions;
     }
 
+    public List<String> getAllStateIds(){
+        return functionStateDao.getAllStateIds();
+    }
+
     public void saveObjects(String data) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
@@ -71,15 +77,8 @@ public class FunctionRepository {
                 Function function = new Function(ioEnum.getId(), ioEnum.getName(), ioEnum.getMembers());
                 functionDao.insert(function);
                 for (int j = 0; j < ioEnum.getMembers().size(); j++) {
-                    State state = stateDao.getStateById(ioEnum.getMembers().get(j));
-                    if (state != null) {
-                        state.setFunctionId(function.getId());
-                        stateDao.update(state);
-                        Log.d(TAG, "saveObjects stateDao.update stateId:" + state.getId());
-                    }else{
-                        state = new State(ioEnum.getMembers().get(j), null, false, 0, 0, null,0, null, ioEnum.getId());
-                        stateDao.insert(state);
-                    }
+                    FunctionState functionState = new FunctionState(function.getId(),ioEnum.getMembers().get(j));
+                    functionStateDao.insert(functionState);
                 }
 
                 Log.d(TAG, "saveObjects getId:" + ioEnum.getId());
