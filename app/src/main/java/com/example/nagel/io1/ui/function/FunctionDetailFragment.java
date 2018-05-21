@@ -19,6 +19,7 @@ import com.example.nagel.io1.R;
 import com.example.nagel.io1.data.model.Function;
 import com.example.nagel.io1.data.model.State;
 import com.example.nagel.io1.di.Injectable;
+import com.example.nagel.io1.ui.base.BaseDetailAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class FunctionDetailFragment extends Fragment implements Injectable {
      * The dummy content this fragment is presenting.
      */
     @BindView(R.id.function_detail_list) RecyclerView mRecyclerView;
-    private FunctionDetailAdapter mAdapter;
+    private BaseDetailAdapter mAdapter;
 
     private LiveData<Function> mFunction;
     private List<State> mListStates = new ArrayList<>();
@@ -77,7 +78,7 @@ public class FunctionDetailFragment extends Fragment implements Injectable {
 
             @Override
             public void run() {
-                mAdapter = new FunctionDetailAdapter(null, mListStates);
+                mAdapter = new BaseDetailAdapter(null, mListStates);
                 mRecyclerView.setAdapter(mAdapter);
                 RecyclerView.LayoutManager layoutManager =
                         new LinearLayoutManager(getContext());
@@ -93,7 +94,7 @@ public class FunctionDetailFragment extends Fragment implements Injectable {
                     @Override
                     public void onChanged(@Nullable List<State> newList) {
                         // update UI
-                        mAdapter = new FunctionDetailAdapter(null, newList);
+                        mAdapter = new BaseDetailAdapter(null, newList);
                         mRecyclerView.setAdapter(mAdapter);
                     }
                 });

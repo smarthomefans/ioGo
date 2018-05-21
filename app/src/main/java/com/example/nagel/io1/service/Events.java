@@ -7,6 +7,11 @@ public class Events {
         private String id;
         private String val;
 
+        public SetState(String id, String val) {
+            this.id = id;
+            this.val = val;
+        }
+
         public String getId() {
             return id;
         }

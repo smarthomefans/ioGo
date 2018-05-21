@@ -12,6 +12,11 @@ import com.example.nagel.io1.data.IoState;
 
 @Entity(tableName = "state", indices = {@Index(value = {"id"},unique = true)})
 public class State {
+
+    public static final String TYPE_BOOLEAN = "boolean";
+    public static final String TYPE_NUMBER = "number";
+    public static final String TYPE_STRING = "string";
+
     @PrimaryKey
     @NonNull
     private final String id;
