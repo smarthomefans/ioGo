@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.nagel.io1.data.model.AppDatabase;
 import com.example.nagel.io1.data.model.State;
@@ -19,6 +20,7 @@ import com.example.nagel.io1.data.model.StateDao;
 import com.example.nagel.io1.data.repository.FunctionRepository;
 import com.example.nagel.io1.data.repository.RoomRepository;
 import com.example.nagel.io1.data.repository.StateRepository;
+import com.example.nagel.io1.ui.main.MainActivity;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
@@ -96,8 +98,15 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             init_pro(username,password);
         }else{
             String ssid = sharedPref.getString("wifi_ssid", null);
-            String url = sharedPref.getString("wifi_url", null);
-            init_wifi(ssid,url);
+
+            String current_ssid = getWifiName(this);
+            if(ssid != null && ssid.equals(current_ssid)) {
+                String url = sharedPref.getString("wifi_url", null);
+                init_direct(url);
+            }else{
+                String url = sharedPref.getString("mobile_url", null);
+                init_direct(url);
+            }
         }
     }
 
@@ -115,11 +124,8 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         return null;
     }
 
-    private void init_wifi(String ssid, String url) {
-        String current_ssid = getWifiName(this);
-        if(ssid != null && ssid.equals(current_ssid)) {
-            createSocket(url);
-        }
+    private void init_direct(String url) {
+        createSocket(url);
     }
 
     private void init_pro(String username, String password){

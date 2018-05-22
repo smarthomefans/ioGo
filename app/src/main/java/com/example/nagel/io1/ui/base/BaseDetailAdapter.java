@@ -40,7 +40,7 @@ public class BaseDetailAdapter
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.switch_listitem, parent, false);
                 return new BooleanTypeViewHolder(view);
             case 1:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.temp_listitem, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.number_listitem, parent, false);
                 return new NumberTypeViewHolder(view);
         }
         return null;
@@ -49,7 +49,7 @@ public class BaseDetailAdapter
     @Override
     public int getItemViewType(int position) {
         State object = mValues.get(position);
-        if (object != null) {
+        if (object != null && object.getType() != null) {
             switch (object.getType()) {
                 case State.TYPE_BOOLEAN:
                     return 0;
@@ -69,7 +69,7 @@ public class BaseDetailAdapter
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
         State object = mValues.get(position);
-        if (object != null) {
+        if (object != null && object.getType() != null) {
             switch (object.getType()) {
                 case State.TYPE_NUMBER:
                     ((NumberTypeViewHolder) holder).bindState(mValues.get(position));

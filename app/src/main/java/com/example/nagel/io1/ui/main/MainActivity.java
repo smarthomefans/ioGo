@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        toolbar.setTitleMarginStart(200);
+        toolbar.setTitleMarginStart(120);
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.drawable.home);
 
@@ -51,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
         startService(intent);
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-        Notification notification = new Notification.Builder(this).setSmallIcon(R.drawable.bike).build();
     }
 
     @Override

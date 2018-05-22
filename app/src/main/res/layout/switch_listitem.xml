@@ -12,7 +12,7 @@
         android:layout_height="40dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        app:srcCompat="@drawable/toggle_switch" />
+        app:srcCompat="@drawable/chevron_right" />
 
     <TextView
         android:id="@+id/topMarker"
