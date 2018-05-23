@@ -4,12 +4,13 @@
     <PreferenceCategory android:title="WIFI Connection">
 
         <EditTextPreference
+            android:defaultValue="maulwurf"
             android:key="wifi_ssid"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="SSID Name" />
         <EditTextPreference
-            android:defaultValue="http://iobroker:8082"
+            android:defaultValue="http://iobroker:8084"
             android:key="wifi_socket_url"
             android:selectAllOnFocus="true"
             android:singleLine="true"

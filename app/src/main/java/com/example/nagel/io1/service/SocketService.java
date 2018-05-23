@@ -101,10 +101,10 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
             String current_ssid = getWifiName(this);
             if(ssid != null && ssid.equals(current_ssid)) {
-                String url = sharedPref.getString("wifi_url", null);
+                String url = sharedPref.getString("wifi_socket_url", null);
                 init_direct(url);
             }else{
-                String url = sharedPref.getString("mobile_url", null);
+                String url = sharedPref.getString("mobile_socket_url", null);
                 init_direct(url);
             }
         }
@@ -125,21 +125,25 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     }
 
     private void init_direct(String url) {
-        createSocket(url);
+        if(url != null) {
+            createSocket(url);
+        }
     }
 
     private void init_pro(String username, String password){
         String cookieUrl = "https://iobroker.pro/login?app=true";
-        getCookie(cookieUrl, username, password);
+        if(username != null && password != null) {
+            getCookie(cookieUrl, username, password);
 
-        try {
-            username = URLEncoder.encode(username, "UTF-8");
-            password = URLEncoder.encode(password, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            try {
+                username = URLEncoder.encode(username, "UTF-8");
+                password = URLEncoder.encode(password, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            String socketUrl = "https://iobroker.pro/?key=nokey" + "&user=" + username + "&pass=" + password;
+            createSocket(socketUrl);
         }
-        String socketUrl = "https://iobroker.pro/?key=nokey" + "&user=" + username + "&pass=" + password;
-        createSocket(socketUrl);
     }
 
     private void getCookie(String url, String username, String password) {
@@ -176,7 +180,9 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
         try {
             mSocket = IO.socket(url, opts);
-            mSocket.io().on(Manager.EVENT_TRANSPORT, onTransport);
+            if(cookie != null) {
+                mSocket.io().on(Manager.EVENT_TRANSPORT, onTransport);
+            }
             mSocket.on(Socket.EVENT_CONNECT, onConnect);
             mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
             mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
