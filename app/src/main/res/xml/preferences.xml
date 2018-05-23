@@ -4,7 +4,6 @@
     <PreferenceCategory android:title="WIFI Connection">
 
         <EditTextPreference
-            android:defaultValue="maulwurf"
             android:key="wifi_ssid"
             android:selectAllOnFocus="true"
             android:singleLine="true"
@@ -19,6 +18,7 @@
     <PreferenceCategory android:title="Mobile Connection">
 
         <EditTextPreference
+            android:defaultValue="http://iobroker:8084"
             android:key="mobile_socket_url"
             android:selectAllOnFocus="true"
             android:singleLine="true"
