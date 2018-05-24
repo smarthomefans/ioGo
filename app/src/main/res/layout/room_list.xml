@@ -29,6 +29,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"
         tools:context=".ui.room.RoomListActivity"
-        tools:listitem="@layout/room_list_item" />
+        tools:listitem="@layout/li_room" />
 
 </android.support.constraint.ConstraintLayout>

@@ -44,7 +44,7 @@ public class FunctionListAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.function_list_item, parent, false);
+                .inflate(R.layout.li_function, parent, false);
         return new ViewHolder(view);
     }
 

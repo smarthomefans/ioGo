@@ -206,6 +206,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     }
 
     private Emitter.Listener onConnect = new Emitter.Listener() {
+
         @Override
         public void call(Object... args) {
             AsyncTask.execute(new Runnable() {
@@ -378,6 +379,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Toast.makeText(getApplicationContext(),"Settings changed", Toast.LENGTH_LONG).show();
         new NetworkAsync().execute();
     }
 

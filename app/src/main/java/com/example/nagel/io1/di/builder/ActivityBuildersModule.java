@@ -2,6 +2,7 @@ package com.example.nagel.io1.di.builder;
 
 
 import com.example.nagel.io1.di.module.AppModule;
+import com.example.nagel.io1.ui.info.InfoActivity;
 import com.example.nagel.io1.ui.function.FunctionDetailActivity;
 import com.example.nagel.io1.ui.function.FunctionListActivity;
 import com.example.nagel.io1.ui.room.RoomDetailActivity;
@@ -31,4 +32,7 @@ public abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector(modules = FragmentBuildersModule.class)
     abstract FunctionDetailActivity bindFunctionDetailActivity();
+
+    @ContributesAndroidInjector(modules = FragmentBuildersModule.class)
+    abstract InfoActivity bindInfoActivity();
 }

@@ -1,5 +1,4 @@
-package com.example.nagel.io1.ui.room;
-
+package com.example.nagel.io1.ui.info;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.example.nagel.io1.ui.main.MainActivity;
 import com.example.nagel.io1.R;
 
 import javax.inject.Inject;
@@ -16,13 +16,7 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-/**
- * An activity representing a single Room detail screen. This
- * activity is only used on narrow width devices. On tablet-size devices,
- * item details are presented side-by-side with a list of items
- * in a {@link RoomListActivity}.
- */
-public class RoomDetailActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+public class InfoActivity extends AppCompatActivity implements HasSupportFragmentInjector {
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
@@ -31,17 +25,12 @@ public class RoomDetailActivity extends AppCompatActivity implements HasSupportF
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_room_detail);
-
+        setContentView(R.layout.activity_info);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
-            Bundle arguments = new Bundle();
-            arguments.putString(RoomDetailFragment.ARG_ROOM_ID,
-                    getIntent().getStringExtra(RoomDetailFragment.ARG_ROOM_ID));
-            RoomDetailFragment fragment = new RoomDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction().add(R.id.room_detail_container, fragment).commit();
+            InfoFragment fragment = new InfoFragment();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_info, fragment).commit();
         }
     }
 
@@ -50,7 +39,7 @@ public class RoomDetailActivity extends AppCompatActivity implements HasSupportF
         int id = item.getItemId();
         if (id == android.R.id.home) {
 
-            navigateUpTo(new Intent(this, RoomListActivity.class));
+            navigateUpTo(new Intent(this, MainActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -60,4 +49,5 @@ public class RoomDetailActivity extends AppCompatActivity implements HasSupportF
     public AndroidInjector<Fragment> supportFragmentInjector() {
         return dispatchingAndroidInjector;
     }
+
 }

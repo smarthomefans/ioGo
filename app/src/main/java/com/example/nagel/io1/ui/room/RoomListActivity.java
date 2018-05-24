@@ -13,8 +13,10 @@ import android.view.MenuItem;
 
 import com.example.nagel.io1.R;
 import com.example.nagel.io1.data.model.Room;
+import com.example.nagel.io1.ui.base.BaseActivity;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,12 +33,13 @@ import dagger.android.AndroidInjection;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class RoomListActivity extends AppCompatActivity {
+public class RoomListActivity extends BaseActivity {
 
     private RoomViewModel mViewModel;
     private RoomListAdapter mAdapter;
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.toolbar) protected Toolbar toolbar;
+
     @BindView(R.id.room_list) RecyclerView recyclerView;
 
     @Inject
@@ -46,7 +49,6 @@ public class RoomListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_list);
         ButterKnife.bind(this);
@@ -86,5 +88,4 @@ public class RoomListActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

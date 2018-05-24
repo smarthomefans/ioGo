@@ -44,7 +44,7 @@ public class RoomListAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.room_list_item, parent, false);
+                .inflate(R.layout.li_room, parent, false);
         return new ViewHolder(view);
     }
 
