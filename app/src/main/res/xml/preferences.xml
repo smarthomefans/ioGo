@@ -9,7 +9,6 @@
             android:singleLine="true"
             android:title="SSID Name" />
         <EditTextPreference
-            android:defaultValue="http://iobroker:8084"
             android:key="wifi_socket_url"
             android:selectAllOnFocus="true"
             android:singleLine="true"
@@ -18,7 +17,6 @@
     <PreferenceCategory android:title="Mobile Connection">
 
         <EditTextPreference
-            android:defaultValue="http://iobroker:8084"
             android:key="mobile_socket_url"
             android:selectAllOnFocus="true"
             android:singleLine="true"
