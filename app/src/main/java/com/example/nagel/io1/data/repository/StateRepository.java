@@ -4,18 +4,17 @@ import android.arch.lifecycle.LiveData;
 import android.util.Log;
 
 import com.example.nagel.io1.data.IoObject;
-import com.example.nagel.io1.data.IoState;
+import com.example.nagel.io1.data.io.IoState;
 import com.example.nagel.io1.data.model.State;
 import com.example.nagel.io1.data.model.StateDao;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -43,35 +42,6 @@ public class StateRepository {
         gson = gsonBuilder.create();
 
         Log.i(TAG,"Constructor created");
-    }
-
-    public void saveStates(String data) {
-        try {
-            JSONObject obj = new JSONObject(data);
-            Iterator<String> iter = obj.keys();
-            while (iter.hasNext()) {
-                String key = iter.next();
-                saveState(key, obj.get(key).toString());
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Log.i(TAG,"saveStates finished");
-    }
-
-    public void saveState(String id, String data) {
-        State state = stateDao.getStateById(id);
-        IoState ioState = gson.fromJson(data, IoState.class);
-        if(state == null) {
-            state = new State(id);
-            state.update(ioState);
-            stateDao.insert(state);
-        }else {
-            state.update(ioState);
-            stateDao.update(state);
-        }
-        Log.i(TAG,"saveState stateId:" + state.getId());
-
     }
 
     public List<State> getAllStates(){
@@ -104,6 +74,33 @@ public class StateRepository {
             stateCache.put(id, state);
         }
         return stateCache.get(id);
+    }
+
+    public void saveStates(String data) {
+        TypeToken<Map<String,IoState>> token = new TypeToken<Map<String,IoState>>() {};
+        Map<String,IoState> states = gson.fromJson(data, token.getType());
+        for (Map.Entry<String, IoState> entry : states.entrySet())
+        {
+            saveState(entry.getKey(), entry.getValue());
+        }
+        Log.i(TAG,"saveStates finished");
+    }
+
+    public void saveState(String id, String data) {
+        IoState ioState = gson.fromJson(data, IoState.class);
+        saveState(id, ioState);
+    }
+
+    private void saveState(String id, IoState ioState){
+        State state = stateDao.getStateById(id);
+        if(state == null) {
+            state = new State(id);
+            state.update(ioState);
+            stateDao.insert(state);
+        }else {
+            state.update(ioState);
+            stateDao.update(state);
+        }
     }
 
     public void saveObjects(String data){

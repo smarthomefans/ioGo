@@ -3,17 +3,16 @@ package com.example.nagel.io1.data.repository;
 import android.arch.lifecycle.LiveData;
 import android.util.Log;
 
-import com.example.nagel.io1.data.IoEnum;
+import com.example.nagel.io1.data.io.Common;
+import com.example.nagel.io1.data.io.IoEnum;
+import com.example.nagel.io1.data.io.Row;
+import com.example.nagel.io1.data.io.Value;
 import com.example.nagel.io1.data.model.Room;
 import com.example.nagel.io1.data.model.RoomDao;
 import com.example.nagel.io1.data.model.RoomState;
 import com.example.nagel.io1.data.model.RoomStateDao;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -62,26 +61,20 @@ public class RoomRepository {
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
 
-        JSONObject obj = null;
-        JSONArray arr = null;
-        try {
-            obj = new JSONObject(data);
-            arr = obj.optJSONArray("rows");
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject item = arr.getJSONObject(i);
-                IoEnum ioEnum = gson.fromJson(item.getJSONObject("value").toString(), IoEnum.class);
-                Room room = new Room(ioEnum.getId(), ioEnum.getName(), ioEnum.getMembers());
-                roomDao.insert(room);
-                for (int j = 0; j < ioEnum.getMembers().size(); j++) {
-                    RoomState roomState = new RoomState(room.getId(),ioEnum.getMembers().get(j));
-                    roomStateDao.insert(roomState);
-                }
-
-                Log.d(TAG, "saveObjects getId:" + ioEnum.getId());
+        IoEnum ioEnum = gson.fromJson(data, IoEnum.class);
+        for(Row row : ioEnum.getRows()){
+            Value value = row.getValue();
+            Common common = value.getCommon();
+            Room room = new Room(value.getId(), common.getName(), common.getMembers());
+            roomDao.insert(room);
+            for (int j = 0; j < common.getMembers().size(); j++) {
+                RoomState roomState = new RoomState(room.getId(), common.getMembers().get(j));
+                roomStateDao.insert(roomState);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+
+            Log.d(TAG, "saveObjects getId:" + value.getId());
         }
+
         Log.i(TAG, "saveObjects finished");
     }
 }

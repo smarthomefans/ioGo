@@ -1,14 +1,13 @@
 package com.example.nagel.io1.data.model;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import com.example.nagel.io1.data.IoObject;
-import com.example.nagel.io1.data.IoState;
+import com.example.nagel.io1.data.io.IoState;
 
 @Entity(tableName = "state", indices = {@Index(value = {"id"},unique = true)})
 public class State {

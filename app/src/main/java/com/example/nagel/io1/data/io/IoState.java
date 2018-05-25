@@ -1,21 +1,12 @@
-package com.example.nagel.io1.data;
+package com.example.nagel.io1.data.io;
 
 public class IoState {
-    private String id;
     private String val;
     private boolean ack;
     private long ts;
     private long lc;
     private String from;
     private int q;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getVal() {
         return val;
