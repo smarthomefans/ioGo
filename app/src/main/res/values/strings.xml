@@ -8,5 +8,5 @@
     <string name="title_function_list">Functions</string>
     <string name="title_function_detail">Function Detail</string>
     <string name="title_activity_info">InfoActivity</string>
-
+    <string name="local_service_started">Local service has started</string>
 </resources>

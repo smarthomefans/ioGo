@@ -13,10 +13,8 @@ import android.view.MenuItem;
 
 import com.example.nagel.io1.R;
 import com.example.nagel.io1.data.model.Room;
-import com.example.nagel.io1.ui.base.BaseActivity;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -33,14 +31,16 @@ import dagger.android.AndroidInjection;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class RoomListActivity extends BaseActivity {
+public class RoomListActivity extends AppCompatActivity {
 
     private RoomViewModel mViewModel;
     private RoomListAdapter mAdapter;
 
-    @BindView(R.id.toolbar) protected Toolbar toolbar;
+    @BindView(R.id.toolbar)
+    protected Toolbar toolbar;
 
-    @BindView(R.id.room_list) RecyclerView recyclerView;
+    @BindView(R.id.room_list)
+    RecyclerView recyclerView;
 
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
@@ -49,6 +49,7 @@ public class RoomListActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_list);
         ButterKnife.bind(this);
@@ -76,13 +77,6 @@ public class RoomListActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. Use NavUtils to allow users
-            // to navigate up one level in the application structure. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
             NavUtils.navigateUpFromSameTask(this);
             return true;
         }

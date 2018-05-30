@@ -30,6 +30,6 @@ public class Events {
 
     }
 
-    public static class sync {}
+    public static class syncObjects {}
 
 }

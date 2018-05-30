@@ -1,5 +1,9 @@
 package com.example.nagel.io1.service;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +18,7 @@ import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.nagel.io1.R;
 import com.example.nagel.io1.data.model.AppDatabase;
 import com.example.nagel.io1.data.model.State;
 import com.example.nagel.io1.data.model.StateDao;
@@ -73,7 +78,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     public AppDatabase appDatabase;
 
     public SocketService() {
-        Log.i(TAG, "instance cerated");
+        Log.i(TAG, "instance created");
     }
 
     @Override
@@ -86,6 +91,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         sharedPref.registerOnSharedPreferenceChangeListener(this);
 
         new NetworkAsync().execute();
+        Toast.makeText(this, "service started", Toast.LENGTH_LONG).show();
 
         Log.i(TAG, "onCreate finished");
     }
@@ -196,12 +202,20 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return Service.START_STICKY;
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if(isConnected()) {
             mSocket.disconnect();
         }
         DataBus.getBus().unregister(this);
+
+        Toast.makeText(this, "service stopped", Toast.LENGTH_LONG).show();
+
         Log.i(TAG, "onDestroy finished");
     }
 
@@ -215,8 +229,10 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                     List<String> stateIds = stateRepository.getAllStateIds();
                     JSONArray json = new JSONArray(stateIds);
                     mSocket.emit("subscribe", json);
+
                 }
             });
+
             Log.i(TAG, "connected");
         }
     };
@@ -256,7 +272,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         public void call(final Object... args) {
             if(args[0] != null) {
                 if(args[1] != null) {
-                    stateRepository.saveState(args[0].toString(), args[1].toString());
+                    stateRepository.saveStateChange(args[0].toString(), args[1].toString());
                 }else{
                     Log.w(TAG,"onStateChange: state deleted: "+args[0].toString());
                 }
@@ -272,7 +288,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     }
 
     @Subscribe
-    public void sync(final Events.sync event){
+    public void sync(final Events.syncObjects event){
         if(isConnected()) {
             AsyncTask.execute(new Runnable() {
                 @Override
@@ -329,8 +345,6 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    //List<String> stateIds = stateRepository.getAllStateIds();
-                    //JSONArray json = new JSONArray(stateIds);
                     JSONArray json = new JSONArray();
                     List<String> functionStateIds = functionRepository.getAllStateIds();
                     List<String> roomStateIds = roomRepository.getAllStateIds();
@@ -345,7 +359,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                         @Override
                         public void call(Object... args) {
                             Log.i(TAG,"getStates: receiving states");
-                            stateRepository.saveStates(args[1].toString());
+                            stateRepository.saveStateChanges(args[1].toString());
                             getObjects();
                         }
                     });

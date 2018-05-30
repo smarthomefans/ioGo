@@ -3,14 +3,8 @@ package com.example.nagel.io1;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Service;
-import android.content.Intent;
-import android.os.Environment;
-import android.util.Log;
 
 import com.example.nagel.io1.di.component.DaggerAppComponent;
-
-import java.io.File;
-import java.io.IOException;
 
 import javax.inject.Inject;
 

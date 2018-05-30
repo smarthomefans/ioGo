@@ -37,15 +37,9 @@ import dagger.android.support.AndroidSupportInjection;
  * on handsets.
  */
 public class RoomDetailFragment extends Fragment implements Injectable {
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
+
     public static final String ARG_ROOM_ID = "room_id";
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
     @BindView(R.id.room_detail_list) RecyclerView mRecyclerView;
     private BaseDetailAdapter mAdapter;
 

@@ -10,14 +10,14 @@ public class IoEnum {
 
     @SerializedName("rows")
     @Expose
-    private List<Row> rows = null;
+    private List<IoRow> ioRows = null;
 
-    public List<Row> getRows() {
-        return rows;
+    public List<IoRow> getRows() {
+        return ioRows;
     }
 
-    public void setRows(List<Row> rows) {
-        this.rows = rows;
+    public void setIoRows(List<IoRow> ioRows) {
+        this.ioRows = ioRows;
     }
 
 }

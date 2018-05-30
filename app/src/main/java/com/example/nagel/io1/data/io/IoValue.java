@@ -3,20 +3,20 @@ package com.example.nagel.io1.data.io;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Value {
+public class IoValue {
 
     @SerializedName("_id")
     @Expose
     private String id;
     @SerializedName("common")
     @Expose
-    private Common common;
+    private IoCommon ioCommon;
     @SerializedName("type")
     @Expose
     private String type;
     @SerializedName("acl")
     @Expose
-    private Acl acl;
+    private IoAcl ioAcl;
     @SerializedName("from")
     @Expose
     private String from;
@@ -32,12 +32,12 @@ public class Value {
         this.id = id;
     }
 
-    public Common getCommon() {
-        return common;
+    public IoCommon getCommon() {
+        return ioCommon;
     }
 
-    public void setCommon(Common common) {
-        this.common = common;
+    public void setCommon(IoCommon ioCommon) {
+        this.ioCommon = ioCommon;
     }
 
     public String getType() {
@@ -48,12 +48,12 @@ public class Value {
         this.type = type;
     }
 
-    public Acl getAcl() {
-        return acl;
+    public IoAcl getIoAcl() {
+        return ioAcl;
     }
 
-    public void setAcl(Acl acl) {
-        this.acl = acl;
+    public void setIoAcl(IoAcl ioAcl) {
+        this.ioAcl = ioAcl;
     }
 
     public String getFrom() {

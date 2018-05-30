@@ -3,14 +3,14 @@ package com.example.nagel.io1.data.io;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Row {
+public class IoRow {
 
     @SerializedName("id")
     @Expose
     private String id;
     @SerializedName("value")
     @Expose
-    private Value value;
+    private IoValue ioValue;
 
     public String getId() {
         return id;
@@ -20,12 +20,12 @@ public class Row {
         this.id = id;
     }
 
-    public Value getValue() {
-        return value;
+    public IoValue getValue() {
+        return ioValue;
     }
 
-    public void setValue(Value value) {
-        this.value = value;
+    public void setIoValue(IoValue ioValue) {
+        this.ioValue = ioValue;
     }
 
 }

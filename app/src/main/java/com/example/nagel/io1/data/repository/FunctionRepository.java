@@ -3,22 +3,16 @@ package com.example.nagel.io1.data.repository;
 import android.arch.lifecycle.LiveData;
 import android.util.Log;
 
-import com.example.nagel.io1.data.io.Common;
+import com.example.nagel.io1.data.io.IoCommon;
 import com.example.nagel.io1.data.io.IoEnum;
-import com.example.nagel.io1.data.io.Row;
-import com.example.nagel.io1.data.io.Value;
+import com.example.nagel.io1.data.io.IoRow;
+import com.example.nagel.io1.data.io.IoValue;
 import com.example.nagel.io1.data.model.Function;
 import com.example.nagel.io1.data.model.FunctionDao;
 import com.example.nagel.io1.data.model.FunctionState;
 import com.example.nagel.io1.data.model.FunctionStateDao;
-import com.example.nagel.io1.data.model.Room;
-import com.example.nagel.io1.data.model.RoomState;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -66,17 +60,17 @@ public class FunctionRepository {
         Gson gson = gsonBuilder.create();
 
         IoEnum ioEnum = gson.fromJson(data, IoEnum.class);
-        for(Row row : ioEnum.getRows()){
-            Value value = row.getValue();
-            Common common = value.getCommon();
-            Function function = new Function(value.getId(), common.getName(), common.getMembers());
+        for(IoRow ioRow : ioEnum.getRows()){
+            IoValue ioValue = ioRow.getValue();
+            IoCommon ioCommon = ioValue.getCommon();
+            Function function = new Function(ioValue.getId(), ioCommon.getName(), ioCommon.getMembers());
             functionDao.insert(function);
-            for (int j = 0; j < common.getMembers().size(); j++) {
-                FunctionState functionState = new FunctionState(function.getId(), common.getMembers().get(j));
+            for (int j = 0; j < ioCommon.getMembers().size(); j++) {
+                FunctionState functionState = new FunctionState(function.getId(), ioCommon.getMembers().get(j));
                 functionStateDao.insert(functionState);
             }
 
-            Log.d(TAG, "saveObjects getId:" + value.getId());
+            Log.d(TAG, "saveObjects getId:" + ioValue.getId());
         }
 
         Log.i(TAG, "saveObjects finished");

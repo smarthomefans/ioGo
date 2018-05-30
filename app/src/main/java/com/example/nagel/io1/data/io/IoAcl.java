@@ -3,7 +3,7 @@ package com.example.nagel.io1.data.io;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Acl {
+public class IoAcl {
 
     @SerializedName("object")
     @Expose

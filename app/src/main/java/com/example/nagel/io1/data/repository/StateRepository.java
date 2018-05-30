@@ -44,10 +44,6 @@ public class StateRepository {
         Log.i(TAG,"Constructor created");
     }
 
-    public List<State> getAllStates(){
-        return stateDao.getAllStates();
-    }
-
     public List<String> getAllStateIds(){
         return stateDao.getAllStateIds();
     }
@@ -68,30 +64,22 @@ public class StateRepository {
         return stateFunctionCache.get(functionId);
     }
 
-    public LiveData<State> getState(String id){
-        if(!stateCache.containsKey(id)){
-            LiveData<State> state = stateDao.getLStateById(id);
-            stateCache.put(id, state);
-        }
-        return stateCache.get(id);
-    }
-
-    public void saveStates(String data) {
+    public void saveStateChanges(String data) {
         TypeToken<Map<String,IoState>> token = new TypeToken<Map<String,IoState>>() {};
         Map<String,IoState> states = gson.fromJson(data, token.getType());
         for (Map.Entry<String, IoState> entry : states.entrySet())
         {
-            saveState(entry.getKey(), entry.getValue());
+            saveStateChange(entry.getKey(), entry.getValue());
         }
         Log.i(TAG,"saveStates finished");
     }
 
-    public void saveState(String id, String data) {
+    public void saveStateChange(String id, String data) {
         IoState ioState = gson.fromJson(data, IoState.class);
-        saveState(id, ioState);
+        saveStateChange(id, ioState);
     }
 
-    private void saveState(String id, IoState ioState){
+    private void saveStateChange(String id, IoState ioState){
         State state = stateDao.getStateById(id);
         if(state == null) {
             state = new State(id);

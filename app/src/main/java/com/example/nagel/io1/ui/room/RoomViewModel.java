@@ -18,8 +18,6 @@ public class RoomViewModel extends ViewModel {
     private RoomRepository roomRepository;
     private StateRepository stateRepository;
 
-    private MutableLiveData<String> mRoomName;
-
     @Inject
     public RoomViewModel(RoomRepository roomRepository, StateRepository stateRepository) {
         this.roomRepository = roomRepository;
@@ -29,13 +27,9 @@ public class RoomViewModel extends ViewModel {
     public LiveData<List<Room>> getRooms() {
         return roomRepository.getAllRooms();
     }
+
     public LiveData<Room> getRoom(String roomId) {
         return roomRepository.getRoom(roomId);
-    }
-
-    public LiveData<String> getRoomName(String roomId){
-        mRoomName.setValue(roomRepository.getRoom(roomId).getValue().getName());
-        return mRoomName;
     }
 
     public LiveData<List<State>> getStates(String roomId) {
