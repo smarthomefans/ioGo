@@ -19,7 +19,6 @@ import butterknife.ButterKnife;
 public class FunctionListAdapter
         extends RecyclerView.Adapter<FunctionListAdapter.ViewHolder> {
 
-    private final FunctionListActivity mParentActivity;
     private final List<Function> mValues;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -35,10 +34,8 @@ public class FunctionListAdapter
         }
     };
 
-    public FunctionListAdapter(FunctionListActivity parent,
-                               List<Function> functionList) {
+    public FunctionListAdapter(List<Function> functionList) {
         mValues = functionList;
-        mParentActivity = parent;
     }
 
     @Override

@@ -72,7 +72,7 @@ public class FunctionDetailFragment extends Fragment implements Injectable {
 
             @Override
             public void run() {
-                mAdapter = new BaseDetailAdapter(null, mListStates);
+                mAdapter = new BaseDetailAdapter(mListStates);
                 mRecyclerView.setAdapter(mAdapter);
                 RecyclerView.LayoutManager layoutManager =
                         new LinearLayoutManager(getContext());
@@ -88,7 +88,7 @@ public class FunctionDetailFragment extends Fragment implements Injectable {
                     @Override
                     public void onChanged(@Nullable List<State> newList) {
                         // update UI
-                        mAdapter = new BaseDetailAdapter(null, newList);
+                        mAdapter = new BaseDetailAdapter(newList);
                         mRecyclerView.setAdapter(mAdapter);
                     }
                 });

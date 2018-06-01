@@ -15,6 +15,7 @@ public class State {
     public static final String TYPE_BOOLEAN = "boolean";
     public static final String TYPE_NUMBER = "number";
     public static final String TYPE_STRING = "string";
+    public static final String ROLE_BUTTON = "button";
 
     @PrimaryKey
     @NonNull

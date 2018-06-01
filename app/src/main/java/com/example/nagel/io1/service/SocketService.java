@@ -1,42 +1,26 @@
 package com.example.nagel.io1.service;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.NetworkInfo;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.nagel.io1.R;
 import com.example.nagel.io1.data.model.AppDatabase;
-import com.example.nagel.io1.data.model.State;
-import com.example.nagel.io1.data.model.StateDao;
 import com.example.nagel.io1.data.repository.FunctionRepository;
 import com.example.nagel.io1.data.repository.RoomRepository;
 import com.example.nagel.io1.data.repository.StateRepository;
-import com.example.nagel.io1.ui.main.MainActivity;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -45,17 +29,10 @@ import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
 import io.socket.client.Ack;
-import io.socket.client.IO;
 import io.socket.client.Manager;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import io.socket.engineio.client.Transport;
-import io.socket.engineio.client.transports.WebSocket;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class SocketService extends Service implements SharedPreferences.OnSharedPreferenceChangeListener{
     final private String TAG = "SocketService";
@@ -105,7 +82,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }else{
             String ssid = sharedPref.getString("wifi_ssid", null);
 
-            String current_ssid = getWifiName(this);
+            String current_ssid = NetworkUtils.getWifiName(this);
             if(ssid != null && ssid.equals(current_ssid)) {
                 String url = sharedPref.getString("wifi_socket_url", null);
                 init_direct(url);
@@ -116,20 +93,6 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }
     }
 
-    public String getWifiName(Context context) {
-        WifiManager manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        if (manager.isWifiEnabled()) {
-            WifiInfo wifiInfo = manager.getConnectionInfo();
-            if (wifiInfo != null) {
-                NetworkInfo.DetailedState state = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
-                if (state == NetworkInfo.DetailedState.CONNECTED || state == NetworkInfo.DetailedState.OBTAINING_IPADDR) {
-                    return wifiInfo.getSSID();
-                }
-            }
-        }
-        return null;
-    }
-
     private void init_direct(String url) {
         if(url != null) {
             createSocket(url);
@@ -137,9 +100,8 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     }
 
     private void init_pro(String username, String password){
-        String cookieUrl = "https://iobroker.pro/login?app=true";
         if(username != null && password != null) {
-            getCookie(cookieUrl, username, password);
+            cookie = NetworkUtils.getProCookie(username, password);
 
             try {
                 username = URLEncoder.encode(username, "UTF-8");
@@ -152,40 +114,11 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }
     }
 
-    private void getCookie(String url, String username, String password) {
-        RequestBody requestBody = new FormBody.Builder()
-                .add("username", username)
-                .add("password", password)
-                .build();
-
-        Request request = new Request.Builder()
-                .url(url)
-                .post(requestBody)
-                .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                .addHeader("Referrer", "https://iobroker.pro/login")
-                .addHeader("Host", "iobroker.pro")
-                .addHeader("Origin", "https://iobroker.pro")
-                .build();
-        Response response = null;
-        OkHttpClient client = new OkHttpClient();
-
-        try {
-            response = client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        cookie = response.headers().get("Set-Cookie");
-    }
 
     private void createSocket(String url) {
-        IO.Options opts = new IO.Options();
-        opts.upgrade = true;
-        opts.reconnection = true;
-        opts.forceNew = true;
-        opts.transports = new String[]{WebSocket.NAME};
+        mSocket = NetworkUtils.getSocket(url);
 
-        try {
-            mSocket = IO.socket(url, opts);
+        if(mSocket != null) {
             if(cookie != null) {
                 mSocket.io().on(Manager.EVENT_TRANSPORT, onTransport);
             }
@@ -195,9 +128,6 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
             mSocket.on("stateChange", onStateChange);
             mSocket.connect();
-
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -288,12 +218,12 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     }
 
     @Subscribe
-    public void sync(final Events.syncObjects event){
+    public void sync(final Events.SyncObjects event){
         if(isConnected()) {
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    //appDatabase.clearAllTables();
+                    appDatabase.clearAllTables();
                     getEnumRooms();
                 }
             });

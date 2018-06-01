@@ -59,7 +59,7 @@ public class RoomListActivity extends AppCompatActivity {
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(RoomViewModel.class);
 
-        mAdapter = new RoomListAdapter(this, list);
+        mAdapter = new RoomListAdapter(list);
         recyclerView.setAdapter(mAdapter);
 
         mViewModel.getRooms()
@@ -67,7 +67,7 @@ public class RoomListActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(@Nullable List<Room> newList) {
                         // update UI
-                        mAdapter = new RoomListAdapter(null, newList);
+                        mAdapter = new RoomListAdapter(newList);
                         recyclerView.setAdapter(mAdapter);
                     }
                 });

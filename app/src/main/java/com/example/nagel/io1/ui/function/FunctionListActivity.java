@@ -56,7 +56,7 @@ public class FunctionListActivity extends AppCompatActivity {
         toolbar.setTitle("Funktion");
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(FunctionViewModel.class);
-        mAdapter = new FunctionListAdapter(this, list);
+        mAdapter = new FunctionListAdapter(list);
         recyclerView.setAdapter(mAdapter);
 
         mViewModel.getFunctions()
@@ -64,7 +64,7 @@ public class FunctionListActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(@Nullable List<Function> newList) {
                         // update UI
-                        mAdapter = new FunctionListAdapter(null, newList);
+                        mAdapter = new FunctionListAdapter(newList);
                         recyclerView.setAdapter(mAdapter);
                     }
                 });

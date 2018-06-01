@@ -19,7 +19,6 @@ import butterknife.ButterKnife;
 public class RoomListAdapter
         extends RecyclerView.Adapter<RoomListAdapter.ViewHolder> {
 
-    private final RoomListActivity mParentActivity;
     private final List<Room> mValues;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -35,10 +34,8 @@ public class RoomListAdapter
         }
     };
 
-    public RoomListAdapter(RoomListActivity parent,
-                    List<Room> roomList) {
+    public RoomListAdapter(List<Room> roomList) {
         mValues = roomList;
-        mParentActivity = parent;
     }
 
     @Override
