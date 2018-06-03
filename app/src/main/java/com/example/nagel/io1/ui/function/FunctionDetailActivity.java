@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.example.nagel.io1.R;
+import com.example.nagel.io1.ui.base.BaseActivity;
 
 import javax.inject.Inject;
 
@@ -22,7 +23,7 @@ import dagger.android.support.HasSupportFragmentInjector;
  * item details are presented side-by-side with a list of items
  * in a {@link FunctionListActivity}.
  */
-public class FunctionDetailActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+public class FunctionDetailActivity extends BaseActivity implements HasSupportFragmentInjector {
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;

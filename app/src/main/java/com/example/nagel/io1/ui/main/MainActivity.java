@@ -13,6 +13,7 @@ import com.example.nagel.io1.R;
 import com.example.nagel.io1.service.DataBus;
 import com.example.nagel.io1.service.Events;
 import com.example.nagel.io1.service.SocketService;
+import com.example.nagel.io1.ui.base.BaseActivity;
 import com.example.nagel.io1.ui.function.FunctionListActivity;
 import com.example.nagel.io1.ui.room.RoomListActivity;
 import com.example.nagel.io1.ui.settings.SettingsActivity;
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.AndroidInjection;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
 
@@ -39,11 +40,10 @@ public class MainActivity extends AppCompatActivity {
 
         DataBus.getBus().register(this);
 
-        Intent intent = new Intent(this, SocketService.class);
-        startService(intent);
-
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
+
+
 
     @Override
     public boolean onSupportNavigateUp(){

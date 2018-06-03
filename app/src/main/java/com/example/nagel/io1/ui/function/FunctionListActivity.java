@@ -3,16 +3,24 @@ package com.example.nagel.io1.ui.function;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.nagel.io1.R;
 import com.example.nagel.io1.data.model.Function;
+import com.example.nagel.io1.service.SocketService;
+import com.example.nagel.io1.ui.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +39,8 @@ import dagger.android.AndroidInjection;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class FunctionListActivity extends AppCompatActivity {
+public class FunctionListActivity extends BaseActivity {
+    final private String TAG = "FunctionListActivity";
 
     private FunctionViewModel mViewModel;
     private FunctionListAdapter mAdapter;

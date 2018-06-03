@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.example.nagel.io1.R;
 import com.example.nagel.io1.data.model.Room;
+import com.example.nagel.io1.ui.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ import dagger.android.AndroidInjection;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class RoomListActivity extends AppCompatActivity {
+public class RoomListActivity extends BaseActivity {
 
     private RoomViewModel mViewModel;
     private RoomListAdapter mAdapter;

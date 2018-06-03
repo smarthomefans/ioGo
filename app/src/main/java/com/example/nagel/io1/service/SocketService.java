@@ -1,10 +1,13 @@
 package com.example.nagel.io1.service;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Binder;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -63,12 +66,11 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         AndroidInjection.inject(this);
         super.onCreate();
 
-        DataBus.getBus().register(this);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPref.registerOnSharedPreferenceChangeListener(this);
-
-        new NetworkAsync().execute();
-        Toast.makeText(this, "service started", Toast.LENGTH_LONG).show();
+        DataBus.getBus().register(this);
+        //new NetworkAsync().execute();
+        Toast.makeText(this, "service created", Toast.LENGTH_LONG).show();
 
         Log.i(TAG, "onCreate finished");
     }
@@ -114,7 +116,6 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }
     }
 
-
     private void createSocket(String url) {
         mSocket = NetworkUtils.getSocket(url);
 
@@ -132,7 +133,19 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     }
 
     @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        Log.i(TAG, "onTaskRemoved");
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        if(!isConnected()) {
+            new NetworkAsync().execute();
+        }
+        Toast.makeText(this, "service start command", Toast.LENGTH_LONG).show();
+        Log.i(TAG, "onStartCommand");
         return Service.START_STICKY;
     }
 
@@ -144,7 +157,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }
         DataBus.getBus().unregister(this);
 
-        Toast.makeText(this, "service stopped", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "service destroyed", Toast.LENGTH_LONG).show();
 
         Log.i(TAG, "onDestroy finished");
     }
@@ -316,6 +329,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }
         return (mSocket != null && mSocket.connected());
     }
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
