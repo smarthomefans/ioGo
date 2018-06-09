@@ -3,7 +3,7 @@ package com.example.nagel.io1.data.repository;
 import android.arch.lifecycle.LiveData;
 import android.util.Log;
 
-import com.example.nagel.io1.data.IoObject;
+import com.example.nagel.io1.data.io.IoObject;
 import com.example.nagel.io1.data.io.IoState;
 import com.example.nagel.io1.data.model.State;
 import com.example.nagel.io1.data.model.StateDao;

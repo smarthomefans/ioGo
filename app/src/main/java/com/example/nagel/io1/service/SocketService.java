@@ -143,8 +143,8 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
         if(!isConnected()) {
             new NetworkAsync().execute();
+            Toast.makeText(this, "service start command", Toast.LENGTH_LONG).show();
         }
-        Toast.makeText(this, "service start command", Toast.LENGTH_LONG).show();
         Log.i(TAG, "onStartCommand");
         return Service.START_STICKY;
     }
@@ -236,7 +236,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    appDatabase.clearAllTables();
+                    //appDatabase.clearAllTables();
                     getEnumRooms();
                 }
             });

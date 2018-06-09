@@ -10,13 +10,13 @@ public class IoValue {
     private String id;
     @SerializedName("common")
     @Expose
-    private IoCommon ioCommon;
+    private IoCommon common;
     @SerializedName("type")
     @Expose
     private String type;
     @SerializedName("acl")
     @Expose
-    private IoAcl ioAcl;
+    private IoAcl acl;
     @SerializedName("from")
     @Expose
     private String from;
@@ -33,11 +33,11 @@ public class IoValue {
     }
 
     public IoCommon getCommon() {
-        return ioCommon;
+        return common;
     }
 
-    public void setCommon(IoCommon ioCommon) {
-        this.ioCommon = ioCommon;
+    public void setCommon(IoCommon common) {
+        this.common = common;
     }
 
     public String getType() {
@@ -48,12 +48,12 @@ public class IoValue {
         this.type = type;
     }
 
-    public IoAcl getIoAcl() {
-        return ioAcl;
+    public IoAcl getAcl() {
+        return acl;
     }
 
-    public void setIoAcl(IoAcl ioAcl) {
-        this.ioAcl = ioAcl;
+    public void setAcl(IoAcl ioAcl) {
+        this.acl = acl;
     }
 
     public String getFrom() {

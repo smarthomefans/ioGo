@@ -10,7 +10,7 @@ public class IoRow {
     private String id;
     @SerializedName("value")
     @Expose
-    private IoValue ioValue;
+    private IoValue value;
 
     public String getId() {
         return id;
@@ -21,11 +21,11 @@ public class IoRow {
     }
 
     public IoValue getValue() {
-        return ioValue;
+        return value;
     }
 
-    public void setIoValue(IoValue ioValue) {
-        this.ioValue = ioValue;
+    public void setValue(IoValue value) {
+        this.value = value;
     }
 
 }

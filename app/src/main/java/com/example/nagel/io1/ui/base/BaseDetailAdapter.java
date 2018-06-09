@@ -16,6 +16,7 @@ public class BaseDetailAdapter
 
     private final List<State> mValues;
 
+    private final int C_STRING_SPINNER = 5;
     private final int C_STRING = 1;
     private final int C_NUMBER = 2;
     private final int C_BOOLEAN_SWITCH = 3;
@@ -42,6 +43,9 @@ public class BaseDetailAdapter
             case C_NUMBER:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_number, parent, false);
                 return new NumberTypeViewHolder(view);
+            case C_STRING_SPINNER:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string_spinner, parent, false);
+                return new StringSpinnerViewHolder(view);
         }
         return null;
     }
@@ -59,7 +63,11 @@ public class BaseDetailAdapter
                     }
 
                 case State.TYPE_STRING:
-                    return C_STRING;
+                    if(object.getStates() != null && object.getStates().size() > 0){
+                        return C_STRING_SPINNER;
+                    }else {
+                        return C_STRING;
+                    }
                 case State.TYPE_NUMBER:
                     return C_NUMBER;
                 default:
@@ -77,24 +85,23 @@ public class BaseDetailAdapter
         switch (viewType) {
             case C_BOOLEAN_SWITCH:
                 ((BooleanTypeViewHolder) holder).bindState(mValues.get(position));
-
                 break;
 
             case C_BOOLEAN_BUTTON:
                 ((BooleanButtonViewHolder) holder).bindState(mValues.get(position));
-
                 break;
 
             case C_NUMBER:
                 ((NumberTypeViewHolder) holder).bindState(mValues.get(position));
-
                 break;
 
             case C_STRING:
                 ((StringTypeViewHolder) holder).bindState(mValues.get(position));
-
                 break;
 
+            case C_STRING_SPINNER:
+                ((StringSpinnerViewHolder) holder).bindState(mValues.get(position));
+                break;
         }
 
     }
