@@ -30,7 +30,7 @@ public class BooleanButtonViewHolder extends RecyclerView.ViewHolder {
 
     public void bindState(State state) {
         mTitle.setText(state.getName());
-        mSubtitle.setText(state.getId());
+        mSubtitle.setText("");
         mValue.setClickable(state.getWrite());
         mValue.setOnClickListener(new CompoundButton.OnClickListener() {
                                       @Override
