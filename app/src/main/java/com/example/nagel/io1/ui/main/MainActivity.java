@@ -15,6 +15,7 @@ import com.example.nagel.io1.service.Events;
 import com.example.nagel.io1.service.SocketService;
 import com.example.nagel.io1.ui.base.BaseActivity;
 import com.example.nagel.io1.ui.function.FunctionListActivity;
+import com.example.nagel.io1.ui.info.InfoActivity;
 import com.example.nagel.io1.ui.room.RoomListActivity;
 import com.example.nagel.io1.ui.settings.SettingsActivity;
 
@@ -43,8 +44,6 @@ public class MainActivity extends BaseActivity {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 
-
-
     @Override
     public boolean onSupportNavigateUp(){
         finish();
@@ -69,11 +68,6 @@ public class MainActivity extends BaseActivity {
         startActivity(i);
     }
 
-    @OnClick(R.id.syncObjects)
-    public void onClickSyncObjects(){
-        DataBus.getBus().post(new Events.SyncObjects());
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -86,8 +80,15 @@ public class MainActivity extends BaseActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            Toast.makeText(this,"Settings", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,R.string.action_settings, Toast.LENGTH_LONG).show();
             Intent i = new Intent(this, SettingsActivity.class);
+            startActivity(i);
+            return true;
+        }
+
+        if (id == R.id.action_info) {
+            Toast.makeText(this,R.string.action_info, Toast.LENGTH_LONG).show();
+            Intent i = new Intent(this, InfoActivity.class);
             startActivity(i);
             return true;
         }

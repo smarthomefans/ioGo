@@ -1,6 +1,7 @@
 package com.example.nagel.io1.di.builder;
 
 import com.example.nagel.io1.ui.function.FunctionDetailFragment;
+import com.example.nagel.io1.ui.info.InfoFragment;
 import com.example.nagel.io1.ui.room.RoomDetailFragment;
 
 import dagger.Module;
@@ -14,4 +15,7 @@ public abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract FunctionDetailFragment contributeFunctionDetailFragment();
+
+    @ContributesAndroidInjector
+    abstract InfoFragment contributeInfoFragment();
 }

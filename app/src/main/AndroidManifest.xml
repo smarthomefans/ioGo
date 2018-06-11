@@ -19,7 +19,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,7 +37,7 @@
         <activity
             android:name=".ui.room.RoomListActivity"
             android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.nagel.io1.ui.main.MainActivity" />
@@ -45,7 +45,7 @@
         <activity
             android:name=".ui.room.RoomDetailActivity"
             android:parentActivityName=".ui.room.RoomListActivity"
-            android:theme="@style/Theme.AppCompat">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.nagel.io1.ui.room.RoomListActivity" />
@@ -53,7 +53,7 @@
         <activity
             android:name=".ui.function.FunctionListActivity"
             android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.nagel.io1.ui.main.MainActivity" />
@@ -61,7 +61,7 @@
         <activity
             android:name=".ui.function.FunctionDetailActivity"
             android:parentActivityName=".ui.function.FunctionListActivity"
-            android:theme="@style/Theme.AppCompat">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.nagel.io1.ui.function.FunctionListActivity" />

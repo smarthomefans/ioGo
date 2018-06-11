@@ -20,6 +20,9 @@ public interface RoomDao {
     @Query("SELECT * FROM room WHERE id = :id")
     LiveData<Room> getRoomById(String id);
 
+    @Query("SELECT count(*) FROM room")
+    LiveData<Integer> countRooms();
+
     @TypeConverters(ListConverters.class)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Room... rooms);

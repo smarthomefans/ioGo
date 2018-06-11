@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.example.nagel.io1.ui.base.BaseActivity;
 import com.example.nagel.io1.ui.main.MainActivity;
 import com.example.nagel.io1.R;
 
@@ -16,7 +17,7 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public class InfoActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+public class InfoActivity extends BaseActivity implements HasSupportFragmentInjector {
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
@@ -26,11 +27,12 @@ public class InfoActivity extends AppCompatActivity implements HasSupportFragmen
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
             InfoFragment fragment = new InfoFragment();
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_info, fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.info_container, fragment).commit();
         }
     }
 

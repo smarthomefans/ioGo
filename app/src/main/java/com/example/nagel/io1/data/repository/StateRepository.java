@@ -64,6 +64,10 @@ public class StateRepository {
         return stateFunctionCache.get(functionId);
     }
 
+    public LiveData<Integer> countStates(){
+        return stateDao.countStates();
+    }
+
     public void saveStateChanges(String data) {
         TypeToken<Map<String,IoState>> token = new TypeToken<Map<String,IoState>>() {};
         Map<String,IoState> states = gson.fromJson(data, token.getType());

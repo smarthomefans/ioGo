@@ -16,7 +16,7 @@
         android:layout_height="72dp"
         android:paddingLeft="72dp"
         android:paddingTop="20dp"
-        android:text="Funktionübersicht" />
+        android:text="@string/title_activity_function_list" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/function_list"

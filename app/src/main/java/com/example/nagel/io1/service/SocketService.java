@@ -84,7 +84,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }else{
             String ssid = sharedPref.getString("wifi_ssid", null);
 
-            String current_ssid = NetworkUtils.getWifiName(this);
+            String current_ssid = null;//NetworkUtils.getWifiName(this);
             if(ssid != null && ssid.equals(current_ssid)) {
                 String url = sharedPref.getString("wifi_socket_url", null);
                 init_direct(url);
@@ -236,7 +236,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    //appDatabase.clearAllTables();
+                    appDatabase.clearAllTables();
                     getEnumRooms();
                 }
             });

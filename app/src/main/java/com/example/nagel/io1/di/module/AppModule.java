@@ -16,6 +16,7 @@ import com.example.nagel.io1.data.repository.RoomRepository;
 import com.example.nagel.io1.data.model.StateDao;
 import com.example.nagel.io1.data.repository.StateRepository;
 import com.example.nagel.io1.ui.function.FunctionViewModel;
+import com.example.nagel.io1.ui.info.InfoViewModel;
 import com.example.nagel.io1.ui.room.RoomViewModel;
 import com.example.nagel.io1.ui.ViewModelFactory;
 
@@ -49,6 +50,11 @@ public class AppModule {
 
     @Provides
     ViewModel provideFunctionViewModel(FunctionViewModel viewModel) {
+        return viewModel;
+    }
+
+    @Provides
+    ViewModel provideInfoViewModel(InfoViewModel viewModel) {
         return viewModel;
     }
 

@@ -51,6 +51,10 @@ public class FunctionRepository {
         return mListFunctions;
     }
 
+    public LiveData<Integer> countFunctions(){
+        return functionDao.countFunctions();
+    }
+
     public List<String> getAllStateIds(){
         return functionStateDao.getAllStateIds();
     }

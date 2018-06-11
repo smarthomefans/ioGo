@@ -20,6 +20,9 @@ public interface FunctionDao {
     @Query("SELECT * FROM function WHERE id = :id")
     LiveData<Function> getFunctionById(String id);
 
+    @Query("SELECT count(*) FROM function")
+    LiveData<Integer> countFunctions();
+
     @TypeConverters(ListConverters.class)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Function... functions);

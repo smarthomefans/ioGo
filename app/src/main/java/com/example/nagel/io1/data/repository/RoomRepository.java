@@ -57,6 +57,10 @@ public class RoomRepository {
         return roomStateDao.getAllStateIds();
     }
 
+    public LiveData<Integer> countRooms(){
+        return roomDao.countRooms();
+    }
+
     public void saveObjects(String data){
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();

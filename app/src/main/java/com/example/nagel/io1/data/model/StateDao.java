@@ -31,6 +31,9 @@ public interface StateDao {
     @Query("SELECT * FROM state WHERE id IN (SELECT state_id FROM function_state WHERE function_id = :functionId)")
     LiveData<List<State>> getStatesByFunction(String functionId);
 
+    @Query("SELECT count(*) FROM state")
+    LiveData<Integer> countStates();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(State... states);
 
