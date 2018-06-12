@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE " />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
@@ -28,8 +27,7 @@
         </activity>
         <activity
             android:name=".ui.settings.SettingsActivity"
-            android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/AppTheme">
+            android:parentActivityName=".ui.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />
@@ -44,8 +42,7 @@
         </activity>
         <activity
             android:name=".ui.room.RoomDetailActivity"
-            android:parentActivityName=".ui.room.RoomListActivity"
-            android:theme="@style/AppTheme">
+            android:parentActivityName=".ui.room.RoomListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.nagel.io1.ui.room.RoomListActivity" />
@@ -60,13 +57,18 @@
         </activity>
         <activity
             android:name=".ui.function.FunctionDetailActivity"
-            android:parentActivityName=".ui.function.FunctionListActivity"
-            android:theme="@style/AppTheme">
+            android:parentActivityName=".ui.function.FunctionListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.nagel.io1.ui.function.FunctionListActivity" />
         </activity>
-
+        <activity
+            android:name=".ui.info.InfoActivity"
+            android:parentActivityName=".ui.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.nagel.io1.ui.main.MainActivity" />
+        </activity>
         <service
             android:name=".service.SocketService"
             android:enabled="true"
@@ -76,14 +78,6 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity
-            android:name=".ui.info.InfoActivity"
-            android:label="@string/title_activity_info"
-            android:parentActivityName=".ui.main.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.nagel.io1.ui.main.MainActivity" />
-        </activity>
     </application>
 
 </manifest>

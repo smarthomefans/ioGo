@@ -70,7 +70,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         sharedPref.registerOnSharedPreferenceChangeListener(this);
         DataBus.getBus().register(this);
         //new NetworkAsync().execute();
-        Toast.makeText(this, "service created", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "service created", Toast.LENGTH_SHORT).show();
 
         Log.i(TAG, "onCreate finished");
     }
@@ -143,7 +143,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
         if(!isConnected()) {
             new NetworkAsync().execute();
-            Toast.makeText(this, "service start command", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "service started", Toast.LENGTH_SHORT).show();
         }
         Log.i(TAG, "onStartCommand");
         return Service.START_STICKY;
@@ -157,7 +157,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }
         DataBus.getBus().unregister(this);
 
-        Toast.makeText(this, "service destroyed", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "service destroyed", Toast.LENGTH_SHORT).show();
 
         Log.i(TAG, "onDestroy finished");
     }
@@ -324,9 +324,6 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     }
 
     private Boolean isConnected(){
-        if(mSocket == null){
-            new NetworkAsync().execute();
-        }
         return (mSocket != null && mSocket.connected());
     }
 
