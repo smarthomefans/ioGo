@@ -18,7 +18,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class NetworkUtils {
-    public static String getWifiName(Context context) {
+    /*public static String getWifiName(Context context) {
         WifiManager manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         if (manager.isWifiEnabled()) {
             WifiInfo wifiInfo = manager.getConnectionInfo();
@@ -30,7 +30,7 @@ public class NetworkUtils {
             }
         }
         return null;
-    }
+    }*/
 
     public static String getProCookie(String username, String password) {
         RequestBody requestBody = new FormBody.Builder()

@@ -84,20 +84,18 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }else{
             String ssid = sharedPref.getString("wifi_ssid", null);
 
-            String current_ssid = null;//NetworkUtils.getWifiName(this);
+            /*String current_ssid = NetworkUtils.getWifiName(this);
+            String url;
             if(ssid != null && ssid.equals(current_ssid)) {
-                String url = sharedPref.getString("wifi_socket_url", null);
-                init_direct(url);
+                url = sharedPref.getString("wifi_socket_url", null);
             }else{
-                String url = sharedPref.getString("mobile_socket_url", null);
-                init_direct(url);
+                url = sharedPref.getString("mobile_socket_url", null);
             }
-        }
-    }
-
-    private void init_direct(String url) {
-        if(url != null) {
-            createSocket(url);
+            */
+            String url = sharedPref.getString("mobile_socket_url", null);
+            if(url != null) {
+                createSocket(url);
+            }
         }
     }
 

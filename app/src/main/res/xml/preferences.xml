@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+<!--
     <PreferenceCategory android:title="WIFI Connection">
 
         <EditTextPreference
@@ -14,6 +14,7 @@
             android:singleLine="true"
             android:title="Socket URL" />
     </PreferenceCategory>
+    -->
     <PreferenceCategory android:title="Mobile Connection">
 
         <EditTextPreference
