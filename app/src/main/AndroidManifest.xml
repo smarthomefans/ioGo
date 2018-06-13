@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.nagel.io1">
+    package="de.nisio.iobroker">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -36,14 +36,14 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.nagel.io1.ui.main.MainActivity" />
+                android:value=".ui.main.MainActivity" />
         </activity>
         <activity
             android:name=".ui.room.RoomDetailActivity"
             android:parentActivityName=".ui.room.RoomListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.nagel.io1.ui.room.RoomListActivity" />
+                android:value=".ui.room.RoomListActivity" />
         </activity>
         <activity
             android:name=".ui.function.FunctionListActivity"
@@ -51,21 +51,21 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.nagel.io1.ui.main.MainActivity" />
+                android:value=".ui.main.MainActivity" />
         </activity>
         <activity
             android:name=".ui.function.FunctionDetailActivity"
             android:parentActivityName=".ui.function.FunctionListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.nagel.io1.ui.function.FunctionListActivity" />
+                android:value=".ui.function.FunctionListActivity" />
         </activity>
         <activity
             android:name=".ui.info.InfoActivity"
             android:parentActivityName=".ui.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.nagel.io1.ui.main.MainActivity" />
+                android:value=".ui.main.MainActivity" />
         </activity>
         <service
             android:name=".service.SocketService"

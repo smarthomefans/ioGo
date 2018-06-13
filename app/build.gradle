@@ -1,14 +1,13 @@
 apply plugin: 'com.android.application'
 
-
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId 'com.example.nagel.ioBroker'
+        applicationId 'de.nisio.iobroker'
         minSdkVersion 24
         targetSdkVersion 27
         versionCode 1
-        versionName "0.0.1"
+        versionName "0.5.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -30,7 +29,7 @@ dependencies {
 
     // android support libraries
     implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
