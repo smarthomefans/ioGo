@@ -54,8 +54,10 @@ public class RoomListActivity extends BaseActivity {
         setContentView(R.layout.activity_room_list);
         ButterKnife.bind(this);
 
+        toolbar.setTitle(R.string.title_activity_room_list);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(RoomViewModel.class);
 

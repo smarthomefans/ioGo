@@ -9,25 +9,17 @@
     tools:layout_editor_absoluteY="81dp"
     tools:showIn="@layout/activity_function_list">
 
-    <TextView
-        android:id="@+id/title"
-        style="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title"
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:paddingLeft="72dp"
-        android:paddingTop="20dp"
-        android:text="@string/title_activity_function_list" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/function_list"
         android:name="com.example.nagel.io1.FunctionListFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         app:layoutManager="LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintTop_toTopOf="parent"
         tools:context=".ui.function.FunctionListActivity"
         tools:listitem="@layout/li_function" />
 

@@ -63,31 +63,4 @@ public class MainActivity extends BaseActivity {
         startActivity(i);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            Toast.makeText(this,R.string.action_settings, Toast.LENGTH_LONG).show();
-            Intent i = new Intent(this, SettingsActivity.class);
-            startActivity(i);
-            return true;
-        }
-
-        if (id == R.id.action_info) {
-            Toast.makeText(this,R.string.action_info, Toast.LENGTH_LONG).show();
-            Intent i = new Intent(this, InfoActivity.class);
-            startActivity(i);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

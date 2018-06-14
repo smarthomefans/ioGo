@@ -4,10 +4,13 @@ package de.nisio.iobroker.ui.function;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
@@ -23,6 +26,9 @@ import de.nisio.iobroker.ui.base.BaseActivity;
  */
 public class FunctionDetailActivity extends BaseActivity implements HasSupportFragmentInjector {
 
+    @BindView(R.id.toolbar)
+    protected Toolbar toolbar;
+
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
@@ -32,6 +38,10 @@ public class FunctionDetailActivity extends BaseActivity implements HasSupportFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_function_detail);
 
+        ButterKnife.bind(this);
+
+        toolbar.setTitle(R.string.title_activity_room_list);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {

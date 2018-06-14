@@ -40,7 +40,8 @@
         </activity>
         <activity
             android:name=".ui.room.RoomDetailActivity"
-            android:parentActivityName=".ui.room.RoomListActivity">
+            android:parentActivityName=".ui.room.RoomListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.room.RoomListActivity" />
@@ -55,7 +56,8 @@
         </activity>
         <activity
             android:name=".ui.function.FunctionDetailActivity"
-            android:parentActivityName=".ui.function.FunctionListActivity">
+            android:parentActivityName=".ui.function.FunctionListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.function.FunctionListActivity" />

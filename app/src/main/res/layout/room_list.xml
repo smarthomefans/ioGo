@@ -9,25 +9,16 @@
     tools:layout_editor_absoluteY="81dp"
     tools:showIn="@layout/activity_room_list">
 
-    <TextView
-        android:id="@+id/title"
-        style="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title"
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:paddingLeft="72dp"
-        android:paddingTop="20dp"
-        android:text="@string/title_activity_room_list" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/room_list"
-        android:name="com.example.nagel.io1.RoomListFragment"
+        android:name="ui.room.RoomListFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layoutManager="LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintTop_toTopOf="parent"
         tools:context=".ui.room.RoomListActivity"
         tools:listitem="@layout/li_room" />
 

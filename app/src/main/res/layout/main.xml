@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="72dp"
         android:paddingTop="20dp"
-        android:text="YOUR HOME SCREEN"
+        android:text="@string/main_title"
         android:textAlignment="center" />
 
     <Button
@@ -24,7 +24,7 @@
         android:layout_height="72dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="room list"
+        android:text="@string/main_room_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"/>
@@ -36,7 +36,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="function list"
+        android:text="@string/main_function_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/showRoomList" />

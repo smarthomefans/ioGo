@@ -25,13 +25,13 @@ public interface StateDao {
     @Query("SELECT * FROM state WHERE id = :id")
     State getStateById(String id);
 
-    @Query("SELECT state.* FROM state INNER JOIN room_state ON state.id = room_state.state_id WHERE room_state.room_id = :roomId")
+    @Query("SELECT * FROM state WHERE name IS NOT NULL AND id IN (SELECT state_id FROM room_state WHERE room_id = :roomId)")
     LiveData<List<State>> getStatesByRoom(String roomId);
 
-    @Query("SELECT * FROM state WHERE id IN (SELECT state_id FROM function_state WHERE function_id = :functionId)")
+    @Query("SELECT * FROM state WHERE name IS NOT NULL AND id IN (SELECT state_id FROM function_state WHERE function_id = :functionId)")
     LiveData<List<State>> getStatesByFunction(String functionId);
 
-    @Query("SELECT count(*) FROM state")
+    @Query("SELECT count(*) FROM state WHERE name IS NOT NULL")
     LiveData<Integer> countStates();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

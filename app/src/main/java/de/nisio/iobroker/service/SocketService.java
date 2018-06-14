@@ -66,8 +66,8 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPref.registerOnSharedPreferenceChangeListener(this);
         DataBus.getBus().register(this);
-        //new NetworkAsync().execute();
-        Toast.makeText(this, "service created", Toast.LENGTH_SHORT).show();
+
+        stateRepository.saveSocketState("unknown");
 
         Log.i(TAG, "onCreate finished");
     }
@@ -152,8 +152,6 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }
         DataBus.getBus().unregister(this);
 
-        Toast.makeText(this, "service destroyed", Toast.LENGTH_SHORT).show();
-
         Log.i(TAG, "onDestroy finished");
     }
 
@@ -170,7 +168,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
                 }
             });
-            stateRepository.saveSocketState("true");
+            stateRepository.saveSocketState("connected");
             Log.i(TAG, "connected");
         }
     };
@@ -178,7 +176,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     private Emitter.Listener onDisconnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            stateRepository.saveSocketState("false");
+            stateRepository.saveSocketState("offline");
             Log.i(TAG, "disconnected");
         }
     };

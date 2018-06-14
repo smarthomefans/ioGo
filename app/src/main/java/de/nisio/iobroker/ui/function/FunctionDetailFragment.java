@@ -9,6 +9,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 import de.nisio.iobroker.R;
 import de.nisio.iobroker.data.model.Function;
+import de.nisio.iobroker.data.model.Room;
 import de.nisio.iobroker.data.model.State;
 import de.nisio.iobroker.di.Injectable;
 import de.nisio.iobroker.ui.base.BaseDetailAdapter;
@@ -81,7 +83,13 @@ public class FunctionDetailFragment extends Fragment implements Injectable {
         });
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(FunctionViewModel.class);
-
+        mViewModel.getFunction(functionId).observe(this, new Observer<Function>() {
+            @Override
+            public void onChanged(@Nullable Function function) {
+                // update UI
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(function.getName());
+            }
+        });
         mViewModel.getStates(functionId)
                 .observe(this, new Observer<List<State>>() {
                     @Override

@@ -9,11 +9,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 import java.util.ArrayList;
@@ -41,6 +44,7 @@ public class RoomDetailFragment extends Fragment implements Injectable {
     public static final String ARG_ROOM_ID = "room_id";
 
     @BindView(R.id.room_detail_list) RecyclerView mRecyclerView;
+
     private BaseDetailAdapter mAdapter;
 
     private LiveData<Room> mRoom;
@@ -55,7 +59,9 @@ public class RoomDetailFragment extends Fragment implements Injectable {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(RoomViewModel.class);
+
         roomId = getArguments().getString(ARG_ROOM_ID);
         if (getArguments().containsKey(ARG_ROOM_ID)) {
             mRoom = mViewModel.getRoom(roomId);
@@ -67,6 +73,7 @@ public class RoomDetailFragment extends Fragment implements Injectable {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.room_detail, container, false);
         ButterKnife.bind(this, rootView);
+
         getActivity().runOnUiThread(new Runnable() {
 
             @Override
@@ -81,6 +88,13 @@ public class RoomDetailFragment extends Fragment implements Injectable {
         });
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(RoomViewModel.class);
+        mViewModel.getRoom(roomId).observe(this, new Observer<Room>() {
+            @Override
+            public void onChanged(@Nullable Room room) {
+                // update UI
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(room.getName());
+            }
+        });
 
         mViewModel.getStates(roomId)
                 .observe(this, new Observer<List<State>>() {

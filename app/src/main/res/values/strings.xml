@@ -7,4 +7,7 @@
     <string name="title_activity_function_list">Funktionen</string>
     <string name="title_activity_info">Information</string>
     <string name="local_service_started">Local service has started</string>
+    <string name="main_title">YOUR HOME SCREEN</string>
+    <string name="main_room_button">room list</string>
+    <string name="main_function_button">function list</string>
 </resources>

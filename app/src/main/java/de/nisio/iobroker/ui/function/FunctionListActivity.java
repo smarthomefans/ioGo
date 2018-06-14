@@ -51,10 +51,10 @@ public class FunctionListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_function_list);
         ButterKnife.bind(this);
+
+        toolbar.setTitle(R.string.title_activity_function_list);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        toolbar.setTitle("Funktion");
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(FunctionViewModel.class);
         mAdapter = new FunctionListAdapter(list);
