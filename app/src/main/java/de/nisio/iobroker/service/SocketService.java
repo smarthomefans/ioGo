@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -225,13 +226,36 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     }
 
     @Subscribe
-    public void sync(final Events.SyncObjects event){
+    public void syncObjects(final Events.SyncObjects event){
         if(isConnected()) {
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
                     appDatabase.clearAllTables();
                     getEnumRooms();
+                }
+            });
+        }
+    }
+
+    @Subscribe
+    public void loadHistory(final Events.LoadHistory event){
+        if(isConnected()) {
+            JSONObject json = new JSONObject();
+            try {
+                //json.put("id", "javascript.0.flur.temperature");
+                //json.put("start", 1);//(System.currentTimeMillis() - 3600000));
+                //json.put("end", System.currentTimeMillis());
+                json.put("aggregate", "none");
+                //json.put("count", "100");
+                //json.put("timeout", "2000");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            mSocket.emit("getHistory", "javascript.0.flur.temperature", json, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    Log.i(TAG,"loadHistory: receiving historical data");
                 }
             });
         }

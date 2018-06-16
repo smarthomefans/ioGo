@@ -32,4 +32,6 @@ public class Events {
 
     public static class SyncObjects {}
 
+    public static class LoadHistory {}
+
 }

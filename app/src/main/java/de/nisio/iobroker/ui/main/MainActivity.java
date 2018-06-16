@@ -13,6 +13,7 @@ import butterknife.OnClick;
 import dagger.android.AndroidInjection;
 import de.nisio.iobroker.R;
 import de.nisio.iobroker.service.DataBus;
+import de.nisio.iobroker.service.Events;
 import de.nisio.iobroker.ui.base.BaseActivity;
 import de.nisio.iobroker.ui.function.FunctionListActivity;
 import de.nisio.iobroker.ui.info.InfoActivity;

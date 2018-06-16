@@ -28,7 +28,7 @@ public class NumberTypeViewHolder extends RecyclerView.ViewHolder {
 
     public void bindState(State state) {
         mTitle.setText(state.getName());
-        mSubtitle.setText("");
+        mSubtitle.setText(state.getRole());
         String value = state.getVal();
         if(state.getUnit() != null){
             value += state.getUnit();

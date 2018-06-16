@@ -19,6 +19,8 @@ public class State {
     public static final String TYPE_NUMBER = "number";
     public static final String TYPE_STRING = "string";
     public static final String ROLE_BUTTON = "button";
+    public static final String ROLE_SENSOR_DOOR = "sensor.door";
+    public static final String ROLE_SENSOR_WINDOW = "sensor.window";
 
     @PrimaryKey
     @NonNull

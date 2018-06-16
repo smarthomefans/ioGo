@@ -4,16 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.info.InfoFragment">
-
-    <TextView
-        android:id="@+id/title"
-        style="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title"
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:paddingLeft="72dp"
-        android:paddingTop="20dp"
-        android:text="@string/title_activity_info" />
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ui.info.InfoFragment"
+    tools:layout_editor_absoluteY="81dp">
 
     <TextView
         android:id="@+id/labelCountRooms"
@@ -22,8 +15,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Anzahl Räume:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
         android:id="@+id/countRooms"
@@ -32,8 +24,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/labelCountFunctions"

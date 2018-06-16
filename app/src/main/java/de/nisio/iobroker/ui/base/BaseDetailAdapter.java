@@ -17,11 +17,12 @@ public class BaseDetailAdapter
 
     private final List<State> mValues;
 
-    private final int C_STRING_SPINNER = 5;
     private final int C_STRING = 1;
     private final int C_NUMBER = 2;
     private final int C_BOOLEAN_SWITCH = 3;
     private final int C_BOOLEAN_BUTTON = 4;
+    private final int C_STRING_SPINNER = 5;
+    private final int C_BOOLEAN_DOOR = 6;
 
     public BaseDetailAdapter(List<State> stateList) {
         mValues = stateList;
@@ -38,6 +39,9 @@ public class BaseDetailAdapter
             case C_BOOLEAN_BUTTON:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_boolean_button, parent, false);
                 return new BooleanButtonViewHolder(view);
+            case C_BOOLEAN_DOOR:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
+                return new BooleanDoorViewHolder(view);
             case C_STRING:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
                 return new StringTypeViewHolder(view);
@@ -57,10 +61,15 @@ public class BaseDetailAdapter
         if (object != null && object.getType() != null) {
             switch (object.getType()) {
                 case State.TYPE_BOOLEAN:
-                    if(State.ROLE_BUTTON.equals(object.getRole())){
-                        return C_BOOLEAN_BUTTON;
-                    }else{
-                        return C_BOOLEAN_SWITCH;
+                    switch (object.getRole()){
+                        case State.ROLE_BUTTON:
+                            return C_BOOLEAN_BUTTON;
+                        case State.ROLE_SENSOR_DOOR:
+                            return C_BOOLEAN_DOOR;
+                        case State.ROLE_SENSOR_WINDOW:
+                            return C_BOOLEAN_DOOR;
+                        default:
+                            return C_BOOLEAN_SWITCH;
                     }
 
                 case State.TYPE_STRING:
@@ -90,6 +99,10 @@ public class BaseDetailAdapter
 
             case C_BOOLEAN_BUTTON:
                 ((BooleanButtonViewHolder) holder).bindState(mValues.get(position));
+                break;
+
+            case C_BOOLEAN_DOOR:
+                ((BooleanDoorViewHolder) holder).bindState(mValues.get(position));
                 break;
 
             case C_NUMBER:
