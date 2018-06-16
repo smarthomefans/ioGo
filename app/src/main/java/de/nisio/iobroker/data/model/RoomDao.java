@@ -33,4 +33,7 @@ public interface RoomDao {
 
     @Delete
     void delete(Room... rooms);
+
+    @Query("DELETE FROM room")
+    void deleteAll();
 }

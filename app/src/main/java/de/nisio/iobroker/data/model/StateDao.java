@@ -42,4 +42,7 @@ public interface StateDao {
 
     @Delete
     void delete(State... states);
+
+    @Query("DELETE FROM state")
+    void deleteAll();
 }

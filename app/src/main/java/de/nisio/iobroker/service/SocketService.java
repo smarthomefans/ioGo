@@ -231,7 +231,9 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    appDatabase.clearAllTables();
+                    stateRepository.deleteAll();
+                    functionRepository.deleteAll();
+                    roomRepository.deleteAll();
                     getEnumRooms();
                 }
             });

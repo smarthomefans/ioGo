@@ -62,6 +62,11 @@ public class RoomRepository {
         return roomDao.countRooms();
     }
 
+    public void deleteAll(){
+        roomDao.deleteAll();
+        roomStateDao.deleteAll();
+    }
+
     public void saveObjects(String data){
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();

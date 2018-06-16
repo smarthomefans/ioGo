@@ -30,4 +30,7 @@ public interface RoomStateDao {
 
     @Delete
     void delete(RoomState... roomStates);
+
+    @Query("DELETE FROM room_state")
+    void deleteAll();
 }

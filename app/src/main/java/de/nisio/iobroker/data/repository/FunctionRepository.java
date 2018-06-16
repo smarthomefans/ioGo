@@ -61,6 +61,11 @@ public class FunctionRepository {
         return functionStateDao.getAllStateIds();
     }
 
+    public void deleteAll(){
+        functionDao.deleteAll();
+        functionStateDao.deleteAll();
+    }
+
     public void saveObjects(String data) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();

@@ -33,4 +33,7 @@ public interface FunctionDao {
 
     @Delete
     void delete(Function... functions);
+
+    @Query("DELETE FROM function")
+    void deleteAll();
 }

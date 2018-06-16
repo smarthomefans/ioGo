@@ -30,4 +30,7 @@ public interface FunctionStateDao {
 
     @Delete
     void delete(FunctionState... functionStates);
+
+    @Query("DELETE FROM function_state")
+    void deleteAll();
 }
