@@ -32,6 +32,7 @@ import de.nisio.iobroker.data.repository.StateRepository;
 import io.socket.client.Ack;
 import io.socket.client.Manager;
 import io.socket.client.Socket;
+import io.socket.client.Url;
 import io.socket.emitter.Emitter;
 import io.socket.engineio.client.Transport;
 
@@ -91,7 +92,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             }
             */
             String url = sharedPref.getString("mobile_socket_url", null);
-            if(url != null) {
+            if(url != null && NetworkUtils.isValidUrl(url)) {
                 createSocket(url);
             }
         }

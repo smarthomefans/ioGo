@@ -1,8 +1,12 @@
 package de.nisio.iobroker.service;
 
+import android.util.Patterns;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -51,6 +55,12 @@ public class NetworkUtils {
             e.printStackTrace();
         }
         return response.headers().get("Set-Cookie");
+    }
+
+    public static boolean isValidUrl(String url) {
+        Pattern p = Patterns.WEB_URL;
+        Matcher m = p.matcher(url.toLowerCase());
+        return m.matches();
     }
 
     public static Socket getSocket(String url) {
