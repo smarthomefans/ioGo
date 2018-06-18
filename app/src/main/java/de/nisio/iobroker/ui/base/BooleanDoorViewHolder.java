@@ -27,7 +27,7 @@ public class BooleanDoorViewHolder extends RecyclerView.ViewHolder {
 
     public void bindState(State state) {
         mTitle.setText(state.getName());
-        mSubtitle.setText("");
+        mSubtitle.setText(state.getRole());
         String val = ("true".equals(state.getVal())) ? "open" : "closed";
         mValue.setText(val);
     }

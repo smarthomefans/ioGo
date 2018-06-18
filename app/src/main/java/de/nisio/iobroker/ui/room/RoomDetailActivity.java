@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -62,7 +64,23 @@ public class RoomDetailActivity extends BaseActivity implements HasSupportFragme
             navigateUpTo(new Intent(this, RoomListActivity.class));
             return true;
         }
+
+        if (id == R.id.action_room_settings) {
+            Toast.makeText(this,R.string.action_settings, Toast.LENGTH_LONG).show();
+            Intent i = new Intent(this, RoomSettingsActivity.class);
+            i.putExtra(RoomDetailFragment.ARG_ROOM_ID, getIntent().getStringExtra(RoomDetailFragment.ARG_ROOM_ID));
+            startActivity(i);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_room, menu);
+        return true;
     }
 
     @Override

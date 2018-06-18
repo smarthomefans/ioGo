@@ -1,34 +1,35 @@
 package de.nisio.iobroker.data.model;
 
+
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-@Entity(tableName = "room_state", indices = {@Index(value = {"room_id", "state_id"},unique = true)})
-public class RoomState {
+@Entity(tableName = "enum_state", indices = {@Index(value = {"enum_id", "state_id"},unique = true)})
+public class EnumState {
     @PrimaryKey(autoGenerate = true)
     public Integer id;
     @NonNull
-    @ColumnInfo(name = "room_id")
-    private String roomId;
+    @ColumnInfo(name = "enum_id")
+    private String enumId;
     @NonNull
     @ColumnInfo(name = "state_id")
     private String stateId;
 
-    public RoomState(@NonNull String roomId, @NonNull String stateId) {
-        this.roomId = roomId;
+    public EnumState(@NonNull String enumId, @NonNull String stateId) {
+        this.enumId = enumId;
         this.stateId = stateId;
     }
 
     @NonNull
-    public String getRoomId() {
-        return roomId;
+    public String getEnumId() {
+        return enumId;
     }
 
-    public void setRoomId(@NonNull String roomId) {
-        this.roomId = roomId;
+    public void setEnumId(@NonNull String enumId) {
+        this.enumId = enumId;
     }
 
     @NonNull

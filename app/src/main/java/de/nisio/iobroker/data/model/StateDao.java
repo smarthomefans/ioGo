@@ -25,10 +25,10 @@ public interface StateDao {
     @Query("SELECT * FROM state WHERE id = :id")
     State getStateById(String id);
 
-    @Query("SELECT * FROM state WHERE name IS NOT NULL AND id IN (SELECT state_id FROM room_state WHERE room_id = :roomId)")
+    @Query("SELECT * FROM state WHERE name IS NOT NULL AND id IN (SELECT state_id FROM enum_state WHERE enum_id = :roomId)")
     LiveData<List<State>> getStatesByRoom(String roomId);
 
-    @Query("SELECT * FROM state WHERE name IS NOT NULL AND id IN (SELECT state_id FROM function_state WHERE function_id = :functionId)")
+    @Query("SELECT * FROM state WHERE name IS NOT NULL AND id IN (SELECT state_id FROM enum_state WHERE enum_id = :functionId)")
     LiveData<List<State>> getStatesByFunction(String functionId);
 
     @Query("SELECT count(*) FROM state WHERE name IS NOT NULL")

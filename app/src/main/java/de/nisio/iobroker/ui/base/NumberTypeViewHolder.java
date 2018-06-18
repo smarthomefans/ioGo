@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -20,6 +21,8 @@ public class NumberTypeViewHolder extends RecyclerView.ViewHolder {
     TextView mTitle;
     @BindView(R.id.message_subtitle)  TextView mSubtitle;
     @BindView(R.id.value)  TextView mValue;
+    @BindView(R.id.icon)
+    ImageView mIcon;
 
     public NumberTypeViewHolder(View itemView) {
         super(itemView);

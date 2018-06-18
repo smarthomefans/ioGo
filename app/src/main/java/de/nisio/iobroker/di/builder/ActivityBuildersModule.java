@@ -9,6 +9,7 @@ import de.nisio.iobroker.ui.info.InfoActivity;
 import de.nisio.iobroker.ui.main.MainActivity;
 import de.nisio.iobroker.ui.room.RoomDetailActivity;
 import de.nisio.iobroker.ui.room.RoomListActivity;
+import de.nisio.iobroker.ui.room.RoomSettingsActivity;
 
 /**
  * Binds all sub-components within the app.
@@ -24,6 +25,9 @@ public abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector(modules = FragmentBuildersModule.class)
     abstract RoomDetailActivity bindRoomDetailActivity();
+
+    @ContributesAndroidInjector(modules = AppModule.class)
+    abstract RoomSettingsActivity bindRoomSettingsActivity();
 
     @ContributesAndroidInjector(modules = AppModule.class)
     abstract FunctionListActivity bindFunctionListActivity();

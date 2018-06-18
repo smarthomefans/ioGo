@@ -6,6 +6,7 @@ import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.support.AndroidSupportInjectionModule;
 import de.nisio.iobroker.App;
+import de.nisio.iobroker.data.model.AppDatabase;
 import de.nisio.iobroker.di.builder.ActivityBuildersModule;
 import de.nisio.iobroker.di.builder.ServiceBuilderModule;
 import de.nisio.iobroker.di.module.AppModule;
@@ -25,4 +26,5 @@ public interface AppComponent {
         AppComponent build();
     }
     void inject(App app);
+
 }

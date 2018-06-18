@@ -1,13 +1,13 @@
 <resources>
-    <string name="app_name">ioBroker</string>
+    <string name="app_name">ioBroker.app</string>
     <string name="action_info">Info</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="title_activity_room_list">Räume</string>
-    <string name="title_activity_function_list">Funktionen</string>
+    <string name="title_activity_room_list">Rooms</string>
+    <string name="title_activity_function_list">Functions</string>
     <string name="title_activity_info">Information</string>
     <string name="local_service_started">Local service has started</string>
-    <string name="main_title">YOUR HOME SCREEN</string>
-    <string name="main_room_button">room list</string>
-    <string name="main_function_button">function list</string>
+    <string name="main_title">YOUR FAVORITES</string>
+    <string name="main_room_button">all rooms</string>
+    <string name="main_function_button">all functions</string>
 </resources>

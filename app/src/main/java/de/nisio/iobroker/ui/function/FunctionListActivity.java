@@ -20,8 +20,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 import de.nisio.iobroker.R;
-import de.nisio.iobroker.data.model.Function;
+import de.nisio.iobroker.data.model.Enum;
 import de.nisio.iobroker.ui.base.BaseActivity;
+import de.nisio.iobroker.ui.main.EnumListAdapter;
 
 /**
  * An activity representing a list of Functions. This activity
@@ -35,7 +36,7 @@ public class FunctionListActivity extends BaseActivity {
     final private String TAG = "FunctionListActivity";
 
     private FunctionViewModel mViewModel;
-    private FunctionListAdapter mAdapter;
+    private EnumListAdapter mAdapter;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.function_list) RecyclerView recyclerView;
@@ -43,7 +44,7 @@ public class FunctionListActivity extends BaseActivity {
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
 
-    public List<Function> list = new ArrayList<>();
+    public List<Enum> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,15 +58,15 @@ public class FunctionListActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(FunctionViewModel.class);
-        mAdapter = new FunctionListAdapter(list);
+        mAdapter = new EnumListAdapter(list);
         recyclerView.setAdapter(mAdapter);
 
         mViewModel.getFunctions()
-                .observe(this, new Observer<List<Function>>() {
+                .observe(this, new Observer<List<Enum>>() {
                     @Override
-                    public void onChanged(@Nullable List<Function> newList) {
+                    public void onChanged(@Nullable List<Enum> newList) {
                         // update UI
-                        mAdapter = new FunctionListAdapter(newList);
+                        mAdapter = new EnumListAdapter(newList);
                         recyclerView.setAdapter(mAdapter);
                     }
                 });

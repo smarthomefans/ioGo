@@ -17,7 +17,6 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +25,11 @@ import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
 import de.nisio.iobroker.data.model.AppDatabase;
-import de.nisio.iobroker.data.repository.FunctionRepository;
-import de.nisio.iobroker.data.repository.RoomRepository;
+import de.nisio.iobroker.data.repository.EnumRepository;
 import de.nisio.iobroker.data.repository.StateRepository;
 import io.socket.client.Ack;
 import io.socket.client.Manager;
 import io.socket.client.Socket;
-import io.socket.client.Url;
 import io.socket.emitter.Emitter;
 import io.socket.engineio.client.Transport;
 
@@ -45,16 +42,10 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     SharedPreferences sharedPref;
 
     @Inject
-    public FunctionRepository functionRepository;
-
-    @Inject
-    public RoomRepository roomRepository;
+    public EnumRepository enumRepository;
 
     @Inject
     public StateRepository stateRepository;
-
-    @Inject
-    public AppDatabase appDatabase;
 
     public SocketService() {
         Log.i(TAG, "instance created");
@@ -81,16 +72,6 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             String password = sharedPref.getString("pro_password", null);
             init_pro(username,password);
         }else{
-            String ssid = sharedPref.getString("wifi_ssid", null);
-
-            /*String current_ssid = NetworkUtils.getWifiName(this);
-            String url;
-            if(ssid != null && ssid.equals(current_ssid)) {
-                url = sharedPref.getString("wifi_socket_url", null);
-            }else{
-                url = sharedPref.getString("mobile_socket_url", null);
-            }
-            */
             String url = sharedPref.getString("mobile_socket_url", null);
             if(url != null && NetworkUtils.isValidUrl(url)) {
                 createSocket(url);
@@ -232,9 +213,6 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    stateRepository.deleteAll();
-                    functionRepository.deleteAll();
-                    roomRepository.deleteAll();
                     getEnumRooms();
                 }
             });
@@ -277,7 +255,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 @Override
                 public void call(Object... args) {
                     Log.i(TAG,"getEnumRooms: receiving objects");
-                    roomRepository.saveObjects(args[1].toString());
+                    enumRepository.saveRoomObjects(args[1].toString());
                     getEnumFunctions();
                 }
             });
@@ -297,7 +275,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 @Override
                 public void call(Object... args) {
                     Log.i(TAG,"getEnumFunctions: receiving objects");
-                    functionRepository.saveObjects(args[1].toString());
+                    enumRepository.saveFunctionObjects(args[1].toString());
                     getStates();
                 }
             });
@@ -310,14 +288,9 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 @Override
                 public void run() {
                     JSONArray json = new JSONArray();
-                    List<String> functionStateIds = functionRepository.getAllStateIds();
-                    List<String> roomStateIds = roomRepository.getAllStateIds();
-                    for(String s: roomStateIds){
-                        if(!functionStateIds.contains(s))
-                            functionStateIds.add(s);
-                    }
-                    for(int i = 0; i<functionStateIds.size();i++){
-                        json.put(functionStateIds.get(i));
+                    List<String> stateIds = enumRepository.getAllStateIds();
+                    for(int i = 0; i<stateIds.size();i++){
+                        json.put(stateIds.get(i));
                     }
                     mSocket.emit("getStates", json, new Ack() {
                         @Override

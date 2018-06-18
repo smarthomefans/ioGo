@@ -11,26 +11,26 @@ import android.arch.persistence.room.Update;
 import java.util.List;
 
 @Dao
-public interface RoomStateDao {
+public interface EnumStateDao {
 
-    @Query("SELECT * FROM room_state")
-    LiveData<List<RoomState>> getAllRoomStates();
+    @Query("SELECT * FROM enum_state")
+    LiveData<List<EnumState>> getAllEnumStates();
 
-    @Query("SELECT * FROM room_state WHERE room_id=:room_id and state_id = :state_id")
-    RoomState getById(String room_id, String state_id);
+    @Query("SELECT * FROM enum_state WHERE enum_id=:enum_id and state_id = :state_id")
+    EnumState getById(String enum_id, String state_id);
 
-    @Query("SELECT state_id FROM room_state")
+    @Query("SELECT state_id FROM enum_state")
     List<String> getAllStateIds();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(RoomState... roomStates);
+    void insert(EnumState... enumStates);
 
     @Update
-    void update(RoomState... roomStates);
+    void update(EnumState... enumStates);
 
     @Delete
-    void delete(RoomState... roomStates);
+    void delete(EnumState... enumStates);
 
-    @Query("DELETE FROM room_state")
+    @Query("DELETE FROM enum_state")
     void deleteAll();
 }

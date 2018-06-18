@@ -6,23 +6,23 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
-
+import android.widget.CheckBox;
+import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.android.AndroidInjection;
 import de.nisio.iobroker.R;
 import de.nisio.iobroker.data.model.Enum;
 import de.nisio.iobroker.ui.base.BaseActivity;
-import de.nisio.iobroker.ui.main.EnumListAdapter;
 
 /**
  * An activity representing a list of Rooms. This activity
@@ -32,16 +32,19 @@ import de.nisio.iobroker.ui.main.EnumListAdapter;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class RoomListActivity extends BaseActivity {
+public class RoomSettingsActivity extends BaseActivity {
 
     private RoomViewModel mViewModel;
-    private EnumListAdapter mAdapter;
+
+    private String roomId;
+
+    private Enum mRoom;
 
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
 
-    @BindView(R.id.room_list)
-    RecyclerView recyclerView;
+    @BindView(R.id.chkFavorit)
+    protected CheckBox chkFavorit;
 
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
@@ -52,28 +55,40 @@ public class RoomListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_room_list);
+        setContentView(R.layout.activity_room_settings);
         ButterKnife.bind(this);
 
         toolbar.setTitle(R.string.title_activity_room_list);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(RoomViewModel.class);
 
-        mAdapter = new EnumListAdapter(list);
-        recyclerView.setAdapter(mAdapter);
+        roomId = getIntent().getStringExtra(RoomDetailFragment.ARG_ROOM_ID);
+        if (roomId != null) {
+            mRoom = mViewModel.getRoom(roomId).getValue();
+        }
 
-        mViewModel.getRooms()
-                .observe(this, new Observer<List<Enum>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Enum> newList) {
-                        // update UI
-                        mAdapter = new EnumListAdapter(newList);
-                        recyclerView.setAdapter(mAdapter);
-                    }
-                });
+        mViewModel.getRoom(roomId).observe(this, new Observer<Enum>() {
+            @Override
+            public void onChanged(@Nullable Enum room) {
+                // update UI
+                getSupportActionBar().setTitle(room.getName() + " - Settings");
+            }
+        });
+
+    }
+
+    @OnClick(R.id.chkFavorit)
+    public void onClickChkFavorit(){
+        Toast.makeText(this,"Test",Toast.LENGTH_SHORT).show();
+        mViewModel.flagFavorite(roomId, chkFavorit.isChecked());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        return true;
     }
 
     @Override
@@ -84,7 +99,6 @@ public class RoomListActivity extends BaseActivity {
             NavUtils.navigateUpFromSameTask(this);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

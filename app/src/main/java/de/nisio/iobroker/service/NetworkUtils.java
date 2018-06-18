@@ -18,19 +18,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class NetworkUtils {
-    /*public static String getWifiName(Context context) {
-        WifiManager manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        if (manager.isWifiEnabled()) {
-            WifiInfo wifiInfo = manager.getConnectionInfo();
-            if (wifiInfo != null) {
-                NetworkInfo.DetailedState state = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
-                if (state == NetworkInfo.DetailedState.CONNECTED || state == NetworkInfo.DetailedState.OBTAINING_IPADDR) {
-                    return wifiInfo.getSSID();
-                }
-            }
-        }
-        return null;
-    }*/
 
     public static String getProCookie(String username, String password) {
         RequestBody requestBody = new FormBody.Builder()

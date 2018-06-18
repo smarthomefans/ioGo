@@ -11,13 +11,11 @@ import dagger.Module;
 import dagger.Provides;
 import de.nisio.iobroker.App;
 import de.nisio.iobroker.data.model.AppDatabase;
-import de.nisio.iobroker.data.model.FunctionDao;
-import de.nisio.iobroker.data.model.FunctionStateDao;
-import de.nisio.iobroker.data.model.RoomDao;
-import de.nisio.iobroker.data.model.RoomStateDao;
+import de.nisio.iobroker.data.model.EnumDao;
+import de.nisio.iobroker.data.model.EnumStateDao;
+import de.nisio.iobroker.data.model.FavoriteDao;
 import de.nisio.iobroker.data.model.StateDao;
-import de.nisio.iobroker.data.repository.FunctionRepository;
-import de.nisio.iobroker.data.repository.RoomRepository;
+import de.nisio.iobroker.data.repository.EnumRepository;
 import de.nisio.iobroker.data.repository.StateRepository;
 import de.nisio.iobroker.ui.ViewModelFactory;
 import de.nisio.iobroker.ui.function.FunctionViewModel;
@@ -60,7 +58,7 @@ public class AppModule {
     @Singleton
     @Provides
     AppDatabase provideDb(App app) {
-        return Room.databaseBuilder(app, AppDatabase.class,"appDatabase.db").build();
+        return Room.databaseBuilder(app, AppDatabase.class,"appDatabase.db").fallbackToDestructiveMigration().allowMainThreadQueries().build();
     }
 
     @Singleton
@@ -71,14 +69,8 @@ public class AppModule {
 
     @Singleton
     @Provides
-    RoomRepository provideRoomRepository(RoomDao roomDao, RoomStateDao roomStateDao) {
-        return new RoomRepository(roomDao, roomStateDao);
-    }
-
-    @Singleton
-    @Provides
-    FunctionRepository provideFunctionRepository(FunctionDao functionDao, FunctionStateDao functionStateDao) {
-        return new FunctionRepository(functionDao, functionStateDao);
+    EnumRepository provideEnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, FavoriteDao favoriteDao) {
+        return new EnumRepository(enumDao, enumStateDao, favoriteDao);
     }
 
     @Singleton
@@ -89,25 +81,19 @@ public class AppModule {
 
     @Singleton
     @Provides
-    RoomDao provideRoomDao(AppDatabase db) {
-        return db.getRoomDao();
+    EnumDao provideEnumDao(AppDatabase db) {
+        return db.getEnumDao();
     }
 
     @Singleton
     @Provides
-    FunctionDao provideFunctionDao(AppDatabase db) {
-        return db.getFunctionDao();
+    EnumStateDao provideEnumStateDao(AppDatabase db) {
+        return db.getEnumStateDao();
     }
 
     @Singleton
     @Provides
-    FunctionStateDao provideFunctionStateDao(AppDatabase db) {
-        return db.getFunctionStateDao();
-    }
-
-    @Singleton
-    @Provides
-    RoomStateDao provideRoomStateDao(AppDatabase db) {
-        return db.getRoomStateDao();
+    FavoriteDao provideFavoriteeDao(AppDatabase db) {
+        return db.getFavoriteDao();
     }
 }

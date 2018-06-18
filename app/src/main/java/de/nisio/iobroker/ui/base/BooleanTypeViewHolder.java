@@ -27,7 +27,7 @@ public class BooleanTypeViewHolder extends RecyclerView.ViewHolder {
 
     public void bindState(State state) {
         mTitle.setText(state.getName());
-        mSubtitle.setText("");
+        mSubtitle.setText(state.getRole());
         mValue.setClickable(state.getWrite());
         mValue.setChecked("true".equals(state.getVal()));
         mValue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

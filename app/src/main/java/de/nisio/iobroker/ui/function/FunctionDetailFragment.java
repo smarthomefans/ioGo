@@ -25,8 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 import de.nisio.iobroker.R;
-import de.nisio.iobroker.data.model.Function;
-import de.nisio.iobroker.data.model.Room;
+import de.nisio.iobroker.data.model.Enum;
 import de.nisio.iobroker.data.model.State;
 import de.nisio.iobroker.di.Injectable;
 import de.nisio.iobroker.ui.base.BaseDetailAdapter;
@@ -44,7 +43,7 @@ public class FunctionDetailFragment extends Fragment implements Injectable {
     @BindView(R.id.function_detail_list) RecyclerView mRecyclerView;
     private BaseDetailAdapter mAdapter;
 
-    private LiveData<Function> mFunction;
+    private LiveData<Enum> mFunction;
     private List<State> mListStates = new ArrayList<>();
     private FunctionViewModel mViewModel;
 
@@ -59,7 +58,7 @@ public class FunctionDetailFragment extends Fragment implements Injectable {
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(FunctionViewModel.class);
         functionId = getArguments().getString(ARG_FUNCTION_ID);
         if (getArguments().containsKey(ARG_FUNCTION_ID)) {
-            mFunction = mViewModel.getFunction(functionId);
+            mFunction = mViewModel.getEnum(functionId);
 
         }
     }
@@ -83,9 +82,9 @@ public class FunctionDetailFragment extends Fragment implements Injectable {
         });
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(FunctionViewModel.class);
-        mViewModel.getFunction(functionId).observe(this, new Observer<Function>() {
+        mViewModel.getEnum(functionId).observe(this, new Observer<Enum>() {
             @Override
-            public void onChanged(@Nullable Function function) {
+            public void onChanged(@Nullable Enum function) {
                 // update UI
                 ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(function.getName());
             }

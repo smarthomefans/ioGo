@@ -12,11 +12,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 
 import java.util.ArrayList;
@@ -28,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 import de.nisio.iobroker.R;
-import de.nisio.iobroker.data.model.Room;
+import de.nisio.iobroker.data.model.Enum;
 import de.nisio.iobroker.data.model.State;
 import de.nisio.iobroker.di.Injectable;
 import de.nisio.iobroker.ui.base.BaseDetailAdapter;
@@ -47,7 +45,7 @@ public class RoomDetailFragment extends Fragment implements Injectable {
 
     private BaseDetailAdapter mAdapter;
 
-    private LiveData<Room> mRoom;
+    private LiveData<Enum> mRoom;
     private List<State> mListStates = new ArrayList<>();
     private RoomViewModel mViewModel;
 
@@ -88,9 +86,9 @@ public class RoomDetailFragment extends Fragment implements Injectable {
         });
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(RoomViewModel.class);
-        mViewModel.getRoom(roomId).observe(this, new Observer<Room>() {
+        mViewModel.getRoom(roomId).observe(this, new Observer<Enum>() {
             @Override
-            public void onChanged(@Nullable Room room) {
+            public void onChanged(@Nullable Enum room) {
                 // update UI
                 ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(room.getName());
             }

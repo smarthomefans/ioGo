@@ -1,4 +1,4 @@
-package de.nisio.iobroker.ui.function;
+package de.nisio.iobroker.ui.main;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,40 +13,42 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisio.iobroker.R;
-import de.nisio.iobroker.data.model.Function;
+import de.nisio.iobroker.data.model.Enum;
+import de.nisio.iobroker.ui.room.RoomDetailActivity;
+import de.nisio.iobroker.ui.room.RoomDetailFragment;
 
-public class FunctionListAdapter
-        extends RecyclerView.Adapter<FunctionListAdapter.ViewHolder> {
+public class EnumListAdapter
+        extends RecyclerView.Adapter<EnumListAdapter.ViewHolder> {
 
-    private final List<Function> mValues;
+    private final List<Enum> mValues;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Function item = (Function) view.getTag();
+            Enum item = (Enum) view.getTag();
 
             Context context = view.getContext();
-            Intent intent = new Intent(context, FunctionDetailActivity.class);
-            intent.putExtra(FunctionDetailFragment.ARG_FUNCTION_ID, item.getId());
+            Intent intent = new Intent(context, RoomDetailActivity.class);
+            intent.putExtra(RoomDetailFragment.ARG_ROOM_ID, item.getId());
 
             context.startActivity(intent);
 
         }
     };
 
-    public FunctionListAdapter(List<Function> functionList) {
-        mValues = functionList;
+    public EnumListAdapter(List<Enum> roomList) {
+        mValues = roomList;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.li_function, parent, false);
+                .inflate(R.layout.li_room, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.bindFunction(mValues.get(position));
+        holder.bindRoom(mValues.get(position));
         holder.itemView.setTag(mValues.get(position));
         holder.itemView.setOnClickListener(mOnClickListener);
     }
@@ -64,8 +66,8 @@ public class FunctionListAdapter
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindFunction(Function function) {
-            mTitle.setText(function.getName());
+        public void bindRoom(Enum room) {
+            mTitle.setText(room.getName());
         }
     }
 

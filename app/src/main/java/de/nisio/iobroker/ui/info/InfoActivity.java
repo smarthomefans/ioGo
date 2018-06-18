@@ -1,8 +1,8 @@
 package de.nisio.iobroker.ui.info;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -16,7 +16,6 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import de.nisio.iobroker.R;
 import de.nisio.iobroker.ui.base.BaseActivity;
-import de.nisio.iobroker.ui.main.MainActivity;
 
 public class InfoActivity extends BaseActivity implements HasSupportFragmentInjector {
 
@@ -46,11 +45,12 @@ public class InfoActivity extends BaseActivity implements HasSupportFragmentInje
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home) {
 
-            navigateUpTo(new Intent(this, MainActivity.class));
+        if (id == android.R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

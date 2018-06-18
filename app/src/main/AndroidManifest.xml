@@ -41,10 +41,19 @@
         <activity
             android:name=".ui.room.RoomDetailActivity"
             android:parentActivityName=".ui.room.RoomListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.room.RoomListActivity" />
+        </activity>
+        <activity
+            android:name=".ui.room.RoomSettingsActivity"
+            android:parentActivityName=".ui.room.RoomDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.room.RoomDetailActivity" />
         </activity>
         <activity
             android:name=".ui.function.FunctionListActivity"
@@ -79,6 +88,9 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
+        <meta-data
+            android:name="firebase_crash_collection_enabled"
+            android:value="@bool/FIREBASE_CRASH_ENABLED"/>
     </application>
 
 </manifest>

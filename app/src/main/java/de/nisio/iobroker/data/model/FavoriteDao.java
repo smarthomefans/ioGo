@@ -12,28 +12,27 @@ import android.arch.persistence.room.Update;
 import java.util.List;
 
 @Dao
-public interface FunctionDao {
+public interface FavoriteDao {
 
-    @Query("SELECT * FROM function")
-    LiveData<List<Function>> getAllFunctions();
+    @Query("SELECT * FROM favorite")
+    LiveData<List<Favorite>> getAllFavorites();
 
-    @Query("SELECT * FROM function WHERE id = :id")
-    LiveData<Function> getFunctionById(String id);
+    @Query("SELECT * FROM favorite WHERE id = :id")
+    LiveData<Favorite> getFavoriteById(String id);
 
-    @Query("SELECT count(*) FROM function")
-    LiveData<Integer> countFunctions();
+    @Query("SELECT count(*) FROM favorite")
+    LiveData<Integer> countFavorites();
 
-    @TypeConverters(ListConverters.class)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Function... functions);
+    void insert(Favorite... favorits);
 
     @TypeConverters(ListConverters.class)
     @Update
-    void update(Function... functions);
+    void update(Favorite... favorits);
 
     @Delete
-    void delete(Function... functions);
+    void delete(Favorite... favorits);
 
-    @Query("DELETE FROM function")
+    @Query("DELETE FROM favorite")
     void deleteAll();
 }

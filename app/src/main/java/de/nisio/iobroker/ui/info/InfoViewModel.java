@@ -6,20 +6,17 @@ import android.arch.lifecycle.ViewModel;
 
 import javax.inject.Inject;
 
-import de.nisio.iobroker.data.repository.FunctionRepository;
-import de.nisio.iobroker.data.repository.RoomRepository;
+import de.nisio.iobroker.data.repository.EnumRepository;
 import de.nisio.iobroker.data.repository.StateRepository;
 
 public class InfoViewModel extends ViewModel {
 
-    private RoomRepository roomRepository;
-    private FunctionRepository functionRepository;
+    private EnumRepository enumRepository;
     private StateRepository stateRepository;
 
     @Inject
-    public InfoViewModel(RoomRepository roomRepository, FunctionRepository functionRepository, StateRepository stateRepository) {
-        this.roomRepository = roomRepository;
-        this.functionRepository = functionRepository;
+    public InfoViewModel(EnumRepository enumRepository, StateRepository stateRepository) {
+        this.enumRepository = enumRepository;
         this.stateRepository = stateRepository;
     }
 
@@ -28,14 +25,19 @@ public class InfoViewModel extends ViewModel {
     }
 
     public LiveData<Integer> countRooms() {
-        return roomRepository.countRooms();
+        return enumRepository.countRooms();
     }
 
     public LiveData<Integer> countFunctions() {
-        return functionRepository.countFunctions();
+        return enumRepository.countFunctions();
     }
 
     public LiveData<String> getSocketState() {
         return stateRepository.getSocketState();
+    }
+
+    public void clearDatabase() {
+        stateRepository.deleteAll();
+        enumRepository.deleteAll();
     }
 }

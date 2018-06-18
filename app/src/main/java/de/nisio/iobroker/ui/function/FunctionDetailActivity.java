@@ -40,7 +40,7 @@ public class FunctionDetailActivity extends BaseActivity implements HasSupportFr
 
         ButterKnife.bind(this);
 
-        toolbar.setTitle(R.string.title_activity_room_list);
+        toolbar.setTitle(R.string.title_activity_function_list);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

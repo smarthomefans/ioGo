@@ -99,6 +99,11 @@ public class InfoFragment extends Fragment implements Injectable {
         DataBus.getBus().post(new Events.SyncObjects());
     }
 
+    @OnClick(R.id.clearDatabase)
+    public void onClickClearDatabase(){
+        mViewModel.clearDatabase();
+    }
+
     @Override
     public void onAttach(Context context) {
         AndroidSupportInjection.inject(this);

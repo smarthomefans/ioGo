@@ -4,24 +4,20 @@ package de.nisio.iobroker.data.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
-import java.util.List;
-
-@Entity(tableName = "room", indices = {@Index(value = {"id"},unique = true)})
-public class Room {
+@Entity(tableName = "enum", indices = {@Index(value = {"id"},unique = true)})
+public class Enum {
     @PrimaryKey
     @NonNull
     private String id;
     private String name;
-    @TypeConverters(ListConverters.class)
-    private List<String> members;
+    private String type;
 
-    public Room(@NonNull String id, String name, List<String> members) {
+    public Enum(@NonNull String id, String name, String type) {
         this.id = id;
         this.name = name;
-        this.members = members;
+        this.type = type;
     }
 
     @NonNull
@@ -41,11 +37,11 @@ public class Room {
         this.name = name;
     }
 
-    public List<String> getMembers() {
-        return members;
+    public String getType() {
+        return type;
     }
 
-    public void setMembers(List<String> members) {
-        this.members = members;
+    public void setType(String type) {
+        this.type = type;
     }
 }

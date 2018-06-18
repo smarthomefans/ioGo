@@ -38,7 +38,7 @@ public class StringSpinnerViewHolder extends RecyclerView.ViewHolder implements 
     public void bindState(State state) {
         this.state = state;
         mTitle.setText(state.getName());
-        mSubtitle.setText("");
+        mSubtitle.setText(state.getRole());
 
         for (Map.Entry<String, String> entry : state.getStates().entrySet())
         {
