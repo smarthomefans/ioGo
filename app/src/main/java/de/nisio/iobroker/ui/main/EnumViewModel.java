@@ -49,11 +49,8 @@ public class EnumViewModel extends ViewModel {
         return stateRepository.getStatesByEnum(enumId);
     }
 
-    public void flagFavorite(String enumId, boolean checked) {
-        enumRepository.flagFavorite(enumId,checked);
+    public void saveEnum(Enum anEnum) {
+        enumRepository.saveEnum(anEnum);
     }
 
-    public boolean isFavorite(String enumId) {
-        return true;
-    }
 }

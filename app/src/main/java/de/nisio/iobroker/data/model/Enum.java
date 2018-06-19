@@ -13,11 +13,13 @@ public class Enum {
     private String id;
     private String name;
     private String type;
+    private String favorite;
 
-    public Enum(@NonNull String id, String name, String type) {
+    public Enum(@NonNull String id, String name, String type, String favorite) {
         this.id = id;
         this.name = name;
         this.type = type;
+        this.favorite = favorite;
     }
 
     @NonNull
@@ -43,5 +45,13 @@ public class Enum {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(String favorite) {
+        this.favorite = favorite;
     }
 }

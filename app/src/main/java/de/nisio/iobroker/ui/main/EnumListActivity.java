@@ -54,7 +54,7 @@ public class EnumListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_room_list);
+        setContentView(R.layout.activity_enum_list);
         ButterKnife.bind(this);
 
         enumType = getIntent().getStringExtra(ARG_ENUM_TYPE);

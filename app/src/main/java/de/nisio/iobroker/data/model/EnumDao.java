@@ -26,7 +26,7 @@ public interface EnumDao {
     @Query("SELECT * FROM enum WHERE type = 'room'")
     LiveData<List<Enum>> getRoomEnums();
 
-    @Query("SELECT * FROM enum WHERE id IN (SELECT id FROM favorite)")
+    @Query("SELECT * FROM enum WHERE favorite = 'true'")
     LiveData<List<Enum>> getFavoriteEnums();
 
     @Query("SELECT count(*) FROM enum WHERE type = 'function'")

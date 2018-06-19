@@ -13,7 +13,6 @@ import de.nisio.iobroker.App;
 import de.nisio.iobroker.data.model.AppDatabase;
 import de.nisio.iobroker.data.model.EnumDao;
 import de.nisio.iobroker.data.model.EnumStateDao;
-import de.nisio.iobroker.data.model.FavoriteDao;
 import de.nisio.iobroker.data.model.StateDao;
 import de.nisio.iobroker.data.repository.EnumRepository;
 import de.nisio.iobroker.data.repository.StateRepository;
@@ -63,8 +62,8 @@ public class AppModule {
 
     @Singleton
     @Provides
-    EnumRepository provideEnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, FavoriteDao favoriteDao) {
-        return new EnumRepository(enumDao, enumStateDao, favoriteDao);
+    EnumRepository provideEnumRepository(EnumDao enumDao, EnumStateDao enumStateDao) {
+        return new EnumRepository(enumDao, enumStateDao);
     }
 
     @Singleton
@@ -85,9 +84,4 @@ public class AppModule {
         return db.getEnumStateDao();
     }
 
-    @Singleton
-    @Provides
-    FavoriteDao provideFavoriteeDao(AppDatabase db) {
-        return db.getFavoriteDao();
-    }
 }

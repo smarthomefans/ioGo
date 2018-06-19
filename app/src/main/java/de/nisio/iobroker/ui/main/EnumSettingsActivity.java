@@ -38,7 +38,7 @@ public class EnumSettingsActivity extends BaseActivity {
 
     private String roomId;
 
-    private Enum mRoom;
+    private Enum mEnum;
 
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
@@ -66,14 +66,14 @@ public class EnumSettingsActivity extends BaseActivity {
 
         roomId = getIntent().getStringExtra(EnumDetailFragment.ARG_ENUM_ID);
         if (roomId != null) {
-            mRoom = mViewModel.getEnum(roomId).getValue();
+            mEnum = mViewModel.getEnum(roomId).getValue();
         }
 
         mViewModel.getEnum(roomId).observe(this, new Observer<Enum>() {
             @Override
-            public void onChanged(@Nullable Enum room) {
+            public void onChanged(@Nullable Enum anEnum) {
                 // update UI
-                getSupportActionBar().setTitle(room.getName() + " - Settings");
+                getSupportActionBar().setTitle(anEnum.getName() + " - Settings");
             }
         });
 
@@ -81,8 +81,9 @@ public class EnumSettingsActivity extends BaseActivity {
 
     @OnClick(R.id.chkFavorit)
     public void onClickChkFavorit(){
-        Toast.makeText(this,"Test",Toast.LENGTH_SHORT).show();
-        mViewModel.flagFavorite(roomId, chkFavorit.isChecked());
+        String tmp = (chkFavorit.isChecked()) ? "true" : "false";
+        mEnum.setFavorite(tmp);
+        mViewModel.saveEnum(mEnum);
     }
 
     @Override

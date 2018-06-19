@@ -33,7 +33,8 @@
         <activity
             android:name=".ui.main.EnumListActivity"
             android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />
@@ -46,6 +47,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.EnumListActivity" />
+        </activity>
+        <activity
+            android:name=".ui.main.EnumSettingsActivity"
+            android:parentActivityName=".ui.main.EnumDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.main.EnumDetailActivity" />
         </activity>
         <activity
             android:name=".ui.info.InfoActivity"

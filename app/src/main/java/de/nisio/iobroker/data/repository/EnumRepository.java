@@ -21,8 +21,6 @@ import de.nisio.iobroker.data.model.Enum;
 import de.nisio.iobroker.data.model.EnumDao;
 import de.nisio.iobroker.data.model.EnumState;
 import de.nisio.iobroker.data.model.EnumStateDao;
-import de.nisio.iobroker.data.model.Favorite;
-import de.nisio.iobroker.data.model.FavoriteDao;
 
 @Singleton
 public class EnumRepository {
@@ -38,13 +36,11 @@ public class EnumRepository {
     private LiveData<List<Enum>> mListFavoriteEnums;
     private final EnumDao enumDao;
     private final EnumStateDao enumStateDao;
-    private final FavoriteDao favoriteDao;
 
     @Inject
-    public EnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, FavoriteDao favoriteDao) {
+    public EnumRepository(EnumDao enumDao, EnumStateDao enumStateDao) {
         this.enumDao = enumDao;
         this.enumStateDao = enumStateDao;
-        this.favoriteDao = favoriteDao;
         enumCache = new HashMap<>();
     }
 
@@ -96,7 +92,6 @@ public class EnumRepository {
         return enumDao.countRoomEnums();
     }
 
-
     public void deleteAll(){
         enumDao.deleteAll();
         enumStateDao.deleteAll();
@@ -118,7 +113,7 @@ public class EnumRepository {
         for(IoRow ioRow : ioEnum.getRows()){
             IoValue ioValue = ioRow.getValue();
             IoCommon ioCommon = ioValue.getCommon();
-            Enum anEnum = new Enum(ioValue.getId(), ioCommon.getName(), type);
+            Enum anEnum = new Enum(ioValue.getId(), ioCommon.getName(), type, "false");
             enumDao.insert(anEnum);
             for (int j = 0; j < ioCommon.getMembers().size(); j++) {
                 EnumState enumState = new EnumState(anEnum.getId(), ioCommon.getMembers().get(j));
@@ -131,9 +126,7 @@ public class EnumRepository {
         Log.i(TAG, "saveObjects finished");
     }
 
-    public void flagFavorite(String roomId, boolean checked) {
-        String tmp = (checked) ? "true" : "false";
-        Favorite favorite = new Favorite(roomId,tmp);
-        favoriteDao.insert(favorite);
+    public void saveEnum(Enum anEnum) {
+        enumDao.update(anEnum);
     }
 }
