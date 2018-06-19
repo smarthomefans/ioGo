@@ -37,47 +37,49 @@ public class NumberTypeViewHolder extends RecyclerView.ViewHolder {
             value += state.getUnit();
         }
         mValue.setText(value);
-        mValue.setClickable(state.getWrite());
-        mValue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if(state.getWrite()) {
+            mValue.setClickable(true);
+            mValue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                LayoutInflater li = LayoutInflater.from(v.getContext());
-                View promptsView = li.inflate(R.layout.prompts, null);
+                    LayoutInflater li = LayoutInflater.from(v.getContext());
+                    View promptsView = li.inflate(R.layout.prompts, null);
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
 
-                // set prompts.xml to alertdialog builder
-                alertDialogBuilder.setView(promptsView);
+                    // set prompts.xml to alertdialog builder
+                    alertDialogBuilder.setView(promptsView);
 
-                final EditText userInput = (EditText) promptsView
-                        .findViewById(R.id.editTextDialogUserInput);
+                    final EditText userInput = (EditText) promptsView
+                            .findViewById(R.id.editTextDialogUserInput);
 
-                // set dialog message
-                alertDialogBuilder
-                        .setCancelable(false)
-                        .setPositiveButton("OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // get user input and set it to result
-                                        // edit text
-                                        mSubtitle.setText("syncing data...");
-                                        DataBus.getBus().post(new Events.SetState(state.getId(), userInput.getText().toString()));
-                                    }
-                                })
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
+                    // set dialog message
+                    alertDialogBuilder
+                            .setCancelable(false)
+                            .setPositiveButton("OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            // get user input and set it to result
+                                            // edit text
+                                            mSubtitle.setText("syncing data...");
+                                            DataBus.getBus().post(new Events.SetState(state.getId(), userInput.getText().toString()));
+                                        }
+                                    })
+                            .setNegativeButton("Cancel",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
 
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
+                    // create alert dialog
+                    AlertDialog alertDialog = alertDialogBuilder.create();
 
-                // show it
-                alertDialog.show();
-            }
-        });
+                    // show it
+                    alertDialog.show();
+                }
+            });
+        }
     }
 }

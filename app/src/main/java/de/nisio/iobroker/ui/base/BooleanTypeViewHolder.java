@@ -28,14 +28,16 @@ public class BooleanTypeViewHolder extends RecyclerView.ViewHolder {
     public void bindState(State state) {
         mTitle.setText(state.getName());
         mSubtitle.setText(state.getRole());
-        mValue.setClickable(state.getWrite());
         mValue.setChecked("true".equals(state.getVal()));
-        mValue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
-                mSubtitle.setText("syncing data...");
-                DataBus.getBus().post(new Events.SetState(state.getId(), (isChecked) ? "true" : "false"));
-            }
-        });
+        if(state.getWrite()) {
+            mValue.setClickable(true);
+            mValue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+                    mSubtitle.setText("syncing data...");
+                    DataBus.getBus().post(new Events.SetState(state.getId(), (isChecked) ? "true" : "false"));
+                }
+            });
+        }
     }
 }

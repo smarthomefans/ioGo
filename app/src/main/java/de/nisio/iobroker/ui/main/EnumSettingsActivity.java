@@ -74,6 +74,7 @@ public class EnumSettingsActivity extends BaseActivity {
             public void onChanged(@Nullable Enum anEnum) {
                 // update UI
                 getSupportActionBar().setTitle(anEnum.getName() + " - Settings");
+                chkFavorit.setChecked("true".equals(anEnum.getFavorite()));
             }
         });
 
