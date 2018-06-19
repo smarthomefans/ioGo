@@ -7,7 +7,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,14 +22,12 @@ import de.nisio.iobroker.data.io.IoObject;
 import de.nisio.iobroker.data.io.IoState;
 import de.nisio.iobroker.data.model.State;
 import de.nisio.iobroker.data.model.StateDao;
-import de.nisio.iobroker.service.Events;
 
 @Singleton
 public class StateRepository {
     private static final String TAG = "StateRepository";
     private Map<String,LiveData<State>> stateCache;
-    private Map<String,LiveData<List<State>>> stateRoomCache;
-    private Map<String,LiveData<List<State>>> stateFunctionCache;
+    private Map<String,LiveData<List<State>>> stateEnumCache;
     private MutableLiveData<String> connected;
 
     private final StateDao stateDao;
@@ -41,8 +38,7 @@ public class StateRepository {
         this.stateDao = stateDao;
 
         stateCache = new HashMap<>();
-        stateRoomCache = new HashMap<>();
-        stateFunctionCache = new HashMap<>();
+        stateEnumCache = new HashMap<>();
         GsonBuilder gsonBuilder = new GsonBuilder();
         gson = gsonBuilder.create();
         connected = new MutableLiveData<>();
@@ -54,20 +50,12 @@ public class StateRepository {
         return stateDao.getAllStateIds();
     }
 
-    public LiveData<List<State>> getStatesByRoom(String roomId){
-        if(!stateRoomCache.containsKey(roomId)){
-            LiveData<List<State>> stateList = stateDao.getStatesByRoom(roomId);
-            stateRoomCache.put(roomId, stateList);
+    public LiveData<List<State>> getStatesByEnum(String enumId){
+        if(!stateEnumCache.containsKey(enumId)){
+            LiveData<List<State>> stateList = stateDao.getStatesByEnum(enumId);
+            stateEnumCache.put(enumId, stateList);
         }
-        return stateRoomCache.get(roomId);
-    }
-
-    public LiveData<List<State>> getStatesByFunction(String functionId){
-        if(!stateFunctionCache.containsKey(functionId)){
-            LiveData<List<State>> stateList = stateDao.getStatesByFunction(functionId);
-            stateFunctionCache.put(functionId, stateList);
-        }
-        return stateFunctionCache.get(functionId);
+        return stateEnumCache.get(enumId);
     }
 
     public LiveData<Integer> countStates(){

@@ -9,7 +9,7 @@ import de.nisio.iobroker.ui.info.InfoActivity;
 import de.nisio.iobroker.ui.main.MainActivity;
 import de.nisio.iobroker.ui.room.RoomDetailActivity;
 import de.nisio.iobroker.ui.room.RoomListActivity;
-import de.nisio.iobroker.ui.room.RoomSettingsActivity;
+import de.nisio.iobroker.ui.main.EnumSettingsActivity;
 
 /**
  * Binds all sub-components within the app.
@@ -27,7 +27,7 @@ public abstract class ActivityBuildersModule {
     abstract RoomDetailActivity bindRoomDetailActivity();
 
     @ContributesAndroidInjector(modules = AppModule.class)
-    abstract RoomSettingsActivity bindRoomSettingsActivity();
+    abstract EnumSettingsActivity bindRoomSettingsActivity();
 
     @ContributesAndroidInjector(modules = AppModule.class)
     abstract FunctionListActivity bindFunctionListActivity();

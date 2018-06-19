@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.Service;
 
-import com.google.firebase.crash.FirebaseCrash;
-
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjector;
@@ -24,8 +22,6 @@ public class App extends Application implements HasActivityInjector, HasServiceI
     @Override
     public void onCreate() {
         super.onCreate();
-
-        FirebaseCrash.setCrashCollectionEnabled(false);
 
         DaggerAppComponent
                 .builder()

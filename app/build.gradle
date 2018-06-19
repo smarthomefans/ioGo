@@ -15,9 +15,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue("bool", "FIREBASE_CRASH_ENABLED", "true")
         }
         debug {
             debuggable true
+            //applicationIdSuffix ".dev"
+            resValue("bool", "FIREBASE_CRASH_ENABLED", "false")
         }
     }
     compileOptions {
@@ -25,14 +28,6 @@ android {
         sourceCompatibility 1.8
     }
     productFlavors {
-    }
-    buildTypes {
-        release {
-            resValue("bool", "FIREBASE_CRASH_ENABLED", "true")
-        }
-        debug {
-            resValue("bool", "FIREBASE_CRASH_ENABLED", "false")
-        }
     }
 }
 
@@ -80,7 +75,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation 'com.google.firebase:firebase-crash:16.0.0'
     // CRASHLYTICS
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.3'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
 }
 
 apply plugin: 'com.google.gms.google-services'

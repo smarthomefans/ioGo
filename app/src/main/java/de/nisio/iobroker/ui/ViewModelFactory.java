@@ -6,31 +6,25 @@ import android.arch.lifecycle.ViewModelProvider;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import de.nisio.iobroker.ui.function.FunctionViewModel;
 import de.nisio.iobroker.ui.info.InfoViewModel;
-import de.nisio.iobroker.ui.room.RoomViewModel;
+import de.nisio.iobroker.ui.main.EnumViewModel;
 
 @Singleton
 public class ViewModelFactory implements ViewModelProvider.Factory {
-    private RoomViewModel mRoomViewModel;
-    private FunctionViewModel mFunctionViewModel;
+    private EnumViewModel mEnumViewModel;
     private InfoViewModel mInfoViewModel;
 
     @Inject
-    public ViewModelFactory(RoomViewModel mRoomViewModel, FunctionViewModel mFunctionViewModel, InfoViewModel mInfoViewModel) {
-        this.mRoomViewModel = mRoomViewModel;
-        this.mFunctionViewModel = mFunctionViewModel;
+    public ViewModelFactory(EnumViewModel mEnumViewModel, InfoViewModel mInfoViewModel) {
+        this.mEnumViewModel = mEnumViewModel;
         this.mInfoViewModel = mInfoViewModel;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(RoomViewModel.class)) {
-            return (T) mRoomViewModel;
-        }
-        if (modelClass.isAssignableFrom(FunctionViewModel.class)) {
-            return (T) mFunctionViewModel;
+        if (modelClass.isAssignableFrom(EnumViewModel.class)) {
+            return (T) mEnumViewModel;
         }
         if (modelClass.isAssignableFrom(InfoViewModel.class)) {
             return (T) mInfoViewModel;

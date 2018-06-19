@@ -23,6 +23,7 @@ import de.nisio.iobroker.R;
 import de.nisio.iobroker.data.model.Enum;
 import de.nisio.iobroker.ui.base.BaseActivity;
 import de.nisio.iobroker.ui.main.EnumListAdapter;
+import de.nisio.iobroker.ui.main.EnumViewModel;
 
 /**
  * An activity representing a list of Functions. This activity
@@ -35,7 +36,7 @@ import de.nisio.iobroker.ui.main.EnumListAdapter;
 public class FunctionListActivity extends BaseActivity {
     final private String TAG = "FunctionListActivity";
 
-    private FunctionViewModel mViewModel;
+    private EnumViewModel mViewModel;
     private EnumListAdapter mAdapter;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -57,7 +58,7 @@ public class FunctionListActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(FunctionViewModel.class);
+        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
         mAdapter = new EnumListAdapter(list);
         recyclerView.setAdapter(mAdapter);
 

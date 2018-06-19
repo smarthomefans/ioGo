@@ -23,6 +23,7 @@ import de.nisio.iobroker.R;
 import de.nisio.iobroker.data.model.Enum;
 import de.nisio.iobroker.ui.base.BaseActivity;
 import de.nisio.iobroker.ui.main.EnumListAdapter;
+import de.nisio.iobroker.ui.main.EnumViewModel;
 
 /**
  * An activity representing a list of Rooms. This activity
@@ -34,7 +35,7 @@ import de.nisio.iobroker.ui.main.EnumListAdapter;
  */
 public class RoomListActivity extends BaseActivity {
 
-    private RoomViewModel mViewModel;
+    private EnumViewModel mViewModel;
     private EnumListAdapter mAdapter;
 
     @BindView(R.id.toolbar)
@@ -60,7 +61,7 @@ public class RoomListActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(RoomViewModel.class);
+        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
 
         mAdapter = new EnumListAdapter(list);
         recyclerView.setAdapter(mAdapter);

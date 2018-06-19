@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".ui.room.RoomSettingsActivity"
+    tools:context=".ui.main.EnumSettingsActivity"
     tools:layout_editor_absoluteY="81dp"
     tools:showIn="@layout/activity_room_settings">
 

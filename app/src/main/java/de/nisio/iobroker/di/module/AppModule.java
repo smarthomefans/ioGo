@@ -18,9 +18,8 @@ import de.nisio.iobroker.data.model.StateDao;
 import de.nisio.iobroker.data.repository.EnumRepository;
 import de.nisio.iobroker.data.repository.StateRepository;
 import de.nisio.iobroker.ui.ViewModelFactory;
-import de.nisio.iobroker.ui.function.FunctionViewModel;
 import de.nisio.iobroker.ui.info.InfoViewModel;
-import de.nisio.iobroker.ui.room.RoomViewModel;
+import de.nisio.iobroker.ui.main.EnumViewModel;
 
 /**
  * This is where you will inject application-wide dependencies.
@@ -41,12 +40,7 @@ public class AppModule {
     }
 
     @Provides
-    ViewModel provideRoomViewModel(RoomViewModel viewModel) {
-        return viewModel;
-    }
-
-    @Provides
-    ViewModel provideFunctionViewModel(FunctionViewModel viewModel) {
+    ViewModel provideEnumViewModel(EnumViewModel viewModel) {
         return viewModel;
     }
 

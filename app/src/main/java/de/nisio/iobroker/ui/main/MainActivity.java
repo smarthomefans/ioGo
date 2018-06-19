@@ -25,11 +25,10 @@ import de.nisio.iobroker.data.model.Enum;
 import de.nisio.iobroker.ui.base.BaseActivity;
 import de.nisio.iobroker.ui.function.FunctionListActivity;
 import de.nisio.iobroker.ui.room.RoomListActivity;
-import de.nisio.iobroker.ui.room.RoomViewModel;
 
 public class MainActivity extends BaseActivity {
 
-    private RoomViewModel mViewModel;
+    private EnumViewModel mViewModel;
     private EnumListAdapter mAdapter;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -57,7 +56,7 @@ public class MainActivity extends BaseActivity {
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(RoomViewModel.class);
+        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
 
         mAdapter = new EnumListAdapter(list);
         recyclerView.setAdapter(mAdapter);

@@ -1,4 +1,4 @@
-package de.nisio.iobroker.ui.room;
+package de.nisio.iobroker.ui.main;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
@@ -23,6 +23,9 @@ import dagger.android.AndroidInjection;
 import de.nisio.iobroker.R;
 import de.nisio.iobroker.data.model.Enum;
 import de.nisio.iobroker.ui.base.BaseActivity;
+import de.nisio.iobroker.ui.main.EnumViewModel;
+import de.nisio.iobroker.ui.room.RoomDetailActivity;
+import de.nisio.iobroker.ui.room.RoomDetailFragment;
 
 /**
  * An activity representing a list of Rooms. This activity
@@ -32,9 +35,9 @@ import de.nisio.iobroker.ui.base.BaseActivity;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class RoomSettingsActivity extends BaseActivity {
+public class EnumSettingsActivity extends BaseActivity {
 
-    private RoomViewModel mViewModel;
+    private EnumViewModel mViewModel;
 
     private String roomId;
 
@@ -62,14 +65,14 @@ public class RoomSettingsActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(RoomViewModel.class);
+        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
 
         roomId = getIntent().getStringExtra(RoomDetailFragment.ARG_ROOM_ID);
         if (roomId != null) {
-            mRoom = mViewModel.getRoom(roomId).getValue();
+            mRoom = mViewModel.getEnum(roomId).getValue();
         }
 
-        mViewModel.getRoom(roomId).observe(this, new Observer<Enum>() {
+        mViewModel.getEnum(roomId).observe(this, new Observer<Enum>() {
             @Override
             public void onChanged(@Nullable Enum room) {
                 // update UI

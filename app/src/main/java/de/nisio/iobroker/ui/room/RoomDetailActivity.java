@@ -4,7 +4,6 @@ package de.nisio.iobroker.ui.room;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +19,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import de.nisio.iobroker.ui.base.BaseActivity;
 import de.nisio.iobroker.R;
+import de.nisio.iobroker.ui.main.EnumSettingsActivity;
 
 /**
  * An activity representing a single Room detail screen. This
@@ -67,7 +67,7 @@ public class RoomDetailActivity extends BaseActivity implements HasSupportFragme
 
         if (id == R.id.action_room_settings) {
             Toast.makeText(this,R.string.action_settings, Toast.LENGTH_LONG).show();
-            Intent i = new Intent(this, RoomSettingsActivity.class);
+            Intent i = new Intent(this, EnumSettingsActivity.class);
             i.putExtra(RoomDetailFragment.ARG_ROOM_ID, getIntent().getStringExtra(RoomDetailFragment.ARG_ROOM_ID));
             startActivity(i);
             return true;

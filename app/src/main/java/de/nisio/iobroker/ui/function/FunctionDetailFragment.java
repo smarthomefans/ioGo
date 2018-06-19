@@ -29,6 +29,7 @@ import de.nisio.iobroker.data.model.Enum;
 import de.nisio.iobroker.data.model.State;
 import de.nisio.iobroker.di.Injectable;
 import de.nisio.iobroker.ui.base.BaseDetailAdapter;
+import de.nisio.iobroker.ui.main.EnumViewModel;
 
 /**
  * A fragment representing a single Function detail screen.
@@ -45,7 +46,7 @@ public class FunctionDetailFragment extends Fragment implements Injectable {
 
     private LiveData<Enum> mFunction;
     private List<State> mListStates = new ArrayList<>();
-    private FunctionViewModel mViewModel;
+    private EnumViewModel mViewModel;
 
     private String functionId;
 
@@ -55,7 +56,7 @@ public class FunctionDetailFragment extends Fragment implements Injectable {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(FunctionViewModel.class);
+        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
         functionId = getArguments().getString(ARG_FUNCTION_ID);
         if (getArguments().containsKey(ARG_FUNCTION_ID)) {
             mFunction = mViewModel.getEnum(functionId);
@@ -81,7 +82,7 @@ public class FunctionDetailFragment extends Fragment implements Injectable {
             }
         });
 
-        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(FunctionViewModel.class);
+        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
         mViewModel.getEnum(functionId).observe(this, new Observer<Enum>() {
             @Override
             public void onChanged(@Nullable Enum function) {

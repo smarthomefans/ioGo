@@ -48,7 +48,7 @@
                 android:value=".ui.room.RoomListActivity" />
         </activity>
         <activity
-            android:name=".ui.room.RoomSettingsActivity"
+            android:name=".ui.main.EnumSettingsActivity"
             android:parentActivityName=".ui.room.RoomDetailActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
