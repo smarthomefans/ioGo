@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +21,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.AndroidInjection;
 import de.nisio.iobroker.R;
-import de.nisio.iobroker.service.DataBus;
 import de.nisio.iobroker.data.model.Enum;
+import de.nisio.iobroker.data.repository.EnumRepository;
+import de.nisio.iobroker.service.DataBus;
 import de.nisio.iobroker.ui.base.BaseActivity;
-import de.nisio.iobroker.ui.function.FunctionListActivity;
-import de.nisio.iobroker.ui.room.RoomListActivity;
 
 public class MainActivity extends BaseActivity {
 
@@ -86,14 +86,22 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.showRoomList)
     public void onClickRoomList(){
-        Intent i = new Intent(this, RoomListActivity.class);
+        Intent i = new Intent(this, EnumListActivity.class);
+        i.putExtra(EnumListActivity.ARG_ENUM_TYPE, EnumRepository.TYPE_ROOM);
         startActivity(i);
     }
 
     @OnClick(R.id.showFunctionList)
     public void onClickFuncionList(){
-        Intent i = new Intent(this, FunctionListActivity.class);
+        Intent i = new Intent(this, EnumListActivity.class);
+        i.putExtra(EnumListActivity.ARG_ENUM_TYPE, EnumRepository.TYPE_FUNCTION);
         startActivity(i);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 }

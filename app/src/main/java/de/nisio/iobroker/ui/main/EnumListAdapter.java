@@ -14,8 +14,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisio.iobroker.R;
 import de.nisio.iobroker.data.model.Enum;
-import de.nisio.iobroker.ui.room.RoomDetailActivity;
-import de.nisio.iobroker.ui.room.RoomDetailFragment;
 
 public class EnumListAdapter
         extends RecyclerView.Adapter<EnumListAdapter.ViewHolder> {
@@ -27,8 +25,8 @@ public class EnumListAdapter
             Enum item = (Enum) view.getTag();
 
             Context context = view.getContext();
-            Intent intent = new Intent(context, RoomDetailActivity.class);
-            intent.putExtra(RoomDetailFragment.ARG_ROOM_ID, item.getId());
+            Intent intent = new Intent(context, EnumDetailActivity.class);
+            intent.putExtra(EnumDetailFragment.ARG_ENUM_ID, item.getId());
 
             context.startActivity(intent);
 
@@ -42,7 +40,7 @@ public class EnumListAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.li_room, parent, false);
+                .inflate(R.layout.li_enum, parent, false);
         return new ViewHolder(view);
     }
 

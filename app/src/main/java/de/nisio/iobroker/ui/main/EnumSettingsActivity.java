@@ -23,15 +23,12 @@ import dagger.android.AndroidInjection;
 import de.nisio.iobroker.R;
 import de.nisio.iobroker.data.model.Enum;
 import de.nisio.iobroker.ui.base.BaseActivity;
-import de.nisio.iobroker.ui.main.EnumViewModel;
-import de.nisio.iobroker.ui.room.RoomDetailActivity;
-import de.nisio.iobroker.ui.room.RoomDetailFragment;
 
 /**
  * An activity representing a list of Rooms. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link RoomDetailActivity} representing
+ * lead to a {@link EnumDetailActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
@@ -58,7 +55,7 @@ public class EnumSettingsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_room_settings);
+        setContentView(R.layout.activity_enum_settings);
         ButterKnife.bind(this);
 
         toolbar.setTitle(R.string.title_activity_room_list);
@@ -67,7 +64,7 @@ public class EnumSettingsActivity extends BaseActivity {
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
 
-        roomId = getIntent().getStringExtra(RoomDetailFragment.ARG_ROOM_ID);
+        roomId = getIntent().getStringExtra(EnumDetailFragment.ARG_ENUM_ID);
         if (roomId != null) {
             mRoom = mViewModel.getEnum(roomId).getValue();
         }

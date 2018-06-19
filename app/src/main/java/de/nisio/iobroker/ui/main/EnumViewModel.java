@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import de.nisio.iobroker.R;
 import de.nisio.iobroker.data.model.Enum;
 import de.nisio.iobroker.data.model.State;
 import de.nisio.iobroker.data.repository.EnumRepository;
@@ -24,8 +25,13 @@ public class EnumViewModel extends ViewModel {
         this.stateRepository = stateRepository;
     }
 
-    public LiveData<List<Enum>> getRooms() {
-        return enumRepository.getRoomEnums();
+    public LiveData<List<Enum>> getEnums(String type) {
+        if(EnumRepository.TYPE_FUNCTION.equals(type)) {
+            return enumRepository.getFunctionEnums();
+        }else if(EnumRepository.TYPE_ROOM.equals(type)) {
+            return enumRepository.getRoomEnums();
+        }
+        return null;
     }
     public LiveData<List<Enum>> getFunctions() {
         return enumRepository.getFunctionEnums();

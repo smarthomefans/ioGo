@@ -31,7 +31,7 @@
                 android:value=".ui.main.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.room.RoomListActivity"
+            android:name=".ui.main.EnumListActivity"
             android:parentActivityName=".ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -39,37 +39,13 @@
                 android:value=".ui.main.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.room.RoomDetailActivity"
-            android:parentActivityName=".ui.room.RoomListActivity"
+            android:name=".ui.main.EnumDetailActivity"
+            android:parentActivityName=".ui.main.EnumListActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.room.RoomListActivity" />
-        </activity>
-        <activity
-            android:name=".ui.main.EnumSettingsActivity"
-            android:parentActivityName=".ui.room.RoomDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.room.RoomDetailActivity" />
-        </activity>
-        <activity
-            android:name=".ui.function.FunctionListActivity"
-            android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.main.MainActivity" />
-        </activity>
-        <activity
-            android:name=".ui.function.FunctionDetailActivity"
-            android:parentActivityName=".ui.function.FunctionListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.function.FunctionListActivity" />
+                android:value=".ui.main.EnumListActivity" />
         </activity>
         <activity
             android:name=".ui.info.InfoActivity"
@@ -79,6 +55,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />
         </activity>
+
         <service
             android:name=".service.SocketService"
             android:enabled="true"

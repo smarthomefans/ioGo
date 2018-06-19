@@ -1,11 +1,13 @@
-package de.nisio.iobroker.ui.function;
+package de.nisio.iobroker.ui.main;
 
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -19,12 +21,12 @@ import de.nisio.iobroker.R;
 import de.nisio.iobroker.ui.base.BaseActivity;
 
 /**
- * An activity representing a single Function detail screen. This
+ * An activity representing a single Room detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a {@link FunctionListActivity}.
+ * in a {@link EnumListActivity}.
  */
-public class FunctionDetailActivity extends BaseActivity implements HasSupportFragmentInjector {
+public class EnumDetailActivity extends BaseActivity implements HasSupportFragmentInjector {
 
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
@@ -36,21 +38,19 @@ public class FunctionDetailActivity extends BaseActivity implements HasSupportFr
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_function_detail);
-
+        setContentView(R.layout.activity_enum_detail);
         ButterKnife.bind(this);
 
-        toolbar.setTitle(R.string.title_activity_function_list);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
-            arguments.putString(FunctionDetailFragment.ARG_FUNCTION_ID,
-                    getIntent().getStringExtra(FunctionDetailFragment.ARG_FUNCTION_ID));
-            FunctionDetailFragment fragment = new FunctionDetailFragment();
+            arguments.putString(EnumDetailFragment.ARG_ENUM_ID,
+                    getIntent().getStringExtra(EnumDetailFragment.ARG_ENUM_ID));
+            EnumDetailFragment fragment = new EnumDetailFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction().add(R.id.function_detail_container, fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.enum_detail_container, fragment).commit();
         }
     }
 
@@ -58,10 +58,27 @@ public class FunctionDetailActivity extends BaseActivity implements HasSupportFr
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            navigateUpTo(new Intent(this, FunctionListActivity.class));
+
+            navigateUpTo(new Intent(this, EnumListActivity.class));
             return true;
         }
+
+        if (id == R.id.action_enum_settings) {
+            Toast.makeText(this,R.string.action_settings, Toast.LENGTH_LONG).show();
+            Intent i = new Intent(this, EnumSettingsActivity.class);
+            i.putExtra(EnumDetailFragment.ARG_ENUM_ID, getIntent().getStringExtra(EnumDetailFragment.ARG_ENUM_ID));
+            startActivity(i);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_enum, menu);
+        return true;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package de.nisio.iobroker.ui.room;
+package de.nisio.iobroker.ui.main;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,27 +20,29 @@ import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 import de.nisio.iobroker.R;
 import de.nisio.iobroker.data.model.Enum;
+import de.nisio.iobroker.data.repository.EnumRepository;
 import de.nisio.iobroker.ui.base.BaseActivity;
-import de.nisio.iobroker.ui.main.EnumListAdapter;
-import de.nisio.iobroker.ui.main.EnumViewModel;
 
 /**
  * An activity representing a list of Rooms. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link RoomDetailActivity} representing
+ * lead to a {@link EnumDetailActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class RoomListActivity extends BaseActivity {
+public class EnumListActivity extends BaseActivity {
+
+    public static final String ARG_ENUM_TYPE = "enum_type";
 
     private EnumViewModel mViewModel;
     private EnumListAdapter mAdapter;
+    private String enumType;
 
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
 
-    @BindView(R.id.room_list)
+    @BindView(R.id.enum_list)
     RecyclerView recyclerView;
 
     @Inject
@@ -56,17 +57,23 @@ public class RoomListActivity extends BaseActivity {
         setContentView(R.layout.activity_room_list);
         ButterKnife.bind(this);
 
-        toolbar.setTitle(R.string.title_activity_room_list);
+        enumType = getIntent().getStringExtra(ARG_ENUM_TYPE);
+        if(EnumRepository.TYPE_FUNCTION.equals(enumType)) {
+            toolbar.setTitle(R.string.title_activity_function_list);
+        }else if(EnumRepository.TYPE_ROOM.equals(enumType)) {
+            toolbar.setTitle(R.string.title_activity_room_list);
+        }else if(EnumRepository.TYPE_ROOM.equals(enumType)) {
+            toolbar.setTitle("Unknown");
+        }
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
 
         mAdapter = new EnumListAdapter(list);
         recyclerView.setAdapter(mAdapter);
 
-        mViewModel.getRooms()
+        mViewModel.getEnums(enumType)
                 .observe(this, new Observer<List<Enum>>() {
                     @Override
                     public void onChanged(@Nullable List<Enum> newList) {

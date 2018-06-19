@@ -1,4 +1,4 @@
-package de.nisio.iobroker.ui.room;
+package de.nisio.iobroker.ui.main;
 
 
 import android.arch.lifecycle.LiveData;
@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,19 +29,18 @@ import de.nisio.iobroker.data.model.Enum;
 import de.nisio.iobroker.data.model.State;
 import de.nisio.iobroker.di.Injectable;
 import de.nisio.iobroker.ui.base.BaseDetailAdapter;
-import de.nisio.iobroker.ui.main.EnumViewModel;
 
 /**
  * A fragment representing a single Room detail screen.
- * This fragment is either contained in a {@link RoomListActivity}
- * in two-pane mode (on tablets) or a {@link RoomDetailActivity}
+ * This fragment is either contained in a {@link EnumListActivity}
+ * in two-pane mode (on tablets) or a {@link EnumDetailActivity}
  * on handsets.
  */
-public class RoomDetailFragment extends Fragment implements Injectable {
+public class EnumDetailFragment extends Fragment implements Injectable {
 
-    public static final String ARG_ROOM_ID = "room_id";
+    public static final String ARG_ENUM_ID = "enum_id";
 
-    @BindView(R.id.room_detail_list) RecyclerView mRecyclerView;
+    @BindView(R.id.enum_detail_list) RecyclerView mRecyclerView;
 
     private BaseDetailAdapter mAdapter;
 
@@ -50,7 +48,7 @@ public class RoomDetailFragment extends Fragment implements Injectable {
     private List<State> mListStates = new ArrayList<>();
     private EnumViewModel mViewModel;
 
-    private String roomId;
+    private String enumId;
 
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
@@ -61,13 +59,13 @@ public class RoomDetailFragment extends Fragment implements Injectable {
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
 
-        roomId = getArguments().getString(ARG_ROOM_ID);
+        enumId = getArguments().getString(ARG_ENUM_ID);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.room_detail, container, false);
+        View rootView = inflater.inflate(R.layout.enum_detail, container, false);
         ButterKnife.bind(this, rootView);
 
         getActivity().runOnUiThread(new Runnable() {
@@ -84,15 +82,15 @@ public class RoomDetailFragment extends Fragment implements Injectable {
         });
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
-        mViewModel.getEnum(roomId).observe(this, new Observer<Enum>() {
+        mViewModel.getEnum(enumId).observe(this, new Observer<Enum>() {
             @Override
-            public void onChanged(@Nullable Enum room) {
+            public void onChanged(@Nullable Enum anEnum) {
                 // update UI
-                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(room.getName());
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(anEnum.getName());
             }
         });
 
-        mViewModel.getStates(roomId)
+        mViewModel.getStates(enumId)
                 .observe(this, new Observer<List<State>>() {
                     @Override
                     public void onChanged(@Nullable List<State> newList) {

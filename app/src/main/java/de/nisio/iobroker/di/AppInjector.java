@@ -7,14 +7,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
-
 import dagger.android.AndroidInjection;
 import dagger.android.support.AndroidSupportInjection;
 import dagger.android.support.HasSupportFragmentInjector;
 import de.nisio.iobroker.App;
 import de.nisio.iobroker.di.component.DaggerAppComponent;
-import de.nisio.iobroker.ui.function.FunctionDetailActivity;
-import de.nisio.iobroker.ui.room.RoomDetailActivity;
+import de.nisio.iobroker.ui.main.EnumDetailActivity;
 
 /**
  * Helper class to automatically inject fragments if they implement {@link Injectable}.
@@ -80,21 +78,8 @@ public class AppInjector {
                                 }
                             }, true);
         }
-        if (activity instanceof RoomDetailActivity) {
-            ((RoomDetailActivity) activity).getSupportFragmentManager()
-                    .registerFragmentLifecycleCallbacks(
-                            new FragmentManager.FragmentLifecycleCallbacks() {
-                                @Override
-                                public void onFragmentCreated(FragmentManager fm, Fragment f,
-                                                              Bundle savedInstanceState) {
-                                    if (f instanceof Injectable) {
-                                        AndroidSupportInjection.inject(f);
-                                    }
-                                }
-                            }, true);
-        }
-        if (activity instanceof FunctionDetailActivity) {
-            ((FunctionDetailActivity) activity).getSupportFragmentManager()
+        if (activity instanceof EnumDetailActivity) {
+            ((EnumDetailActivity) activity).getSupportFragmentManager()
                     .registerFragmentLifecycleCallbacks(
                             new FragmentManager.FragmentLifecycleCallbacks() {
                                 @Override

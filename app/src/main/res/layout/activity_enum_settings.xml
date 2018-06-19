@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.room.RoomListActivity">
+    tools:context=".ui.main.EnumListActivity">
 
     <include layout="@layout/toolbar" />
 
-    <include layout="@layout/room_list" />
+    <include layout="@layout/enum_settings" />
 
 </android.support.design.widget.CoordinatorLayout>
