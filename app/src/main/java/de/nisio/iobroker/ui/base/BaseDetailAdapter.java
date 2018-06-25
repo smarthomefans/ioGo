@@ -23,6 +23,7 @@ public class BaseDetailAdapter
     private final int C_BOOLEAN_BUTTON = 4;
     private final int C_STRING_SPINNER = 5;
     private final int C_BOOLEAN_DOOR = 6;
+    private final int C_BOOLEAN = 7;
 
     public BaseDetailAdapter(List<State> stateList) {
         mValues = stateList;
@@ -35,13 +36,16 @@ public class BaseDetailAdapter
         switch (viewType) {
             case C_BOOLEAN_SWITCH:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_boolean_switch, parent, false);
-                return new BooleanTypeViewHolder(view);
+                return new BooleanSwitchViewHolder(view);
             case C_BOOLEAN_BUTTON:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_boolean_button, parent, false);
                 return new BooleanButtonViewHolder(view);
             case C_BOOLEAN_DOOR:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
                 return new BooleanDoorViewHolder(view);
+            case C_BOOLEAN:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
+                return new BooleanViewHolder(view);
             case C_STRING:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
                 return new StringTypeViewHolder(view);
@@ -68,6 +72,8 @@ public class BaseDetailAdapter
                             return C_BOOLEAN_DOOR;
                         case State.ROLE_SENSOR_WINDOW:
                             return C_BOOLEAN_DOOR;
+                        case State.ROLE_SENSOR:
+                            return C_BOOLEAN;
                         default:
                             return C_BOOLEAN_SWITCH;
                     }
@@ -94,7 +100,7 @@ public class BaseDetailAdapter
         int viewType = getItemViewType(position);
         switch (viewType) {
             case C_BOOLEAN_SWITCH:
-                ((BooleanTypeViewHolder) holder).bindState(mValues.get(position));
+                ((BooleanSwitchViewHolder) holder).bindState(mValues.get(position));
                 break;
 
             case C_BOOLEAN_BUTTON:
@@ -103,6 +109,10 @@ public class BaseDetailAdapter
 
             case C_BOOLEAN_DOOR:
                 ((BooleanDoorViewHolder) holder).bindState(mValues.get(position));
+                break;
+
+            case C_BOOLEAN:
+                ((BooleanViewHolder) holder).bindState(mValues.get(position));
                 break;
 
             case C_NUMBER:

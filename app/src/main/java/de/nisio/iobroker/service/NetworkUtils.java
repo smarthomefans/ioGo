@@ -41,7 +41,12 @@ public class NetworkUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return response.headers().get("Set-Cookie");
+        if(response != null) {
+            return response.headers().get("Set-Cookie");
+        }else{
+            return null;
+        }
+
     }
 
     public static boolean isValidUrl(String url) {

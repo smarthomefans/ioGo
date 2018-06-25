@@ -74,9 +74,6 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <meta-data
-            android:name="firebase_crash_collection_enabled"
-            android:value="@bool/FIREBASE_CRASH_ENABLED"/>
     </application>
 
 </manifest>

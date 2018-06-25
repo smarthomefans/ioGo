@@ -109,18 +109,22 @@ public class EnumRepository {
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
 
-        IoEnum ioEnum = gson.fromJson(data, IoEnum.class);
-        for(IoRow ioRow : ioEnum.getRows()){
-            IoValue ioValue = ioRow.getValue();
-            IoCommon ioCommon = ioValue.getCommon();
-            Enum anEnum = new Enum(ioValue.getId(), ioCommon.getName(), type, "false");
-            enumDao.insert(anEnum);
-            for (int j = 0; j < ioCommon.getMembers().size(); j++) {
-                EnumState enumState = new EnumState(anEnum.getId(), ioCommon.getMembers().get(j));
-                enumStateDao.insert(enumState);
-            }
+        try {
+            IoEnum ioEnum = gson.fromJson(data, IoEnum.class);
+            for (IoRow ioRow : ioEnum.getRows()) {
+                IoValue ioValue = ioRow.getValue();
+                IoCommon ioCommon = ioValue.getCommon();
+                Enum anEnum = new Enum(ioValue.getId(), ioCommon.getName(), type, "false");
+                enumDao.insert(anEnum);
+                for (int j = 0; j < ioCommon.getMembers().size(); j++) {
+                    EnumState enumState = new EnumState(anEnum.getId(), ioCommon.getMembers().get(j));
+                    enumStateDao.insert(enumState);
+                }
 
-            Log.d(TAG, "saveObjects getId:" + ioValue.getId());
+                Log.d(TAG, "saveObjects getId:" + ioValue.getId());
+            }
+        }catch(Throwable e){
+            e.printStackTrace();
         }
 
         Log.i(TAG, "saveObjects finished");

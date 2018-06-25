@@ -90,7 +90,11 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 e.printStackTrace();
             }
             String socketUrl = "https://iobroker.pro/?key=nokey" + "&user=" + username + "&pass=" + password;
-            createSocket(socketUrl);
+            if(cookie != null) {
+                createSocket(socketUrl);
+           // }else{
+           //     Toast.makeText(this,"Connection error", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -108,12 +112,6 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             mSocket.on("stateChange", onStateChange);
             mSocket.connect();
         }
-    }
-
-    @Override
-    public void onTaskRemoved(Intent rootIntent) {
-        super.onTaskRemoved(rootIntent);
-        Log.i(TAG, "onTaskRemoved");
     }
 
     @Override

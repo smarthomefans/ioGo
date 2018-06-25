@@ -71,18 +71,26 @@ public class StateRepository {
     }
 
     public void saveStateChanges(String data) {
-        TypeToken<Map<String,IoState>> token = new TypeToken<Map<String,IoState>>() {};
-        Map<String,IoState> states = gson.fromJson(data, token.getType());
-        for (Map.Entry<String, IoState> entry : states.entrySet())
-        {
-            saveStateChange(entry.getKey(), entry.getValue());
+        try{
+            TypeToken<Map<String,IoState>> token = new TypeToken<Map<String,IoState>>() {};
+            Map<String,IoState> states = gson.fromJson(data, token.getType());
+            for (Map.Entry<String, IoState> entry : states.entrySet())
+            {
+                saveStateChange(entry.getKey(), entry.getValue());
+            }
+        }catch(Throwable e){
+            e.printStackTrace();
         }
         Log.i(TAG,"saveStates finished");
     }
 
     public void saveStateChange(String id, String data) {
-        IoState ioState = gson.fromJson(data, IoState.class);
-        saveStateChange(id, ioState);
+        try{
+            IoState ioState = gson.fromJson(data, IoState.class);
+            saveStateChange(id, ioState);
+        }catch(Throwable e){
+            e.printStackTrace();
+        }
     }
 
     private void saveStateChange(String id, IoState ioState){
@@ -104,9 +112,13 @@ public class StateRepository {
             for(State state : states){
                 JSONObject json = obj.optJSONObject(state.getId());
                 if(json != null) {
-                    IoObject ioObject = gson.fromJson(json.toString(), IoObject.class);
-                    state.update(ioObject);
-                    stateDao.update(state);
+                    try{
+                        IoObject ioObject = gson.fromJson(json.toString(), IoObject.class);
+                        state.update(ioObject);
+                        stateDao.update(state);
+                    }catch(Throwable e){
+                        e.printStackTrace();
+                    }
                 }else{
                     stateDao.delete(state);
                     Log.w(TAG,"saveObjects: Object not found: "+state.getId());

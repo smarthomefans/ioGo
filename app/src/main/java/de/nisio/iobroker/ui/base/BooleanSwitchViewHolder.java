@@ -13,14 +13,14 @@ import de.nisio.iobroker.data.model.State;
 import de.nisio.iobroker.service.DataBus;
 import de.nisio.iobroker.service.Events;
 
-public class BooleanTypeViewHolder extends RecyclerView.ViewHolder {
+public class BooleanSwitchViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.message_title)
     TextView mTitle;
     @BindView(R.id.message_subtitle)  TextView mSubtitle;
     @BindView(R.id.value)
     Switch mValue;
 
-    public BooleanTypeViewHolder(View itemView) {
+    public BooleanSwitchViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
