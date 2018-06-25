@@ -21,7 +21,10 @@ public class State {
     public static final String ROLE_BUTTON = "button";
     public static final String ROLE_SENSOR_DOOR = "sensor.door";
     public static final String ROLE_SENSOR_WINDOW = "sensor.window";
+    public static final String ROLE_SENSOR_MOTION = "sensor.motion";
     public static final String ROLE_SENSOR = "sensor";
+    public static final String ROLE_VALUE = "value";
+    public static final String ROLE_VALUE_TEMPERATURE = "value.temperature";
 
     @PrimaryKey
     @NonNull

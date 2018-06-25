@@ -1,6 +1,6 @@
 package de.nisio.iobroker.ui.base;
 
-class StateItem {
+public class StateItem {
 
         private String id;
         private String name;

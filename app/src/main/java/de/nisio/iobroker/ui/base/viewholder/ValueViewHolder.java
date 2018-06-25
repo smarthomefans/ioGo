@@ -1,26 +1,24 @@
-package de.nisio.iobroker.ui.base;
+package de.nisio.iobroker.ui.base.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.Switch;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisio.iobroker.R;
 import de.nisio.iobroker.data.model.State;
-import de.nisio.iobroker.service.DataBus;
-import de.nisio.iobroker.service.Events;
 
-public class BooleanDoorViewHolder extends RecyclerView.ViewHolder {
+public class ValueViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.message_title)
     TextView mTitle;
     @BindView(R.id.message_subtitle)  TextView mSubtitle;
-    @BindView(R.id.value)
-    TextView mValue;
+    @BindView(R.id.value)  TextView mValue;
+    @BindView(R.id.icon)
+    ImageView mIcon;
 
-    public BooleanDoorViewHolder(View itemView) {
+    public ValueViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
@@ -28,7 +26,11 @@ public class BooleanDoorViewHolder extends RecyclerView.ViewHolder {
     public void bindState(State state) {
         mTitle.setText(state.getName());
         mSubtitle.setText(state.getRole());
-        String val = ("true".equals(state.getVal())) ? "open" : "closed";
-        mValue.setText(val);
+        String value = state.getVal();
+        if(state.getUnit() != null){
+            value += state.getUnit();
+        }
+        mValue.setText(value);
+
     }
 }

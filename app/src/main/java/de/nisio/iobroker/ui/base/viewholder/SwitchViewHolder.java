@@ -1,4 +1,4 @@
-package de.nisio.iobroker.ui.base;
+package de.nisio.iobroker.ui.base.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -13,14 +13,14 @@ import de.nisio.iobroker.data.model.State;
 import de.nisio.iobroker.service.DataBus;
 import de.nisio.iobroker.service.Events;
 
-public class BooleanSwitchViewHolder extends RecyclerView.ViewHolder {
+public class SwitchViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.message_title)
     TextView mTitle;
     @BindView(R.id.message_subtitle)  TextView mSubtitle;
     @BindView(R.id.value)
     Switch mValue;
 
-    public BooleanSwitchViewHolder(View itemView) {
+    public SwitchViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }

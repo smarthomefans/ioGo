@@ -1,4 +1,4 @@
-package de.nisio.iobroker.ui.base;
+package de.nisio.iobroker.ui.base.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -16,6 +16,7 @@ import de.nisio.iobroker.R;
 import de.nisio.iobroker.data.model.State;
 import de.nisio.iobroker.service.DataBus;
 import de.nisio.iobroker.service.Events;
+import de.nisio.iobroker.ui.base.StateItem;
 
 public class StringSpinnerViewHolder extends RecyclerView.ViewHolder implements AdapterView.OnItemSelectedListener{
     @BindView(R.id.message_title)

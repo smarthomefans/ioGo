@@ -10,4 +10,6 @@
     <string name="main_title">YOUR FAVORITES</string>
     <string name="main_room_button">all rooms</string>
     <string name="main_function_button">all functions</string>
+    <string name="banner_ad_unit_id">ca-app-pub-9046643317542583/6252575050</string>
+    <string name="banner_ad_unit_id_test">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

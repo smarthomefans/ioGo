@@ -8,7 +8,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 4
-        versionName "0.9.4"
+        versionName "0.9.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -32,6 +32,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     // android support libraries
+    //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.android.support:design:27.1.1'
@@ -74,6 +75,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-crash:16.0.1'
     // CRASHLYTICS
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
+    //ADMOB
+    implementation 'com.google.firebase:firebase-ads:15.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

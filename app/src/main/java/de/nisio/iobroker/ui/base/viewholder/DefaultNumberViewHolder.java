@@ -1,4 +1,4 @@
-package de.nisio.iobroker.ui.base;
+package de.nisio.iobroker.ui.base.viewholder;
 
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -15,13 +16,15 @@ import de.nisio.iobroker.data.model.State;
 import de.nisio.iobroker.service.DataBus;
 import de.nisio.iobroker.service.Events;
 
-public class StringTypeViewHolder extends RecyclerView.ViewHolder {
+public class DefaultNumberViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.message_title)
     TextView mTitle;
     @BindView(R.id.message_subtitle)  TextView mSubtitle;
     @BindView(R.id.value)  TextView mValue;
+    @BindView(R.id.icon)
+    ImageView mIcon;
 
-    public StringTypeViewHolder(View itemView) {
+    public DefaultNumberViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
@@ -29,7 +32,11 @@ public class StringTypeViewHolder extends RecyclerView.ViewHolder {
     public void bindState(State state) {
         mTitle.setText(state.getName());
         mSubtitle.setText(state.getRole());
-        mValue.setText(state.getVal());
+        String value = state.getVal();
+        if(state.getUnit() != null){
+            value += state.getUnit();
+        }
+        mValue.setText(value);
         if(state.getWrite()) {
             mValue.setClickable(true);
             mValue.setOnClickListener(new View.OnClickListener() {
@@ -37,7 +44,7 @@ public class StringTypeViewHolder extends RecyclerView.ViewHolder {
                 public void onClick(View v) {
 
                     LayoutInflater li = LayoutInflater.from(v.getContext());
-                    View promptsView = li.inflate(R.layout.prompts, null);
+                    View promptsView = li.inflate(R.layout.prompts_number, null);
 
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
 

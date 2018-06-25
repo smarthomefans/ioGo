@@ -10,6 +10,17 @@ import java.util.List;
 import de.nisio.iobroker.R;
 import de.nisio.iobroker.data.model.State;
 import de.nisio.iobroker.service.DataBus;
+import de.nisio.iobroker.ui.base.viewholder.DefaultBooleanViewHolder;
+import de.nisio.iobroker.ui.base.viewholder.ButtonViewHolder;
+import de.nisio.iobroker.ui.base.viewholder.DefaultNumberViewHolder;
+import de.nisio.iobroker.ui.base.viewholder.DefaultStringViewHolder;
+import de.nisio.iobroker.ui.base.viewholder.SensorDoorViewHolder;
+import de.nisio.iobroker.ui.base.viewholder.SensorMotionViewHolder;
+import de.nisio.iobroker.ui.base.viewholder.SensorWindowViewHolder;
+import de.nisio.iobroker.ui.base.viewholder.StringSpinnerViewHolder;
+import de.nisio.iobroker.ui.base.viewholder.SwitchViewHolder;
+import de.nisio.iobroker.ui.base.viewholder.ValueTemperatureViewHolder;
+import de.nisio.iobroker.ui.base.viewholder.ValueViewHolder;
 
 
 public class BaseDetailAdapter
@@ -22,8 +33,12 @@ public class BaseDetailAdapter
     private final int C_BOOLEAN_SWITCH = 3;
     private final int C_BOOLEAN_BUTTON = 4;
     private final int C_STRING_SPINNER = 5;
-    private final int C_BOOLEAN_DOOR = 6;
-    private final int C_BOOLEAN = 7;
+    private final int C_SENSOR_DOOR = 6;
+    private final int C_SENSOR_WINDOW = 7;
+    private final int C_SENSOR_MOTION = 8;
+    private final int C_SENSOR = 9;
+    private final int C_VALUE = 10;
+    private final int C_VALUE_TEMPERATURE = 11;
 
     public BaseDetailAdapter(List<State> stateList) {
         mValues = stateList;
@@ -36,22 +51,34 @@ public class BaseDetailAdapter
         switch (viewType) {
             case C_BOOLEAN_SWITCH:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_boolean_switch, parent, false);
-                return new BooleanSwitchViewHolder(view);
+                return new SwitchViewHolder(view);
             case C_BOOLEAN_BUTTON:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_boolean_button, parent, false);
-                return new BooleanButtonViewHolder(view);
-            case C_BOOLEAN_DOOR:
+                return new ButtonViewHolder(view);
+            case C_SENSOR_DOOR:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
-                return new BooleanDoorViewHolder(view);
-            case C_BOOLEAN:
+                return new SensorDoorViewHolder(view);
+            case C_SENSOR_WINDOW:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
-                return new BooleanViewHolder(view);
+                return new SensorWindowViewHolder(view);
+            case C_SENSOR_MOTION:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
+                return new SensorMotionViewHolder(view);
+            case C_SENSOR:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
+                return new DefaultBooleanViewHolder(view);
             case C_STRING:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
-                return new StringTypeViewHolder(view);
+                return new DefaultStringViewHolder(view);
             case C_NUMBER:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_number, parent, false);
-                return new NumberTypeViewHolder(view);
+                return new DefaultNumberViewHolder(view);
+            case C_VALUE:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_number, parent, false);
+                return new ValueViewHolder(view);
+            case C_VALUE_TEMPERATURE:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_number, parent, false);
+                return new ValueTemperatureViewHolder(view);
             case C_STRING_SPINNER:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string_spinner, parent, false);
                 return new StringSpinnerViewHolder(view);
@@ -69,11 +96,13 @@ public class BaseDetailAdapter
                         case State.ROLE_BUTTON:
                             return C_BOOLEAN_BUTTON;
                         case State.ROLE_SENSOR_DOOR:
-                            return C_BOOLEAN_DOOR;
+                            return C_SENSOR_DOOR;
                         case State.ROLE_SENSOR_WINDOW:
-                            return C_BOOLEAN_DOOR;
+                            return C_SENSOR_WINDOW;
+                        case State.ROLE_SENSOR_MOTION:
+                            return C_SENSOR_MOTION;
                         case State.ROLE_SENSOR:
-                            return C_BOOLEAN;
+                            return C_SENSOR;
                         default:
                             return C_BOOLEAN_SWITCH;
                     }
@@ -85,7 +114,14 @@ public class BaseDetailAdapter
                         return C_STRING;
                     }
                 case State.TYPE_NUMBER:
-                    return C_NUMBER;
+                    switch (object.getRole()){
+                        case State.ROLE_VALUE_TEMPERATURE:
+                            return C_VALUE_TEMPERATURE;
+                        case State.ROLE_VALUE:
+                            return C_VALUE;
+                        default:
+                            return C_NUMBER;
+                    }
                 default:
                     return C_STRING;
             }
@@ -100,27 +136,43 @@ public class BaseDetailAdapter
         int viewType = getItemViewType(position);
         switch (viewType) {
             case C_BOOLEAN_SWITCH:
-                ((BooleanSwitchViewHolder) holder).bindState(mValues.get(position));
+                ((SwitchViewHolder) holder).bindState(mValues.get(position));
                 break;
 
             case C_BOOLEAN_BUTTON:
-                ((BooleanButtonViewHolder) holder).bindState(mValues.get(position));
+                ((ButtonViewHolder) holder).bindState(mValues.get(position));
                 break;
 
-            case C_BOOLEAN_DOOR:
-                ((BooleanDoorViewHolder) holder).bindState(mValues.get(position));
+            case C_SENSOR_DOOR:
+                ((SensorDoorViewHolder) holder).bindState(mValues.get(position));
                 break;
 
-            case C_BOOLEAN:
-                ((BooleanViewHolder) holder).bindState(mValues.get(position));
+            case C_SENSOR_WINDOW:
+                ((SensorWindowViewHolder) holder).bindState(mValues.get(position));
+                break;
+
+            case C_SENSOR_MOTION:
+                ((SensorMotionViewHolder) holder).bindState(mValues.get(position));
+                break;
+
+            case C_SENSOR:
+                ((DefaultBooleanViewHolder) holder).bindState(mValues.get(position));
                 break;
 
             case C_NUMBER:
-                ((NumberTypeViewHolder) holder).bindState(mValues.get(position));
+                ((DefaultNumberViewHolder) holder).bindState(mValues.get(position));
+                break;
+
+            case C_VALUE:
+                ((ValueViewHolder) holder).bindState(mValues.get(position));
+                break;
+
+            case C_VALUE_TEMPERATURE:
+                ((ValueTemperatureViewHolder) holder).bindState(mValues.get(position));
                 break;
 
             case C_STRING:
-                ((StringTypeViewHolder) holder).bindState(mValues.get(position));
+                ((DefaultStringViewHolder) holder).bindState(mValues.get(position));
                 break;
 
             case C_STRING_SPINNER:
