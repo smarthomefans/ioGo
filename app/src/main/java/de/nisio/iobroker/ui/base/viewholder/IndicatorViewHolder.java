@@ -10,7 +10,7 @@ import butterknife.ButterKnife;
 import de.nisio.iobroker.R;
 import de.nisio.iobroker.data.model.State;
 
-public class SensorWindowViewHolder extends RecyclerView.ViewHolder {
+public class IndicatorViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.message_title)
     TextView mTitle;
     @BindView(R.id.message_subtitle)  TextView mSubtitle;
@@ -19,9 +19,10 @@ public class SensorWindowViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.icon)
     ImageView mIcon;
 
-    public SensorWindowViewHolder(View itemView) {
+    public IndicatorViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+
     }
 
     public void bindState(State state) {
@@ -29,6 +30,21 @@ public class SensorWindowViewHolder extends RecyclerView.ViewHolder {
         mSubtitle.setText(state.getRole());
         String val = ("true".equals(state.getVal())) ? "open" : "closed";
         mValue.setText(val);
-        mIcon.setImageResource(R.drawable.fts_window_2w);
+        setImageRessource(state.getRole());
+    }
+
+    private void setImageRessource(String role){
+        switch (role){
+            case State.ROLE_SENSOR_DOOR:
+                mIcon.setImageResource(R.drawable.fts_door);
+                break;
+            case State.ROLE_SENSOR_WINDOW:
+                mIcon.setImageResource(R.drawable.fts_window_2w);
+                break;
+            default:
+                mIcon.setImageResource(R.drawable.fts_door);
+                break;
+        }
+
     }
 }

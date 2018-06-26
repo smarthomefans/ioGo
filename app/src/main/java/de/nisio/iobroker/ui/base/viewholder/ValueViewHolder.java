@@ -31,6 +31,17 @@ public class ValueViewHolder extends RecyclerView.ViewHolder {
             value += state.getUnit();
         }
         mValue.setText(value);
+        setImageRessource(state.getRole());
+    }
 
+    private void setImageRessource(String role){
+        switch (role){
+            case State.ROLE_VALUE_TEMPERATURE:
+                mIcon.setImageResource(R.drawable.fts_temperature);
+                break;
+            default:
+                mIcon.setImageResource(R.drawable.circle);
+                break;
+        }
     }
 }

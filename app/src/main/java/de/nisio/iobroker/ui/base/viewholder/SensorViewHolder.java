@@ -5,12 +5,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisio.iobroker.R;
 import de.nisio.iobroker.data.model.State;
 
-public class SensorDoorViewHolder extends RecyclerView.ViewHolder {
+public class SensorViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.message_title)
     TextView mTitle;
     @BindView(R.id.message_subtitle)  TextView mSubtitle;
@@ -19,7 +22,7 @@ public class SensorDoorViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.icon)
     ImageView mIcon;
 
-    public SensorDoorViewHolder(View itemView) {
+    public SensorViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
@@ -29,6 +32,23 @@ public class SensorDoorViewHolder extends RecyclerView.ViewHolder {
         mSubtitle.setText(state.getRole());
         String val = ("true".equals(state.getVal())) ? "open" : "closed";
         mValue.setText(val);
-        mIcon.setImageResource(R.drawable.fts_door);
+        setImageRessource(state.getRole());
+    }
+
+    private void setImageRessource(String role){
+        switch (role){
+            case State.ROLE_SENSOR_DOOR:
+                mIcon.setImageResource(R.drawable.fts_door);
+                break;
+            case State.ROLE_SENSOR_WINDOW:
+                mIcon.setImageResource(R.drawable.fts_window_2w);
+                break;
+            case State.ROLE_SENSOR_MOTION:
+                mIcon.setImageResource(R.drawable.fts_motion);
+                break;
+            default:
+                mIcon.setImageResource(R.drawable.fts_door);
+                break;
+        }
     }
 }

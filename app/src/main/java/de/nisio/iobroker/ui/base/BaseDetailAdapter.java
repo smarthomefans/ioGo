@@ -10,16 +10,13 @@ import java.util.List;
 import de.nisio.iobroker.R;
 import de.nisio.iobroker.data.model.State;
 import de.nisio.iobroker.service.DataBus;
-import de.nisio.iobroker.ui.base.viewholder.DefaultBooleanViewHolder;
 import de.nisio.iobroker.ui.base.viewholder.ButtonViewHolder;
-import de.nisio.iobroker.ui.base.viewholder.DefaultNumberViewHolder;
+import de.nisio.iobroker.ui.base.viewholder.IndicatorViewHolder;
+import de.nisio.iobroker.ui.base.viewholder.LevelViewHolder;
 import de.nisio.iobroker.ui.base.viewholder.DefaultStringViewHolder;
-import de.nisio.iobroker.ui.base.viewholder.SensorDoorViewHolder;
-import de.nisio.iobroker.ui.base.viewholder.SensorMotionViewHolder;
-import de.nisio.iobroker.ui.base.viewholder.SensorWindowViewHolder;
+import de.nisio.iobroker.ui.base.viewholder.SensorViewHolder;
 import de.nisio.iobroker.ui.base.viewholder.StringSpinnerViewHolder;
 import de.nisio.iobroker.ui.base.viewholder.SwitchViewHolder;
-import de.nisio.iobroker.ui.base.viewholder.ValueTemperatureViewHolder;
 import de.nisio.iobroker.ui.base.viewholder.ValueViewHolder;
 
 
@@ -28,17 +25,15 @@ public class BaseDetailAdapter
 
     private final List<State> mValues;
 
-    private final int C_STRING = 1;
-    private final int C_NUMBER = 2;
-    private final int C_BOOLEAN_SWITCH = 3;
-    private final int C_BOOLEAN_BUTTON = 4;
-    private final int C_STRING_SPINNER = 5;
-    private final int C_SENSOR_DOOR = 6;
-    private final int C_SENSOR_WINDOW = 7;
-    private final int C_SENSOR_MOTION = 8;
-    private final int C_SENSOR = 9;
-    private final int C_VALUE = 10;
-    private final int C_VALUE_TEMPERATURE = 11;
+
+    private final int C_SENSOR = 1;         //boolean readonly
+    private final int C_BUTTON = 2;         //boolean writeonly
+    private final int C_VALUE = 3;          //numbers readonly
+    private final int C_INDICATOR = 4;      //boolean readonly
+    private final int C_LEVEL = 5;          //numbers read-write
+    private final int C_SWITCH = 6;         //boolean read-write
+    private final int C_STRING_SPINNER = 7; //string read-write states
+    private final int C_DEFAULT = 99;       //string
 
     public BaseDetailAdapter(List<State> stateList) {
         mValues = stateList;
@@ -49,39 +44,30 @@ public class BaseDetailAdapter
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         switch (viewType) {
-            case C_BOOLEAN_SWITCH:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_boolean_switch, parent, false);
-                return new SwitchViewHolder(view);
-            case C_BOOLEAN_BUTTON:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_boolean_button, parent, false);
-                return new ButtonViewHolder(view);
-            case C_SENSOR_DOOR:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
-                return new SensorDoorViewHolder(view);
-            case C_SENSOR_WINDOW:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
-                return new SensorWindowViewHolder(view);
-            case C_SENSOR_MOTION:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
-                return new SensorMotionViewHolder(view);
             case C_SENSOR:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
-                return new DefaultBooleanViewHolder(view);
-            case C_STRING:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
-                return new DefaultStringViewHolder(view);
-            case C_NUMBER:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_number, parent, false);
-                return new DefaultNumberViewHolder(view);
+                return new SensorViewHolder(view);
+            case C_BUTTON:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_button, parent, false);
+                return new ButtonViewHolder(view);
             case C_VALUE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_number, parent, false);
                 return new ValueViewHolder(view);
-            case C_VALUE_TEMPERATURE:
+            case C_INDICATOR:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
+                return new IndicatorViewHolder(view);
+            case C_LEVEL:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_number, parent, false);
-                return new ValueTemperatureViewHolder(view);
+                return new LevelViewHolder(view);
+            case C_SWITCH:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_switch, parent, false);
+                return new SwitchViewHolder(view);
             case C_STRING_SPINNER:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string_spinner, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
                 return new StringSpinnerViewHolder(view);
+            case C_DEFAULT:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
+                return new DefaultStringViewHolder(view);
         }
         return null;
     }
@@ -89,45 +75,32 @@ public class BaseDetailAdapter
     @Override
     public int getItemViewType(int position) {
         State object = mValues.get(position);
-        if (object != null && object.getType() != null) {
-            switch (object.getType()) {
-                case State.TYPE_BOOLEAN:
-                    switch (object.getRole()){
-                        case State.ROLE_BUTTON:
-                            return C_BOOLEAN_BUTTON;
-                        case State.ROLE_SENSOR_DOOR:
-                            return C_SENSOR_DOOR;
-                        case State.ROLE_SENSOR_WINDOW:
-                            return C_SENSOR_WINDOW;
-                        case State.ROLE_SENSOR_MOTION:
-                            return C_SENSOR_MOTION;
-                        case State.ROLE_SENSOR:
-                            return C_SENSOR;
-                        default:
-                            return C_BOOLEAN_SWITCH;
-                    }
-
-                case State.TYPE_STRING:
-                    if(object.getStates() != null && object.getStates().size() > 0){
-                        return C_STRING_SPINNER;
-                    }else {
-                        return C_STRING;
-                    }
-                case State.TYPE_NUMBER:
-                    switch (object.getRole()){
-                        case State.ROLE_VALUE_TEMPERATURE:
-                            return C_VALUE_TEMPERATURE;
-                        case State.ROLE_VALUE:
-                            return C_VALUE;
-                        default:
-                            return C_NUMBER;
-                    }
-                default:
-                    return C_STRING;
+        if (object != null) {
+            if (object.getRole() != null) {
+                if (object.getRole().startsWith("sensor")) {
+                    return C_SENSOR;
+                }
+                if (object.getRole().startsWith("button")) {
+                    return C_BUTTON;
+                }
+                if (object.getRole().startsWith("value")) {
+                    return C_VALUE;
+                }
+                if (object.getRole().startsWith("indicator")) {
+                    return C_INDICATOR;
+                }
+                if (object.getRole().startsWith("level")) {
+                    return C_LEVEL;
+                }
+                if (object.getRole().startsWith("switch")) {
+                    return C_SWITCH;
+                }
             }
-        }else{
-            return 1;
+            if(object.getStates() != null && object.getStates().size() > 0){
+                return C_STRING_SPINNER;
+            }
         }
+        return C_DEFAULT;
     }
 
     @Override
@@ -135,48 +108,29 @@ public class BaseDetailAdapter
 
         int viewType = getItemViewType(position);
         switch (viewType) {
-            case C_BOOLEAN_SWITCH:
-                ((SwitchViewHolder) holder).bindState(mValues.get(position));
+            case C_SENSOR:
+                ((SensorViewHolder) holder).bindState(mValues.get(position));
                 break;
-
-            case C_BOOLEAN_BUTTON:
+            case C_BUTTON:
                 ((ButtonViewHolder) holder).bindState(mValues.get(position));
                 break;
-
-            case C_SENSOR_DOOR:
-                ((SensorDoorViewHolder) holder).bindState(mValues.get(position));
-                break;
-
-            case C_SENSOR_WINDOW:
-                ((SensorWindowViewHolder) holder).bindState(mValues.get(position));
-                break;
-
-            case C_SENSOR_MOTION:
-                ((SensorMotionViewHolder) holder).bindState(mValues.get(position));
-                break;
-
-            case C_SENSOR:
-                ((DefaultBooleanViewHolder) holder).bindState(mValues.get(position));
-                break;
-
-            case C_NUMBER:
-                ((DefaultNumberViewHolder) holder).bindState(mValues.get(position));
-                break;
-
             case C_VALUE:
                 ((ValueViewHolder) holder).bindState(mValues.get(position));
                 break;
-
-            case C_VALUE_TEMPERATURE:
-                ((ValueTemperatureViewHolder) holder).bindState(mValues.get(position));
+            case C_INDICATOR:
+                ((IndicatorViewHolder) holder).bindState(mValues.get(position));
                 break;
-
-            case C_STRING:
-                ((DefaultStringViewHolder) holder).bindState(mValues.get(position));
+            case C_LEVEL:
+                ((LevelViewHolder) holder).bindState(mValues.get(position));
                 break;
-
+            case C_SWITCH:
+                ((SwitchViewHolder) holder).bindState(mValues.get(position));
+                break;
             case C_STRING_SPINNER:
                 ((StringSpinnerViewHolder) holder).bindState(mValues.get(position));
+                break;
+            case C_DEFAULT:
+                ((DefaultStringViewHolder) holder).bindState(mValues.get(position));
                 break;
         }
 

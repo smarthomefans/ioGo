@@ -16,7 +16,7 @@ import de.nisio.iobroker.data.model.State;
 import de.nisio.iobroker.service.DataBus;
 import de.nisio.iobroker.service.Events;
 
-public class DefaultNumberViewHolder extends RecyclerView.ViewHolder {
+public class LevelViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.message_title)
     TextView mTitle;
     @BindView(R.id.message_subtitle)  TextView mSubtitle;
@@ -24,7 +24,7 @@ public class DefaultNumberViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.icon)
     ImageView mIcon;
 
-    public DefaultNumberViewHolder(View itemView) {
+    public LevelViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
