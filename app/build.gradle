@@ -8,7 +8,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 4
-        versionName "0.9.5"
+        versionName "0.9.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -32,35 +32,28 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     // android support libraries
-    //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
-    // testing
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.android.support:preference-v7:27.1.1'
+    implementation 'com.android.support:preference-v14:27.1.1'
+    implementation 'com.android.support:cardview-v7:27.1.1'
     // view model
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
+    // ROOM
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
     // GSON
     implementation 'com.google.code.gson:gson:2.8.2'
-    // SETTINGS
-    implementation 'com.android.support:preference-v7:27.1.1'
-    implementation 'com.android.support:preference-v14:27.1.1'
-    // CARDVIEW
-    implementation 'com.android.support:cardview-v7:27.1.1'
     // SOCKET IO
     implementation('io.socket:socket.io-client:0.8.3') {
         exclude group: 'org.json', module: 'json'
     }
     // OTTO BUS
     implementation 'com.squareup:otto:1.3.8'
-    // ROOM
-    implementation 'android.arch.persistence.room:runtime:1.1.1'
-    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
     // DAGGER
     annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
     implementation 'com.google.dagger:dagger:2.14.1'
@@ -75,8 +68,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-crash:16.0.1'
     // CRASHLYTICS
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
-    //ADMOB
-    implementation 'com.google.firebase:firebase-ads:15.0.1'
+    // testing
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

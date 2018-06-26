@@ -11,11 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,8 +35,6 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.favorite_list)
     RecyclerView recyclerView;
-
-    @BindView(R.id.adView) AdView mAdView;
 
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
@@ -77,11 +70,6 @@ public class MainActivity extends BaseActivity {
                         recyclerView.setAdapter(mAdapter);
                     }
                 });
-        MobileAds.initialize(this, "ca-app-pub-9046643317542583~5897351833");
-        AdRequest adRequest = new AdRequest.Builder().build();
-        //mAdView.setAdSize(AdSize.BANNER);
-        //mAdView.setAdUnitId("@string/banner_ad_unit_id");
-        mAdView.loadAd(adRequest);
     }
 
     @Override
