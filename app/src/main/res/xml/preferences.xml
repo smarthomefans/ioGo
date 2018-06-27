@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-<!--
-    <PreferenceCategory android:title="WIFI Connection">
 
-        <EditTextPreference
-            android:key="wifi_ssid"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="SSID Name" />
-        <EditTextPreference
-            android:key="wifi_socket_url"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="Socket URL" />
-    </PreferenceCategory>
-    -->
     <PreferenceCategory android:title="Mobile Connection">
 
         <EditTextPreference

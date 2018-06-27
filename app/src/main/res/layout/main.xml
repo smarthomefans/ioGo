@@ -11,7 +11,7 @@
     android:weightSum="100">
 
     <android.support.constraint.Guideline
-        android:id="@+id/guideline1"
+        android:id="@+id/guideline_middle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -46,9 +46,10 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:text="@string/main_room_button"
+        android:drawableLeft="@drawable/rooms"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/guideline1"
+        app:layout_constraintEnd_toEndOf="@id/guideline_middle"
         android:layout_weight="50"/>
 
     <Button
@@ -59,9 +60,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/main_function_button"
+        android:drawableLeft="@drawable/functions"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/guideline1"
+        app:layout_constraintStart_toStartOf="@id/guideline_middle"
         android:layout_weight="50"/>
 
 </android.support.constraint.ConstraintLayout>

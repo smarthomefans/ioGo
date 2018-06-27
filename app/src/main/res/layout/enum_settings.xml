@@ -12,10 +12,11 @@
     <CheckBox
         android:id="@+id/chkFavorit"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Als Favorit anzeigen"
-        tools:layout_editor_absoluteX="30dp"
-        tools:layout_editor_absoluteY="16dp" />
-
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/enum_mark_favorite"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

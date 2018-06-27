@@ -14,6 +14,7 @@ import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
+import de.nisio.iobroker.BuildConfig;
 import de.nisio.iobroker.R;
 import de.nisio.iobroker.ui.base.BaseActivity;
 
@@ -33,6 +34,7 @@ public class InfoActivity extends BaseActivity implements HasSupportFragmentInje
         ButterKnife.bind(this);
 
         toolbar.setTitle(R.string.title_activity_info);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

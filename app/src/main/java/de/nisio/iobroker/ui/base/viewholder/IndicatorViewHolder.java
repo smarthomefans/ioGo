@@ -36,10 +36,10 @@ public class IndicatorViewHolder extends RecyclerView.ViewHolder {
     private void setImageRessource(String role){
         switch (role){
             case State.ROLE_SENSOR_DOOR:
-                mIcon.setImageResource(R.drawable.fts_door);
+                mIcon.setImageResource(R.drawable.li_door);
                 break;
             case State.ROLE_SENSOR_WINDOW:
-                mIcon.setImageResource(R.drawable.fts_window_2w);
+                mIcon.setImageResource(R.drawable.li_window_2w);
                 break;
             default:
                 mIcon.setImageResource(R.drawable.circle);
