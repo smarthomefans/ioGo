@@ -42,7 +42,7 @@ public class IndicatorViewHolder extends RecyclerView.ViewHolder {
                 mIcon.setImageResource(R.drawable.fts_window_2w);
                 break;
             default:
-                mIcon.setImageResource(R.drawable.fts_door);
+                mIcon.setImageResource(R.drawable.circle);
                 break;
         }
 

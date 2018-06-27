@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -58,14 +59,19 @@ public class EnumListAdapter
 
     class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.title)  TextView mTitle;
+        @BindView(R.id.icon)
+        ImageView mIcon;
 
         ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindRoom(Enum room) {
-            mTitle.setText(room.getName());
+        public void bindRoom(Enum anEnum) {
+            mTitle.setText(anEnum.getName());
+            if(anEnum.isFavorite()){
+                mIcon.setImageResource(R.drawable.star);
+            }
         }
     }
 

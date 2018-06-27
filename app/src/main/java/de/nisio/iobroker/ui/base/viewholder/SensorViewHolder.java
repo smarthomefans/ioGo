@@ -47,7 +47,7 @@ public class SensorViewHolder extends RecyclerView.ViewHolder {
                 mIcon.setImageResource(R.drawable.fts_motion);
                 break;
             default:
-                mIcon.setImageResource(R.drawable.fts_door);
+                mIcon.setImageResource(R.drawable.circle);
                 break;
         }
     }

@@ -13,9 +13,8 @@ import de.nisio.iobroker.service.DataBus;
 import de.nisio.iobroker.ui.base.viewholder.ButtonViewHolder;
 import de.nisio.iobroker.ui.base.viewholder.IndicatorViewHolder;
 import de.nisio.iobroker.ui.base.viewholder.LevelViewHolder;
-import de.nisio.iobroker.ui.base.viewholder.DefaultStringViewHolder;
+import de.nisio.iobroker.ui.base.viewholder.CommonViewHolder;
 import de.nisio.iobroker.ui.base.viewholder.SensorViewHolder;
-import de.nisio.iobroker.ui.base.viewholder.StringSpinnerViewHolder;
 import de.nisio.iobroker.ui.base.viewholder.SwitchViewHolder;
 import de.nisio.iobroker.ui.base.viewholder.ValueViewHolder;
 
@@ -32,8 +31,7 @@ public class BaseDetailAdapter
     private final int C_INDICATOR = 4;      //boolean readonly
     private final int C_LEVEL = 5;          //numbers read-write
     private final int C_SWITCH = 6;         //boolean read-write
-    private final int C_STRING_SPINNER = 7; //string read-write states
-    private final int C_DEFAULT = 99;       //string
+    private final int C_COMMON = 99;        //string
 
     public BaseDetailAdapter(List<State> stateList) {
         mValues = stateList;
@@ -45,7 +43,7 @@ public class BaseDetailAdapter
         View view;
         switch (viewType) {
             case C_SENSOR:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_sensor, parent, false);
                 return new SensorViewHolder(view);
             case C_BUTTON:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_button, parent, false);
@@ -54,7 +52,7 @@ public class BaseDetailAdapter
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_number, parent, false);
                 return new ValueViewHolder(view);
             case C_INDICATOR:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_indicator, parent, false);
                 return new IndicatorViewHolder(view);
             case C_LEVEL:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_number, parent, false);
@@ -62,45 +60,48 @@ public class BaseDetailAdapter
             case C_SWITCH:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_switch, parent, false);
                 return new SwitchViewHolder(view);
-            case C_STRING_SPINNER:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
-                return new StringSpinnerViewHolder(view);
-            case C_DEFAULT:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_string, parent, false);
-                return new DefaultStringViewHolder(view);
+            case C_COMMON:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_common, parent, false);
+                return new CommonViewHolder(view);
+            default:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_common, parent, false);
+                return new CommonViewHolder(view);
         }
-        return null;
     }
 
     @Override
     public int getItemViewType(int position) {
         State object = mValues.get(position);
-        if (object != null) {
-            if (object.getRole() != null) {
-                if (object.getRole().startsWith("sensor")) {
-                    return C_SENSOR;
-                }
-                if (object.getRole().startsWith("button")) {
-                    return C_BUTTON;
-                }
-                if (object.getRole().startsWith("value")) {
-                    return C_VALUE;
-                }
-                if (object.getRole().startsWith("indicator")) {
-                    return C_INDICATOR;
-                }
-                if (object.getRole().startsWith("level")) {
-                    return C_LEVEL;
-                }
-                if (object.getRole().startsWith("switch")) {
-                    return C_SWITCH;
-                }
+        String role = null;
+        if (object != null && object.getRole() != null) {
+            role = object.getRole();
+        }
+
+        if(role != null){
+            if (role.startsWith("sensor")) {
+                return C_SENSOR;
             }
-            if(object.getStates() != null && object.getStates().size() > 0){
-                return C_STRING_SPINNER;
+            if (role.startsWith("button")) {
+                return C_BUTTON;
+            }
+            if (role.startsWith("value")) {
+                return C_VALUE;
+            }
+            if (role.startsWith("indicator")) {
+                return C_INDICATOR;
+            }
+            if (role.startsWith("level")) {
+                return C_LEVEL;
+            }
+            if (role.startsWith("switch")) {
+                return C_SWITCH;
+            }
+            if (role.equals("state") || role.startsWith("text") || role.startsWith("html") || role.startsWith("json")) {
+                return C_COMMON;
             }
         }
-        return C_DEFAULT;
+
+        return C_COMMON;
     }
 
     @Override
@@ -126,11 +127,8 @@ public class BaseDetailAdapter
             case C_SWITCH:
                 ((SwitchViewHolder) holder).bindState(mValues.get(position));
                 break;
-            case C_STRING_SPINNER:
-                ((StringSpinnerViewHolder) holder).bindState(mValues.get(position));
-                break;
-            case C_DEFAULT:
-                ((DefaultStringViewHolder) holder).bindState(mValues.get(position));
+            case C_COMMON:
+                ((CommonViewHolder) holder).bindState(mValues.get(position));
                 break;
         }
 
