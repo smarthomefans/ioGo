@@ -67,9 +67,6 @@ public class SensorViewHolder extends RecyclerView.ViewHolder {
             case State.ROLE_SENSOR_RAIN:
                 mIcon.setImageResource(R.drawable.weather_rainy);
                 break;
-            default:
-                mIcon.setImageResource(R.drawable.circle);
-                break;
         }
     }
 }

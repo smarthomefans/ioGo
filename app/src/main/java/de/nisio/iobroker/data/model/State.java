@@ -18,7 +18,12 @@ public class State {
     public static final String TYPE_BOOLEAN = "boolean";
     public static final String TYPE_NUMBER = "number";
     public static final String TYPE_STRING = "string";
-    public static final String ROLE_BUTTON = "button";
+
+    //Common
+    public static final String ROLE_TEXT = "text";
+
+    //Sensor
+    public static final String ROLE_SENSOR = "sensor";
     public static final String ROLE_SENSOR_DOOR = "sensor.door";
     public static final String ROLE_SENSOR_WINDOW = "sensor.window_closed";
     public static final String ROLE_SENSOR_MOTION = "sensor.motion";
@@ -30,10 +35,24 @@ public class State {
     public static final String ROLE_SENSOR_LOCK = "sensor.lock";
     public static final String ROLE_SENSOR_LIGHT = "sensor.light";
     public static final String ROLE_SENSOR_RAIN = "sensor.rain";
-    public static final String ROLE_SENSOR = "sensor";
+
+    //Button
+    public static final String ROLE_BUTTON = "button";
+    public static final String ROLE_BUTTON_START = "button.start";
+    public static final String ROLE_BUTTON_STOP = "button.stop";
+
+    //Value
     public static final String ROLE_VALUE = "value";
     public static final String ROLE_VALUE_TEMPERATURE = "value.temperature";
-    public static final String ROLE_TEXT = "text";
+
+    //Indicator
+
+    //Level
+
+    //Switch
+    public static final String ROLE_SWITCH = "switch";
+    public static final String ROLE_SWITCH_LIGHT = "switch.light";
+
 
     @PrimaryKey
     @NonNull
