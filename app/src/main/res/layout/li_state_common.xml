@@ -60,7 +60,7 @@
 
     <TextView
         android:id="@+id/text"
-        android:layout_width="60dp"
+        android:layout_width="100dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="16dp"

@@ -7,8 +7,8 @@ android {
         applicationId 'de.nisio.iobroker'
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 908
-        versionName "0.9.8"
+        versionCode 909
+        versionName "0.9.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
