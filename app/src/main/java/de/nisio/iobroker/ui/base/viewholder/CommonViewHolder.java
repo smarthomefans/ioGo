@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,6 +31,8 @@ public class CommonViewHolder extends RecyclerView.ViewHolder implements Adapter
     @BindView(R.id.text)  TextView mText;
     @BindView(R.id.spinner)
     Spinner mSpinner;
+    @BindView(R.id.icon)
+    ImageView mIcon;
 
     ArrayList<StateItem> stateItems;
     StateItem stateItem;
@@ -52,6 +55,8 @@ public class CommonViewHolder extends RecyclerView.ViewHolder implements Adapter
         }else{
             bindText(state);
         }
+
+        setImageRessource(state.getRole());
     }
 
     private void bindSpinner(State state){
@@ -123,6 +128,18 @@ public class CommonViewHolder extends RecyclerView.ViewHolder implements Adapter
                 }
             });
         }
+    }
+
+    private void setImageRessource(String role){
+        switch (role){
+            case State.ROLE_TEXT:
+                mIcon.setImageResource(R.drawable.text);
+                break;
+            default:
+                mIcon.setImageResource(R.drawable.circle);
+                break;
+        }
+
     }
 
     @Override

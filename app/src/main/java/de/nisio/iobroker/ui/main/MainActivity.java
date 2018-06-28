@@ -28,7 +28,6 @@ import de.nisio.iobroker.ui.base.BaseActivity;
 
 public class MainActivity extends BaseActivity {
 
-    private EnumViewModel mViewModel;
     private EnumListAdapter mAdapter;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -56,7 +55,7 @@ public class MainActivity extends BaseActivity {
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
+        EnumViewModel mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
 
         mAdapter = new EnumListAdapter(list);
         recyclerView.setAdapter(mAdapter);

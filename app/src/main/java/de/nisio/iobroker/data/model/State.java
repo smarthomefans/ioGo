@@ -20,11 +20,20 @@ public class State {
     public static final String TYPE_STRING = "string";
     public static final String ROLE_BUTTON = "button";
     public static final String ROLE_SENSOR_DOOR = "sensor.door";
-    public static final String ROLE_SENSOR_WINDOW = "sensor.window";
+    public static final String ROLE_SENSOR_WINDOW = "sensor.window_closed";
     public static final String ROLE_SENSOR_MOTION = "sensor.motion";
+    public static final String ROLE_SENSOR_ALARM = "sensor.alarm";
+    public static final String ROLE_SENSOR_ALARM_FIRE = "sensor.alarm.fire";
+    public static final String ROLE_SENSOR_ALARM_FLOOD = "sensor.alarm.flood";
+    public static final String ROLE_SENSOR_ALARM_SECURE = "sensor.alarm.secure";
+    public static final String ROLE_SENSOR_ALARM_POWER = "sensor.alarm.power";
+    public static final String ROLE_SENSOR_LOCK = "sensor.lock";
+    public static final String ROLE_SENSOR_LIGHT = "sensor.light";
+    public static final String ROLE_SENSOR_RAIN = "sensor.rain";
     public static final String ROLE_SENSOR = "sensor";
     public static final String ROLE_VALUE = "value";
     public static final String ROLE_VALUE_TEMPERATURE = "value.temperature";
+    public static final String ROLE_TEXT = "text";
 
     @PrimaryKey
     @NonNull
