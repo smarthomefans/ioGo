@@ -25,7 +25,7 @@ public class State {
     //Sensor
     public static final String ROLE_SENSOR = "sensor";
     public static final String ROLE_SENSOR_DOOR = "sensor.door";
-    public static final String ROLE_SENSOR_WINDOW = "sensor.window_closed";
+    public static final String ROLE_SENSOR_WINDOW = "sensor.window";
     public static final String ROLE_SENSOR_MOTION = "sensor.motion";
     public static final String ROLE_SENSOR_ALARM = "sensor.alarm";
     public static final String ROLE_SENSOR_ALARM_FIRE = "sensor.alarm.fire";

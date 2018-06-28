@@ -27,9 +27,23 @@ public class SensorViewHolder extends RecyclerView.ViewHolder {
     public void bindState(State state) {
         mTitle.setText(state.getName());
         mSubtitle.setText(state.getRole());
-        String val = ("true".equals(state.getVal())) ? "open" : "closed";
-        mValue.setText(val);
+        setValue(state.getRole(), state.getVal());
         setImageRessource(state.getRole());
+    }
+
+    private void setValue(String role, String val){
+
+        switch (role){
+            case State.ROLE_SENSOR_DOOR:
+                mValue.setText(("true".equals(val)) ? "open" : "closed");
+                break;
+            case State.ROLE_SENSOR_WINDOW:
+                mValue.setText(("true".equals(val)) ? "open" : "closed");
+                break;
+            default:
+                mValue.setText(val);
+                break;
+        }
     }
 
     private void setImageRessource(String role){
