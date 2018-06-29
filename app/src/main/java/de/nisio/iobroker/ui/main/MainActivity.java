@@ -11,6 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +37,9 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.favorite_list)
     RecyclerView recyclerView;
+
+    @BindView(R.id.adView)
+    AdView mAdView;
 
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
@@ -69,6 +75,9 @@ public class MainActivity extends BaseActivity {
                         recyclerView.setAdapter(mAdapter);
                     }
                 });
+
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("33BE2250B43518CCDA7DE426D04EE231").build();
+        mAdView.loadAd(adRequest);
     }
 
     @Override

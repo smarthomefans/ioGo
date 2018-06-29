@@ -136,9 +136,6 @@ public class CommonViewHolder extends RecyclerView.ViewHolder implements Adapter
                 case State.ROLE_TEXT:
                     mIcon.setImageResource(R.drawable.text);
                     break;
-                default:
-                    mIcon.setImageResource(R.drawable.circle);
-                    break;
             }
         }
     }

@@ -44,6 +44,10 @@ public class State {
     //Value
     public static final String ROLE_VALUE = "value";
     public static final String ROLE_VALUE_TEMPERATURE = "value.temperature";
+    public static final String ROLE_VALUE_HUMIDITY = "value.humidity";
+    public static final String ROLE_VALUE_BRIGHTNESS = "value.brightness";
+    public static final String ROLE_VALUE_BATTERY = "value.battery";
+    public static final String ROLE_VALUE_BLIND = "value.blind";
 
     //Indicator
 

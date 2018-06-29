@@ -40,8 +40,17 @@ public class ValueViewHolder extends RecyclerView.ViewHolder {
                 case State.ROLE_VALUE_TEMPERATURE:
                     mIcon.setImageResource(R.drawable.thermometer);
                     break;
-                default:
-                    mIcon.setImageResource(R.drawable.circle);
+                case State.ROLE_VALUE_HUMIDITY:
+                    mIcon.setImageResource(R.drawable.water_percent);
+                    break;
+                case State.ROLE_VALUE_BRIGHTNESS:
+                    mIcon.setImageResource(R.drawable.brightness_5);
+                    break;
+                case State.ROLE_VALUE_BATTERY:
+                    mIcon.setImageResource(R.drawable.battery);
+                    break;
+                case State.ROLE_VALUE_BLIND:
+                    mIcon.setImageResource(R.drawable.blinds);
                     break;
             }
         }
