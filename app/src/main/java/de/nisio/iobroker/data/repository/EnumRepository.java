@@ -25,7 +25,7 @@ import de.nisio.iobroker.data.model.EnumStateDao;
 @Singleton
 public class EnumRepository {
 
-    public static final String TYPE_FUNCTION = "functions";
+    public static final String TYPE_FUNCTION = "function";
     public static final String TYPE_ROOM = "room";
 
     private static final String TAG = "EnumRepository";

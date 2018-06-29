@@ -43,16 +43,18 @@ public class ButtonViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setImageRessource(String role){
-        switch (role){
-            case State.ROLE_BUTTON:
-                mIcon.setImageResource(R.drawable.checkbox_blank_circle);
-                break;
-            case State.ROLE_BUTTON_START:
-                mIcon.setImageResource(R.drawable.play);
-                break;
-            case State.ROLE_BUTTON_STOP:
-                mIcon.setImageResource(R.drawable.stop);
-                break;
+        if(role != null) {
+            switch (role) {
+                case State.ROLE_BUTTON:
+                    mIcon.setImageResource(R.drawable.checkbox_blank_circle);
+                    break;
+                case State.ROLE_BUTTON_START:
+                    mIcon.setImageResource(R.drawable.play);
+                    break;
+                case State.ROLE_BUTTON_STOP:
+                    mIcon.setImageResource(R.drawable.stop);
+                    break;
+            }
         }
     }
 }

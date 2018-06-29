@@ -46,13 +46,15 @@ public class SwitchViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setImageRessource(String role){
-        switch (role){
-            case State.ROLE_SWITCH:
-                mIcon.setImageResource(R.drawable.toggle_switch);
-                break;
-            case State.ROLE_SWITCH_LIGHT:
-                mIcon.setImageResource(R.drawable.lightbulb);
-                break;
+        if(role != null) {
+            switch (role) {
+                case State.ROLE_SWITCH:
+                    mIcon.setImageResource(R.drawable.toggle_switch);
+                    break;
+                case State.ROLE_SWITCH_LIGHT:
+                    mIcon.setImageResource(R.drawable.lightbulb);
+                    break;
+            }
         }
     }
 }

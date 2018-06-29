@@ -35,13 +35,15 @@ public class ValueViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setImageRessource(String role){
-        switch (role){
-            case State.ROLE_VALUE_TEMPERATURE:
-                mIcon.setImageResource(R.drawable.thermometer);
-                break;
-            default:
-                mIcon.setImageResource(R.drawable.circle);
-                break;
+        if(role != null) {
+            switch (role) {
+                case State.ROLE_VALUE_TEMPERATURE:
+                    mIcon.setImageResource(R.drawable.thermometer);
+                    break;
+                default:
+                    mIcon.setImageResource(R.drawable.circle);
+                    break;
+            }
         }
     }
 }

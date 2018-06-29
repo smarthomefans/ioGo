@@ -131,15 +131,16 @@ public class CommonViewHolder extends RecyclerView.ViewHolder implements Adapter
     }
 
     private void setImageRessource(String role){
-        switch (role){
-            case State.ROLE_TEXT:
-                mIcon.setImageResource(R.drawable.text);
-                break;
-            default:
-                mIcon.setImageResource(R.drawable.circle);
-                break;
+        if(role != null) {
+            switch (role) {
+                case State.ROLE_TEXT:
+                    mIcon.setImageResource(R.drawable.text);
+                    break;
+                default:
+                    mIcon.setImageResource(R.drawable.circle);
+                    break;
+            }
         }
-
     }
 
     @Override
