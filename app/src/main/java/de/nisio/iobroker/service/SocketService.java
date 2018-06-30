@@ -92,8 +92,6 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             String socketUrl = "https://iobroker.pro/?key=nokey" + "&user=" + username + "&pass=" + password;
             if(cookie != null) {
                 createSocket(socketUrl);
-           // }else{
-           //     Toast.makeText(this,"Connection error", Toast.LENGTH_LONG).show();
             }
         }
     }

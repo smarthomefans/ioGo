@@ -64,7 +64,7 @@ public class NetworkUtils {
 
         try {
             return IO.socket(url, opts);
-        } catch (URISyntaxException e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
 
