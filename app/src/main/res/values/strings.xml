@@ -19,4 +19,5 @@
     <string name="info_count_rooms">Number of rooms:</string>
     <string name="info_socket_status">Socket Status:</string>
     <string name="enum_mark_favorite">Mark as favorite</string>
+    <string name="syncing_data">syncing data...</string>
 </resources>

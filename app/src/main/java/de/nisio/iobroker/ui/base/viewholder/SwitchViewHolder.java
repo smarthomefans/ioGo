@@ -37,7 +37,7 @@ public class SwitchViewHolder extends RecyclerView.ViewHolder {
             mValue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
-                    mSubtitle.setText("syncing data...");
+                    mSubtitle.setText(R.string.syncing_data);
                     DataBus.getBus().post(new Events.SetState(state.getId(), (isChecked) ? "true" : "false"));
                 }
             });

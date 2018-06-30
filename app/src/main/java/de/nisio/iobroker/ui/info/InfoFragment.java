@@ -63,7 +63,9 @@ public class InfoFragment extends Fragment implements Injectable {
             @Override
             public void onChanged(@Nullable Integer value) {
                 // update UI
-                mCountRooms.setText(value.toString());
+                if(value != null) {
+                    mCountRooms.setText(value.toString());
+                }
             }
         });
 
@@ -71,7 +73,9 @@ public class InfoFragment extends Fragment implements Injectable {
             @Override
             public void onChanged(@Nullable Integer value) {
                 // update UI
-                mCountFunctions.setText(value.toString());
+                if(value != null) {
+                    mCountFunctions.setText(value.toString());
+                }
             }
         });
 
@@ -79,7 +83,9 @@ public class InfoFragment extends Fragment implements Injectable {
             @Override
             public void onChanged(@Nullable Integer value) {
                 // update UI
-                mCountStates.setText(value.toString());
+                if(value != null) {
+                    mCountStates.setText(value.toString());
+                }
             }
         });
 
@@ -87,7 +93,9 @@ public class InfoFragment extends Fragment implements Injectable {
             @Override
             public void onChanged(@Nullable String value) {
                 // update UI
-                mSocketState.setText(value);
+                if(value != null) {
+                    mSocketState.setText(value);
+                }
             }
         });
 

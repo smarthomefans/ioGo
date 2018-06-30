@@ -86,7 +86,9 @@ public class EnumDetailFragment extends Fragment implements Injectable {
             @Override
             public void onChanged(@Nullable Enum anEnum) {
                 // update UI
-                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(anEnum.getName());
+                if(anEnum != null) {
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(anEnum.getName());
+                }
             }
         });
 

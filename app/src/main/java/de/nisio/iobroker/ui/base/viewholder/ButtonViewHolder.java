@@ -34,7 +34,7 @@ public class ButtonViewHolder extends RecyclerView.ViewHolder {
         mValue.setOnClickListener(new CompoundButton.OnClickListener() {
                                       @Override
                                       public void onClick(View v) {
-                                          mSubtitle.setText("syncing data...");
+                                          mSubtitle.setText(R.string.syncing_data);
                                           DataBus.getBus().post(new Events.SetState(state.getId(), "true"));
                                       }
                                   }
