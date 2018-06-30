@@ -35,9 +35,7 @@ public class EnumListActivity extends BaseActivity {
 
     public static final String ARG_ENUM_TYPE = "enum_type";
 
-    private EnumViewModel mViewModel;
     private EnumListAdapter mAdapter;
-    private String enumType;
 
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
@@ -57,7 +55,7 @@ public class EnumListActivity extends BaseActivity {
         setContentView(R.layout.activity_enum_list);
         ButterKnife.bind(this);
 
-        enumType = getIntent().getStringExtra(ARG_ENUM_TYPE);
+        String enumType = getIntent().getStringExtra(ARG_ENUM_TYPE);
         if(EnumRepository.TYPE_FUNCTION.equals(enumType)) {
             toolbar.setTitle(R.string.title_activity_function_list);
         }else if(EnumRepository.TYPE_ROOM.equals(enumType)) {
@@ -68,7 +66,7 @@ public class EnumListActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
+        EnumViewModel mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
 
         mAdapter = new EnumListAdapter(list);
         recyclerView.setAdapter(mAdapter);
