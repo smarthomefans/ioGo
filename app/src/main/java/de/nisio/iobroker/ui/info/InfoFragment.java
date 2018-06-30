@@ -4,6 +4,8 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -42,6 +44,9 @@ public class InfoFragment extends Fragment implements Injectable {
 
     @BindView(R.id.socketState)
     TextView mSocketState;
+
+    @BindView(R.id.appVersion)
+    TextView mAppVersion;
 
     private InfoViewModel mViewModel;
 
@@ -98,6 +103,14 @@ public class InfoFragment extends Fragment implements Injectable {
                 }
             }
         });
+
+        try {
+            PackageInfo packageInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+            mAppVersion.setText(packageInfo.versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
         return rootView;
     }
