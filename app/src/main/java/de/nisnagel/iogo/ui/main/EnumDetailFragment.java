@@ -28,7 +28,6 @@ import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.di.Injectable;
-import de.nisnagel.iogo.ui.base.BaseDetailAdapter;
 
 /**
  * A fragment representing a single Room detail screen.
@@ -42,7 +41,7 @@ public class EnumDetailFragment extends Fragment implements Injectable {
 
     @BindView(R.id.enum_detail_list) RecyclerView mRecyclerView;
 
-    private BaseDetailAdapter mAdapter;
+    private EnumDetailAdapter mAdapter;
 
     private LiveData<Enum> mRoom;
     private List<State> mListStates = new ArrayList<>();
@@ -72,7 +71,7 @@ public class EnumDetailFragment extends Fragment implements Injectable {
 
             @Override
             public void run() {
-                mAdapter = new BaseDetailAdapter(mListStates);
+                mAdapter = new EnumDetailAdapter(mListStates);
                 mRecyclerView.setAdapter(mAdapter);
                 RecyclerView.LayoutManager layoutManager =
                         new LinearLayoutManager(getContext());
@@ -97,7 +96,7 @@ public class EnumDetailFragment extends Fragment implements Injectable {
                     @Override
                     public void onChanged(@Nullable List<State> newList) {
                         // update UI
-                        mAdapter = new BaseDetailAdapter(newList);
+                        mAdapter = new EnumDetailAdapter(newList);
                         mRecyclerView.setAdapter(mAdapter);
                     }
                 });

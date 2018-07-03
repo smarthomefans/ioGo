@@ -36,8 +36,11 @@ public class IndicatorViewHolder extends RecyclerView.ViewHolder {
     private void setImageRessource(String role){
         if(role != null) {
             switch (role) {
-                case State.ROLE_SENSOR_DOOR:
-                    mIcon.setImageResource(R.drawable.door);
+                case State.ROLE_INDICATOR_CONNECTED:
+                    mIcon.setImageResource(R.drawable.lan_connect);
+                    break;
+                case State.ROLE_INDICATOR_LOWBAT:
+                    mIcon.setImageResource(R.drawable.battery_10);
                     break;
             }
         }

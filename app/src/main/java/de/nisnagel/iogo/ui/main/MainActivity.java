@@ -13,6 +13,7 @@ import android.view.Menu;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +56,7 @@ public class MainActivity extends BaseActivity {
 
         toolbar.setTitleMarginStart(120);
         setSupportActionBar(toolbar);
-        toolbar.setLogo(R.drawable.home);
+        toolbar.setLogo(R.drawable.ic_icon);
 
         DataBus.getBus().register(this);
 
@@ -75,6 +76,9 @@ public class MainActivity extends BaseActivity {
                         recyclerView.setAdapter(mAdapter);
                     }
                 });
+
+        // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
+        MobileAds.initialize(this, "ca-app-pub-9046643317542583~2243544255");
 
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("33BE2250B43518CCDA7DE426D04EE231").build();
         mAdView.loadAd(adRequest);

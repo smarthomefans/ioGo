@@ -1,4 +1,4 @@
-package de.nisnagel.iogo.ui.base;
+package de.nisnagel.iogo.ui.main;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,7 +19,7 @@ import de.nisnagel.iogo.ui.base.viewholder.SwitchViewHolder;
 import de.nisnagel.iogo.ui.base.viewholder.ValueViewHolder;
 
 
-public class BaseDetailAdapter
+public class EnumDetailAdapter
         extends RecyclerView.Adapter {
 
     private final List<State> mValues;
@@ -33,7 +33,7 @@ public class BaseDetailAdapter
     private final int C_SWITCH = 6;         //boolean read-write
     private final int C_COMMON = 99;        //string
 
-    public BaseDetailAdapter(List<State> stateList) {
+    public EnumDetailAdapter(List<State> stateList) {
         mValues = stateList;
         DataBus.getBus().register(this);
     }

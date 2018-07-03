@@ -50,6 +50,8 @@ public class State {
     public static final String ROLE_VALUE_BLIND = "value.blind";
 
     //Indicator
+    public static final String ROLE_INDICATOR_LOWBAT = "indicator.lowbat";
+    public static final String ROLE_INDICATOR_CONNECTED = "indicator.connected";
 
     //Level
 

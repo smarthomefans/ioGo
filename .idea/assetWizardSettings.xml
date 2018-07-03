@@ -23,6 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
+                                                <entry key="scalingPercent" value="72" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -34,8 +35,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="ffffff" />
-                                      <entry key="foregroundImage" value="C:\dev\logo.png" />
+                                      <entry key="backgroundColor" value="3398cc" />
+                                      <entry key="foregroundImage" value="C:\dev\icon.png" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -76,9 +77,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_logo" />
-                            <entry key="sourceFile" value="C:\dev\git\knx-uf-iconset-master\raw_svg\scene_garden.svg" />
+                            <entry key="outputName" value="ic_icon" />
+                            <entry key="sourceFile" value="C:\dev\icon.svg" />
                           </map>
                         </option>
                       </PersistentState>
