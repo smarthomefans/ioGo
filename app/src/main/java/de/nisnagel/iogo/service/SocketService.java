@@ -144,7 +144,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                     List<String> stateIds = stateRepository.getAllStateIds();
                     JSONArray json = new JSONArray(stateIds);
                     mSocket.emit("subscribe", json);
-
+                    syncStates();
                 }
             });
             stateRepository.saveSocketState("connected");
@@ -200,6 +200,28 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     public void setState(final Events.SetState event) {
         if(isConnected()) {
             mSocket.emit("setState", event.getId(), event.getVal());
+        }
+    }
+
+    public void syncStates(){
+        if(isConnected()) {
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    JSONArray json = new JSONArray();
+                    List<String> stateIds = stateRepository.getAllStateIds();
+                    for(int i = 0; i<stateIds.size();i++){
+                        json.put(stateIds.get(i));
+                    }
+                    mSocket.emit("getStates", json, new Ack() {
+                        @Override
+                        public void call(Object... args) {
+                            Log.i(TAG,"syncStates: receiving states");
+                            stateRepository.saveStateChanges(args[1].toString());
+                        }
+                    });
+                }
+            });
         }
     }
 
