@@ -50,7 +50,7 @@ public class CommonViewHolder extends RecyclerView.ViewHolder implements Adapter
         mTitle.setText(state.getName());
         mSubtitle.setText(state.getRole());
 
-        if(state.getStates() != null){
+        if(state.getStates() != null && state.getWrite()){
             bindSpinner(state);
         }else{
             bindText(state);
@@ -83,7 +83,11 @@ public class CommonViewHolder extends RecyclerView.ViewHolder implements Adapter
 
     private void bindText(State state){
         mText.setVisibility(View.VISIBLE);
-        mText.setText(state.getVal());
+        if(state.getStates() != null) {
+            mText.setText(state.getStates().get(state.getVal()));
+        }else{
+            mText.setText(state.getVal());
+        }
         if(state.getWrite()) {
             mText.setClickable(true);
             mText.setOnClickListener(new View.OnClickListener() {

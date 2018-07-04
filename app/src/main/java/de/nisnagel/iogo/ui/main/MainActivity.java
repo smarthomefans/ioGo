@@ -56,7 +56,7 @@ public class MainActivity extends BaseActivity {
 
         toolbar.setTitleMarginStart(120);
         setSupportActionBar(toolbar);
-        toolbar.setLogo(R.drawable.ic_icon);
+        toolbar.setLogo(R.drawable.home);
 
         DataBus.getBus().register(this);
 
