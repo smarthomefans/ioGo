@@ -1,4 +1,4 @@
-package com.example.nagel.io1;
+package com.example.nagel.iogo;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.nagel.io1", appContext.getPackageName());
+        assertEquals("de.nisnagel.iogo", appContext.getPackageName());
     }
 }
