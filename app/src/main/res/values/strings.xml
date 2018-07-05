@@ -10,8 +10,6 @@
     <string name="main_title">YOUR FAVORITES</string>
     <string name="main_room_button">rooms</string>
     <string name="main_function_button">functions</string>
-    <string name="banner_ad_unit_id">ca-app-pub-9046643317542583/5033359122</string>
-    <string name="banner_ad_unit_id_test">ca-app-pub-3940256099942544/6300978111</string>
     <string name="info_sync_objects">sync objects</string>
     <string name="info_clear_database">clear database</string>
     <string name="info_count_states">Number of states:</string>
@@ -21,4 +19,6 @@
     <string name="info_app_version">App Version:</string>
     <string name="enum_mark_favorite">Mark as favorite</string>
     <string name="syncing_data">syncing data...</string>
+    <string name="banner_ad_unit_id">ca-app-pub-9046643317542583/5033359122</string>
+    <string name="ad_unit_id">ca-app-pub-9046643317542583~2243544255</string>
 </resources>

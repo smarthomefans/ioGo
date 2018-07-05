@@ -78,9 +78,9 @@ public class MainActivity extends BaseActivity {
                 });
 
         // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
-        MobileAds.initialize(this, "ca-app-pub-9046643317542583~2243544255");
+        MobileAds.initialize(this, getString(R.string.ad_unit_id));
 
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice("33BE2250B43518CCDA7DE426D04EE231").build();
+        AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
     }
 
