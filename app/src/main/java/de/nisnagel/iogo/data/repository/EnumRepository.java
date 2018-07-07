@@ -1,8 +1,10 @@
 package de.nisnagel.iogo.data.repository;
 
 import android.arch.lifecycle.LiveData;
+import android.os.Bundle;
 import android.util.Log;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -21,6 +23,7 @@ import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.EnumDao;
 import de.nisnagel.iogo.data.model.EnumState;
 import de.nisnagel.iogo.data.model.EnumStateDao;
+import timber.log.Timber;
 
 @Singleton
 public class EnumRepository {
@@ -28,9 +31,7 @@ public class EnumRepository {
     public static final String TYPE_FUNCTION = "function";
     public static final String TYPE_ROOM = "room";
 
-    private static final String TAG = "EnumRepository";
     private Map<String, LiveData<Enum>> enumCache;
-    private LiveData<List<Enum>> mListEnums;
     private LiveData<List<Enum>> mListFunctionEnums;
     private LiveData<List<Enum>> mListRoomEnums;
     private LiveData<List<Enum>> mListFavoriteEnums;
@@ -47,16 +48,9 @@ public class EnumRepository {
     public LiveData<Enum> getEnum(String enumId) {
         if (!enumCache.containsKey(enumId)) {
             enumCache.put(enumId, enumDao.getEnumById(enumId));
-            Log.d(TAG, "getEnum enumCache.put enumId:" + enumId);
+            Timber.d("getEnum enumCache.put enumId:" + enumId);
         }
         return enumCache.get(enumId);
-    }
-
-    public LiveData<List<Enum>> getAllEnums() {
-        if(mListEnums == null){
-            mListEnums = enumDao.getAllEnums();
-        }
-        return mListEnums;
     }
 
     public LiveData<List<Enum>> getFunctionEnums() {
@@ -121,13 +115,13 @@ public class EnumRepository {
                     enumStateDao.insert(enumState);
                 }
 
-                Log.d(TAG, "saveObjects getId:" + ioValue.getId());
+                Timber.d("saveObjects getId:" + ioValue.getId());
             }
         }catch(Throwable e){
-            e.printStackTrace();
+            Timber.e(e);
         }
 
-        Log.i(TAG, "saveObjects finished");
+        Timber.i("saveObjects finished");
     }
 
     public void saveEnum(Enum anEnum) {

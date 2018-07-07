@@ -14,6 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
+import java.util.Objects;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -49,11 +53,13 @@ public class InfoFragment extends Fragment implements Injectable {
     TextView mAppVersion;
 
     private InfoViewModel mViewModel;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(InfoViewModel.class);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(Objects.requireNonNull(getActivity()));
     }
 
     @Override
@@ -118,11 +124,13 @@ public class InfoFragment extends Fragment implements Injectable {
     @OnClick(R.id.syncObjects)
     public void onClickSyncObjects(){
         DataBus.getBus().post(new Events.SyncObjects());
+        mFirebaseAnalytics.logEvent("sync_ojects", null);
     }
 
     @OnClick(R.id.clearDatabase)
     public void onClickClearDatabase(){
         mViewModel.clearDatabase();
+        mFirebaseAnalytics.logEvent("clear_database", null);
     }
 
     @Override

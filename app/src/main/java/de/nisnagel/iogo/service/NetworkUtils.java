@@ -16,6 +16,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import timber.log.Timber;
 
 public class NetworkUtils {
 
@@ -24,6 +25,7 @@ public class NetworkUtils {
                 .add("username", username)
                 .add("password", password)
                 .build();
+        Timber.d("requestBody build");
 
         Request request = new Request.Builder()
                 .url("https://iobroker.pro/login?app=true")
@@ -33,17 +35,20 @@ public class NetworkUtils {
                 .addHeader("Host", "iobroker.pro")
                 .addHeader("Origin", "https://iobroker.pro")
                 .build();
+        Timber.d("request build");
+
         Response response = null;
         OkHttpClient client = new OkHttpClient();
 
         try {
             response = client.newCall(request).execute();
         } catch (IOException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
-        if(response != null) {
+        if (response != null) {
             return response.headers().get("Set-Cookie");
-        }else{
+        } else {
+            Timber.e("no response");
             return null;
         }
 
@@ -65,7 +70,7 @@ public class NetworkUtils {
         try {
             return IO.socket(url, opts);
         } catch (Throwable e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
 
         return null;

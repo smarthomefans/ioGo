@@ -11,6 +11,10 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 import dagger.android.HasServiceInjector;
 import de.nisnagel.iogo.di.component.DaggerAppComponent;
+import de.nisnagel.iogo.service.TimberDebugTree;
+import de.nisnagel.iogo.service.TimberFileTree;
+import de.nisnagel.iogo.service.TimberReleaseTree;
+import timber.log.Timber;
 
 public class App extends Application implements HasActivityInjector, HasServiceInjector {
 
@@ -29,7 +33,14 @@ public class App extends Application implements HasActivityInjector, HasServiceI
                 .build()
                 .inject(this);
 
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new TimberDebugTree());
+        } else {
+            Timber.plant(new TimberFileTree());
+        }
     }
+
 
     @Override
     public AndroidInjector<Activity> activityInjector() {

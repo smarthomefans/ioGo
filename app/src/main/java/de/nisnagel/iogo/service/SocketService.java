@@ -4,11 +4,13 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
@@ -32,9 +34,9 @@ import io.socket.client.Manager;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import io.socket.engineio.client.Transport;
+import timber.log.Timber;
 
 public class SocketService extends Service implements SharedPreferences.OnSharedPreferenceChangeListener{
-    final private String TAG = "SocketService";
 
     private Socket mSocket;
     private String cookie;
@@ -48,7 +50,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     public StateRepository stateRepository;
 
     public SocketService() {
-        Log.i(TAG, "instance created");
+        Timber.i("instance created");
     }
 
     @Override
@@ -62,7 +64,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
         stateRepository.saveSocketState("unknown");
 
-        Log.i(TAG, "onCreate finished");
+        Timber.i("onCreate finished");
     }
 
     private void init(){
@@ -75,6 +77,8 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             String url = sharedPref.getString("mobile_socket_url", null);
             if(url != null && NetworkUtils.isValidUrl(url)) {
                 createSocket(url);
+            }else{
+                Timber.e("url invalid or empty");
             }
         }
     }
@@ -87,11 +91,13 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 username = URLEncoder.encode(username, "UTF-8");
                 password = URLEncoder.encode(password, "UTF-8");
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                Timber.e(e);
             }
             String socketUrl = "https://iobroker.pro/?key=nokey" + "&user=" + username + "&pass=" + password;
             if(cookie != null) {
                 createSocket(socketUrl);
+            }else{
+                Timber.e("cookie missing");
             }
         }
     }
@@ -119,7 +125,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             new NetworkAsync().execute();
             Toast.makeText(this, "service started", Toast.LENGTH_SHORT).show();
         }
-        Log.i(TAG, "onStartCommand");
+        Timber.i("onStartCommand");
         return Service.START_STICKY;
     }
 
@@ -131,7 +137,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }
         DataBus.getBus().unregister(this);
 
-        Log.i(TAG, "onDestroy finished");
+        Timber.i("onDestroy finished");
     }
 
     private Emitter.Listener onConnect = new Emitter.Listener() {
@@ -148,7 +154,8 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 }
             });
             stateRepository.saveSocketState("connected");
-            Log.i(TAG, "connected");
+
+            Timber.i("connected");
         }
     };
 
@@ -156,14 +163,14 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         @Override
         public void call(Object... args) {
             stateRepository.saveSocketState("offline");
-            Log.i(TAG, "disconnected");
+            Timber.i("disconnected");
         }
     };
 
     private Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.i(TAG, "connect error");
+            Timber.i("connect error");
         }
     };
 
@@ -190,7 +197,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 if(args[1] != null) {
                     stateRepository.saveStateChange(args[0].toString(), args[1].toString());
                 }else{
-                    Log.w(TAG,"onStateChange: state deleted: "+args[0].toString());
+                    Timber.w("onStateChange: state deleted: "+args[0].toString());
                 }
             }
         }
@@ -203,7 +210,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }
     }
 
-    public void syncStates(){
+    private void syncStates(){
         if(isConnected()) {
             AsyncTask.execute(new Runnable() {
                 @Override
@@ -216,7 +223,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                     mSocket.emit("getStates", json, new Ack() {
                         @Override
                         public void call(Object... args) {
-                            Log.i(TAG,"syncStates: receiving states");
+                            Timber.i("syncStates: receiving states");
                             stateRepository.saveStateChanges(args[1].toString());
                         }
                     });
@@ -254,25 +261,25 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             mSocket.emit("getHistory", "javascript.0.flur.temperature", json, new Ack() {
                 @Override
                 public void call(Object... args) {
-                    Log.i(TAG,"loadHistory: receiving historical data");
+                    Timber.i("loadHistory: receiving historical data");
                 }
             });
         }
     }
 
-    public void getEnumRooms(){
+    private void getEnumRooms(){
         if(isConnected()) {
             JSONObject json = new JSONObject();
             try {
                 json.put("startkey", "enum.rooms.");
                 json.put("endkey", "enum.rooms.\u9999");
             } catch (JSONException e) {
-                e.printStackTrace();
+                Timber.e(e);
             }
             mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
                 @Override
                 public void call(Object... args) {
-                    Log.i(TAG,"getEnumRooms: receiving objects");
+                    Timber.i("getEnumRooms: receiving objects");
                     enumRepository.saveRoomObjects(args[1].toString());
                     getEnumFunctions();
                 }
@@ -280,19 +287,19 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }
     }
 
-    public void getEnumFunctions(){
+    private void getEnumFunctions(){
         if(isConnected()) {
             JSONObject json = new JSONObject();
             try {
                 json.put("startkey", "enum.functions.");
                 json.put("endkey", "enum.functions.\u9999");
             } catch (JSONException e) {
-                e.printStackTrace();
+                Timber.e(e);
             }
             mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
                 @Override
                 public void call(Object... args) {
-                    Log.i(TAG,"getEnumFunctions: receiving objects");
+                    Timber.i("getEnumFunctions: receiving objects");
                     enumRepository.saveFunctionObjects(args[1].toString());
                     getStates();
                 }
@@ -300,7 +307,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }
     }
 
-    public void getStates(){
+    private void getStates(){
         if(isConnected()) {
             AsyncTask.execute(new Runnable() {
                 @Override
@@ -313,7 +320,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                     mSocket.emit("getStates", json, new Ack() {
                         @Override
                         public void call(Object... args) {
-                            Log.i(TAG,"getStates: receiving states");
+                            Timber.i("getStates: receiving states");
                             stateRepository.saveStateChanges(args[1].toString());
                             getObjects();
                         }
@@ -323,12 +330,12 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }
     }
 
-    public void getObjects(){
+    private void getObjects(){
         if(isConnected()) {
             mSocket.emit("getObjects", null, new Ack() {
                 @Override
                 public void call(Object... args) {
-                    Log.i(TAG,"getObjects: receiving objects");
+                    Timber.i("getObjects: receiving objects");
                     stateRepository.saveObjects(args[1].toString());
                 }
             });
@@ -352,10 +359,8 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
     class NetworkAsync extends AsyncTask<Void, Integer, String>
     {
-        String TAG = getClass().getSimpleName();
-
         protected String doInBackground(Void...arg0) {
-            Log.d(TAG + " DoINBackGround","On doInBackground...");
+            Timber.d(" DoINBackGround","On doInBackground...");
             if(isConnected()){
                 mSocket.disconnect();
             }

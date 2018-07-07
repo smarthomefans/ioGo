@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -22,11 +23,10 @@ import de.nisnagel.iogo.data.io.IoObject;
 import de.nisnagel.iogo.data.io.IoState;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.model.StateDao;
+import timber.log.Timber;
 
 @Singleton
 public class StateRepository {
-    private static final String TAG = "StateRepository";
-    private Map<String,LiveData<State>> stateCache;
     private Map<String,LiveData<List<State>>> stateEnumCache;
     private MutableLiveData<String> connected;
 
@@ -37,13 +37,12 @@ public class StateRepository {
     public StateRepository(StateDao stateDao) {
         this.stateDao = stateDao;
 
-        stateCache = new HashMap<>();
         stateEnumCache = new HashMap<>();
         GsonBuilder gsonBuilder = new GsonBuilder();
         gson = gsonBuilder.create();
         connected = new MutableLiveData<>();
 
-        Log.i(TAG,"Constructor created");
+        Timber.i("Constructor created");
     }
 
     public List<String> getAllStateIds(){
@@ -76,24 +75,24 @@ public class StateRepository {
             Map<String,IoState> states = gson.fromJson(data, token.getType());
             for (Map.Entry<String, IoState> entry : states.entrySet())
             {
-                saveStateChange(entry.getKey(), entry.getValue());
+                changeState(entry.getKey(), entry.getValue());
             }
         }catch(Throwable e){
-            e.printStackTrace();
+            Timber.e(e);
         }
-        Log.i(TAG,"saveStates finished");
+        Timber.i("saveStates finished");
     }
 
     public void saveStateChange(String id, String data) {
         try{
             IoState ioState = gson.fromJson(data, IoState.class);
-            saveStateChange(id, ioState);
+            changeState(id, ioState);
         }catch(Throwable e){
-            e.printStackTrace();
+            Timber.e(e);
         }
     }
 
-    private void saveStateChange(String id, IoState ioState){
+    private void changeState(String id, IoState ioState){
         State state = stateDao.getStateById(id);
         if(state == null) {
             state = new State(id);
@@ -117,17 +116,17 @@ public class StateRepository {
                         state.update(ioObject);
                         stateDao.update(state);
                     }catch(Throwable e){
-                        e.printStackTrace();
+                        Timber.e(e);
                     }
                 }else{
                     stateDao.delete(state);
-                    Log.w(TAG,"saveObjects: Object not found: "+state.getId());
+                    Timber.w("saveObjects: Object not found: "+state.getId());
                 }
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
-        Log.i(TAG,"saveObjects finished");
+        Timber.i("saveObjects finished");
     }
 
     public void saveSocketState(String state){
