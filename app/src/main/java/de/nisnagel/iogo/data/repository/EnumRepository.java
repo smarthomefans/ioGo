@@ -43,63 +43,79 @@ public class EnumRepository {
         this.enumDao = enumDao;
         this.enumStateDao = enumStateDao;
         enumCache = new HashMap<>();
+        Timber.v("instance created");
     }
 
     public LiveData<Enum> getEnum(String enumId) {
+        Timber.v("getEnum called");
         if (!enumCache.containsKey(enumId)) {
             enumCache.put(enumId, enumDao.getEnumById(enumId));
-            Timber.d("getEnum enumCache.put enumId:" + enumId);
+            Timber.d("getEnum: load enum from database enumId:" + enumId);
         }
         return enumCache.get(enumId);
     }
 
     public LiveData<List<Enum>> getFunctionEnums() {
+        Timber.v("getFunctionEnums called");
         if(mListFunctionEnums == null){
             mListFunctionEnums = enumDao.getFunctionEnums();
+            Timber.d("getFunctionEnums: load function enums from database");
         }
         return mListFunctionEnums;
     }
 
     public LiveData<List<Enum>> getRoomEnums() {
+        Timber.v("getRoomEnums called");
         if(mListRoomEnums == null){
             mListRoomEnums = enumDao.getRoomEnums();
+            Timber.d("getFunctionEnums: load room enums from database");
         }
+        Timber.v("getRoomEnums");
         return mListRoomEnums;
     }
 
     public LiveData<List<Enum>> getFavoriteEnums() {
+        Timber.v("getFavoriteEnums called");
         if(mListFavoriteEnums == null){
             mListFavoriteEnums = enumDao.getFavoriteEnums();
+            Timber.d("getFunctionEnums: load favorite enums from database");
         }
         return mListFavoriteEnums;
     }
 
     public List<String> getAllStateIds(){
+        Timber.v("getAllStateIds called");
         return enumStateDao.getAllStateIds();
     }
 
     public LiveData<Integer> countFunctions(){
+        Timber.v("countFunctions called");
         return enumDao.countFunctionEnums();
     }
 
     public LiveData<Integer> countRooms(){
+        Timber.v("countRooms called");
         return enumDao.countRoomEnums();
     }
 
     public void deleteAll(){
+        Timber.v("deleteAll called");
         enumDao.deleteAll();
         enumStateDao.deleteAll();
     }
 
     public void saveFunctionObjects(String data){
+        Timber.v("saveFunctionObjects called");
         saveObjects(data, TYPE_FUNCTION);
     }
 
     public void saveRoomObjects(String data){
+        Timber.v("saveRoomObjects called");
         saveObjects(data, TYPE_ROOM);
     }
 
     private void saveObjects(String data, String type) {
+        Timber.v("saveObjects called");
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
 
@@ -110,21 +126,27 @@ public class EnumRepository {
                 IoCommon ioCommon = ioValue.getCommon();
                 Enum anEnum = new Enum(ioValue.getId(), ioCommon.getName(), type, "false");
                 enumDao.insert(anEnum);
-                for (int j = 0; j < ioCommon.getMembers().size(); j++) {
-                    EnumState enumState = new EnumState(anEnum.getId(), ioCommon.getMembers().get(j));
-                    enumStateDao.insert(enumState);
+                Timber.d("saveObjects: enum inserted enumId:" + anEnum.getId());
+                if(ioCommon.getMembers() != null ) {
+                    for (int j = 0; j < ioCommon.getMembers().size(); j++) {
+                        EnumState enumState = new EnumState(anEnum.getId(), ioCommon.getMembers().get(j));
+                        enumStateDao.insert(enumState);
+                        Timber.d("saveObjects: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
+                    }
+                }else{
+                    Timber.i("saveObjects: no members found for enumId:" + anEnum.getId());
                 }
-
-                Timber.d("saveObjects getId:" + ioValue.getId());
+                Timber.d("saveObjects: enum saved enumId:" + anEnum.getId());
             }
         }catch(Throwable e){
             Timber.e(e);
         }
 
-        Timber.i("saveObjects finished");
+        Timber.v("saveObjects finished");
     }
 
     public void saveEnum(Enum anEnum) {
+        Timber.v("saveEnum called");
         enumDao.update(anEnum);
     }
 }

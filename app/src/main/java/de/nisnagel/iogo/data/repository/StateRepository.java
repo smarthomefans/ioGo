@@ -42,34 +42,40 @@ public class StateRepository {
         gson = gsonBuilder.create();
         connected = new MutableLiveData<>();
 
-        Timber.i("Constructor created");
+        Timber.v("instance created");
     }
 
     public List<String> getAllStateIds(){
+        Timber.v("getAllStateIds called");
         return stateDao.getAllStateIds();
     }
 
     public LiveData<List<State>> getStatesByEnum(String enumId){
+        Timber.v("getStatesByEnum called");
         if(!stateEnumCache.containsKey(enumId)){
-            LiveData<List<State>> stateList = stateDao.getStatesByEnum(enumId);
-            stateEnumCache.put(enumId, stateList);
+            stateEnumCache.put(enumId, stateDao.getStatesByEnum(enumId));
+            Timber.d("getStatesByEnum: load states from database enumId:" + enumId);
         }
         return stateEnumCache.get(enumId);
     }
 
     public LiveData<Integer> countStates(){
+        Timber.v("countStates called");
         return stateDao.countStates();
     }
 
     public LiveData<String> getSocketState(){
+        Timber.v("getSocketState called");
         return connected;
     }
 
     public void deleteAll(){
+        Timber.v("deleteAll called");
         stateDao.deleteAll();
     }
 
     public void saveStateChanges(String data) {
+        Timber.v("saveStateChanges called");
         try{
             TypeToken<Map<String,IoState>> token = new TypeToken<Map<String,IoState>>() {};
             Map<String,IoState> states = gson.fromJson(data, token.getType());
@@ -80,10 +86,11 @@ public class StateRepository {
         }catch(Throwable e){
             Timber.e(e);
         }
-        Timber.i("saveStates finished");
+        Timber.v("saveStates finished");
     }
 
     public void saveStateChange(String id, String data) {
+        Timber.v("saveStateChange called");
         try{
             IoState ioState = gson.fromJson(data, IoState.class);
             changeState(id, ioState);
@@ -93,18 +100,22 @@ public class StateRepository {
     }
 
     private void changeState(String id, IoState ioState){
+        Timber.v("changeState called");
         State state = stateDao.getStateById(id);
         if(state == null) {
             state = new State(id);
             state.update(ioState);
             stateDao.insert(state);
+            Timber.d("changeState: state inserted stateId:" + state.getId());
         }else {
             state.update(ioState);
             stateDao.update(state);
+            Timber.d("changeState: state updated stateId:" + state.getId());
         }
     }
 
     public void saveObjects(String data){
+        Timber.v("saveObjects called");
         try {
             JSONObject obj = new JSONObject(data);
             List<State> states = stateDao.getAllStates();
@@ -115,21 +126,23 @@ public class StateRepository {
                         IoObject ioObject = gson.fromJson(json.toString(), IoObject.class);
                         state.update(ioObject);
                         stateDao.update(state);
+                        Timber.d("saveObjects: state updated from object stateId:"+state.getId());
                     }catch(Throwable e){
                         Timber.e(e);
                     }
                 }else{
                     stateDao.delete(state);
-                    Timber.w("saveObjects: Object not found: "+state.getId());
+                    Timber.w("saveObjects: object not found for stateId:"+state.getId());
                 }
             }
         } catch (JSONException e) {
             Timber.e(e);
         }
-        Timber.i("saveObjects finished");
+        Timber.v("saveObjects finished");
     }
 
     public void saveSocketState(String state){
+        Timber.v("saveSocketState called");
         connected.postValue(state);
     }
 }

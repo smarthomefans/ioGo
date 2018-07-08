@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="logging_level">
+        <item name="verbose">Verbose</item>
+        <item name="debug">Debug</item>
+        <item name="info">Info</item>
+        <item name="warn">Warn</item>
+        <item name="error">Error</item>
+    </string-array>
+
+    <string-array name="logging_levelValues">
+        <item name="verbose">2</item>
+        <item name="debug">3</item>
+        <item name="info">4</item>
+        <item name="warn">5</item>
+        <item name="error">6</item>
+    </string-array>
+
+</resources>

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="Mobile Connection">
 
         <EditTextPreference
+            android:enabled="false"
             android:key="mobile_socket_url"
             android:selectAllOnFocus="true"
             android:singleLine="true"
@@ -26,5 +28,19 @@
             android:key="pro_password"
             android:selectAllOnFocus="true"
             android:title="Password" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Expert">
+        <SwitchPreference
+            android:key="logging_enabled"
+            android:selectAllOnFocus="true"
+            android:title="Logging">
+        </SwitchPreference>
+        <ListPreference
+            android:key="logging_level"
+            android:title="Logging Level"
+            android:defaultValue="6"
+            android:entries="@array/logging_level"
+            android:entryValues="@array/logging_levelValues"
+            />
     </PreferenceCategory>
 </PreferenceScreen>

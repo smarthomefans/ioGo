@@ -50,11 +50,12 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     public StateRepository stateRepository;
 
     public SocketService() {
-        Timber.i("instance created");
+        Timber.v("instance created");
     }
 
     @Override
     public void onCreate() {
+        Timber.v(" onCreate called");
         AndroidInjection.inject(this);
         super.onCreate();
 
@@ -63,11 +64,10 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         DataBus.getBus().register(this);
 
         stateRepository.saveSocketState("unknown");
-
-        Timber.i("onCreate finished");
     }
 
     private void init(){
+        Timber.v(" init called");
         Boolean isProEnabled = sharedPref.getBoolean("pro_cloud_enabled",false);
         if(isProEnabled) {
             String username = sharedPref.getString("pro_username", null);
@@ -84,6 +84,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     }
 
     private void init_pro(String username, String password){
+        Timber.v(" init_pro called");
         if(username != null && password != null) {
             cookie = NetworkUtils.getProCookie(username, password);
 
@@ -103,6 +104,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     }
 
     private void createSocket(String url) {
+        Timber.v(" createSocket called");
         mSocket = NetworkUtils.getSocket(url);
 
         if(mSocket != null) {
@@ -120,24 +122,22 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
+        Timber.v(" onStartCommand called");
         if(!isConnected()) {
             new NetworkAsync().execute();
             Toast.makeText(this, "service started", Toast.LENGTH_SHORT).show();
         }
-        Timber.i("onStartCommand");
         return Service.START_STICKY;
     }
 
     @Override
     public void onDestroy() {
+        Timber.v("onDestroy called");
         super.onDestroy();
         if(isConnected()) {
             mSocket.disconnect();
         }
         DataBus.getBus().unregister(this);
-
-        Timber.i("onDestroy finished");
     }
 
     private Emitter.Listener onConnect = new Emitter.Listener() {
@@ -170,7 +170,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     private Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Timber.i("connect error");
+            Timber.w("connect error");
         }
     };
 
@@ -193,11 +193,12 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     private Emitter.Listener onStateChange = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
+            Timber.v("onStateChange called");
             if(args[0] != null) {
                 if(args[1] != null) {
                     stateRepository.saveStateChange(args[0].toString(), args[1].toString());
                 }else{
-                    Timber.w("onStateChange: state deleted: "+args[0].toString());
+                    Timber.w("onStateChange: state deleted stateId:"+args[0].toString());
                 }
             }
         }
@@ -205,28 +206,35 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
     @Subscribe
     public void setState(final Events.SetState event) {
+        Timber.v("setState called");
         if(isConnected()) {
             mSocket.emit("setState", event.getId(), event.getVal());
         }
     }
 
     private void syncStates(){
+        Timber.v("setState called");
         if(isConnected()) {
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
                     JSONArray json = new JSONArray();
                     List<String> stateIds = stateRepository.getAllStateIds();
-                    for(int i = 0; i<stateIds.size();i++){
-                        json.put(stateIds.get(i));
-                    }
-                    mSocket.emit("getStates", json, new Ack() {
-                        @Override
-                        public void call(Object... args) {
-                            Timber.i("syncStates: receiving states");
-                            stateRepository.saveStateChanges(args[1].toString());
+                    if(stateIds != null && stateIds.size() > 0) {
+                        for (int i = 0; i < stateIds.size(); i++) {
+                            json.put(stateIds.get(i));
                         }
-                    });
+                        Timber.i("getStates: reuquesting "+stateIds.size()+" states from server");
+                        mSocket.emit("getStates", json, new Ack() {
+                            @Override
+                            public void call(Object... args) {
+                                Timber.i("syncStates: receiving states");
+                                stateRepository.saveStateChanges(args[1].toString());
+                            }
+                        });
+                    }else{
+                        Timber.w("getStates: no states found in database");
+                    }
                 }
             });
         }
@@ -234,6 +242,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
     @Subscribe
     public void syncObjects(final Events.SyncObjects event){
+        Timber.v("syncObjects called");
         if(isConnected()) {
             AsyncTask.execute(new Runnable() {
                 @Override
@@ -244,30 +253,8 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }
     }
 
-    @Subscribe
-    public void loadHistory(final Events.LoadHistory event){
-        if(isConnected()) {
-            JSONObject json = new JSONObject();
-            try {
-                //json.put("id", "javascript.0.flur.temperature");
-                //json.put("start", 1);//(System.currentTimeMillis() - 3600000));
-                //json.put("end", System.currentTimeMillis());
-                json.put("aggregate", "none");
-                //json.put("count", "100");
-                //json.put("timeout", "2000");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            mSocket.emit("getHistory", "javascript.0.flur.temperature", json, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    Timber.i("loadHistory: receiving historical data");
-                }
-            });
-        }
-    }
-
     private void getEnumRooms(){
+        Timber.v("getEnumRooms called");
         if(isConnected()) {
             JSONObject json = new JSONObject();
             try {
@@ -276,10 +263,11 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             } catch (JSONException e) {
                 Timber.e(e);
             }
+            Timber.i("getStates: reuquesting enum.rooms from server");
             mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
                 @Override
                 public void call(Object... args) {
-                    Timber.i("getEnumRooms: receiving objects");
+                    Timber.i("getEnumRooms: receiving enum.rooms");
                     enumRepository.saveRoomObjects(args[1].toString());
                     getEnumFunctions();
                 }
@@ -288,6 +276,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     }
 
     private void getEnumFunctions(){
+        Timber.v("getEnumFunctions called");
         if(isConnected()) {
             JSONObject json = new JSONObject();
             try {
@@ -296,10 +285,11 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             } catch (JSONException e) {
                 Timber.e(e);
             }
+            Timber.i("getStates: reuquesting enum.functions from server");
             mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
                 @Override
                 public void call(Object... args) {
-                    Timber.i("getEnumFunctions: receiving objects");
+                    Timber.i("getEnumFunctions: receiving enum.functions");
                     enumRepository.saveFunctionObjects(args[1].toString());
                     getStates();
                 }
@@ -308,34 +298,41 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     }
 
     private void getStates(){
+        Timber.v("getStates called");
         if(isConnected()) {
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
                     JSONArray json = new JSONArray();
                     List<String> stateIds = enumRepository.getAllStateIds();
-                    for(int i = 0; i<stateIds.size();i++){
-                        json.put(stateIds.get(i));
-                    }
-                    mSocket.emit("getStates", json, new Ack() {
-                        @Override
-                        public void call(Object... args) {
-                            Timber.i("getStates: receiving states");
-                            stateRepository.saveStateChanges(args[1].toString());
-                            getObjects();
+                    if(stateIds != null && stateIds.size() > 0) {
+                        for (int i = 0; i < stateIds.size(); i++) {
+                            json.put(stateIds.get(i));
                         }
-                    });
+                        Timber.i("getStates: reuquesting "+stateIds.size()+" states from server");
+                        mSocket.emit("getStates", json, new Ack() {
+                            @Override
+                            public void call(Object... args) {
+                                Timber.i("getStates: receiving states");
+                                stateRepository.saveStateChanges(args[1].toString());
+                                getObjects();
+                            }
+                        });
+                    }else{
+                        Timber.w("getStates: no states found in database");
+                    }
                 }
             });
         }
     }
 
     private void getObjects(){
+        Timber.v("getObjects called");
         if(isConnected()) {
+            Timber.i("getObjects: requesting all objects from server");
             mSocket.emit("getObjects", null, new Ack() {
                 @Override
                 public void call(Object... args) {
-                    Timber.i("getObjects: receiving objects");
                     stateRepository.saveObjects(args[1].toString());
                 }
             });
@@ -353,14 +350,17 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Toast.makeText(getApplicationContext(),"Settings changed", Toast.LENGTH_LONG).show();
-        new NetworkAsync().execute();
+        if (key.equals("mobile_socket_url") || key.equals("pro_cloud_enabled") || key.equals("pro_username") || key.equals("pro_password")) {
+            Toast.makeText(getApplicationContext(), "Settings changed", Toast.LENGTH_LONG).show();
+
+            new NetworkAsync().execute();
+        }
     }
 
     class NetworkAsync extends AsyncTask<Void, Integer, String>
     {
         protected String doInBackground(Void...arg0) {
-            Timber.d(" DoINBackGround","On doInBackground...");
+            Timber.v(" doInBackground called");
             if(isConnected()){
                 mSocket.disconnect();
             }

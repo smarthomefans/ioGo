@@ -21,11 +21,12 @@ import timber.log.Timber;
 public class NetworkUtils {
 
     public static String getProCookie(String username, String password) {
+        Timber.v("getProCookie called");
         RequestBody requestBody = new FormBody.Builder()
                 .add("username", username)
                 .add("password", password)
                 .build();
-        Timber.d("requestBody build");
+        Timber.d("getProCookie: requestBody build");
 
         Request request = new Request.Builder()
                 .url("https://iobroker.pro/login?app=true")
@@ -35,7 +36,7 @@ public class NetworkUtils {
                 .addHeader("Host", "iobroker.pro")
                 .addHeader("Origin", "https://iobroker.pro")
                 .build();
-        Timber.d("request build");
+        Timber.d("getProCookie: request build");
 
         Response response = null;
         OkHttpClient client = new OkHttpClient();
@@ -48,19 +49,21 @@ public class NetworkUtils {
         if (response != null) {
             return response.headers().get("Set-Cookie");
         } else {
-            Timber.e("no response");
+            Timber.e("getProCookie: no response cookie received");
             return null;
         }
 
     }
 
     public static boolean isValidUrl(String url) {
+        Timber.v("isValidUrl called");
         Pattern p = Patterns.WEB_URL;
         Matcher m = p.matcher(url.toLowerCase());
         return m.matches();
     }
 
     public static Socket getSocket(String url) {
+        Timber.v("getSocket called");
         IO.Options opts = new IO.Options();
         opts.upgrade = true;
         opts.reconnection = true;

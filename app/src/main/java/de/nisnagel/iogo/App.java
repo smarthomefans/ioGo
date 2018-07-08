@@ -3,6 +3,7 @@ package de.nisnagel.iogo;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Service;
+import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -37,7 +38,7 @@ public class App extends Application implements HasActivityInjector, HasServiceI
         if (BuildConfig.DEBUG) {
             Timber.plant(new TimberDebugTree());
         } else {
-            Timber.plant(new TimberFileTree());
+            Timber.plant(new TimberReleaseTree());
         }
     }
 

@@ -1,13 +1,11 @@
 package de.nisnagel.iogo.service;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+
+import com.crashlytics.android.Crashlytics;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -21,39 +19,46 @@ import timber.log.Timber;
 public class TimberFileTree extends Timber.DebugTree {
 
     private static final String LOG_TAG = TimberFileTree.class.getSimpleName();
+    private int priority;
 
-    public TimberFileTree() {
+    public TimberFileTree(int priority) {
+        this.priority = priority;
     }
 
     @Override
     protected void log(int priority, String tag, String message, Throwable t) {
-        try {
-            String path = "Log";
-            String fileNameTimeStamp = new SimpleDateFormat("dd-MM-yyyy",
-                    Locale.getDefault()).format(new Date());
-            String logTimeStamp = new SimpleDateFormat("E MMM dd yyyy 'at' hh:mm:ss:SSS aaa",
-                    Locale.getDefault()).format(new Date());
-            String fileName = fileNameTimeStamp + ".html";
+        if (priority == Log.ERROR)
+            Crashlytics.log(priority, tag, message);
 
-            // Create file
-            File file  = generateFile(path, fileName);
+        if (this.priority <= priority) {
+            try {
+                String path = "Log";
+                String fileNameTimeStamp = new SimpleDateFormat("dd-MM-yyyy",
+                        Locale.getDefault()).format(new Date());
+                String logTimeStamp = new SimpleDateFormat("E MMM dd yyyy 'at' hh:mm:ss:SSS aaa",
+                        Locale.getDefault()).format(new Date());
+                String fileName = fileNameTimeStamp + ".html";
 
-            // If file created or exists save logs
-            if (file != null) {
-                FileWriter writer = new FileWriter(file, true);
-                writer.append("<p style=\"background:lightgray;\"><strong "
-                        + "style=\"background:lightblue;\">&nbsp&nbsp")
-                        .append(logTimeStamp)
-                        .append(" :&nbsp&nbsp</strong><strong>&nbsp&nbsp")
-                        .append(tag)
-                        .append("</strong> - ")
-                        .append(message)
-                        .append("</p>");
-                writer.flush();
-                writer.close();
+                // Create file
+                File file = generateFile(path, fileName);
+
+                // If file created or exists save logs
+                if (file != null) {
+                    FileWriter writer = new FileWriter(file, true);
+                    writer.append("<p style=\"background:lightgray;\"><strong "
+                            + "style=\"background:lightblue;\">&nbsp&nbsp")
+                            .append(logTimeStamp)
+                            .append(" :&nbsp&nbsp</strong><strong>&nbsp&nbsp")
+                            .append(tag)
+                            .append("</strong> - ")
+                            .append(message)
+                            .append("</p>");
+                    writer.flush();
+                    writer.close();
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "Error while logging into file : " + e);
             }
-        } catch (Exception e) {
-            Log.e(LOG_TAG,"Error while logging into file : " + e);
         }
     }
 

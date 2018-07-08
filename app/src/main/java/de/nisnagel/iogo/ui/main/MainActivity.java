@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,7 +34,10 @@ import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.service.DataBus;
+import de.nisnagel.iogo.service.TimberFileTree;
+import de.nisnagel.iogo.service.TimberReleaseTree;
 import de.nisnagel.iogo.ui.base.BaseActivity;
+import timber.log.Timber;
 
 public class MainActivity extends BaseActivity {
 
