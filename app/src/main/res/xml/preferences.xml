@@ -5,7 +5,6 @@
     <PreferenceCategory android:title="Mobile Connection">
 
         <EditTextPreference
-            android:enabled="false"
             android:key="mobile_socket_url"
             android:selectAllOnFocus="true"
             android:singleLine="true"
