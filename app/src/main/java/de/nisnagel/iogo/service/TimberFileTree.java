@@ -32,12 +32,14 @@ public class TimberFileTree extends Timber.DebugTree {
 
         if (this.priority <= priority) {
             try {
-                String path = "Log";
-                String fileNameTimeStamp = new SimpleDateFormat("dd-MM-yyyy",
+                String path = "logs";
+                String fileNameTimeStamp = new SimpleDateFormat("yyyyMMdd",
                         Locale.getDefault()).format(new Date());
-                String logTimeStamp = new SimpleDateFormat("E MMM dd yyyy 'at' hh:mm:ss:SSS aaa",
+                String fileName = fileNameTimeStamp + ".log";
+                String logTimeStamp = new SimpleDateFormat("hh:mm:ss:SSS",
                         Locale.getDefault()).format(new Date());
-                String fileName = fileNameTimeStamp + ".html";
+                String logPriority = getLogPriority(priority);
+
 
                 // Create file
                 File file = generateFile(path, fileName);
@@ -45,20 +47,36 @@ public class TimberFileTree extends Timber.DebugTree {
                 // If file created or exists save logs
                 if (file != null) {
                     FileWriter writer = new FileWriter(file, true);
-                    writer.append("<p style=\"background:lightgray;\"><strong "
-                            + "style=\"background:lightblue;\">&nbsp&nbsp")
-                            .append(logTimeStamp)
-                            .append(" :&nbsp&nbsp</strong><strong>&nbsp&nbsp")
-                            .append(tag)
-                            .append("</strong> - ")
-                            .append(message)
-                            .append("</p>");
+                    writer.append(logTimeStamp)
+                              .append(" ")
+                              .append(logPriority)
+                              .append(" ")
+                              .append(tag)
+                              .append(": ")
+                              .append(message);
                     writer.flush();
                     writer.close();
                 }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "Error while logging into file : " + e);
             }
+        }
+    }
+
+    private String getLogPriority(int priority) {
+        switch (priority) {
+            case Log.VERBOSE:
+                return "V";
+            case Log.DEBUG:
+                return "D";
+            case Log.INFO:
+                return "I";
+            case Log.WARN:
+                return "W";
+            case Log.ERROR:
+                return "E";
+            default:
+                return "?";
         }
     }
 
