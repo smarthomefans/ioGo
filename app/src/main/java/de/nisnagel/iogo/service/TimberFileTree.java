@@ -40,7 +40,6 @@ public class TimberFileTree extends Timber.DebugTree {
                         Locale.getDefault()).format(new Date());
                 String logPriority = getLogPriority(priority);
 
-
                 // Create file
                 File file = generateFile(path, fileName);
 
@@ -50,10 +49,11 @@ public class TimberFileTree extends Timber.DebugTree {
                     writer.append(logTimeStamp)
                               .append(" ")
                               .append(logPriority)
-                              .append(" ")
+                              .append("/")
                               .append(tag)
                               .append(": ")
-                              .append(message);
+                              .append(message)
+                              .append("\n");
                     writer.flush();
                     writer.close();
                 }
