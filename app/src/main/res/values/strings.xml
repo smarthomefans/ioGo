@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">iobroker.app</string>
+    <string name="app_name">iogo</string>
     <string name="action_info">Info</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>

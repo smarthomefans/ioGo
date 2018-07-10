@@ -1,15 +1,20 @@
 package de.nisnagel.iogo.ui.settings;
 
 
+import android.Manifest;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import de.nisnagel.iogo.BuildConfig;
 import de.nisnagel.iogo.R;
+import de.nisnagel.iogo.service.LoggingUtils;
 import de.nisnagel.iogo.service.TimberDebugTree;
 import de.nisnagel.iogo.service.TimberFileTree;
 import de.nisnagel.iogo.service.TimberReleaseTree;
@@ -28,26 +33,17 @@ import timber.log.Timber;
  */
 public class SettingsActivity extends AppCompatActivity {
 
-    SharedPreferences sharedPref;
-
     SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (key.equals("logging_enabled") || key.equals("logging_level")) {
                 Timber.uprootAll();
-                if (sharedPref.getBoolean("logging_enabled", false)) {
-                    String priority = sharedPref.getString("logging_level", null);
-                    if (priority != null) {
-                        Timber.plant(new TimberFileTree(Integer.parseInt(priority)));
-                    } else {
-                        Timber.plant(new TimberFileTree(Log.ERROR));
-                    }
-                } else {
-                    if (BuildConfig.DEBUG) {
-                        Timber.plant(new TimberDebugTree());
-                    } else {
-                        Timber.plant(new TimberReleaseTree());
-                    }
+                if(isStoragePermissionGranted()) {
+                    LoggingUtils.setupLogging(getApplicationContext());
+                }else{
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("logging_enabled",false);
+                    editor.apply();
                 }
             }
         }
@@ -57,7 +53,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPref.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
 
         getSupportActionBar().setTitle(R.string.title_activity_settings);
@@ -66,5 +62,25 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
+    }
+
+
+    public boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Timber.v("Permission is granted");
+                return true;
+            } else {
+
+                Timber.v("Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Timber.v("Permission is granted");
+            return true;
+        }
     }
 }

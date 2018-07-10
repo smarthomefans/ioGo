@@ -5,6 +5,7 @@
     <PreferenceCategory android:title="Mobile Connection">
 
         <EditTextPreference
+            android:dialogMessage="Please enter URL and port from your web-adapter"
             android:key="mobile_socket_url"
             android:selectAllOnFocus="true"
             android:singleLine="true"

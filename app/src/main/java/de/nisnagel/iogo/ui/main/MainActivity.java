@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity {
         isStoragePermissionGranted();
         toolbar.setTitleMarginStart(120);
         setSupportActionBar(toolbar);
-        toolbar.setLogo(R.drawable.home);
+        toolbar.setLogo(R.drawable.test48);
 
         DataBus.getBus().register(this);
 

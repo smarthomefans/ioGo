@@ -3,6 +3,8 @@ package de.nisnagel.iogo;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Service;
+import android.content.SharedPreferences;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import javax.inject.Inject;
@@ -12,6 +14,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 import dagger.android.HasServiceInjector;
 import de.nisnagel.iogo.di.component.DaggerAppComponent;
+import de.nisnagel.iogo.service.LoggingUtils;
 import de.nisnagel.iogo.service.TimberDebugTree;
 import de.nisnagel.iogo.service.TimberFileTree;
 import de.nisnagel.iogo.service.TimberReleaseTree;
@@ -35,11 +38,8 @@ public class App extends Application implements HasActivityInjector, HasServiceI
                 .inject(this);
 
 
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new TimberDebugTree());
-        } else {
-            Timber.plant(new TimberReleaseTree());
-        }
+        //LoggingUtils.setupLogging(this);
+
     }
 
 
