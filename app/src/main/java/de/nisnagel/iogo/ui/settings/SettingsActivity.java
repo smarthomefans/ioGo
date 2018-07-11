@@ -57,8 +57,8 @@ public class SettingsActivity extends AppCompatActivity {
         sharedPref.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
 
         getSupportActionBar().setTitle(R.string.title_activity_settings);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         getSupportFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();

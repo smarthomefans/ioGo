@@ -18,9 +18,10 @@
     <TextView
         android:id="@+id/labelConnectivity"
         android:layout_width="wrap_content"
-        android:layout_height="24dp"
+        android:layout_height="48dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
         android:text="Connectivity:"
         android:textColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
         android:text="@string/info_socket_status"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelConnectivity" />
@@ -40,17 +41,18 @@
         android:id="@+id/socketState"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:ems="10"
+        android:gravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelConnectivity" />
 
     <TextView
         android:id="@+id/labelDatabase"
         android:layout_width="wrap_content"
-        android:layout_height="24dp"
+        android:layout_height="48dp"
         android:layout_marginStart="16dp"
+        android:gravity="center_vertical"
         android:text="Database:"
         android:textColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,27 +63,27 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
         android:text="@string/info_count_rooms"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelDatabase"/>
+        app:layout_constraintTop_toBottomOf="@+id/labelDatabase" />
 
     <TextView
         android:id="@+id/countRooms"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:ems="10"
+        android:gravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelDatabase"/>
+        app:layout_constraintTop_toBottomOf="@+id/labelDatabase" />
 
     <TextView
         android:id="@+id/labelCountFunctions"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
         android:text="@string/info_count_funktions"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/countRooms" />
@@ -90,9 +92,9 @@
         android:id="@+id/countFunctions"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:ems="10"
+        android:gravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelCountRooms" />
 
@@ -101,7 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
         android:text="@string/info_count_states"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/countFunctions" />
@@ -110,17 +112,18 @@
         android:id="@+id/countStates"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:ems="10"
+        android:gravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/countFunctions" />
 
     <TextView
         android:id="@+id/labelApp"
         android:layout_width="wrap_content"
-        android:layout_height="24dp"
+        android:layout_height="48dp"
         android:layout_marginStart="16dp"
+        android:gravity="center_vertical"
         android:text="App:"
         android:textColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="parent"
@@ -131,7 +134,7 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
         android:text="@string/info_app_version"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelApp" />
@@ -140,9 +143,9 @@
         android:id="@+id/appVersion"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:ems="10"
+        android:gravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelApp" />
 

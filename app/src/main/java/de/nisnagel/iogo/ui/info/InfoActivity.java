@@ -20,9 +20,6 @@ import de.nisnagel.iogo.ui.base.BaseActivity;
 
 public class InfoActivity extends BaseActivity implements HasSupportFragmentInjector {
 
-    @BindView(R.id.toolbar)
-    protected Toolbar toolbar;
-
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
@@ -33,9 +30,7 @@ public class InfoActivity extends BaseActivity implements HasSupportFragmentInje
         setContentView(R.layout.activity_info);
         ButterKnife.bind(this);
 
-        toolbar.setTitle(R.string.title_activity_info);
-
-        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.title_activity_info);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
