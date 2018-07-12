@@ -4,6 +4,7 @@ package de.nisnagel.iogo.ui.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,12 +21,6 @@ import dagger.android.support.HasSupportFragmentInjector;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.ui.base.BaseActivity;
 
-/**
- * An activity representing a single Room detail screen. This
- * activity is only used on narrow width devices. On tablet-size devices,
- * item details are presented side-by-side with a list of items
- * in a {@link EnumListActivity}.
- */
 public class EnumDetailActivity extends BaseActivity implements HasSupportFragmentInjector {
 
     @BindView(R.id.toolbar)
@@ -59,7 +54,7 @@ public class EnumDetailActivity extends BaseActivity implements HasSupportFragme
         int id = item.getItemId();
         if (id == android.R.id.home) {
 
-            navigateUpTo(new Intent(this, EnumListActivity.class));
+            NavUtils.navigateUpFromSameTask(this);
             return true;
         }
 
