@@ -1,60 +1,32 @@
 package de.nisnagel.iogo.ui.main;
 
-import android.Manifest;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
-
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.view.MenuItem;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import de.nisnagel.iogo.R;
-import de.nisnagel.iogo.data.model.Enum;
-import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.service.DataBus;
-import de.nisnagel.iogo.service.TimberFileTree;
-import de.nisnagel.iogo.service.TimberReleaseTree;
 import de.nisnagel.iogo.ui.base.BaseActivity;
-import timber.log.Timber;
 
-public class MainActivity extends BaseActivity {
-
-    private EnumListAdapter mAdapter;
+public class MainActivity extends BaseActivity implements HasSupportFragmentInjector, BottomNavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
 
-    @BindView(R.id.favorite_list)
-    RecyclerView recyclerView;
-
-    @BindView(R.id.adView)
-    AdView mAdView;
-
     @Inject
-    ViewModelProvider.Factory mViewModelFactory;
-
-    public ArrayList<Enum> list = new ArrayList<>();
+    DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,26 +43,13 @@ public class MainActivity extends BaseActivity {
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        EnumViewModel mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
+        //loading the default fragment
+        loadFragment(new HomeFragment());
+        setTitle(R.string.title_activity_home);
 
-        mAdapter = new EnumListAdapter(list);
-        recyclerView.setAdapter(mAdapter);
-
-        mViewModel.getFavoriteEnums()
-                .observe(this, new Observer<List<Enum>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Enum> newList) {
-                        // update UI
-                        mAdapter = new EnumListAdapter(newList);
-                        recyclerView.setAdapter(mAdapter);
-                    }
-                });
-
-        // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
-        MobileAds.initialize(this, getString(R.string.ad_unit_id));
-
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
-        mAdView.loadAd(adRequest);
+        //getting bottom navigation view and attaching the listener
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -105,24 +64,51 @@ public class MainActivity extends BaseActivity {
         DataBus.getBus().unregister(this);
     }
 
-    @OnClick(R.id.showRoomList)
-    public void onClickRoomList(){
-        Intent i = new Intent(this, EnumListActivity.class);
-        i.putExtra(EnumListActivity.ARG_ENUM_TYPE, EnumRepository.TYPE_ROOM);
-        startActivity(i);
-    }
-
-    @OnClick(R.id.showFunctionList)
-    public void onClickFuncionList(){
-        Intent i = new Intent(this, EnumListActivity.class);
-        i.putExtra(EnumListActivity.ARG_ENUM_TYPE, EnumRepository.TYPE_FUNCTION);
-        startActivity(i);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    private boolean loadFragment(Fragment fragment) {
+        //switching fragment
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Fragment fragment = null;
+
+        switch (item.getItemId()) {
+            case R.id.showHome:
+                fragment = new HomeFragment();
+                setTitle(R.string.title_activity_home);
+                break;
+
+            case R.id.showFunctionList:
+                fragment = new FunctionFragment();
+                setTitle(R.string.title_activity_function_list);
+                break;
+
+            case R.id.showRoomList:
+                fragment = new RoomFragment();
+                setTitle(R.string.title_activity_room_list);
+                break;
+        }
+
+        return loadFragment(fragment);
+    }
+
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return dispatchingAndroidInjector;
     }
 }

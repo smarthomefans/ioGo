@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/showHome"
+        android:enabled="true"
+        android:icon="@drawable/home"
+        android:title="@string/title_activity_home"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/showFunctionList"
+        android:enabled="true"
+        android:icon="@drawable/functions"
+        android:title="@string/title_activity_function_list"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/showRoomList"
+        android:enabled="true"
+        android:icon="@drawable/rooms"
+        android:title="@string/title_activity_room_list"
+        app:showAsAction="ifRoom" />
+
+</menu>

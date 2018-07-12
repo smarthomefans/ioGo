@@ -13,6 +13,7 @@ import dagger.android.support.HasSupportFragmentInjector;
 import de.nisnagel.iogo.App;
 import de.nisnagel.iogo.di.component.DaggerAppComponent;
 import de.nisnagel.iogo.ui.main.EnumDetailActivity;
+import de.nisnagel.iogo.ui.main.MainActivity;
 
 /**
  * Helper class to automatically inject fragments if they implement {@link Injectable}.
@@ -80,6 +81,19 @@ public class AppInjector {
         }
         if (activity instanceof EnumDetailActivity) {
             ((EnumDetailActivity) activity).getSupportFragmentManager()
+                    .registerFragmentLifecycleCallbacks(
+                            new FragmentManager.FragmentLifecycleCallbacks() {
+                                @Override
+                                public void onFragmentCreated(FragmentManager fm, Fragment f,
+                                                              Bundle savedInstanceState) {
+                                    if (f instanceof Injectable) {
+                                        AndroidSupportInjection.inject(f);
+                                    }
+                                }
+                            }, true);
+        }
+        if (activity instanceof MainActivity) {
+            ((MainActivity) activity).getSupportFragmentManager()
                     .registerFragmentLifecycleCallbacks(
                             new FragmentManager.FragmentLifecycleCallbacks() {
                                 @Override

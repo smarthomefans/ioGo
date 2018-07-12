@@ -15,7 +15,7 @@ import de.nisnagel.iogo.ui.main.MainActivity;
 @Module
 public abstract class ActivityBuildersModule {
 
-    @ContributesAndroidInjector(modules = AppModule.class)
+    @ContributesAndroidInjector(modules = FragmentBuildersModule.class)
     abstract MainActivity bindMainActivity();
 
     @ContributesAndroidInjector(modules = AppModule.class)
@@ -29,4 +29,5 @@ public abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector(modules = FragmentBuildersModule.class)
     abstract InfoActivity bindInfoActivity();
+
 }
