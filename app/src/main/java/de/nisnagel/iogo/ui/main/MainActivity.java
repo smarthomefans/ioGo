@@ -24,6 +24,7 @@ import de.nisnagel.iogo.ui.base.BaseActivity;
 public class MainActivity extends BaseActivity implements HasSupportFragmentInjector, BottomNavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.bottombar) BottomNavigationView bottombar;
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
@@ -48,8 +49,7 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
         setTitle(R.string.title_activity_home);
 
         //getting bottom navigation view and attaching the listener
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(this);
+        bottombar.setOnNavigationItemSelectedListener(this);
     }
 
     @Override

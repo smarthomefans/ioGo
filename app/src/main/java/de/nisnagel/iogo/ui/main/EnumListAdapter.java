@@ -20,8 +20,8 @@ import de.nisnagel.iogo.data.model.Enum;
 public class EnumListAdapter
         extends RecyclerView.Adapter<EnumListAdapter.ViewHolder> {
 
-    private final List<Enum> mValues;
-    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    protected List<Enum> mValues;
+    protected final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Enum item = (Enum) view.getTag();
