@@ -20,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.State;
+import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.service.Events;
 import de.nisnagel.iogo.ui.base.StateItem;
@@ -137,7 +138,7 @@ public class CommonViewHolder extends RecyclerView.ViewHolder implements Adapter
     private void setImageRessource(String role){
         if(role != null) {
             switch (role) {
-                case State.ROLE_TEXT:
+                case Constants.ROLE_TEXT:
                     mIcon.setImageResource(R.drawable.text);
                     break;
             }

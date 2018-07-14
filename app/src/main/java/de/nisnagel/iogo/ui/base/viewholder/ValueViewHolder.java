@@ -9,6 +9,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.State;
+import de.nisnagel.iogo.service.Constants;
 
 public class ValueViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.message_title)
@@ -37,19 +38,19 @@ public class ValueViewHolder extends RecyclerView.ViewHolder {
     private void setImageRessource(String role){
         if(role != null) {
             switch (role) {
-                case State.ROLE_VALUE_TEMPERATURE:
+                case Constants.ROLE_VALUE_TEMPERATURE:
                     mIcon.setImageResource(R.drawable.thermometer);
                     break;
-                case State.ROLE_VALUE_HUMIDITY:
+                case Constants.ROLE_VALUE_HUMIDITY:
                     mIcon.setImageResource(R.drawable.water_percent);
                     break;
-                case State.ROLE_VALUE_BRIGHTNESS:
+                case Constants.ROLE_VALUE_BRIGHTNESS:
                     mIcon.setImageResource(R.drawable.brightness_5);
                     break;
-                case State.ROLE_VALUE_BATTERY:
+                case Constants.ROLE_VALUE_BATTERY:
                     mIcon.setImageResource(R.drawable.battery);
                     break;
-                case State.ROLE_VALUE_BLIND:
+                case Constants.ROLE_VALUE_BLIND:
                     mIcon.setImageResource(R.drawable.blinds);
                     break;
             }

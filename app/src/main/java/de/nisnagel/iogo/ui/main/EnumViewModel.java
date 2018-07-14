@@ -40,6 +40,9 @@ public class EnumViewModel extends ViewModel {
     public LiveData<List<Enum>> getFavoriteEnums() {
         return enumRepository.getFavoriteEnums();
     }
+    public LiveData<List<State>> getFavoriteStates() {
+        return stateRepository.getFavoriteStates();
+    }
 
     public LiveData<Enum> getEnum(String enumId) {
         return enumRepository.getEnum(enumId);
@@ -51,6 +54,10 @@ public class EnumViewModel extends ViewModel {
 
     public void saveEnum(Enum anEnum) {
         enumRepository.saveEnum(anEnum);
+    }
+
+    public void saveState(State state) {
+        stateRepository.saveState(state);
     }
 
 }

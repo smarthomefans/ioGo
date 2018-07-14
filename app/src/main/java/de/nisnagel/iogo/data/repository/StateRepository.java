@@ -21,6 +21,7 @@ import javax.inject.Singleton;
 
 import de.nisnagel.iogo.data.io.IoObject;
 import de.nisnagel.iogo.data.io.IoState;
+import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.model.StateDao;
 import timber.log.Timber;
@@ -29,6 +30,7 @@ import timber.log.Timber;
 public class StateRepository {
     private Map<String,LiveData<List<State>>> stateEnumCache;
     private MutableLiveData<String> connected;
+    private LiveData<List<State>> mListFavoriteStates;
 
     private final StateDao stateDao;
     private Gson gson;
@@ -57,6 +59,15 @@ public class StateRepository {
             Timber.d("getStatesByEnum: load states from database enumId:" + enumId);
         }
         return stateEnumCache.get(enumId);
+    }
+
+    public LiveData<List<State>> getFavoriteStates() {
+        Timber.v("getFavoriteStates called");
+        if(mListFavoriteStates == null){
+            mListFavoriteStates = stateDao.getFavoriteStates();
+            Timber.d("getFavoriteStates: load favorite states from database");
+        }
+        return mListFavoriteStates;
     }
 
     public LiveData<Integer> countStates(){
@@ -144,5 +155,10 @@ public class StateRepository {
     public void saveSocketState(String state){
         Timber.v("saveSocketState called");
         connected.postValue(state);
+    }
+
+    public void saveState(State state) {
+        Timber.v("saveState called");
+        stateDao.update(state);
     }
 }

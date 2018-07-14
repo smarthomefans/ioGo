@@ -9,6 +9,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.State;
+import de.nisnagel.iogo.service.Constants;
 
 public class IndicatorViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.message_title)
@@ -36,10 +37,10 @@ public class IndicatorViewHolder extends RecyclerView.ViewHolder {
     private void setImageRessource(String role){
         if(role != null) {
             switch (role) {
-                case State.ROLE_INDICATOR_CONNECTED:
+                case Constants.ROLE_INDICATOR_CONNECTED:
                     mIcon.setImageResource(R.drawable.lan_connect);
                     break;
-                case State.ROLE_INDICATOR_LOWBAT:
+                case Constants.ROLE_INDICATOR_LOWBAT:
                     mIcon.setImageResource(R.drawable.battery_10);
                     break;
             }

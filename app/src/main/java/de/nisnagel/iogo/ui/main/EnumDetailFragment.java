@@ -41,7 +41,7 @@ public class EnumDetailFragment extends Fragment implements Injectable {
 
     @BindView(R.id.enum_detail_list) RecyclerView mRecyclerView;
 
-    private EnumDetailAdapter mAdapter;
+    private StateListAdapter mAdapter;
 
     private LiveData<Enum> mRoom;
     private List<State> mListStates = new ArrayList<>();
@@ -71,7 +71,7 @@ public class EnumDetailFragment extends Fragment implements Injectable {
 
             @Override
             public void run() {
-                mAdapter = new EnumDetailAdapter(mListStates);
+                mAdapter = new StateListAdapter(mListStates, mViewModel);
                 mRecyclerView.setAdapter(mAdapter);
                 RecyclerView.LayoutManager layoutManager =
                         new LinearLayoutManager(getContext());
@@ -96,7 +96,7 @@ public class EnumDetailFragment extends Fragment implements Injectable {
                     @Override
                     public void onChanged(@Nullable List<State> newList) {
                         // update UI
-                        mAdapter = new EnumDetailAdapter(newList);
+                        mAdapter = new StateListAdapter(newList, mViewModel);
                         mRecyclerView.setAdapter(mAdapter);
                     }
                 });

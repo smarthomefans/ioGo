@@ -19,11 +19,26 @@ import de.nisnagel.iogo.ui.base.viewholder.SwitchViewHolder;
 import de.nisnagel.iogo.ui.base.viewholder.ValueViewHolder;
 
 
-public class EnumDetailAdapter
+public class StateListAdapter
         extends RecyclerView.Adapter {
 
-    private final List<State> mValues;
+    private EnumViewModel mViewModel;
 
+    private final List<State> mValues;
+    protected final View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+            State item = (State) view.getTag();
+            if(item != null){
+                item.setFavorite((item.getFavorite()) == "true" ? "false" : "true");
+                mViewModel.saveState(item);
+
+                return true;
+            }
+
+            return false;
+        }
+    };
 
     private final int C_SENSOR = 1;         //boolean readonly
     private final int C_BUTTON = 2;         //boolean writeonly
@@ -33,8 +48,9 @@ public class EnumDetailAdapter
     private final int C_SWITCH = 6;         //boolean read-write
     private final int C_COMMON = 99;        //string
 
-    public EnumDetailAdapter(List<State> stateList) {
-        mValues = stateList;
+    public StateListAdapter(List<State> stateList, EnumViewModel mViewModel) {
+        this.mValues = stateList;
+        this.mViewModel = mViewModel;
         DataBus.getBus().register(this);
     }
 
@@ -132,6 +148,8 @@ public class EnumDetailAdapter
                 break;
         }
 
+        holder.itemView.setOnLongClickListener(mOnLongClickListener);
+        holder.itemView.setTag(mValues.get(position));
     }
 
     @Override

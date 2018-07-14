@@ -35,15 +35,20 @@ import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.Enum;
+import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.di.Injectable;
 
 
 public class HomeFragment extends Fragment implements Injectable {
 
-    private EnumListAdapter mAdapter;
+    private EnumListAdapter mEnumAdapter;
+    private StateListAdapter mStateAdapter;
 
-    @BindView(R.id.favorite_list)
-    RecyclerView recyclerView;
+    @BindView(R.id.favorite_enums)
+    RecyclerView rvEnums;
+
+    @BindView(R.id.favorite_states)
+    RecyclerView rvStates;
 
     @BindView(R.id.adView)
     AdView mAdView;
@@ -51,7 +56,8 @@ public class HomeFragment extends Fragment implements Injectable {
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
 
-    public ArrayList<Enum> list = new ArrayList<>();
+    public ArrayList<Enum> enumList = new ArrayList<>();
+    public ArrayList<State> stateList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -65,10 +71,13 @@ public class HomeFragment extends Fragment implements Injectable {
 
             @Override
             public void run() {
-                mAdapter = new EnumListAdapter(list);
-                recyclerView.setAdapter(mAdapter);
+                mEnumAdapter = new EnumListAdapter(enumList);
+                rvEnums.setAdapter(mEnumAdapter);
                 RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
-                recyclerView.setLayoutManager(mLayoutManager);
+                rvEnums.setLayoutManager(mLayoutManager);
+
+                mStateAdapter = new StateListAdapter(stateList, mViewModel);
+                rvStates.setAdapter(mStateAdapter);
             }
         });
 
@@ -77,8 +86,18 @@ public class HomeFragment extends Fragment implements Injectable {
                     @Override
                     public void onChanged(@Nullable List<Enum> newList) {
                         // update UI
-                        mAdapter = new EnumListAdapter(newList);
-                        recyclerView.setAdapter(mAdapter);
+                        mEnumAdapter = new EnumListAdapter(newList);
+                        rvEnums.setAdapter(mEnumAdapter);
+                    }
+                });
+
+        mViewModel.getFavoriteStates()
+                .observe(this, new Observer<List<State>>() {
+                    @Override
+                    public void onChanged(@Nullable List<State> newList) {
+                        // update UI
+                        mStateAdapter = new StateListAdapter(newList, mViewModel);
+                        rvStates.setAdapter(mStateAdapter);
                     }
                 });
 
