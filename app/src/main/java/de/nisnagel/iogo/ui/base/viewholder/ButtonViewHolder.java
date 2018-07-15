@@ -1,5 +1,7 @@
 package de.nisnagel.iogo.ui.base.viewholder;
 
+import android.content.Context;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -14,7 +16,7 @@ import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.service.Events;
 
-public class ButtonViewHolder extends RecyclerView.ViewHolder {
+public class ButtonViewHolder extends BaseViewHolder {
     @BindView(R.id.message_title)
     TextView mTitle;
     @BindView(R.id.message_subtitle)  TextView mSubtitle;
@@ -22,15 +24,19 @@ public class ButtonViewHolder extends RecyclerView.ViewHolder {
     ImageButton mValue;
     @BindView(R.id.icon)
     ImageView mIcon;
+    @BindView(R.id.letter)
+    TextView mLetter;
 
-    public ButtonViewHolder(View itemView) {
+    public ButtonViewHolder(View itemView, Context context) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        this.context = context;
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public void bindState(State state) {
         mTitle.setText(state.getName());
-        mSubtitle.setText(state.getRole());
+        mSubtitle.setText(getSubtitle(state));
         mValue.setClickable(state.getWrite());
         mValue.setOnClickListener(new CompoundButton.OnClickListener() {
                                       @Override
@@ -55,7 +61,15 @@ public class ButtonViewHolder extends RecyclerView.ViewHolder {
                 case Constants.ROLE_BUTTON_STOP:
                     mIcon.setImageResource(R.drawable.stop);
                     break;
+                default:
+                    mIcon.setVisibility(View.GONE);
+                    mLetter.setVisibility(View.VISIBLE);
+
             }
+        }else{
+            mIcon.setVisibility(View.GONE);
+            mLetter.setVisibility(View.VISIBLE);
         }
+
     }
 }

@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment implements Injectable {
                 RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
                 rvEnums.setLayoutManager(mLayoutManager);
 
-                mStateAdapter = new StateListAdapter(stateList, mViewModel);
+                mStateAdapter = new StateListAdapter(stateList, mViewModel, getActivity());
                 rvStates.setAdapter(mStateAdapter);
             }
         });
@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment implements Injectable {
                     @Override
                     public void onChanged(@Nullable List<State> newList) {
                         // update UI
-                        mStateAdapter = new StateListAdapter(newList, mViewModel);
+                        mStateAdapter = new StateListAdapter(newList, mViewModel, getActivity());
                         rvStates.setAdapter(mStateAdapter);
                     }
                 });

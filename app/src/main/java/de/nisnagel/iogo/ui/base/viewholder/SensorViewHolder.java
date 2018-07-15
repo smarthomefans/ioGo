@@ -1,5 +1,7 @@
 package de.nisnagel.iogo.ui.base.viewholder;
 
+import android.content.Context;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,7 +13,7 @@ import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.service.Constants;
 
-public class SensorViewHolder extends RecyclerView.ViewHolder {
+public class SensorViewHolder extends BaseViewHolder {
     @BindView(R.id.message_title)
     TextView mTitle;
     @BindView(R.id.message_subtitle)  TextView mSubtitle;
@@ -19,15 +21,19 @@ public class SensorViewHolder extends RecyclerView.ViewHolder {
     TextView mValue;
     @BindView(R.id.icon)
     ImageView mIcon;
+    @BindView(R.id.letter)
+    TextView mLetter;
 
-    public SensorViewHolder(View itemView) {
+    public SensorViewHolder(View itemView, Context context) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        this.context = context;
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public void bindState(State state) {
         mTitle.setText(state.getName());
-        mSubtitle.setText(state.getRole());
+        mSubtitle.setText(getSubtitle(state));
         setValue(state.getRole(), state.getVal());
         setImageRessource(state.getRole());
     }
@@ -84,7 +90,13 @@ public class SensorViewHolder extends RecyclerView.ViewHolder {
                 case Constants.ROLE_SENSOR_RAIN:
                     mIcon.setImageResource(R.drawable.weather_rainy);
                     break;
+                default:
+                    mIcon.setVisibility(View.GONE);
+                    mLetter.setVisibility(View.VISIBLE);
             }
+        }else{
+            mIcon.setVisibility(View.GONE);
+            mLetter.setVisibility(View.VISIBLE);
         }
     }
 }

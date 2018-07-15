@@ -1,5 +1,7 @@
 package de.nisnagel.iogo.ui.base.viewholder;
 
+import android.content.Context;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,7 +13,7 @@ import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.service.Constants;
 
-public class IndicatorViewHolder extends RecyclerView.ViewHolder {
+public class IndicatorViewHolder extends BaseViewHolder {
     @BindView(R.id.message_title)
     TextView mTitle;
     @BindView(R.id.message_subtitle)  TextView mSubtitle;
@@ -19,16 +21,19 @@ public class IndicatorViewHolder extends RecyclerView.ViewHolder {
     TextView mValue;
     @BindView(R.id.icon)
     ImageView mIcon;
+    @BindView(R.id.letter)
+    TextView mLetter;
 
-    public IndicatorViewHolder(View itemView) {
+    public IndicatorViewHolder(View itemView, Context context) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-
+        this.context = context;
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public void bindState(State state) {
         mTitle.setText(state.getName());
-        mSubtitle.setText(state.getRole());
+        mSubtitle.setText(getSubtitle(state));
         String val = ("true".equals(state.getVal())) ? "open" : "closed";
         mValue.setText(val);
         setImageRessource(state.getRole());
@@ -43,7 +48,13 @@ public class IndicatorViewHolder extends RecyclerView.ViewHolder {
                 case Constants.ROLE_INDICATOR_LOWBAT:
                     mIcon.setImageResource(R.drawable.battery_10);
                     break;
+                default:
+                    mIcon.setVisibility(View.GONE);
+                    mLetter.setVisibility(View.VISIBLE);
             }
+        }else{
+            mIcon.setVisibility(View.GONE);
+            mLetter.setVisibility(View.VISIBLE);
         }
     }
 }

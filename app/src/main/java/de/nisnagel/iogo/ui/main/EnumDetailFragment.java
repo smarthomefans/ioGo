@@ -1,7 +1,6 @@
 package de.nisnagel.iogo.ui.main;
 
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -29,12 +28,7 @@ import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.di.Injectable;
 
-/**
- * A fragment representing a single Room detail screen.
- * This fragment is either contained in a {@link EnumListActivity}
- * in two-pane mode (on tablets) or a {@link EnumDetailActivity}
- * on handsets.
- */
+
 public class EnumDetailFragment extends Fragment implements Injectable {
 
     public static final String ARG_ENUM_ID = "enum_id";
@@ -43,7 +37,6 @@ public class EnumDetailFragment extends Fragment implements Injectable {
 
     private StateListAdapter mAdapter;
 
-    private LiveData<Enum> mRoom;
     private List<State> mListStates = new ArrayList<>();
     private EnumViewModel mViewModel;
 
@@ -71,7 +64,7 @@ public class EnumDetailFragment extends Fragment implements Injectable {
 
             @Override
             public void run() {
-                mAdapter = new StateListAdapter(mListStates, mViewModel);
+                mAdapter = new StateListAdapter(mListStates, mViewModel, getActivity());
                 mRecyclerView.setAdapter(mAdapter);
                 RecyclerView.LayoutManager layoutManager =
                         new LinearLayoutManager(getContext());
@@ -96,7 +89,7 @@ public class EnumDetailFragment extends Fragment implements Injectable {
                     @Override
                     public void onChanged(@Nullable List<State> newList) {
                         // update UI
-                        mAdapter = new StateListAdapter(newList, mViewModel);
+                        mAdapter = new StateListAdapter(newList, mViewModel, getActivity());
                         mRecyclerView.setAdapter(mAdapter);
                     }
                 });

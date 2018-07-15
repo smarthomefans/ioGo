@@ -42,5 +42,12 @@
             android:entries="@array/logging_level"
             android:entryValues="@array/logging_levelValues"
             />
+        <ListPreference
+            android:key="state_subtitle"
+            android:title="State Subtitle"
+            android:defaultValue="none"
+            android:entries="@array/state_subtitle"
+            android:entryValues="@array/state_subtitleValues"
+            />
     </PreferenceCategory>
 </PreferenceScreen>

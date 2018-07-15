@@ -45,8 +45,8 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         //loading the default fragment
-        loadFragment(new HomeFragment());
         setTitle(R.string.title_activity_home);
+        loadFragment(new HomeFragment());
 
         //getting bottom navigation view and attaching the listener
         bottombar.setOnNavigationItemSelectedListener(this);

@@ -21,6 +21,7 @@ public class EnumListAdapter
         extends RecyclerView.Adapter<EnumListAdapter.ViewHolder> {
 
     protected List<Enum> mValues;
+
     protected final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -35,8 +36,8 @@ public class EnumListAdapter
         }
     };
 
-    public EnumListAdapter(List<Enum> roomList) {
-        mValues = roomList;
+    public EnumListAdapter(List<Enum> list) {
+        this.mValues = list;
     }
 
     @Override
@@ -63,6 +64,8 @@ public class EnumListAdapter
         @BindView(R.id.title)  TextView mTitle;
         @BindView(R.id.icon)
         ImageView mIcon;
+        @BindView(R.id.letter)
+        TextView mLetter;
 
         ViewHolder(View view) {
             super(view);

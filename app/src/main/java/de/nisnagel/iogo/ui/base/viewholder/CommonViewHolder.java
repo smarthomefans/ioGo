@@ -1,7 +1,9 @@
 package de.nisnagel.iogo.ui.base.viewholder;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +27,7 @@ import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.service.Events;
 import de.nisnagel.iogo.ui.base.StateItem;
 
-public class CommonViewHolder extends RecyclerView.ViewHolder implements AdapterView.OnItemSelectedListener{
+public class CommonViewHolder extends BaseViewHolder implements AdapterView.OnItemSelectedListener{
     @BindView(R.id.message_title)
     TextView mTitle;
     @BindView(R.id.message_subtitle)  TextView mSubtitle;
@@ -34,22 +36,26 @@ public class CommonViewHolder extends RecyclerView.ViewHolder implements Adapter
     Spinner mSpinner;
     @BindView(R.id.icon)
     ImageView mIcon;
+    @BindView(R.id.letter)
+    TextView mLetter;
 
     ArrayList<StateItem> stateItems;
     StateItem stateItem;
     State state;
     Boolean init = false;
 
-    public CommonViewHolder(View itemView) {
+    public CommonViewHolder(View itemView, Context context) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         DataBus.getBus().register(this);
         stateItems = new ArrayList<>();
+        this.context = context;
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public void bindState(State state) {
         mTitle.setText(state.getName());
-        mSubtitle.setText(state.getRole());
+        mSubtitle.setText(getSubtitle(state));
 
         if(state.getStates() != null && state.getWrite()){
             bindSpinner(state);
@@ -141,7 +147,13 @@ public class CommonViewHolder extends RecyclerView.ViewHolder implements Adapter
                 case Constants.ROLE_TEXT:
                     mIcon.setImageResource(R.drawable.text);
                     break;
+                default:
+                    mIcon.setVisibility(View.GONE);
+                    mLetter.setVisibility(View.VISIBLE);
             }
+        }else{
+            mIcon.setVisibility(View.GONE);
+            mLetter.setVisibility(View.VISIBLE);
         }
     }
 

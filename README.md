@@ -10,4 +10,8 @@ Highlights der App:
 - Schnellzugriff auf die wichtigsten Werte vom Homescreen
 - keine Zusatzadapter notwendig
 
+Funktionen:
+- Favoriten: Um einen Raum eine Funktion oder einen State als Favorit zu markieren einfach den Eintrag in der Liste lange klicken
+- 
+
 Du hast Fragen oder Anregungen? Sende einfach eine E-Mail an support@nisnagel.de.

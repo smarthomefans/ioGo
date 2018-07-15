@@ -1,5 +1,6 @@
 package de.nisnagel.iogo.ui.main;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,8 @@ public class StateListAdapter
         extends RecyclerView.Adapter {
 
     private EnumViewModel mViewModel;
+
+    private Context context;
 
     private final List<State> mValues;
     protected final View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
@@ -48,9 +51,10 @@ public class StateListAdapter
     private final int C_SWITCH = 6;         //boolean read-write
     private final int C_COMMON = 99;        //string
 
-    public StateListAdapter(List<State> stateList, EnumViewModel mViewModel) {
+    public StateListAdapter(List<State> stateList, EnumViewModel mViewModel, Context context) {
         this.mValues = stateList;
         this.mViewModel = mViewModel;
+        this.context = context;
         DataBus.getBus().register(this);
     }
 
@@ -60,28 +64,28 @@ public class StateListAdapter
         switch (viewType) {
             case C_SENSOR:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_sensor, parent, false);
-                return new SensorViewHolder(view);
+                return new SensorViewHolder(view, context);
             case C_BUTTON:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_button, parent, false);
-                return new ButtonViewHolder(view);
+                return new ButtonViewHolder(view, context);
             case C_VALUE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_number, parent, false);
-                return new ValueViewHolder(view);
+                return new ValueViewHolder(view, context);
             case C_INDICATOR:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_indicator, parent, false);
-                return new IndicatorViewHolder(view);
+                return new IndicatorViewHolder(view, context);
             case C_LEVEL:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_number, parent, false);
-                return new LevelViewHolder(view);
+                return new LevelViewHolder(view, context);
             case C_SWITCH:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_switch, parent, false);
-                return new SwitchViewHolder(view);
+                return new SwitchViewHolder(view, context);
             case C_COMMON:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_common, parent, false);
-                return new CommonViewHolder(view);
+                return new CommonViewHolder(view, context);
             default:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_common, parent, false);
-                return new CommonViewHolder(view);
+                return new CommonViewHolder(view, context);
         }
     }
 

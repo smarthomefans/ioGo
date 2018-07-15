@@ -17,4 +17,16 @@
         <item name="error">6</item>
     </string-array>
 
+    <string-array name="state_subtitle">
+        <item name="empty">Empty</item>
+        <item name="role">Common.Role</item>
+        <item name="timestamp">Timestamp</item>
+    </string-array>
+
+    <string-array name="state_subtitleValues">
+        <item name="empty">empty</item>
+        <item name="role">role</item>
+        <item name="timestamp">timestamp</item>
+    </string-array>
+
 </resources>
