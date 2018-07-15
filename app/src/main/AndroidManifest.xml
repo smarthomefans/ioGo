@@ -42,14 +42,6 @@
                 android:value=".ui.main.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.main.EnumSettingsActivity"
-            android:parentActivityName=".ui.main.EnumDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.main.EnumDetailActivity" />
-        </activity>
-        <activity
             android:name=".ui.info.InfoActivity"
             android:parentActivityName=".ui.main.MainActivity"
             >

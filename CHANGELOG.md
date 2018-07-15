@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.14.x] - 2018-07-15
+### Added subtitle choice in settings
+
+## [0.13.x] - 2018-07-14
+### Added default icons for room, function, state
 
 ## [0.12.x] - 2018-07-12
 ### Added bottom vanigation bar

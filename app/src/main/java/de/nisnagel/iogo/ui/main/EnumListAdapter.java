@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -16,10 +17,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.Enum;
+import de.nisnagel.iogo.data.model.State;
 
 public class EnumListAdapter
         extends RecyclerView.Adapter<EnumListAdapter.ViewHolder> {
 
+    private EnumViewModel mViewModel;
     protected List<Enum> mValues;
 
     protected final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -36,8 +39,31 @@ public class EnumListAdapter
         }
     };
 
-    public EnumListAdapter(List<Enum> list) {
+    protected final View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+            Enum item = (Enum) view.getTag();
+            if(item != null){
+                if("true".equals(item.getFavorite())){
+                    item.setFavorite("false");
+                    Toast.makeText(view.getContext(),"unstarred",Toast.LENGTH_SHORT).show();
+                }else{
+                    item.setFavorite("true");
+                    Toast.makeText(view.getContext(),"starred",Toast.LENGTH_SHORT).show();
+                }
+                mViewModel.saveEnum(item);
+
+                return true;
+            }
+
+            return false;
+
+        }
+    };
+
+    public EnumListAdapter(List<Enum> list, EnumViewModel mViewModel) {
         this.mValues = list;
+        this.mViewModel = mViewModel;
     }
 
     @Override
@@ -53,6 +79,7 @@ public class EnumListAdapter
         holder.bindRoom(mValues.get(position));
         holder.itemView.setTag(mValues.get(position));
         holder.itemView.setOnClickListener(mOnClickListener);
+        holder.itemView.setOnLongClickListener(mOnLongClickListener);
     }
 
     @Override

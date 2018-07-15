@@ -71,7 +71,7 @@ public class HomeFragment extends Fragment implements Injectable {
 
             @Override
             public void run() {
-                mEnumAdapter = new EnumListAdapter(enumList);
+                mEnumAdapter = new EnumListAdapter(enumList, mViewModel);
                 rvEnums.setAdapter(mEnumAdapter);
                 RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
                 rvEnums.setLayoutManager(mLayoutManager);
@@ -86,7 +86,7 @@ public class HomeFragment extends Fragment implements Injectable {
                     @Override
                     public void onChanged(@Nullable List<Enum> newList) {
                         // update UI
-                        mEnumAdapter = new EnumListAdapter(newList);
+                        mEnumAdapter = new EnumListAdapter(newList, mViewModel);
                         rvEnums.setAdapter(mEnumAdapter);
                     }
                 });

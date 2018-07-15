@@ -50,7 +50,7 @@ public class RoomFragment extends Fragment implements Injectable {
 
             @Override
             public void run() {
-                mAdapter = new EnumListAdapter(list);
+                mAdapter = new EnumListAdapter(list, mViewModel);
                 recyclerView.setAdapter(mAdapter);
             }
         });
@@ -60,7 +60,7 @@ public class RoomFragment extends Fragment implements Injectable {
                     @Override
                     public void onChanged(@Nullable List<Enum> newList) {
                         // update UI
-                        mAdapter = new EnumListAdapter(newList);
+                        mAdapter = new EnumListAdapter(newList, mViewModel);
                         recyclerView.setAdapter(mAdapter);
                     }
                 });
