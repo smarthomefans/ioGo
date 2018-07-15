@@ -3,6 +3,7 @@ package de.nisnagel.iogo.ui.main;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
@@ -10,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -36,7 +36,7 @@ public class EnumSettingsActivity extends BaseActivity {
 
     private EnumViewModel mViewModel;
 
-    private String roomId;
+    private String enumId;
 
     private Enum mEnum;
 
@@ -58,18 +58,17 @@ public class EnumSettingsActivity extends BaseActivity {
         setContentView(R.layout.activity_enum_settings);
         ButterKnife.bind(this);
 
-        toolbar.setTitle(R.string.title_activity_room_list);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
 
-        roomId = getIntent().getStringExtra(EnumDetailFragment.ARG_ENUM_ID);
-        if (roomId != null) {
-            mEnum = mViewModel.getEnum(roomId).getValue();
+        enumId = getIntent().getStringExtra(EnumDetailFragment.ARG_ENUM_ID);
+        if (enumId != null) {
+            mEnum = mViewModel.getEnum(enumId).getValue();
         }
 
-        mViewModel.getEnum(roomId).observe(this, new Observer<Enum>() {
+        mViewModel.getEnum(enumId).observe(this, new Observer<Enum>() {
             @Override
             public void onChanged(@Nullable Enum anEnum) {
                 // update UI
@@ -98,7 +97,9 @@ public class EnumSettingsActivity extends BaseActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
+            Intent intent = NavUtils.getParentActivityIntent(this);
+            intent.putExtra(EnumDetailFragment.ARG_ENUM_ID, enumId);
+            NavUtils.navigateUpTo(this, intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

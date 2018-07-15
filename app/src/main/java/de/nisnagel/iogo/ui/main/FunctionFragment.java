@@ -45,7 +45,7 @@ public class FunctionFragment extends Fragment implements Injectable {
         ButterKnife.bind(this, rootView);
 
         EnumViewModel mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
-
+/*
         getActivity().runOnUiThread(new Runnable() {
 
             @Override
@@ -54,6 +54,9 @@ public class FunctionFragment extends Fragment implements Injectable {
                 recyclerView.setAdapter(mAdapter);
             }
         });
+*/
+        mAdapter = new EnumListAdapter(list);
+        recyclerView.setAdapter(mAdapter);
 
         mViewModel.getEnums(EnumRepository.TYPE_FUNCTION)
                 .observe(this, new Observer<List<Enum>>() {
