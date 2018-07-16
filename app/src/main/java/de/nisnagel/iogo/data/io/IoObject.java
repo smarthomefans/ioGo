@@ -28,11 +28,11 @@ public class IoObject {
         return this.common.getUnit();
     }
 
-    public Boolean isCommonRead() {
+    public boolean isCommonRead() {
         return this.common.getRead();
     }
 
-    public Boolean isCommonWrite() {
+    public boolean isCommonWrite() {
         return this.common.getWrite();
     }
 
@@ -40,7 +40,4 @@ public class IoObject {
         return common;
     }
 
-    public void setCommon(IoCommon common) {
-        this.common = common;
-    }
 }

@@ -14,8 +14,8 @@ public class IoCommon {
 
     private String type;
     private String role;
-    private Boolean read;
-    private Boolean write;
+    private boolean read;
+    private boolean write;
     private String unit;
     private String def;
     private String desc;
@@ -52,20 +52,12 @@ public class IoCommon {
         this.role = role;
     }
 
-    public Boolean getRead() {
+    public boolean getRead() {
         return read;
     }
 
-    public void setRead(Boolean read) {
-        this.read = read;
-    }
-
-    public Boolean getWrite() {
+    public boolean getWrite() {
         return write;
-    }
-
-    public void setWrite(Boolean write) {
-        this.write = write;
     }
 
     public String getUnit() {
@@ -74,22 +66,6 @@ public class IoCommon {
 
     public void setUnit(String unit) {
         this.unit = unit;
-    }
-
-    public String getDef() {
-        return def;
-    }
-
-    public void setDef(String def) {
-        this.def = def;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
     }
 
     public List<String> getMembers() {

@@ -51,7 +51,7 @@ public class Enum {
         return favorite;
     }
 
-    public Boolean isFavorite() { return "true".equals(favorite); }
+    public boolean isFavorite() { return "true".equals(favorite); }
 
     public void setFavorite(String favorite) {
         this.favorite = favorite;

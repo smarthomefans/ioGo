@@ -42,7 +42,7 @@ public class CommonViewHolder extends BaseViewHolder implements AdapterView.OnIt
     ArrayList<StateItem> stateItems;
     StateItem stateItem;
     State state;
-    Boolean init = false;
+    boolean init = false;
 
     public CommonViewHolder(View itemView, Context context) {
         super(itemView);

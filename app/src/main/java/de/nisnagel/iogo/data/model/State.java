@@ -29,8 +29,8 @@ public class State {
     private String type;
     private String role;
     private String unit;
-    private Boolean read;
-    private Boolean write;
+    private boolean read;
+    private boolean write;
     @TypeConverters(ListConverters.class)
     private Map<String,String> states;
 
@@ -131,19 +131,19 @@ public class State {
         this.unit = unit;
     }
 
-    public Boolean getRead() {
+    public boolean getRead() {
         return read;
     }
 
-    public void setRead(Boolean read) {
+    public void setRead(boolean read) {
         this.read = read;
     }
 
-    public Boolean getWrite() {
+    public boolean getWrite() {
         return write;
     }
 
-    public void setWrite(Boolean write) {
+    public void setWrite(boolean write) {
         this.write = write;
     }
 

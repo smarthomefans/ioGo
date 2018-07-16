@@ -68,7 +68,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
     private void init(){
         Timber.v(" init called");
-        Boolean isProEnabled = sharedPref.getBoolean("pro_cloud_enabled",false);
+        boolean isProEnabled = sharedPref.getBoolean("pro_cloud_enabled",false);
         if(isProEnabled) {
             String username = sharedPref.getString("pro_username", null);
             String password = sharedPref.getString("pro_password", null);
@@ -339,7 +339,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }
     }
 
-    private Boolean isConnected(){
+    private boolean isConnected(){
         return (mSocket != null && mSocket.connected());
     }
 
