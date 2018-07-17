@@ -34,8 +34,7 @@ public class IndicatorViewHolder extends BaseViewHolder {
     public void bindState(State state) {
         mTitle.setText(state.getName());
         mSubtitle.setText(getSubtitle(state));
-        String val = ("true".equals(state.getVal())) ? "open" : "closed";
-        mValue.setText(val);
+        mValue.setText(state.getVal());
         setImageRessource(state.getRole());
     }
 

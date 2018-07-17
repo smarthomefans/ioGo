@@ -64,7 +64,7 @@ public class SensorViewHolder extends BaseViewHolder {
                     mIcon.setImageResource(R.drawable.window_closed);
                     break;
                 case Constants.ROLE_SENSOR_MOTION:
-                    mIcon.setImageResource(R.drawable.human_handsup);
+                    mIcon.setImageResource(R.drawable.run_fast);
                     break;
                 case Constants.ROLE_SENSOR_ALARM:
                     mIcon.setImageResource(R.drawable.alarm_light);

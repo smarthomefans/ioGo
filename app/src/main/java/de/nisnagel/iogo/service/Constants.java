@@ -36,6 +36,22 @@ public class Constants {
     public static final String ROLE_INDICATOR_CONNECTED = "indicator.connected";
 
     //Level
+    public static final String ROLE_LEVEL_DIMMER = "level.dimmer";
+    public static final String ROLE_LEVEL_BLIND = "level.blind";
+    public static final String ROLE_LEVEL_TEMPERATURE = "level.temperature";
+    public static final String ROLE_VALVE = "level.valve";
+    public static final String ROLE_LEVEL_COLOR_RED = "level.color.red";
+    public static final String ROLE_LEVEL_COLOR_GREEN = "level.color.green";
+    public static final String ROLE_LEVEL_COLOR_BLUE = "level.color.blue";
+    public static final String ROLE_LEVEL_COLOR_WHITE = "level.color.white";
+    public static final String ROLE_LEVEL_COLOR_HUE = "level.color.hue";
+    public static final String ROLE_LEVEL_COLOR_SATURATION = "level.color.saturation";
+    public static final String ROLE_LEVEL_COLOR_RGB = "level.color.rgb";
+    public static final String ROLE_LEVEL_COLOR_LUMINANCE = "level.color.luminance";
+    public static final String ROLE_LEVEL_COLOR_TEMPERATURE = "level.color.temperature";
+    public static final String ROLE_LEVEL_VOLUME = "level.volume";
+    public static final String ROLE_LEVEL_CURTAIN = "level.curtain";
+    public static final String ROLE_LEVEL_TILT = "level.tilt";
 
     //Switch
     public static final String ROLE_SWITCH = "switch";

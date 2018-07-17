@@ -94,7 +94,63 @@ public class LevelViewHolder extends BaseViewHolder {
     }
 
     private void setImageRessource(String role) {
-        mIcon.setVisibility(View.GONE);
-        mLetter.setVisibility(View.VISIBLE);
+        if(role != null) {
+            switch (role) {
+                case Constants.ROLE_LEVEL_DIMMER:
+                    mIcon.setImageResource(R.drawable.lightbulb);
+                    break;
+                case Constants.ROLE_LEVEL_BLIND:
+                    mIcon.setImageResource(R.drawable.blinds);
+                    break;
+                case Constants.ROLE_LEVEL_TEMPERATURE:
+                    mIcon.setImageResource(R.drawable.thermometer);
+                    break;
+                case Constants.ROLE_VALVE:
+                    mIcon.setImageResource(R.drawable.ship_wheel);
+                    break;
+                case Constants.ROLE_LEVEL_COLOR_RED:
+                    mIcon.setImageResource(R.drawable.palette);
+                    break;
+                case Constants.ROLE_LEVEL_COLOR_GREEN:
+                    mIcon.setImageResource(R.drawable.palette);
+                    break;
+                case Constants.ROLE_LEVEL_COLOR_BLUE:
+                    mIcon.setImageResource(R.drawable.palette);
+                    break;
+                case Constants.ROLE_LEVEL_COLOR_WHITE:
+                    mIcon.setImageResource(R.drawable.palette);
+                    break;
+                case Constants.ROLE_LEVEL_COLOR_HUE:
+                    mIcon.setImageResource(R.drawable.palette);
+                    break;
+                case Constants.ROLE_LEVEL_COLOR_SATURATION:
+                    mIcon.setImageResource(R.drawable.palette);
+                    break;
+                case Constants.ROLE_LEVEL_COLOR_RGB:
+                    mIcon.setImageResource(R.drawable.palette);
+                    break;
+                case Constants.ROLE_LEVEL_COLOR_LUMINANCE:
+                    mIcon.setImageResource(R.drawable.palette);
+                    break;
+                case Constants.ROLE_LEVEL_COLOR_TEMPERATURE:
+                    mIcon.setImageResource(R.drawable.palette);
+                    break;
+                case Constants.ROLE_LEVEL_VOLUME:
+                    mIcon.setImageResource(R.drawable.volume_high);
+                    break;
+                case Constants.ROLE_LEVEL_CURTAIN:
+                    mIcon.setImageResource(R.drawable.blinds);
+                    break;
+                case Constants.ROLE_LEVEL_TILT:
+                    mIcon.setImageResource(R.drawable.blinds);
+                    break;
+                default:
+                    mIcon.setVisibility(View.GONE);
+                    mLetter.setVisibility(View.VISIBLE);
+            }
+        }else{
+            mIcon.setVisibility(View.GONE);
+            mLetter.setVisibility(View.VISIBLE);
+        }
     }
 }
