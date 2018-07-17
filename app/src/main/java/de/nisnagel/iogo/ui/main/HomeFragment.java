@@ -41,7 +41,7 @@ import de.nisnagel.iogo.di.Injectable;
 
 public class HomeFragment extends Fragment implements Injectable {
 
-    private EnumListAdapter mEnumAdapter;
+    private EnumHomeListAdapter mEnumAdapter;
     private StateListAdapter mStateAdapter;
 
     @BindView(R.id.favorite_enums)
@@ -71,7 +71,7 @@ public class HomeFragment extends Fragment implements Injectable {
 
             @Override
             public void run() {
-                mEnumAdapter = new EnumListAdapter(enumList, mViewModel);
+                mEnumAdapter = new EnumHomeListAdapter(enumList, mViewModel);
                 rvEnums.setAdapter(mEnumAdapter);
                 RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
                 rvEnums.setLayoutManager(mLayoutManager);
@@ -86,7 +86,7 @@ public class HomeFragment extends Fragment implements Injectable {
                     @Override
                     public void onChanged(@Nullable List<Enum> newList) {
                         // update UI
-                        mEnumAdapter = new EnumListAdapter(newList, mViewModel);
+                        mEnumAdapter = new EnumHomeListAdapter(newList, mViewModel);
                         rvEnums.setAdapter(mEnumAdapter);
                     }
                 });
