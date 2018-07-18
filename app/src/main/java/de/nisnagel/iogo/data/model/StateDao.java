@@ -22,10 +22,10 @@ public interface StateDao {
     @Query("SELECT * FROM state WHERE id = :id")
     State getStateById(String id);
 
-    @Query("SELECT * FROM state WHERE name IS NOT NULL AND id IN (SELECT state_id FROM enum_state WHERE enum_id = :enumId)")
+    @Query("SELECT * FROM state WHERE name IS NOT NULL AND id IN (SELECT state_id FROM enum_state WHERE enum_id = :enumId) ORDER BY name")
     LiveData<List<State>> getStatesByEnum(String enumId);
 
-    @Query("SELECT * FROM state WHERE favorite = 'true'")
+    @Query("SELECT * FROM state WHERE favorite = 'true' ORDER by name")
     LiveData<List<State>> getFavoriteStates();
 
     @Query("SELECT count(*) FROM state WHERE name IS NOT NULL")

@@ -20,13 +20,13 @@ public interface EnumDao {
     @Query("SELECT * FROM enum WHERE id = :id")
     LiveData<Enum> getEnumById(String id);
 
-    @Query("SELECT * FROM enum WHERE type = 'function'")
+    @Query("SELECT * FROM enum WHERE type = 'function' ORDER BY name")
     LiveData<List<Enum>> getFunctionEnums();
 
-    @Query("SELECT * FROM enum WHERE type = 'room'")
+    @Query("SELECT * FROM enum WHERE type = 'room' ORDER BY name")
     LiveData<List<Enum>> getRoomEnums();
 
-    @Query("SELECT * FROM enum WHERE favorite = 'true'")
+    @Query("SELECT * FROM enum WHERE favorite = 'true' ORDER BY name")
     LiveData<List<Enum>> getFavoriteEnums();
 
     @Query("SELECT count(*) FROM enum WHERE type = 'function'")

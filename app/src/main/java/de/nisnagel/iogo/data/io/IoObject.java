@@ -36,6 +36,10 @@ public class IoObject {
         return this.common.getWrite();
     }
 
+    public String getType() {
+        return type;
+    }
+
     public IoCommon getCommon() {
         return common;
     }

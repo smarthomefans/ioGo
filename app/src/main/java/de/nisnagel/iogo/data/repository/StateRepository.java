@@ -28,7 +28,7 @@ import timber.log.Timber;
 
 @Singleton
 public class StateRepository {
-    private Map<String,LiveData<List<State>>> stateEnumCache;
+    private Map<String, LiveData<List<State>>> stateEnumCache;
     private MutableLiveData<String> connected;
     private LiveData<List<State>> mListFavoriteStates;
 
@@ -47,14 +47,14 @@ public class StateRepository {
         Timber.v("instance created");
     }
 
-    public List<String> getAllStateIds(){
+    public List<String> getAllStateIds() {
         Timber.v("getAllStateIds called");
         return stateDao.getAllStateIds();
     }
 
-    public LiveData<List<State>> getStatesByEnum(String enumId){
+    public LiveData<List<State>> getStatesByEnum(String enumId) {
         Timber.v("getStatesByEnum called");
-        if(!stateEnumCache.containsKey(enumId)){
+        if (!stateEnumCache.containsKey(enumId)) {
             stateEnumCache.put(enumId, stateDao.getStatesByEnum(enumId));
             Timber.d("getStatesByEnum: load states from database enumId:" + enumId);
         }
@@ -63,38 +63,38 @@ public class StateRepository {
 
     public LiveData<List<State>> getFavoriteStates() {
         Timber.v("getFavoriteStates called");
-        if(mListFavoriteStates == null){
+        if (mListFavoriteStates == null) {
             mListFavoriteStates = stateDao.getFavoriteStates();
             Timber.d("getFavoriteStates: load favorite states from database");
         }
         return mListFavoriteStates;
     }
 
-    public LiveData<Integer> countStates(){
+    public LiveData<Integer> countStates() {
         Timber.v("countStates called");
         return stateDao.countStates();
     }
 
-    public LiveData<String> getSocketState(){
+    public LiveData<String> getSocketState() {
         Timber.v("getSocketState called");
         return connected;
     }
 
-    public void deleteAll(){
+    public void deleteAll() {
         Timber.v("deleteAll called");
         stateDao.deleteAll();
     }
 
     public void saveStateChanges(String data) {
         Timber.v("saveStateChanges called");
-        try{
-            TypeToken<Map<String,IoState>> token = new TypeToken<Map<String,IoState>>() {};
-            Map<String,IoState> states = gson.fromJson(data, token.getType());
-            for (Map.Entry<String, IoState> entry : states.entrySet())
-            {
+        try {
+            TypeToken<Map<String, IoState>> token = new TypeToken<Map<String, IoState>>() {
+            };
+            Map<String, IoState> states = gson.fromJson(data, token.getType());
+            for (Map.Entry<String, IoState> entry : states.entrySet()) {
                 changeState(entry.getKey(), entry.getValue());
             }
-        }catch(Throwable e){
+        } catch (Throwable e) {
             Timber.e(e);
         }
         Timber.v("saveStates finished");
@@ -102,57 +102,46 @@ public class StateRepository {
 
     public void saveStateChange(String id, String data) {
         Timber.v("saveStateChange called");
-        try{
+        try {
             IoState ioState = gson.fromJson(data, IoState.class);
             changeState(id, ioState);
-        }catch(Throwable e){
+        } catch (Throwable e) {
             Timber.e(e);
         }
     }
 
-    private void changeState(String id, IoState ioState){
+    private void changeState(String id, IoState ioState) {
         Timber.v("changeState called");
         State state = stateDao.getStateById(id);
-        if(state == null) {
+        if (state == null) {
             state = new State(id);
             state.update(ioState);
             stateDao.insert(state);
             Timber.d("changeState: state inserted stateId:" + state.getId());
-        }else {
+        } else {
             state.update(ioState);
             stateDao.update(state);
             Timber.d("changeState: state updated stateId:" + state.getId());
         }
     }
 
-    public void saveObjects(String data){
-        Timber.v("saveObjects called");
+    public void saveObject(String data) {
+        Timber.v("saveObject called");
         try {
-            JSONObject obj = new JSONObject(data);
-            List<State> states = stateDao.getAllStates();
-            for(State state : states){
-                JSONObject json = obj.optJSONObject(state.getId());
-                if(json != null) {
-                    try{
-                        IoObject ioObject = gson.fromJson(json.toString(), IoObject.class);
-                        state.update(ioObject);
-                        stateDao.update(state);
-                        Timber.d("saveObjects: state updated from object stateId:"+state.getId());
-                    }catch(Throwable e){
-                        Timber.e(e);
-                    }
-                }else{
-                    stateDao.delete(state);
-                    Timber.w("saveObjects: object not found for stateId:"+state.getId());
-                }
+            IoObject ioObject = gson.fromJson(data, IoObject.class);
+            if("state".equals(ioObject.getType())) {
+                State state = stateDao.getStateById(ioObject.getId());
+                state.update(ioObject);
+                stateDao.update(state);
+                Timber.d("saveObject: state updated from object stateId:" + state.getId());
             }
-        } catch (JSONException e) {
+        } catch (Throwable e) {
             Timber.e(e);
         }
-        Timber.v("saveObjects finished");
+        Timber.v("saveObject finished");
     }
 
-    public void saveSocketState(String state){
+    public void saveSocketState(String state) {
         Timber.v("saveSocketState called");
         connected.postValue(state);
     }
