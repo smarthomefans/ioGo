@@ -27,7 +27,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         }
         if(state_subtitle.equals("timestamp")){
             Calendar cal = Calendar.getInstance(Locale.GERMAN);
-            cal.setTimeInMillis(state.getTs() * 1000L);
+            cal.setTimeInMillis(state.getTs());
             String date = DateFormat.format("dd-MM-yyyy hh:mm:ss", cal).toString();
             return date;
         }
