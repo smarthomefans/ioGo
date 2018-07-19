@@ -29,11 +29,11 @@ public class IoObject {
     }
 
     public boolean isCommonRead() {
-        return this.common.getRead();
+        return this.common.isRead();
     }
 
     public boolean isCommonWrite() {
-        return this.common.getWrite();
+        return this.common.isWrite();
     }
 
     public String getType() {
