@@ -38,7 +38,7 @@ public class App extends Application implements HasActivityInjector, HasServiceI
                 .inject(this);
 
 
-        //LoggingUtils.setupLogging(this);
+        LoggingUtils.setupLogging(this);
 
     }
 

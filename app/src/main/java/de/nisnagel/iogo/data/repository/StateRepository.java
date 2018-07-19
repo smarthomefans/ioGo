@@ -125,20 +125,31 @@ public class StateRepository {
         }
     }
 
-    public void saveObject(String data) {
-        Timber.v("saveObject called");
+    public void saveObjects(String data) {
+        Timber.v("saveObjects called");
         try {
-            IoObject ioObject = gson.fromJson(data, IoObject.class);
-            if("state".equals(ioObject.getType())) {
-                State state = stateDao.getStateById(ioObject.getId());
-                state.update(ioObject);
-                stateDao.update(state);
-                Timber.d("saveObject: state updated from object stateId:" + state.getId());
+            JSONObject obj = new JSONObject(data);
+            List<State> states = stateDao.getAllStates();
+            for (State state : states) {
+                JSONObject json = obj.optJSONObject(state.getId());
+                if (json != null) {
+                    try {
+                        IoObject ioObject = gson.fromJson(json.toString(), IoObject.class);
+                        state.update(ioObject);
+                        stateDao.update(state);
+                        Timber.d("saveObjects: state updated from object stateId:" + state.getId());
+                    } catch (Throwable e) {
+                        Timber.e(e);
+                    }
+                } else {
+                    stateDao.delete(state);
+                    Timber.w("saveObjects: object not found for stateId:" + state.getId());
+                }
             }
-        } catch (Throwable e) {
+        } catch (JSONException e) {
             Timber.e(e);
         }
-        Timber.v("saveObject finished");
+        Timber.v("saveObjects finished");
     }
 
     public void saveSocketState(String state) {

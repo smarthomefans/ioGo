@@ -50,9 +50,6 @@ public class HomeFragment extends Fragment implements Injectable {
     @BindView(R.id.favorite_states)
     RecyclerView rvStates;
 
-    @BindView(R.id.adView)
-    AdView mAdView;
-
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
 
@@ -100,11 +97,6 @@ public class HomeFragment extends Fragment implements Injectable {
                         rvStates.setAdapter(mStateAdapter);
                     }
                 });
-
-        MobileAds.initialize(getActivity(), getString(R.string.ad_unit_id));
-
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
-        mAdView.loadAd(adRequest);
 
         return rootView;
     }

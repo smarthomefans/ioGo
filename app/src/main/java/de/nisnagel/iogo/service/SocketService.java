@@ -263,7 +263,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             } catch (JSONException e) {
                 Timber.e(e);
             }
-            Timber.i("getStates: reuquesting enum.rooms from server");
+            Timber.i("getEnumRooms: reuquesting enum.rooms from server");
             mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
                 @Override
                 public void call(Object... args) {
@@ -285,7 +285,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             } catch (JSONException e) {
                 Timber.e(e);
             }
-            Timber.i("getStates: reuquesting enum.functions from server");
+            Timber.i("getEnumFunctions: reuquesting enum.functions from server");
             mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
                 @Override
                 public void call(Object... args) {
@@ -329,22 +329,13 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     private void getObjects(){
         Timber.v("getObjects called");
         if(isConnected()) {
-
-            List<String> stateIds = enumRepository.getAllStateIds();
-            if(stateIds != null && stateIds.size() > 0) {
-                for (int i = 0; i < stateIds.size(); i++) {
-                    Timber.i("getObjects: reuquesting " + stateIds.get(i) + " from server");
-                    mSocket.emit("getObjects", stateIds.get(i), new Ack() {
-                        @Override
-                        public void call(Object... args) {
-                            Timber.i("getObjects: receiving object");
-                            if(args[1] != null) {
-                                stateRepository.saveObject(args[1].toString());
-                            }
-                        }
-                    });
+            Timber.i("getObjects: requesting all objects from server");
+            mSocket.emit("getObjects", null, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    stateRepository.saveObjects(args[1].toString());
                 }
-            }
+            });
         }
     }
 
