@@ -1,18 +1,9 @@
 package de.nisnagel.iogo.data.io;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class IoAcl {
 
-    @SerializedName("object")
-    @Expose
     private long object;
-    @SerializedName("owner")
-    @Expose
     private String owner;
-    @SerializedName("ownerGroup")
-    @Expose
     private String ownerGroup;
 
     public long getObject() {

@@ -25,6 +25,7 @@ import javax.inject.Singleton;
 
 import de.nisnagel.iogo.data.io.IoCommon;
 import de.nisnagel.iogo.data.io.IoEnum;
+import de.nisnagel.iogo.data.io.IoName;
 import de.nisnagel.iogo.data.io.IoRow;
 import de.nisnagel.iogo.data.io.IoValue;
 import de.nisnagel.iogo.data.model.Enum;
@@ -125,57 +126,7 @@ public class EnumRepository {
     private void saveObjects(String data, String type) {
         Timber.v("saveObjects called");
         GsonBuilder gsonBuilder = new GsonBuilder();
-        JsonDeserializer<IoCommon> deserializer = new JsonDeserializer<IoCommon>() {
-            @Override
-            public IoCommon deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                JsonObject jsonObject = json.getAsJsonObject();
-
-                IoCommon ioCommon = new IoCommon();
-                try {
-                    if (jsonObject.get("name").isJsonPrimitive()) {
-                        ioCommon.setName(jsonObject.get("name").getAsString());
-                    } else if (jsonObject.get("name").isJsonObject()) {
-                        ioCommon.setName(jsonObject.get("name").getAsJsonObject().get("en").getAsString());
-                    }
-                } catch (Throwable t) {
-                    Timber.e(t);
-                }
-                if (jsonObject.has("type")) {
-                    ioCommon.setType(jsonObject.get("type").getAsString());
-                }
-                if (jsonObject.has("role")) {
-                    ioCommon.setRole(jsonObject.get("role").getAsString());
-                }
-                if (jsonObject.has("read")) {
-                    ioCommon.setRead(jsonObject.get("read").getAsBoolean());
-                }
-                if (jsonObject.has("write")) {
-                    ioCommon.setWrite(jsonObject.get("write").getAsBoolean());
-                }
-                if (jsonObject.has("unit")) {
-                    ioCommon.setUnit(jsonObject.get("unit").getAsString());
-                }
-                if (jsonObject.has("def")) {
-                    ioCommon.setDef(jsonObject.get("def").getAsString());
-                }
-                if (jsonObject.has("desc")) {
-                    ioCommon.setDesc(jsonObject.get("desc").getAsString());
-                }
-                if (jsonObject.has("members")) {
-                    Gson gson = new Gson();
-                    Type founderListType = new TypeToken<ArrayList<String>>(){}.getType();
-                    ioCommon.setMembers(gson.fromJson(jsonObject.get("members"), founderListType));
-                }
-                if (jsonObject.has("states")) {
-                    Gson gson = new Gson();
-                    Type founderListType = new TypeToken<Map<String,String>>(){}.getType();
-                    ioCommon.setStates(gson.fromJson(jsonObject.get("states"), founderListType));
-                }
-                return ioCommon;
-            }
-        };
-
-        gsonBuilder.registerTypeAdapter(IoCommon.class, deserializer);
+        gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
         Gson gson = gsonBuilder.create();
 
         try {

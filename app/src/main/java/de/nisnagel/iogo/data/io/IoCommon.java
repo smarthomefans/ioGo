@@ -1,17 +1,11 @@
 package de.nisnagel.iogo.data.io;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 import java.util.Map;
 
 public class IoCommon {
 
-    @SerializedName("name")
-    @Expose
-    private String name;
-
+    private IoName name;
     private String type;
     private String role;
     private boolean read;
@@ -20,19 +14,15 @@ public class IoCommon {
     private String def;
     private String desc;
 
-    @SerializedName("members")
-    @Expose
     private List<String> members = null;
 
-    @SerializedName("states")
-    @Expose
     private Map<String,String> states;
 
     public String getName() {
-        return name;
+        return name.toString();
     }
 
-    public void setName(String name) {
+    public void setName(IoName name) {
         this.name = name;
     }
 

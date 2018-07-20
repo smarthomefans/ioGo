@@ -8,20 +8,10 @@ public class IoValue {
     @SerializedName("_id")
     @Expose
     private String id;
-    @SerializedName("common")
-    @Expose
     private IoCommon common;
-    @SerializedName("type")
-    @Expose
     private String type;
-    @SerializedName("acl")
-    @Expose
     private IoAcl acl;
-    @SerializedName("from")
-    @Expose
     private String from;
-    @SerializedName("ts")
-    @Expose
     private long ts;
 
     public String getId() {

@@ -1,6 +1,7 @@
 package de.nisnagel.iogo.data.io;
 
 public class IoState {
+
     private String val;
     private boolean ack;
     private long ts;

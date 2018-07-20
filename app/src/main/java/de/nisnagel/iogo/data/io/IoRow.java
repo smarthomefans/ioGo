@@ -5,11 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class IoRow {
 
-    @SerializedName("id")
-    @Expose
     private String id;
-    @SerializedName("value")
-    @Expose
     private IoValue value;
 
     public String getId() {

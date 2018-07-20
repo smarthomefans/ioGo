@@ -19,6 +19,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import de.nisnagel.iogo.data.io.IoName;
 import de.nisnagel.iogo.data.io.IoObject;
 import de.nisnagel.iogo.data.io.IoState;
 import de.nisnagel.iogo.data.model.Enum;
@@ -41,6 +42,7 @@ public class StateRepository {
 
         stateEnumCache = new HashMap<>();
         GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
         gson = gsonBuilder.create();
         connected = new MutableLiveData<>();
 
