@@ -46,11 +46,12 @@ public class RoomFragment extends Fragment implements Injectable {
 
         EnumViewModel mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
 
+        mAdapter = new EnumListAdapter(list, mViewModel);
         getActivity().runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
-                mAdapter = new EnumListAdapter(list, mViewModel);
+
                 recyclerView.setAdapter(mAdapter);
             }
         });
@@ -60,8 +61,9 @@ public class RoomFragment extends Fragment implements Injectable {
                     @Override
                     public void onChanged(@Nullable List<Enum> newList) {
                         // update UI
-                        mAdapter = new EnumListAdapter(newList, mViewModel);
-                        recyclerView.setAdapter(mAdapter);
+                        mAdapter.clearList();
+                        mAdapter.addAll(newList);
+                        mAdapter.notifyDataSetChanged();
                     }
                 });
 

@@ -60,11 +60,12 @@ public class EnumDetailFragment extends Fragment implements Injectable {
         View rootView = inflater.inflate(R.layout.enum_detail, container, false);
         ButterKnife.bind(this, rootView);
 
+        mAdapter = new StateListAdapter(mListStates, mViewModel, getActivity());
+
         getActivity().runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
-                mAdapter = new StateListAdapter(mListStates, mViewModel, getActivity());
                 mRecyclerView.setAdapter(mAdapter);
                 RecyclerView.LayoutManager layoutManager =
                         new LinearLayoutManager(getContext());
@@ -89,8 +90,9 @@ public class EnumDetailFragment extends Fragment implements Injectable {
                     @Override
                     public void onChanged(@Nullable List<State> newList) {
                         // update UI
-                        mAdapter = new StateListAdapter(newList, mViewModel, getActivity());
-                        mRecyclerView.setAdapter(mAdapter);
+                        mAdapter.clearList();
+                        mAdapter.addAll(newList);
+                        mAdapter.notifyDataSetChanged();
                     }
                 });
 

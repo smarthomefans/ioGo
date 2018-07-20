@@ -28,7 +28,7 @@ public class StateListAdapter
 
     private Context context;
 
-    private final List<State> mValues;
+    private List<State> mValues;
     protected final View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View view) {
@@ -63,6 +63,14 @@ public class StateListAdapter
         this.mViewModel = mViewModel;
         this.context = context;
         DataBus.getBus().register(this);
+    }
+
+    public void clearList(){
+        this.mValues.clear();
+    }
+
+    public void addAll(List<State> stateList){
+        this.mValues = stateList;
     }
 
     @Override

@@ -64,16 +64,18 @@ public class HomeFragment extends Fragment implements Injectable {
 
         EnumViewModel mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
 
+        mEnumAdapter = new EnumHomeListAdapter(enumList, mViewModel);
+        mStateAdapter = new StateListAdapter(stateList, mViewModel, getActivity());
+
         getActivity().runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
-                mEnumAdapter = new EnumHomeListAdapter(enumList, mViewModel);
+
                 rvEnums.setAdapter(mEnumAdapter);
                 RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
                 rvEnums.setLayoutManager(mLayoutManager);
 
-                mStateAdapter = new StateListAdapter(stateList, mViewModel, getActivity());
                 rvStates.setAdapter(mStateAdapter);
             }
         });
@@ -83,8 +85,9 @@ public class HomeFragment extends Fragment implements Injectable {
                     @Override
                     public void onChanged(@Nullable List<Enum> newList) {
                         // update UI
-                        mEnumAdapter = new EnumHomeListAdapter(newList, mViewModel);
-                        rvEnums.setAdapter(mEnumAdapter);
+                        mEnumAdapter.clearList();
+                        mEnumAdapter.addAll(newList);
+                        mEnumAdapter.notifyDataSetChanged();
                     }
                 });
 
@@ -93,8 +96,9 @@ public class HomeFragment extends Fragment implements Injectable {
                     @Override
                     public void onChanged(@Nullable List<State> newList) {
                         // update UI
-                        mStateAdapter = new StateListAdapter(newList, mViewModel, getActivity());
-                        rvStates.setAdapter(mStateAdapter);
+                        mStateAdapter.clearList();
+                        mStateAdapter.addAll(newList);
+                        mStateAdapter.notifyDataSetChanged();
                     }
                 });
 

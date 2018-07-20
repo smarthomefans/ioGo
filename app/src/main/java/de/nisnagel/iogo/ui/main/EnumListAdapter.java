@@ -66,6 +66,14 @@ public class EnumListAdapter
         this.mViewModel = mViewModel;
     }
 
+    public void clearList(){
+        this.mValues.clear();
+    }
+
+    public void addAll(List<Enum> list){
+        this.mValues = list;
+    }
+
     @Override
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
