@@ -56,8 +56,8 @@ public class AppModule {
 
     @Singleton
     @Provides
-    StateRepository provideStateRepository(StateDao stateDao) {
-        return new StateRepository(stateDao);
+    StateRepository provideStateRepository(StateDao stateDao, EnumStateDao enumStateDao) {
+        return new StateRepository(stateDao, enumStateDao);
     }
 
     @Singleton

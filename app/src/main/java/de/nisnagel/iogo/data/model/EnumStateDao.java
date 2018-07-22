@@ -13,14 +13,11 @@ import java.util.List;
 @Dao
 public interface EnumStateDao {
 
-    @Query("SELECT * FROM enum_state")
-    LiveData<List<EnumState>> getAllEnumStates();
-
-    @Query("SELECT * FROM enum_state WHERE enum_id=:enum_id and state_id = :state_id")
-    EnumState getById(String enum_id, String state_id);
-
     @Query("SELECT state_id FROM enum_state")
-    List<String> getAllStateIds();
+    List<String> getAllObjectIds();
+
+    @Query("SELECT enum_id FROM enum_state WHERE state_id = :id")
+    String getEnumId(String id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(EnumState... enumStates);

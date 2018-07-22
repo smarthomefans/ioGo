@@ -4,13 +4,10 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
@@ -26,7 +23,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import de.nisnagel.iogo.data.model.AppDatabase;
 import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
 import io.socket.client.Ack;
@@ -196,7 +192,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             Timber.v("onStateChange called");
             if(args[0] != null) {
                 if(args[1] != null) {
-                    stateRepository.saveStateChange(args[0].toString(), args[1].toString());
+                    NetworkUtils.saveState(stateRepository, args[0].toString(), args[1].toString());
                 }else{
                     Timber.w("onStateChange: state deleted stateId:"+args[0].toString());
                 }
@@ -213,31 +209,8 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     }
 
     private void syncStates(){
-        Timber.v("setState called");
-        if(isConnected()) {
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    JSONArray json = new JSONArray();
-                    List<String> stateIds = stateRepository.getAllStateIds();
-                    if(stateIds != null && stateIds.size() > 0) {
-                        for (int i = 0; i < stateIds.size(); i++) {
-                            json.put(stateIds.get(i));
-                        }
-                        Timber.i("getStates: reuquesting "+stateIds.size()+" states from server");
-                        mSocket.emit("getStates", json, new Ack() {
-                            @Override
-                            public void call(Object... args) {
-                                Timber.i("syncStates: receiving states");
-                                stateRepository.saveStateChanges(args[1].toString());
-                            }
-                        });
-                    }else{
-                        Timber.w("getStates: no states found in database");
-                    }
-                }
-            });
-        }
+        Timber.v("syncStates called");
+        getStates();
     }
 
     @Subscribe
@@ -268,7 +241,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 @Override
                 public void call(Object... args) {
                     Timber.i("getEnumRooms: receiving enum.rooms");
-                    enumRepository.saveRoomObjects(args[1].toString());
+                    NetworkUtils.saveEnums(enumRepository,args[1].toString(),EnumRepository.TYPE_ROOM);
                     getEnumFunctions();
                 }
             });
@@ -290,7 +263,21 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 @Override
                 public void call(Object... args) {
                     Timber.i("getEnumFunctions: receiving enum.functions");
-                    enumRepository.saveFunctionObjects(args[1].toString());
+                    NetworkUtils.saveEnums(enumRepository,args[1].toString(),EnumRepository.TYPE_FUNCTION);
+                    getObjects();
+                }
+            });
+        }
+    }
+
+    private void getObjects(){
+        Timber.v("getObjects called");
+        if(isConnected()) {
+            Timber.i("getObjects: requesting all objects from server");
+            mSocket.emit("getObjects", null, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    NetworkUtils.saveObjects(stateRepository, args[1].toString(), sharedPref.getBoolean("sync_children",true));
                     getStates();
                 }
             });
@@ -304,36 +291,22 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 @Override
                 public void run() {
                     JSONArray json = new JSONArray();
-                    List<String> stateIds = enumRepository.getAllStateIds();
-                    if(stateIds != null && stateIds.size() > 0) {
-                        for (int i = 0; i < stateIds.size(); i++) {
-                            json.put(stateIds.get(i));
+                    List<String> objectIds = stateRepository.getAllStateIds();
+                    if(objectIds != null && objectIds.size() > 0) {
+                        for (int i = 0; i < objectIds.size(); i++) {
+                            json.put(objectIds.get(i));
                         }
-                        Timber.i("getStates: reuquesting "+stateIds.size()+" states from server");
+                        Timber.i("getStates: reuquesting "+objectIds.size()+" states from server");
                         mSocket.emit("getStates", json, new Ack() {
                             @Override
                             public void call(Object... args) {
                                 Timber.i("getStates: receiving states");
-                                stateRepository.saveStateChanges(args[1].toString());
-                                getObjects();
+                                NetworkUtils.saveStates(stateRepository, args[1].toString());
                             }
                         });
                     }else{
                         Timber.w("getStates: no states found in database");
                     }
-                }
-            });
-        }
-    }
-
-    private void getObjects(){
-        Timber.v("getObjects called");
-        if(isConnected()) {
-            Timber.i("getObjects: requesting all objects from server");
-            mSocket.emit("getObjects", null, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    stateRepository.saveObjects(args[1].toString());
                 }
             });
         }

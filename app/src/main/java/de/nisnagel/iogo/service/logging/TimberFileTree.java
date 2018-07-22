@@ -1,4 +1,4 @@
-package de.nisnagel.iogo.service;
+package de.nisnagel.iogo.service.logging;
 
 import android.os.Environment;
 import android.support.annotation.NonNull;

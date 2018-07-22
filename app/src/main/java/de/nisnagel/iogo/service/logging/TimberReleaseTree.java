@@ -1,4 +1,4 @@
-package de.nisnagel.iogo.service;
+package de.nisnagel.iogo.service.logging;
 
 import android.util.Log;
 

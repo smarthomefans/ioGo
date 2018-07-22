@@ -10,14 +10,9 @@ import android.preference.PreferenceActivity;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
-import android.util.Log;
 
-import de.nisnagel.iogo.BuildConfig;
 import de.nisnagel.iogo.R;
-import de.nisnagel.iogo.service.LoggingUtils;
-import de.nisnagel.iogo.service.TimberDebugTree;
-import de.nisnagel.iogo.service.TimberFileTree;
-import de.nisnagel.iogo.service.TimberReleaseTree;
+import de.nisnagel.iogo.service.logging.LoggingUtils;
 import timber.log.Timber;
 
 /**

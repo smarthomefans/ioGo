@@ -2,15 +2,9 @@ package de.nisnagel.iogo.data.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,9 +14,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import de.nisnagel.iogo.data.io.IoName;
-import de.nisnagel.iogo.data.io.IoObject;
 import de.nisnagel.iogo.data.io.IoState;
-import de.nisnagel.iogo.data.model.Enum;
+import de.nisnagel.iogo.data.model.EnumState;
+import de.nisnagel.iogo.data.model.EnumStateDao;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.model.StateDao;
 import timber.log.Timber;
@@ -34,11 +28,13 @@ public class StateRepository {
     private LiveData<List<State>> mListFavoriteStates;
 
     private final StateDao stateDao;
+    private final EnumStateDao enumStateDao;
     private Gson gson;
 
     @Inject
-    public StateRepository(StateDao stateDao) {
+    public StateRepository(StateDao stateDao, EnumStateDao enumStateDao) {
         this.stateDao = stateDao;
+        this.enumStateDao = enumStateDao;
 
         stateEnumCache = new HashMap<>();
         GsonBuilder gsonBuilder = new GsonBuilder();
@@ -50,8 +46,18 @@ public class StateRepository {
     }
 
     public List<String> getAllStateIds() {
-        Timber.v("getAllStateIds called");
-        return stateDao.getAllStateIds();
+        Timber.v("getAllObjectIds called");
+        return stateDao.getAllObjectIds();
+    }
+
+    public State getStateById(String id) {
+        Timber.v("getStateById called");
+        return stateDao.getStateById(id);
+    }
+
+    public List<String> getAllEnumStateIds() {
+        Timber.v("getAllEnumStateIds called");
+        return enumStateDao.getAllObjectIds();
     }
 
     public LiveData<List<State>> getStatesByEnum(String enumId) {
@@ -87,32 +93,7 @@ public class StateRepository {
         stateDao.deleteAll();
     }
 
-    public void saveStateChanges(String data) {
-        Timber.v("saveStateChanges called");
-        try {
-            TypeToken<Map<String, IoState>> token = new TypeToken<Map<String, IoState>>() {
-            };
-            Map<String, IoState> states = gson.fromJson(data, token.getType());
-            for (Map.Entry<String, IoState> entry : states.entrySet()) {
-                changeState(entry.getKey(), entry.getValue());
-            }
-        } catch (Throwable e) {
-            Timber.e(e);
-        }
-        Timber.v("saveStates finished");
-    }
-
-    public void saveStateChange(String id, String data) {
-        Timber.v("saveStateChange called");
-        try {
-            IoState ioState = gson.fromJson(data, IoState.class);
-            changeState(id, ioState);
-        } catch (Throwable e) {
-            Timber.e(e);
-        }
-    }
-
-    private void changeState(String id, IoState ioState) {
+    public void changeState(String id, IoState ioState) {
         Timber.v("changeState called");
         State state = stateDao.getStateById(id);
         if (state == null) {
@@ -127,33 +108,6 @@ public class StateRepository {
         }
     }
 
-    public void saveObjects(String data) {
-        Timber.v("saveObjects called");
-        try {
-            JSONObject obj = new JSONObject(data);
-            List<State> states = stateDao.getAllStates();
-            for (State state : states) {
-                JSONObject json = obj.optJSONObject(state.getId());
-                if (json != null) {
-                    try {
-                        IoObject ioObject = gson.fromJson(json.toString(), IoObject.class);
-                        state.update(ioObject);
-                        stateDao.update(state);
-                        Timber.d("saveObjects: state updated from object stateId:" + state.getId());
-                    } catch (Throwable e) {
-                        Timber.e(e);
-                    }
-                } else {
-                    stateDao.delete(state);
-                    Timber.w("saveObjects: object not found for stateId:" + state.getId());
-                }
-            }
-        } catch (JSONException e) {
-            Timber.e(e);
-        }
-        Timber.v("saveObjects finished");
-    }
-
     public void saveSocketState(String state) {
         Timber.v("saveSocketState called");
         connected.postValue(state);
@@ -161,6 +115,13 @@ public class StateRepository {
 
     public void saveState(State state) {
         Timber.v("saveState called");
-        stateDao.update(state);
+        stateDao.insert(state);
+    }
+
+    public void linkToEnum(String parent, String id) {
+        Timber.v("linkToEnum called");
+        String enumId = enumStateDao.getEnumId(parent);
+        EnumState enumState = new EnumState(enumId, id);
+        enumStateDao.insert(enumState);
     }
 }

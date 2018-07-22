@@ -37,17 +37,22 @@
         </SwitchPreference>
         <ListPreference
             android:key="logging_level"
-            android:title="Logging Level"
+            android:title="Logging level"
             android:defaultValue="6"
             android:entries="@array/logging_level"
             android:entryValues="@array/logging_levelValues"
             />
         <ListPreference
             android:key="state_subtitle"
-            android:title="State Subtitle"
+            android:title="State subtitle"
             android:defaultValue="none"
             android:entries="@array/state_subtitle"
             android:entryValues="@array/state_subtitleValues"
             />
+        <SwitchPreference
+            android:key="sync_children"
+            android:selectAllOnFocus="true"
+            android:title="Sync children states">
+        </SwitchPreference>
     </PreferenceCategory>
 </PreferenceScreen>

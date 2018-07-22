@@ -17,7 +17,7 @@ public interface StateDao {
     List<State> getAllStates();
 
     @Query("SELECT id FROM state")
-    List<String> getAllStateIds();
+    List<String> getAllObjectIds();
 
     @Query("SELECT * FROM state WHERE id = :id")
     State getStateById(String id);
