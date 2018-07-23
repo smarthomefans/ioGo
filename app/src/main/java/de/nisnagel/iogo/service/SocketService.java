@@ -277,7 +277,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             mSocket.emit("getObjects", null, new Ack() {
                 @Override
                 public void call(Object... args) {
-                    NetworkUtils.saveObjects(stateRepository, args[1].toString(), sharedPref.getBoolean("sync_children",true));
+                    NetworkUtils.saveObjects(stateRepository, args[1].toString(), sharedPref.getBoolean("sync_children",false));
                     getStates();
                 }
             });
