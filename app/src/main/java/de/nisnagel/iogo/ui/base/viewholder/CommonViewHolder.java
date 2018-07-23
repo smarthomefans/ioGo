@@ -68,7 +68,8 @@ public class CommonViewHolder extends BaseViewHolder implements AdapterView.OnIt
 
     private void bindSpinner(State state){
         this.state = state;
-        mSpinner.setVisibility(View.VISIBLE);
+        mText.setVisibility(View.VISIBLE);
+        stateItems = new ArrayList<>();
         for (Map.Entry<String, String> entry : state.getStates().entrySet())
         {
             stateItems.add(new StateItem(entry.getKey(), entry.getValue()));
@@ -86,6 +87,17 @@ public class CommonViewHolder extends BaseViewHolder implements AdapterView.OnIt
             mSpinner.setSelection(arrayAdapter.getPosition(stateItem));
         }
         mSpinner.setOnItemSelectedListener(this);
+        mText.setText(state.getStates().get(state.getVal()));
+        if(state.getWrite()) {
+            mText.setClickable(true);
+            mText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    init = true;
+                    mSpinner.performClick();
+                }
+            });
+        }
     }
 
     private void bindText(State state){
@@ -100,7 +112,7 @@ public class CommonViewHolder extends BaseViewHolder implements AdapterView.OnIt
             mText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+mSpinner.callOnClick();
                     LayoutInflater li = LayoutInflater.from(v.getContext());
                     View promptsView = li.inflate(R.layout.prompts, null);
 
@@ -163,8 +175,8 @@ public class CommonViewHolder extends BaseViewHolder implements AdapterView.OnIt
             StateItem stateItem = (StateItem) parent.getSelectedItem();
             mSubtitle.setText("syncing data...");
             DataBus.getBus().post(new Events.SetState(this.state.getId(), stateItem.getId()));
+            init = false;
         }
-        init = true;
     }
 
     @Override

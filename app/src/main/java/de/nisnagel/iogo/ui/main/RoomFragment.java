@@ -29,6 +29,7 @@ import de.nisnagel.iogo.di.Injectable;
 public class RoomFragment extends Fragment implements Injectable {
 
     private EnumListAdapter mAdapter;
+    private EnumViewModel mViewModel;
 
     @BindView(R.id.enum_list)
     RecyclerView recyclerView;
@@ -38,13 +39,17 @@ public class RoomFragment extends Fragment implements Injectable {
 
     public ArrayList<Enum> list = new ArrayList<>();
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_enum_list, container, false);
         ButterKnife.bind(this, rootView);
-
-        EnumViewModel mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
 
         mAdapter = new EnumListAdapter(list, mViewModel);
         getActivity().runOnUiThread(new Runnable() {

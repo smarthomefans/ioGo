@@ -81,7 +81,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:text="21.5°C"
-        android:visibility="gone"/>
+        android:visibility="invisible"/>
 
     <Spinner
         android:id="@+id/spinner"
@@ -96,5 +96,5 @@
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:visibility="gone"/>
+        android:visibility="invisible"/>
 </RelativeLayout>

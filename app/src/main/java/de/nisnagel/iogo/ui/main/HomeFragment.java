@@ -43,6 +43,7 @@ public class HomeFragment extends Fragment implements Injectable {
 
     private EnumHomeListAdapter mEnumAdapter;
     private StateListAdapter mStateAdapter;
+    private EnumViewModel mViewModel;
 
     @BindView(R.id.favorite_enums)
     RecyclerView rvEnums;
@@ -56,13 +57,17 @@ public class HomeFragment extends Fragment implements Injectable {
     public ArrayList<Enum> enumList = new ArrayList<>();
     public ArrayList<State> stateList = new ArrayList<>();
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, rootView);
-
-        EnumViewModel mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
 
         mEnumAdapter = new EnumHomeListAdapter(enumList, mViewModel);
         mStateAdapter = new StateListAdapter(stateList, mViewModel, getActivity());

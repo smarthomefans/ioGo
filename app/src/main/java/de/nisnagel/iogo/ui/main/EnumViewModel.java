@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.repository.EnumRepository;
