@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
@@ -36,29 +38,30 @@ public class ValueViewHolder extends BaseViewHolder {
     public void bindState(State state) {
         mTitle.setText(state.getName());
         mSubtitle.setText(getSubtitle(state));
-        setValue(state.getRole(), state.getUnit(), state.getVal());
-
+        setValue(state.getRole(), state.getUnit(), state.getVal(), state.getStates());
         setImageRessource(state.getRole());
     }
 
-    private void setValue(String role, String unit, String val) {
+    private void setValue(String role, String unit, String val, Map<String, String> states) {
         String value = val;
+        if (states != null) {
+            value = states.get(val);
+        } else if (role != null) {
+            switch (role) {
+                case Constants.ROLE_VALUE_WINDOW:
+                    if ("0".equals(val)) {
+                        value = "closed";
+                    } else if ("1".equals(val)) {
+                        value = "tilted";
+                    } else if ("2".equals(val)) {
+                        value = "open";
+                    }
+                    break;
+            }
+        }
+
         if (unit != null) {
             value += unit;
-        } else {
-            if (role != null) {
-                switch (role) {
-                    case Constants.ROLE_VALUE_WINDOW:
-                        if ("0".equals(val)) {
-                            value = "closed";
-                        } else if ("1".equals(val)) {
-                            value = "tilted";
-                        } else if ("2".equals(val)) {
-                            value = "open";
-                        }
-                        break;
-                }
-            }
         }
         mValue.setText(value);
     }
