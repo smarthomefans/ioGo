@@ -80,21 +80,6 @@
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:text="21.5°C"
-        android:visibility="invisible"/>
+        android:text="21.5°C"/>
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:spinnerMode="dialog"
-        android:text="dummy"
-        android:textAlignment="textEnd"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:visibility="invisible"/>
 </RelativeLayout>

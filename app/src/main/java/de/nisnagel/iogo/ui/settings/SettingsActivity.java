@@ -11,6 +11,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.service.logging.LoggingUtils;
 import timber.log.Timber;
@@ -40,6 +42,10 @@ public class SettingsActivity extends AppCompatActivity {
                     editor.putBoolean("logging_enabled",false);
                     editor.apply();
                 }
+            }
+            if(key.equals("pro_cloud_enabled")||key.equals("sync_children")) {
+                String value = (sharedPreferences.getBoolean(key, false)) ? "true" : "false";
+                FirebaseAnalytics.getInstance(getApplicationContext()).setUserProperty(key, value);
             }
         }
     };
