@@ -30,6 +30,7 @@ public class Constants {
     public static final String ROLE_VALUE_BRIGHTNESS = "value.brightness";
     public static final String ROLE_VALUE_BATTERY = "value.battery";
     public static final String ROLE_VALUE_BLIND = "value.blind";
+    public static final String ROLE_VALUE_WINDOW = "value.window";
 
     //Indicator
     public static final String ROLE_INDICATOR_LOWBAT = "indicator.lowbat";

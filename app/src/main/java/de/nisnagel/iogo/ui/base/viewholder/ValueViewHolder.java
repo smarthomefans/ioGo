@@ -36,12 +36,31 @@ public class ValueViewHolder extends BaseViewHolder {
     public void bindState(State state) {
         mTitle.setText(state.getName());
         mSubtitle.setText(getSubtitle(state));
-        String value = state.getVal();
-        if (state.getUnit() != null) {
-            value += state.getUnit();
+        setValue(state.getRole(), state.getUnit(), state.getVal());
+
+        setImageRessource(state.getRole());
+    }
+
+    private void setValue(String role, String unit, String val) {
+        String value = val;
+        if (unit != null) {
+            value += unit;
+        } else {
+            if (role != null) {
+                switch (role) {
+                    case Constants.ROLE_VALUE_WINDOW:
+                        if ("0".equals(val)) {
+                            value = "closed";
+                        } else if ("1".equals(val)) {
+                            value = "tilted";
+                        } else if ("2".equals(val)) {
+                            value = "open";
+                        }
+                        break;
+                }
+            }
         }
         mValue.setText(value);
-        setImageRessource(state.getRole());
     }
 
     private void setImageRessource(String role) {
@@ -66,7 +85,7 @@ public class ValueViewHolder extends BaseViewHolder {
                     mIcon.setVisibility(View.GONE);
                     mLetter.setVisibility(View.VISIBLE);
             }
-        }else{
+        } else {
             mIcon.setVisibility(View.GONE);
             mLetter.setVisibility(View.VISIBLE);
         }
