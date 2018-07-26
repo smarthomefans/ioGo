@@ -1,6 +1,7 @@
 package de.nisnagel.iogo.ui.base.viewholder;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -20,7 +21,8 @@ import de.nisnagel.iogo.service.Events;
 public class SwitchViewHolder extends BaseViewHolder {
     @BindView(R.id.message_title)
     TextView mTitle;
-    @BindView(R.id.message_subtitle)  TextView mSubtitle;
+    @BindView(R.id.message_subtitle)
+    TextView mSubtitle;
     @BindView(R.id.value)
     Switch mValue;
     @BindView(R.id.icon)
@@ -39,21 +41,23 @@ public class SwitchViewHolder extends BaseViewHolder {
         mTitle.setText(state.getName());
         mSubtitle.setText(getSubtitle(state));
         mValue.setChecked("true".equals(state.getVal()));
-        if(state.getWrite()) {
+        if (state.getWrite()) {
             mValue.setClickable(true);
-            mValue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            mValue.setOnClickListener(new CompoundButton.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+                public void onClick(View v) {
+                    final Switch btn = (Switch) v;
                     mSubtitle.setText(R.string.syncing_data);
-                    DataBus.getBus().post(new Events.SetState(state.getId(), (isChecked) ? "true" : "false"));
+                    DataBus.getBus().post(new Events.SetState(state.getId(), (btn.isChecked()) ? "true" : "false"));
                 }
             });
+
         }
         setImageRessource(state.getRole());
     }
 
-    private void setImageRessource(String role){
-        if(role != null) {
+    private void setImageRessource(String role) {
+        if (role != null) {
             switch (role) {
                 case Constants.ROLE_SWITCH:
                     mIcon.setImageResource(R.drawable.toggle_switch);
@@ -65,7 +69,7 @@ public class SwitchViewHolder extends BaseViewHolder {
                     mIcon.setVisibility(View.GONE);
                     mLetter.setVisibility(View.VISIBLE);
             }
-        }else{
+        } else {
             mIcon.setVisibility(View.GONE);
             mLetter.setVisibility(View.VISIBLE);
         }

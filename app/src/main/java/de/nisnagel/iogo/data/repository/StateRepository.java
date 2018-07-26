@@ -29,7 +29,6 @@ public class StateRepository {
 
     private final StateDao stateDao;
     private final EnumStateDao enumStateDao;
-    private Gson gson;
 
     @Inject
     public StateRepository(StateDao stateDao, EnumStateDao enumStateDao) {
@@ -37,9 +36,6 @@ public class StateRepository {
         this.enumStateDao = enumStateDao;
 
         stateEnumCache = new HashMap<>();
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
-        gson = gsonBuilder.create();
         connected = new MutableLiveData<>();
 
         Timber.v("instance created");
