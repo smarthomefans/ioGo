@@ -1,20 +1,17 @@
 package de.nisnagel.iogo.ui.base.viewholder;
 
-import android.content.Context;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.service.Constants;
-import de.nisnagel.iogo.service.DataBus;
-import de.nisnagel.iogo.service.Events;
+import de.nisnagel.iogo.ui.main.EnumViewModel;
 
 public class ButtonViewHolder extends BaseViewHolder {
     @BindView(R.id.message_title)
@@ -27,11 +24,10 @@ public class ButtonViewHolder extends BaseViewHolder {
     @BindView(R.id.letter)
     TextView mLetter;
 
-    public ButtonViewHolder(View itemView, Context context) {
+    public ButtonViewHolder(View itemView, EnumViewModel viewModel) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        this.context = context;
-        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.mViewModel = viewModel;
     }
 
     public void bindState(State state) {
@@ -42,7 +38,7 @@ public class ButtonViewHolder extends BaseViewHolder {
                                       @Override
                                       public void onClick(View v) {
                                           mSubtitle.setText(R.string.syncing_data);
-                                          DataBus.getBus().post(new Events.SetState(state.getId(), "true"));
+                                          mViewModel.changeState(state.getId(), "true");
                                       }
                                   }
         );
@@ -72,4 +68,6 @@ public class ButtonViewHolder extends BaseViewHolder {
         }
 
     }
+
+
 }

@@ -1,8 +1,5 @@
 package de.nisnagel.iogo.ui.base.viewholder;
 
-import android.content.Context;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,6 +9,7 @@ import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.service.Constants;
+import de.nisnagel.iogo.ui.main.EnumViewModel;
 
 public class SensorViewHolder extends BaseViewHolder {
     @BindView(R.id.message_title)
@@ -24,11 +22,10 @@ public class SensorViewHolder extends BaseViewHolder {
     @BindView(R.id.letter)
     TextView mLetter;
 
-    public SensorViewHolder(View itemView, Context context) {
+    public SensorViewHolder(View itemView, EnumViewModel viewModel) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        this.context = context;
-        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.mViewModel = viewModel;
     }
 
     public void bindState(State state) {

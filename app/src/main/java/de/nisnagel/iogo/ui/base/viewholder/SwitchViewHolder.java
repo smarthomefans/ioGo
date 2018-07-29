@@ -1,9 +1,5 @@
 package de.nisnagel.iogo.ui.base.viewholder;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -15,8 +11,7 @@ import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.service.Constants;
-import de.nisnagel.iogo.service.DataBus;
-import de.nisnagel.iogo.service.Events;
+import de.nisnagel.iogo.ui.main.EnumViewModel;
 
 public class SwitchViewHolder extends BaseViewHolder {
     @BindView(R.id.message_title)
@@ -30,11 +25,10 @@ public class SwitchViewHolder extends BaseViewHolder {
     @BindView(R.id.letter)
     TextView mLetter;
 
-    public SwitchViewHolder(View itemView, Context context) {
+    public SwitchViewHolder(View itemView, EnumViewModel viewModel) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        this.context = context;
-        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.mViewModel = viewModel;
     }
 
     public void bindState(State state) {
@@ -48,7 +42,7 @@ public class SwitchViewHolder extends BaseViewHolder {
                 public void onClick(View v) {
                     final Switch btn = (Switch) v;
                     mSubtitle.setText(R.string.syncing_data);
-                    DataBus.getBus().post(new Events.SetState(state.getId(), (btn.isChecked()) ? "true" : "false"));
+                    mViewModel.changeState(state.getId(), (btn.isChecked()) ? "true" : "false");
                 }
             });
 

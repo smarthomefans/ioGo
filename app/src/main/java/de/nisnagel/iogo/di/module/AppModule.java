@@ -5,6 +5,9 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -51,19 +54,25 @@ public class AppModule {
     @Singleton
     @Provides
     AppDatabase provideDb(App app) {
-        return Room.databaseBuilder(app, AppDatabase.class,"appDatabase.db").fallbackToDestructiveMigration().allowMainThreadQueries().build();
+        return Room.databaseBuilder(app, AppDatabase.class, "appDatabase.db").addMigrations(AppDatabase.MIGRATION_5_6).build();
     }
 
     @Singleton
     @Provides
-    StateRepository provideStateRepository(StateDao stateDao, EnumStateDao enumStateDao) {
-        return new StateRepository(stateDao, enumStateDao);
+    Executor providesExecutor() {
+        return Executors.newSingleThreadExecutor();
     }
 
     @Singleton
     @Provides
-    EnumRepository provideEnumRepository(EnumDao enumDao, EnumStateDao enumStateDao) {
-        return new EnumRepository(enumDao, enumStateDao);
+    StateRepository provideStateRepository(StateDao stateDao, EnumStateDao enumStateDao, Executor executor) {
+        return new StateRepository(stateDao, enumStateDao, executor);
+    }
+
+    @Singleton
+    @Provides
+    EnumRepository provideEnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, Executor executor) {
+        return new EnumRepository(enumDao, enumStateDao, executor);
     }
 
     @Singleton

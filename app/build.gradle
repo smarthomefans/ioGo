@@ -25,8 +25,8 @@ android {
         applicationId 'de.nisnagel.iogo'
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 1606
-        versionName "0.16.6"
+        versionCode 1700
+        versionName "0.17.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

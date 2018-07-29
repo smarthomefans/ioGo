@@ -58,5 +58,8 @@ public class EnumViewModel extends ViewModel {
     public void saveState(State state) {
         stateRepository.saveState(state);
     }
+    public void changeState(String id, String newVal) {
+        stateRepository.changeState(id, newVal);
+    }
 
 }

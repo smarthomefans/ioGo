@@ -10,7 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -112,12 +111,12 @@ public class NetworkUtils {
                 IoValue ioValue = ioRow.getValue();
                 IoCommon ioCommon = ioValue.getCommon();
                 Enum anEnum = new Enum(ioValue.getId(), ioCommon.getName(), type, "false");
-                repo.insertEnum(anEnum);
+                repo.syncEnum(anEnum);
                 Timber.d("saveEnums: enum inserted enumId:" + anEnum.getId());
                 if (ioCommon.getMembers() != null) {
                     for (int j = 0; j < ioCommon.getMembers().size(); j++) {
                         EnumState enumState = new EnumState(anEnum.getId(), ioCommon.getMembers().get(j));
-                        repo.insertEnumState(enumState);
+                        repo.syncEnumState(enumState);
                         Timber.d("saveEnums: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
                     }
                 } else {
@@ -145,10 +144,8 @@ public class NetworkUtils {
                 if (json != null) {
                     try {
                         IoObject ioObject = gson.fromJson(json.toString(), IoObject.class);
-                        State state = new State(id);
-                        state.update(ioObject);
-                        repo.saveState(state);
-                        Timber.d("saveObjects: state updated from object stateId:" + state.getId());
+                        repo.syncObject(id,ioObject);
+                        Timber.d("saveObjects: state updated from object stateId:" + id);
                     } catch (Throwable e) {
                         Timber.e(e);
                     }
@@ -160,11 +157,9 @@ public class NetworkUtils {
                             json = obj.optJSONObject(key);
                             try {
                                 IoObject ioObject = gson.fromJson(json.toString(), IoObject.class);
-                                State state = new State(key);
-                                state.update(ioObject);
-                                repo.saveState(state);
-                                repo.linkToEnum(id, state.getId());
-                                Timber.d("saveObjects: state updated from object stateId:" + state.getId());
+                                repo.syncObject(key,ioObject);
+                                repo.linkToEnum(id, key);
+                                Timber.d("saveObjects: state updated from object stateId:" + key);
                             } catch (Throwable e) {
                                 Timber.e(e);
                             }
@@ -187,7 +182,7 @@ public class NetworkUtils {
             };
             Map<String, IoState> states = gson.fromJson(data, token.getType());
             for (Map.Entry<String, IoState> entry : states.entrySet()) {
-                repo.changeState(entry.getKey(), entry.getValue());
+                repo.syncState(entry.getKey(), entry.getValue());
             }
         } catch (Throwable e) {
             Timber.e(e);
@@ -201,7 +196,7 @@ public class NetworkUtils {
         Gson gson = gsonBuilder.create();
         try {
             IoState ioState = gson.fromJson(data, IoState.class);
-            repo.changeState(id, ioState);
+            repo.syncState(id, ioState);
         } catch (Throwable e) {
             Timber.e(e);
         }

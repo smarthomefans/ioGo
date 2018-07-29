@@ -9,31 +9,39 @@ import com.google.gson.GsonBuilder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import de.nisnagel.iogo.data.io.IoName;
+import de.nisnagel.iogo.data.io.IoObject;
 import de.nisnagel.iogo.data.io.IoState;
 import de.nisnagel.iogo.data.model.EnumState;
 import de.nisnagel.iogo.data.model.EnumStateDao;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.model.StateDao;
+import de.nisnagel.iogo.service.DataBus;
+import de.nisnagel.iogo.service.Events;
 import timber.log.Timber;
 
 @Singleton
 public class StateRepository {
+
     private Map<String, LiveData<List<State>>> stateEnumCache;
     private MutableLiveData<String> connected;
     private LiveData<List<State>> mListFavoriteStates;
 
     private final StateDao stateDao;
     private final EnumStateDao enumStateDao;
+    private Executor executor;
 
     @Inject
-    public StateRepository(StateDao stateDao, EnumStateDao enumStateDao) {
+    public StateRepository(StateDao stateDao, EnumStateDao enumStateDao, Executor executor) {
         this.stateDao = stateDao;
         this.enumStateDao = enumStateDao;
+        this.executor = executor;
 
         stateEnumCache = new HashMap<>();
         connected = new MutableLiveData<>();
@@ -42,13 +50,8 @@ public class StateRepository {
     }
 
     public List<String> getAllStateIds() {
-        Timber.v("getAllObjectIds called");
+        Timber.v("getAllStateIds called");
         return stateDao.getAllObjectIds();
-    }
-
-    public State getStateById(String id) {
-        Timber.v("getStateById called");
-        return stateDao.getStateById(id);
     }
 
     public List<String> getAllEnumStateIds() {
@@ -86,21 +89,40 @@ public class StateRepository {
 
     public void deleteAll() {
         Timber.v("deleteAll called");
-        stateDao.deleteAll();
+        executor.execute(stateDao::deleteAll);
     }
 
-    public void changeState(String id, IoState ioState) {
-        Timber.v("changeState called");
+    public void syncObject(String id, IoObject ioObject) {
+        Timber.v("syncObject called");
         State state = stateDao.getStateById(id);
         if (state == null) {
             state = new State(id);
+            state.setSync(true);
+            state.update(ioObject);
+            stateDao.insert(state);
+            Timber.d("syncObject: state inserted stateId:" + state.getId());
+        } else {
+            state.update(ioObject);
+            state.setSync(true);
+            stateDao.update(state);
+            Timber.d("syncObject: state updated stateId:" + state.getId());
+        }
+    }
+
+    public void syncState(String id, IoState ioState) {
+        Timber.v("syncState called");
+        State state = stateDao.getStateById(id);
+        if (state == null) {
+            state = new State(id);
+            state.setSync(true);
             state.update(ioState);
             stateDao.insert(state);
-            Timber.d("changeState: state inserted stateId:" + state.getId());
+            Timber.d("syncState: state inserted stateId:" + state.getId());
         } else {
             state.update(ioState);
+            state.setSync(true);
             stateDao.update(state);
-            Timber.d("changeState: state updated stateId:" + state.getId());
+            Timber.d("syncState: state updated stateId:" + state.getId());
         }
     }
 
@@ -109,9 +131,22 @@ public class StateRepository {
         connected.postValue(state);
     }
 
+    public void changeState(String id, String newVal) {
+        Timber.v("saveState called");
+
+        executor.execute(() -> {
+                    State state = stateDao.getStateById(id);
+                    state.update(newVal);
+                    state.setSync(false);
+                    stateDao.update(state);
+                    DataBus.getBus().post(new Events.SetState(id, newVal));
+                }
+        );
+    }
+
     public void saveState(State state) {
         Timber.v("saveState called");
-        stateDao.insert(state);
+        executor.execute(() -> stateDao.update(state));
     }
 
     public void linkToEnum(String parent, String id) {

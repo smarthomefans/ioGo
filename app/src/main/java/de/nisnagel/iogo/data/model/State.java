@@ -7,6 +7,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
+import java.util.Date;
 import java.util.Map;
 
 import de.nisnagel.iogo.data.io.IoObject;
@@ -18,6 +19,7 @@ public class State {
     @PrimaryKey
     @NonNull
     private final String id;
+
     private String val;
     private boolean ack;
     private long ts;
@@ -25,6 +27,10 @@ public class State {
     private String from;
     private int q;
 
+    private boolean sync;
+
+    private Float min;
+    private Float max;
     private String name;
     private String type;
     private String role;
@@ -60,13 +66,21 @@ public class State {
         this.q = ioState.getQ();
     }
 
+    public void update(String newVal) {
+        this.val = newVal;
+        this.ts = new Date().getTime();
+        this.from = "app";
+    }
+
     public void update(IoObject ioObject) {
-        this.name = ioObject.getCommonName();
-        this.type = ioObject.getCommonType();
-        this.role = ioObject.getCommonRole();
-        this.unit = ioObject.getCommonUnit();
-        this.read = ioObject.isCommonRead();
-        this.write = ioObject.isCommonWrite();
+        this.min = ioObject.getCommon().getMin();
+        this.max = ioObject.getCommon().getMax();
+        this.name = ioObject.getCommon().getName();
+        this.type = ioObject.getCommon().getType();
+        this.role = ioObject.getCommon().getRole();
+        this.unit = ioObject.getCommon().getUnit();
+        this.read = ioObject.getCommon().isRead();
+        this.write = ioObject.getCommon().isWrite();
         this.states = ioObject.getCommon().getStates();
     }
 
@@ -161,5 +175,29 @@ public class State {
 
     public void setFavorite(String favorite) {
         this.favorite = favorite;
+    }
+
+    public Float getMin() {
+        return min;
+    }
+
+    public void setMin(Float min) {
+        this.min = min;
+    }
+
+    public Float getMax() {
+        return max;
+    }
+
+    public void setMax(Float max) {
+        this.max = max;
+    }
+
+    public boolean isSync() {
+        return sync;
+    }
+
+    public void setSync(boolean sync) {
+        this.sync = sync;
     }
 }

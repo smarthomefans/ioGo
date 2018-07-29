@@ -28,7 +28,7 @@ public interface StateDao {
     @Query("SELECT * FROM state WHERE favorite = 'true' ORDER by name")
     LiveData<List<State>> getFavoriteStates();
 
-    @Query("SELECT count(*) FROM state WHERE name IS NOT NULL")
+    @Query("SELECT count(*) FROM state")
     LiveData<Integer> countStates();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

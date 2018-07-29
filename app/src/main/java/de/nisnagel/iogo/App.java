@@ -30,11 +30,9 @@ public class App extends Application implements HasActivityInjector, HasServiceI
                 .build()
                 .inject(this);
 
-
         LoggingUtils.setupLogging(this);
 
     }
-
 
     @Override
     public AndroidInjector<Activity> activityInjector() {

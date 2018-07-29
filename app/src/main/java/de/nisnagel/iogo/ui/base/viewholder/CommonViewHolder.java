@@ -1,9 +1,7 @@
 package de.nisnagel.iogo.ui.base.viewholder;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,6 +22,7 @@ import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.service.Events;
 import de.nisnagel.iogo.ui.base.StateItem;
+import de.nisnagel.iogo.ui.main.EnumViewModel;
 
 public class CommonViewHolder extends BaseViewHolder {
     @BindView(R.id.message_title)
@@ -37,12 +36,10 @@ public class CommonViewHolder extends BaseViewHolder {
 
     private String selected = null;
 
-    public CommonViewHolder(View itemView, Context context) {
+    public CommonViewHolder(View itemView, EnumViewModel viewModel) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        DataBus.getBus().register(this);
-        this.context = context;
-        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.mViewModel = viewModel;
     }
 
     public void bindState(State state) {
@@ -115,8 +112,8 @@ public class CommonViewHolder extends BaseViewHolder {
                             .setPositiveButton("OK",
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
-                                            mSubtitle.setText("syncing data...");
-                                            DataBus.getBus().post(new Events.SetState(state.getId(), selected));
+                                            mSubtitle.setText(R.string.syncing_data);
+                                            mViewModel.changeState(state.getId(), selected);
                                         }
                                     })
                             .setNegativeButton("Cancel",

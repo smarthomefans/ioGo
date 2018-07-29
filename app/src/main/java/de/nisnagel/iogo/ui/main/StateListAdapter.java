@@ -79,28 +79,28 @@ public class StateListAdapter
         switch (viewType) {
             case C_SENSOR:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_sensor, parent, false);
-                return new SensorViewHolder(view, context);
+                return new SensorViewHolder(view, mViewModel);
             case C_BUTTON:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_button, parent, false);
-                return new ButtonViewHolder(view, context);
+                return new ButtonViewHolder(view, mViewModel);
             case C_VALUE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_number, parent, false);
-                return new ValueViewHolder(view, context);
+                return new ValueViewHolder(view, mViewModel);
             case C_INDICATOR:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_indicator, parent, false);
-                return new IndicatorViewHolder(view, context);
+                return new IndicatorViewHolder(view, mViewModel);
             case C_LEVEL:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_number, parent, false);
-                return new LevelViewHolder(view, context);
+                return new LevelViewHolder(view, mViewModel);
             case C_SWITCH:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_switch, parent, false);
-                return new SwitchViewHolder(view, context);
+                return new SwitchViewHolder(view, mViewModel);
             case C_COMMON:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_common, parent, false);
-                return new CommonViewHolder(view, context);
+                return new CommonViewHolder(view, mViewModel);
             default:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_common, parent, false);
-                return new CommonViewHolder(view, context);
+                return new CommonViewHolder(view, mViewModel);
         }
     }
 

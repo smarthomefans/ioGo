@@ -12,30 +12,6 @@ public class IoObject {
         return this.id;
     }
 
-    public String getCommonName() {
-        return this.common.getName();
-    }
-
-    public String getCommonType() {
-        return this.common.getType();
-    }
-
-    public String getCommonRole() {
-        return this.common.getRole();
-    }
-
-    public String getCommonUnit() {
-        return this.common.getUnit();
-    }
-
-    public boolean isCommonRead() {
-        return this.common.isRead();
-    }
-
-    public boolean isCommonWrite() {
-        return this.common.isWrite();
-    }
-
     public String getType() {
         return type;
     }

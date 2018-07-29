@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -33,13 +34,17 @@ public class EnumRepository {
     private LiveData<List<Enum>> mListFunctionEnums;
     private LiveData<List<Enum>> mListRoomEnums;
     private LiveData<List<Enum>> mListFavoriteEnums;
+
     private final EnumDao enumDao;
     private final EnumStateDao enumStateDao;
+    private Executor executor;
 
     @Inject
-    public EnumRepository(EnumDao enumDao, EnumStateDao enumStateDao) {
+    public EnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, Executor executor) {
         this.enumDao = enumDao;
         this.enumStateDao = enumStateDao;
+        this.executor = executor;
+
         enumCache = new HashMap<>();
         Timber.v("instance created");
     }
@@ -93,22 +98,22 @@ public class EnumRepository {
 
     public void deleteAll() {
         Timber.v("deleteAll called");
-        enumDao.deleteAll();
-        enumStateDao.deleteAll();
+        executor.execute(enumDao::deleteAll);
+        executor.execute(enumStateDao::deleteAll);
     }
 
-    public void insertEnum(Enum item){
-        Timber.v("insertEnum called");
+    public void syncEnum(Enum item){
+        Timber.v("syncEnum called");
         enumDao.insert(item);
     }
 
-    public void insertEnumState(EnumState item){
-        Timber.v("insertEnumState called");
+    public void syncEnumState(EnumState item){
+        Timber.v("syncEnumState called");
         enumStateDao.insert(item);
     }
 
     public void saveEnum(Enum anEnum) {
         Timber.v("saveEnum called");
-        enumDao.update(anEnum);
+        executor.execute(() -> enumDao.update(anEnum));
     }
 }

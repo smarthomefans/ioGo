@@ -5,6 +5,8 @@ import java.util.Map;
 
 public class IoCommon {
 
+    private Float min;
+    private Float max;
     private IoName name;
     private String type;
     private String role;
@@ -96,5 +98,21 @@ public class IoCommon {
 
     public void setStates(Map<String, String> states) {
         this.states = states;
+    }
+
+    public Float getMin() {
+        return min;
+    }
+
+    public void setMin(Float min) {
+        this.min = min;
+    }
+
+    public Float getMax() {
+        return max;
+    }
+
+    public void setMax(Float max) {
+        this.max = max;
     }
 }
