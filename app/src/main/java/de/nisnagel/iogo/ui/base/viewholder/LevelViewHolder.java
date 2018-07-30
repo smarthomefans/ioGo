@@ -18,16 +18,8 @@ import de.nisnagel.iogo.service.Events;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
 
 public class LevelViewHolder extends BaseViewHolder {
-    @BindView(R.id.message_title)
-    TextView mTitle;
-    @BindView(R.id.message_subtitle)
-    TextView mSubtitle;
-    @BindView(R.id.value)
+    @BindView(R.id.valueNumber)
     TextView mValue;
-    @BindView(R.id.icon)
-    ImageView mIcon;
-    @BindView(R.id.letter)
-    TextView mLetter;
 
     public LevelViewHolder(View itemView, EnumViewModel viewModel) {
         super(itemView);
@@ -36,8 +28,10 @@ public class LevelViewHolder extends BaseViewHolder {
     }
 
     public void bindState(State state) {
+        super.bindState(state);
         mTitle.setText(state.getName());
         mSubtitle.setText(getSubtitle(state));
+        mValue.setVisibility(View.VISIBLE);
         String value = state.getVal();
         if (state.getUnit() != null) {
             value += state.getUnit();
@@ -139,13 +133,7 @@ public class LevelViewHolder extends BaseViewHolder {
                 case Constants.ROLE_LEVEL_TILT:
                     mIcon.setImageResource(R.drawable.blinds);
                     break;
-                default:
-                    mIcon.setVisibility(View.GONE);
-                    mLetter.setVisibility(View.VISIBLE);
             }
-        }else{
-            mIcon.setVisibility(View.GONE);
-            mLetter.setVisibility(View.VISIBLE);
         }
     }
 }

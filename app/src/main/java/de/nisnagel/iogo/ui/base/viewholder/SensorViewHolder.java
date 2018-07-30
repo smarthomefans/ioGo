@@ -2,6 +2,7 @@ package de.nisnagel.iogo.ui.base.viewholder;
 
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -12,15 +13,8 @@ import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
 
 public class SensorViewHolder extends BaseViewHolder {
-    @BindView(R.id.message_title)
-    TextView mTitle;
-    @BindView(R.id.message_subtitle)  TextView mSubtitle;
-    @BindView(R.id.value)
+    @BindView(R.id.valueText)
     TextView mValue;
-    @BindView(R.id.icon)
-    ImageView mIcon;
-    @BindView(R.id.letter)
-    TextView mLetter;
 
     public SensorViewHolder(View itemView, EnumViewModel viewModel) {
         super(itemView);
@@ -28,15 +22,18 @@ public class SensorViewHolder extends BaseViewHolder {
         this.mViewModel = viewModel;
     }
 
+    @Override
     public void bindState(State state) {
+        super.bindState(state);
         mTitle.setText(state.getName());
         mSubtitle.setText(getSubtitle(state));
+        mValue.setVisibility(View.VISIBLE);
         setValue(state.getRole(), state.getVal());
         setImageRessource(state.getRole());
     }
 
-    private void setValue(String role, String val){
-        if(role != null) {
+    private void setValue(String role, String val) {
+        if (role != null) {
             switch (role) {
                 case Constants.ROLE_SENSOR_DOOR:
                     mValue.setText(("true".equals(val)) ? "open" : "closed");
@@ -51,8 +48,8 @@ public class SensorViewHolder extends BaseViewHolder {
         }
     }
 
-    private void setImageRessource(String role){
-        if(role != null) {
+    private void setImageRessource(String role) {
+        if (role != null) {
             switch (role) {
                 case Constants.ROLE_SENSOR_DOOR:
                     mIcon.setImageResource(R.drawable.door);
@@ -87,13 +84,7 @@ public class SensorViewHolder extends BaseViewHolder {
                 case Constants.ROLE_SENSOR_RAIN:
                     mIcon.setImageResource(R.drawable.weather_rainy);
                     break;
-                default:
-                    mIcon.setVisibility(View.GONE);
-                    mLetter.setVisibility(View.VISIBLE);
             }
-        }else{
-            mIcon.setVisibility(View.GONE);
-            mLetter.setVisibility(View.VISIBLE);
         }
     }
 }

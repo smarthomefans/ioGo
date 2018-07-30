@@ -78,28 +78,28 @@ public class StateListAdapter
         View view;
         switch (viewType) {
             case C_SENSOR:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_sensor, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state, parent, false);
                 return new SensorViewHolder(view, mViewModel);
             case C_BUTTON:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_button, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state, parent, false);
                 return new ButtonViewHolder(view, mViewModel);
             case C_VALUE:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_number, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state, parent, false);
                 return new ValueViewHolder(view, mViewModel);
             case C_INDICATOR:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_indicator, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state, parent, false);
                 return new IndicatorViewHolder(view, mViewModel);
             case C_LEVEL:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_number, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state, parent, false);
                 return new LevelViewHolder(view, mViewModel);
             case C_SWITCH:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_switch, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state, parent, false);
                 return new SwitchViewHolder(view, mViewModel);
             case C_COMMON:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_common, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state, parent, false);
                 return new CommonViewHolder(view, mViewModel);
             default:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state_common, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.li_state, parent, false);
                 return new CommonViewHolder(view, mViewModel);
         }
     }

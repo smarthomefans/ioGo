@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:layout_marginBottom="1dp">
+
+    <ProgressBar
+        android:id="@+id/sync"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:indeterminate="true" />
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/information" />
+
+    <TextView
+        android:id="@+id/message_title"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginEnd="116dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@android:color/primary_text_dark"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/message_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginEnd="116dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="36dp"
+        android:textColor="@android:color/secondary_text_dark"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/valueText"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="end"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <Switch
+        android:id="@+id/valueSwitch"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="end"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/valueNumber"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="end"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/valueButton"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="end"
+        android:visibility="gone" />
+
+</RelativeLayout>

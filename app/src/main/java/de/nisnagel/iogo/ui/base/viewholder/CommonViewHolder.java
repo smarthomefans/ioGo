@@ -25,14 +25,8 @@ import de.nisnagel.iogo.ui.base.StateItem;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
 
 public class CommonViewHolder extends BaseViewHolder {
-    @BindView(R.id.message_title)
-    TextView mTitle;
-    @BindView(R.id.message_subtitle)  TextView mSubtitle;
-    @BindView(R.id.text)  TextView mText;
-    @BindView(R.id.icon)
-    ImageView mIcon;
-    @BindView(R.id.letter)
-    TextView mLetter;
+    @BindView(R.id.valueText)
+    TextView mValue;
 
     private String selected = null;
 
@@ -43,27 +37,28 @@ public class CommonViewHolder extends BaseViewHolder {
     }
 
     public void bindState(State state) {
+        super.bindState(state);
         mTitle.setText(state.getName());
         mSubtitle.setText(getSubtitle(state));
-
-        if(state.getStates() != null){
+        mValue.setVisibility(View.VISIBLE);
+        if (state.getStates() != null) {
             bindSpinner(state);
-        }else{
+        } else {
             bindText(state);
         }
 
         setImageRessource(state.getRole());
     }
 
-    private void bindSpinner(State state){
-        if(state.getStates() != null) {
-            mText.setText(state.getStates().get(state.getVal()));
-        }else{
-            mText.setText(state.getVal());
+    private void bindSpinner(State state) {
+        if (state.getStates() != null) {
+            mValue.setText(state.getStates().get(state.getVal()));
+        } else {
+            mValue.setText(state.getVal());
         }
-        if(state.getWrite()) {
-            mText.setClickable(true);
-            mText.setOnClickListener(new View.OnClickListener() {
+        if (state.getWrite()) {
+            mValue.setClickable(true);
+            mValue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     LayoutInflater li = LayoutInflater.from(v.getContext());
@@ -79,10 +74,9 @@ public class CommonViewHolder extends BaseViewHolder {
                     ArrayList<StateItem> stateItems = new ArrayList<>();
                     StateItem stateItem = null;
 
-                    for (Map.Entry<String, String> entry : state.getStates().entrySet())
-                    {
+                    for (Map.Entry<String, String> entry : state.getStates().entrySet()) {
                         stateItems.add(new StateItem(entry.getKey(), entry.getValue()));
-                        if(entry.getKey().equals(state.getVal())){
+                        if (entry.getKey().equals(state.getVal())) {
                             stateItem = new StateItem(entry.getKey(), entry.getValue());
                         }
                     }
@@ -133,15 +127,15 @@ public class CommonViewHolder extends BaseViewHolder {
         }
     }
 
-    private void bindText(State state){
-        if(state.getStates() != null) {
-            mText.setText(state.getStates().get(state.getVal()));
-        }else{
-            mText.setText(state.getVal());
+    private void bindText(State state) {
+        if (state.getStates() != null) {
+            mValue.setText(state.getStates().get(state.getVal()));
+        } else {
+            mValue.setText(state.getVal());
         }
-        if(state.getWrite()) {
-            mText.setClickable(true);
-            mText.setOnClickListener(new View.OnClickListener() {
+        if (state.getWrite()) {
+            mValue.setClickable(true);
+            mValue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     LayoutInflater li = LayoutInflater.from(v.getContext());
@@ -184,19 +178,13 @@ public class CommonViewHolder extends BaseViewHolder {
         }
     }
 
-    private void setImageRessource(String role){
-        if(role != null) {
+    private void setImageRessource(String role) {
+        if (role != null) {
             switch (role) {
                 case Constants.ROLE_TEXT:
                     mIcon.setImageResource(R.drawable.text);
                     break;
-                default:
-                    mIcon.setVisibility(View.GONE);
-                    mLetter.setVisibility(View.VISIBLE);
             }
-        }else{
-            mIcon.setVisibility(View.GONE);
-            mLetter.setVisibility(View.VISIBLE);
         }
     }
 

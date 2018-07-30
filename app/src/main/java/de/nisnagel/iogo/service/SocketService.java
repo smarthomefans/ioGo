@@ -159,6 +159,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         @Override
         public void call(Object... args) {
             stateRepository.saveSocketState("offline");
+            stateRepository.setSyncAll(false);
             Timber.i("disconnected");
         }
     };

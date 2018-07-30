@@ -155,4 +155,8 @@ public class StateRepository {
         EnumState enumState = new EnumState(enumId, id);
         enumStateDao.insert(enumState);
     }
+
+    public void setSyncAll(boolean sync) {
+        stateDao.setSyncAll(sync);
+    }
 }

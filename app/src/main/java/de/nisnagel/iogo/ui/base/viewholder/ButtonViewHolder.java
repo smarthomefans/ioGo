@@ -14,15 +14,8 @@ import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
 
 public class ButtonViewHolder extends BaseViewHolder {
-    @BindView(R.id.message_title)
-    TextView mTitle;
-    @BindView(R.id.message_subtitle)  TextView mSubtitle;
-    @BindView(R.id.value)
+    @BindView(R.id.valueButton)
     ImageButton mValue;
-    @BindView(R.id.icon)
-    ImageView mIcon;
-    @BindView(R.id.letter)
-    TextView mLetter;
 
     public ButtonViewHolder(View itemView, EnumViewModel viewModel) {
         super(itemView);
@@ -31,8 +24,10 @@ public class ButtonViewHolder extends BaseViewHolder {
     }
 
     public void bindState(State state) {
+        super.bindState(state);
         mTitle.setText(state.getName());
         mSubtitle.setText(getSubtitle(state));
+        mValue.setVisibility(View.VISIBLE);
         mValue.setClickable(state.getWrite());
         mValue.setOnClickListener(new CompoundButton.OnClickListener() {
                                       @Override
@@ -57,14 +52,8 @@ public class ButtonViewHolder extends BaseViewHolder {
                 case Constants.ROLE_BUTTON_STOP:
                     mIcon.setImageResource(R.drawable.stop);
                     break;
-                default:
-                    mIcon.setVisibility(View.GONE);
-                    mLetter.setVisibility(View.VISIBLE);
 
             }
-        }else{
-            mIcon.setVisibility(View.GONE);
-            mLetter.setVisibility(View.VISIBLE);
         }
 
     }

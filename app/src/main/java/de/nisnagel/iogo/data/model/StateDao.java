@@ -42,4 +42,7 @@ public interface StateDao {
 
     @Query("DELETE FROM state")
     void deleteAll();
+
+    @Query("UPDATE state SET sync = :sync")
+    void setSyncAll(boolean sync);
 }
