@@ -7,7 +7,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ui.main.MainActivity"
     tools:layout_editor_absoluteY="81dp"
-    tools:showIn="@layout/activity_enum_list">
+    tools:showIn="@layout/activity_main">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/enum_list"

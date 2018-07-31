@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.Enum;
+import de.nisnagel.iogo.service.Constants;
 
 public class EnumHomeListAdapter
         extends RecyclerView.Adapter<EnumHomeListAdapter.ViewHolder> {
@@ -30,8 +30,8 @@ public class EnumHomeListAdapter
             Enum item = (Enum) view.getTag();
 
             Context context = view.getContext();
-            Intent intent = new Intent(context, EnumDetailActivity.class);
-            intent.putExtra(EnumDetailFragment.ARG_ENUM_ID, item.getId());
+            Intent intent = new Intent(context, EnumActivity.class);
+            intent.putExtra(Constants.ARG_ENUM_ID, item.getId());
 
             context.startActivity(intent);
 

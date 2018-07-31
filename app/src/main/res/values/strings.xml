@@ -22,4 +22,6 @@
     <string name="syncing_data">syncing data...</string>
     <string name="ad_unit_id">ca-app-pub-9046643317542583~2243544255</string>
     <string name="banner_ad_unit_id">ca-app-pub-9046643317542583/7100999122</string>
+    <string name="title_activity_state_detail">StateDetailActivity</string>
+    <string name="title_activity_temp">TempActivity</string>
 </resources>

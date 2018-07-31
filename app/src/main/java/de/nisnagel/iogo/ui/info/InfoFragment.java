@@ -65,7 +65,7 @@ public class InfoFragment extends Fragment implements Injectable {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.info, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_info, container, false);
         ButterKnife.bind(this, rootView);
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(InfoViewModel.class);

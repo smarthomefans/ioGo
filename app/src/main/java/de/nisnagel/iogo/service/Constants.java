@@ -57,4 +57,7 @@ public class Constants {
     //Switch
     public static final String ROLE_SWITCH = "switch";
     public static final String ROLE_SWITCH_LIGHT = "switch.light";
+
+    public static final String ARG_ENUM_ID = "enum_id";
+    public static final String ARG_STATE_ID = "state_id";
 }

@@ -27,11 +27,10 @@ import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.di.Injectable;
+import de.nisnagel.iogo.service.Constants;
 
 
-public class EnumDetailFragment extends Fragment implements Injectable {
-
-    public static final String ARG_ENUM_ID = "enum_id";
+public class EnumFragment extends Fragment implements Injectable {
 
     @BindView(R.id.enum_detail_list) RecyclerView mRecyclerView;
 
@@ -51,13 +50,13 @@ public class EnumDetailFragment extends Fragment implements Injectable {
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
 
-        enumId = getArguments().getString(ARG_ENUM_ID);
+        enumId = getArguments().getString(Constants.ARG_ENUM_ID);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.enum_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_enum, container, false);
         ButterKnife.bind(this, rootView);
 
         mAdapter = new StateListAdapter(mListStates, mViewModel, getActivity());

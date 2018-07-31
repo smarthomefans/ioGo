@@ -17,7 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.Enum;
-import de.nisnagel.iogo.data.model.State;
+import de.nisnagel.iogo.service.Constants;
 
 public class EnumListAdapter
         extends RecyclerView.Adapter<EnumListAdapter.ViewHolder> {
@@ -31,8 +31,8 @@ public class EnumListAdapter
             Enum item = (Enum) view.getTag();
 
             Context context = view.getContext();
-            Intent intent = new Intent(context, EnumDetailActivity.class);
-            intent.putExtra(EnumDetailFragment.ARG_ENUM_ID, item.getId());
+            Intent intent = new Intent(context, EnumActivity.class);
+            intent.putExtra(Constants.ARG_ENUM_ID, item.getId());
 
             context.startActivity(intent);
 

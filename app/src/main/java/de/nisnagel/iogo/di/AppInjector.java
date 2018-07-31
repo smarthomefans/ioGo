@@ -12,7 +12,7 @@ import dagger.android.support.AndroidSupportInjection;
 import dagger.android.support.HasSupportFragmentInjector;
 import de.nisnagel.iogo.App;
 import de.nisnagel.iogo.di.component.DaggerAppComponent;
-import de.nisnagel.iogo.ui.main.EnumDetailActivity;
+import de.nisnagel.iogo.ui.main.EnumActivity;
 import de.nisnagel.iogo.ui.main.MainActivity;
 
 /**
@@ -79,8 +79,8 @@ public class AppInjector {
                                 }
                             }, true);
         }
-        if (activity instanceof EnumDetailActivity) {
-            ((EnumDetailActivity) activity).getSupportFragmentManager()
+        if (activity instanceof EnumActivity) {
+            ((EnumActivity) activity).getSupportFragmentManager()
                     .registerFragmentLifecycleCallbacks(
                             new FragmentManager.FragmentLifecycleCallbacks() {
                                 @Override

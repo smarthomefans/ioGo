@@ -20,6 +20,7 @@ import de.nisnagel.iogo.data.model.StateDao;
 import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
 import de.nisnagel.iogo.ui.ViewModelFactory;
+import de.nisnagel.iogo.ui.detail.StateViewModel;
 import de.nisnagel.iogo.ui.info.InfoViewModel;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
 
@@ -43,6 +44,11 @@ public class AppModule {
 
     @Provides
     ViewModel provideEnumViewModel(EnumViewModel viewModel) {
+        return viewModel;
+    }
+
+    @Provides
+    ViewModel provideStateViewModel(StateViewModel viewModel) {
         return viewModel;
     }
 

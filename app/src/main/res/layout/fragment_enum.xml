@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".ui.main.EnumDetailActivity"
+    tools:context=".ui.main.EnumActivity"
     tools:layout_editor_absoluteY="81dp"
-    tools:showIn="@layout/activity_enum_detail">
+    tools:showIn="@layout/activity_enum">
 
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -21,6 +21,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".ui.main.EnumDetailActivity" />
+        tools:context=".ui.main.EnumActivity" />
 
 </android.support.constraint.ConstraintLayout>

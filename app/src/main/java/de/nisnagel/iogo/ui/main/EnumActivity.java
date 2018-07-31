@@ -1,13 +1,10 @@
 package de.nisnagel.iogo.ui.main;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -18,9 +15,10 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import de.nisnagel.iogo.R;
+import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.ui.base.BaseActivity;
 
-public class EnumDetailActivity extends BaseActivity implements HasSupportFragmentInjector {
+public class EnumActivity extends BaseActivity implements HasSupportFragmentInjector {
 
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
@@ -32,7 +30,7 @@ public class EnumDetailActivity extends BaseActivity implements HasSupportFragme
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_enum_detail);
+        setContentView(R.layout.activity_enum);
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
@@ -40,11 +38,11 @@ public class EnumDetailActivity extends BaseActivity implements HasSupportFragme
 
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
-            arguments.putString(EnumDetailFragment.ARG_ENUM_ID,
-                    getIntent().getStringExtra(EnumDetailFragment.ARG_ENUM_ID));
-            EnumDetailFragment fragment = new EnumDetailFragment();
+            arguments.putString(Constants.ARG_ENUM_ID,
+                    getIntent().getStringExtra(Constants.ARG_ENUM_ID));
+            EnumFragment fragment = new EnumFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction().add(R.id.enum_detail_container, fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.enum_container, fragment).commit();
         }
     }
 
