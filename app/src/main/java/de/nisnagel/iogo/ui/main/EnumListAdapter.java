@@ -99,8 +99,6 @@ public class EnumListAdapter
         @BindView(R.id.title)  TextView mTitle;
         @BindView(R.id.icon)
         ImageView mIcon;
-        @BindView(R.id.letter)
-        TextView mLetter;
 
         ViewHolder(View view) {
             super(view);

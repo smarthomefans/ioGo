@@ -24,35 +24,8 @@ public class StateViewModel extends ViewModel {
         this.stateRepository = stateRepository;
     }
 
-    public LiveData<List<Enum>> getEnums(String type) {
-        if(EnumRepository.TYPE_FUNCTION.equals(type)) {
-            return enumRepository.getFunctionEnums();
-        }else if(EnumRepository.TYPE_ROOM.equals(type)) {
-            return enumRepository.getRoomEnums();
-        }
-        return null;
-    }
-    public LiveData<List<Enum>> getFunctions() {
-        return enumRepository.getFunctionEnums();
-    }
-
-    public LiveData<List<Enum>> getFavoriteEnums() {
-        return enumRepository.getFavoriteEnums();
-    }
-    public LiveData<List<State>> getFavoriteStates() {
-        return stateRepository.getFavoriteStates();
-    }
-
-    public LiveData<Enum> getEnum(String enumId) {
-        return enumRepository.getEnum(enumId);
-    }
-
-    public LiveData<List<State>> getStates(String enumId) {
-        return stateRepository.getStatesByEnum(enumId);
-    }
-
-    public void saveEnum(Enum anEnum) {
-        enumRepository.saveEnum(anEnum);
+    public LiveData<State> getState(String stateId) {
+        return stateRepository.getState(stateId);
     }
 
     public void saveState(State state) {

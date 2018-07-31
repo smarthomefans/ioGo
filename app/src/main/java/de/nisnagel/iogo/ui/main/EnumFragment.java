@@ -73,7 +73,6 @@ public class EnumFragment extends Fragment implements Injectable {
             }
         });
 
-        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
         mViewModel.getEnum(enumId).observe(this, new Observer<Enum>() {
             @Override
             public void onChanged(@Nullable Enum anEnum) {

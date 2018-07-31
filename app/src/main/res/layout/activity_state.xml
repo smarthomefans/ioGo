@@ -6,6 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.detail.StateActivity">
 
-    <include layout="@layout/toolbar" />
+    <include layout="@layout/toolbar_dark" />
 
 </android.support.design.widget.CoordinatorLayout>

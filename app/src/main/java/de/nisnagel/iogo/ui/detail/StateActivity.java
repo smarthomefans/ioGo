@@ -3,6 +3,7 @@ package de.nisnagel.iogo.ui.detail;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import javax.inject.Inject;
@@ -19,9 +20,8 @@ import de.nisnagel.iogo.ui.base.BaseActivity;
 
 public class StateActivity extends BaseActivity implements HasSupportFragmentInjector {
 
-
     @BindView(R.id.toolbar)
-    protected Toolbar toolbar;
+    public Toolbar toolbar;
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
@@ -44,18 +44,6 @@ public class StateActivity extends BaseActivity implements HasSupportFragmentInj
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction().add(R.id.state_container, fragment).commit();
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == android.R.id.home) {
-            finish();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

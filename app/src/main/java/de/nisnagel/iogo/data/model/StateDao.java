@@ -13,14 +13,14 @@ import java.util.List;
 @Dao
 public interface StateDao {
 
-    @Query("SELECT * FROM state")
-    List<State> getAllStates();
-
     @Query("SELECT id FROM state")
     List<String> getAllObjectIds();
 
     @Query("SELECT * FROM state WHERE id = :id")
     State getStateById(String id);
+
+    @Query("SELECT * FROM state WHERE id = :id")
+    LiveData<State> getStateById2(String id);
 
     @Query("SELECT * FROM state WHERE name IS NOT NULL AND id IN (SELECT state_id FROM enum_state WHERE enum_id = :enumId) ORDER BY name")
     LiveData<List<State>> getStatesByEnum(String enumId);

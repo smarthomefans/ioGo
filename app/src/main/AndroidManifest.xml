@@ -42,6 +42,10 @@
                 android:value=".ui.main.MainActivity" />
         </activity>
         <activity
+            android:name=".ui.detail.StateActivity"
+            android:label="@string/title_activity_state"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
             android:name=".ui.info.InfoActivity"
             android:parentActivityName=".ui.main.MainActivity">
             <meta-data
@@ -58,9 +62,6 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity
-            android:name=".ui.detail.StateActivity"
-            android:label="@string/title_activity_state_detail" />
     </application>
 
 </manifest>

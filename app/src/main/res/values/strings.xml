@@ -7,6 +7,7 @@
     <string name="title_activity_room_list">Rooms</string>
     <string name="title_activity_function_list">Functions</string>
     <string name="title_activity_info">Information</string>
+    <string name="title_activity_state">StateActivity</string>
     <string name="local_service_started">Local service has started</string>
     <string name="main_title">YOUR FAVORITES</string>
     <string name="main_room_button">rooms</string>
@@ -22,6 +23,5 @@
     <string name="syncing_data">syncing data...</string>
     <string name="ad_unit_id">ca-app-pub-9046643317542583~2243544255</string>
     <string name="banner_ad_unit_id">ca-app-pub-9046643317542583/7100999122</string>
-    <string name="title_activity_state_detail">StateDetailActivity</string>
-    <string name="title_activity_temp">TempActivity</string>
+
 </resources>

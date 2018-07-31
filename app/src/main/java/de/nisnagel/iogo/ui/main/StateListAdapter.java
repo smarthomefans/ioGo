@@ -1,6 +1,7 @@
 package de.nisnagel.iogo.ui.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,9 @@ import android.widget.Toast;
 import java.util.List;
 
 import de.nisnagel.iogo.R;
+import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.State;
+import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.ui.base.viewholder.ButtonViewHolder;
 import de.nisnagel.iogo.ui.base.viewholder.IndicatorViewHolder;
@@ -19,16 +22,29 @@ import de.nisnagel.iogo.ui.base.viewholder.CommonViewHolder;
 import de.nisnagel.iogo.ui.base.viewholder.SensorViewHolder;
 import de.nisnagel.iogo.ui.base.viewholder.SwitchViewHolder;
 import de.nisnagel.iogo.ui.base.viewholder.ValueViewHolder;
+import de.nisnagel.iogo.ui.detail.StateActivity;
 
 
 public class StateListAdapter
         extends RecyclerView.Adapter {
 
     private EnumViewModel mViewModel;
-
-    private Context context;
-
     private List<State> mValues;
+
+    protected final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            State item = (State) view.getTag();
+
+            Context context = view.getContext();
+            Intent intent = new Intent(context, StateActivity.class);
+            intent.putExtra(Constants.ARG_STATE_ID, item.getId());
+
+            context.startActivity(intent);
+
+        }
+    };
+
     protected final View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View view) {
@@ -61,7 +77,6 @@ public class StateListAdapter
     public StateListAdapter(List<State> stateList, EnumViewModel mViewModel, Context context) {
         this.mValues = stateList;
         this.mViewModel = mViewModel;
-        this.context = context;
         DataBus.getBus().register(this);
     }
 
@@ -166,7 +181,7 @@ public class StateListAdapter
                 ((CommonViewHolder) holder).bindState(mValues.get(position));
                 break;
         }
-
+        holder.itemView.setOnClickListener(mOnClickListener);
         holder.itemView.setOnLongClickListener(mOnLongClickListener);
         holder.itemView.setTag(mValues.get(position));
     }

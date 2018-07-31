@@ -49,6 +49,11 @@ public class StateRepository {
         Timber.v("instance created");
     }
 
+    public LiveData<State> getState(String stateId) {
+        Timber.v("getState called");
+        return stateDao.getStateById2(stateId);
+    }
+
     public List<String> getAllStateIds() {
         Timber.v("getAllStateIds called");
         return stateDao.getAllObjectIds();
