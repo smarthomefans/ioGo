@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,10 +18,13 @@ import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.service.Events;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
+import timber.log.Timber;
 
 public class LevelViewHolder extends BaseViewHolder {
     @BindView(R.id.valueNumber)
     TextView mValue;
+    @BindView(R.id.valueSlider)
+    SeekBar mSlider;
 
     public LevelViewHolder(View itemView, EnumViewModel viewModel) {
         super(itemView);
@@ -38,52 +43,71 @@ public class LevelViewHolder extends BaseViewHolder {
         }
         mValue.setText(value);
         setImageRessource(state.getRole());
+
         if (state.getWrite()) {
-            mValue.setClickable(true);
-            mValue.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            if (state.getMax() != null) {
+                mSlider.setVisibility(View.VISIBLE);
+                mSlider.setMax(state.getMax().intValue());
+                mSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        mViewModel.changeState(state.getId(), String.valueOf(seekBar.getProgress()));
+                    }
 
-                    LayoutInflater li = LayoutInflater.from(v.getContext());
-                    View promptsView = li.inflate(R.layout.prompts_number, null);
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
 
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        mValue.setText(String.valueOf(progress));
+                    }
+                });
+            } else {
+                mValue.setClickable(true);
+                mValue.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    // set prompts.xml to alertdialog builder
-                    alertDialogBuilder.setView(promptsView);
+                        LayoutInflater li = LayoutInflater.from(v.getContext());
+                        View promptsView = li.inflate(R.layout.prompts_number, null);
 
-                    final EditText userInput = (EditText) promptsView
-                            .findViewById(R.id.editTextDialogUserInput);
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                        alertDialogBuilder.setView(promptsView);
 
-                    // set dialog message
-                    alertDialogBuilder
-                            .setCancelable(false)
-                            .setPositiveButton("OK",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            mSubtitle.setText(R.string.syncing_data);
-                                            mViewModel.changeState(state.getId(), userInput.getText().toString());
-                                        }
-                                    })
-                            .setNegativeButton("Cancel",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
+                        final EditText userInput = (EditText) promptsView
+                                .findViewById(R.id.editTextDialogUserInput);
 
-                    // create alert dialog
-                    AlertDialog alertDialog = alertDialogBuilder.create();
+                        // set dialog message
+                        alertDialogBuilder
+                                .setCancelable(false)
+                                .setPositiveButton("OK",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                mSubtitle.setText(R.string.syncing_data);
+                                                mViewModel.changeState(state.getId(), userInput.getText().toString());
+                                            }
+                                        })
+                                .setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
 
-                    // show it
-                    alertDialog.show();
-                }
-            });
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+
+                        // show it
+                        alertDialog.show();
+                    }
+                });
+            }
         }
     }
 
     private void setImageRessource(String role) {
-        if(role != null) {
+        if (role != null) {
             switch (role) {
                 case Constants.ROLE_LEVEL_DIMMER:
                     mIcon.setImageResource(R.drawable.lightbulb);

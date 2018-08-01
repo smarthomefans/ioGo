@@ -181,7 +181,7 @@ public class StateListAdapter
                 ((CommonViewHolder) holder).bindState(mValues.get(position));
                 break;
         }
-        holder.itemView.setOnClickListener(mOnClickListener);
+        //holder.itemView.setOnClickListener(mOnClickListener);
         holder.itemView.setOnLongClickListener(mOnLongClickListener);
         holder.itemView.setTag(mValues.get(position));
     }

@@ -90,4 +90,14 @@
         android:gravity="end"
         android:visibility="gone" />
 
+    <SeekBar
+        android:id="@+id/valueSlider"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="26dp"
+        android:gravity="end"
+        android:visibility="gone" />
+
 </RelativeLayout>

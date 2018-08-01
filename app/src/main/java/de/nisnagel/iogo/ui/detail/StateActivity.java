@@ -35,6 +35,8 @@ public class StateActivity extends BaseActivity implements HasSupportFragmentInj
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.close_circle);
+        getSupportActionBar().setTitle("");
 
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
