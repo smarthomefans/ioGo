@@ -64,7 +64,11 @@ public class LevelViewHolder extends BaseViewHolder {
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        mValue.setText(String.valueOf(progress + min));
+                        String value = String.valueOf(progress + min);
+                        if (state.getUnit() != null) {
+                            value += state.getUnit();
+                        }
+                        mValue.setText(value);
                     }
                 });
             } else {
