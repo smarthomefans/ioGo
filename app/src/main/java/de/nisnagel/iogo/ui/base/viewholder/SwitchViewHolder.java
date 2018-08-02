@@ -2,9 +2,7 @@ package de.nisnagel.iogo.ui.base.viewholder;
 
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.Switch;
-import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

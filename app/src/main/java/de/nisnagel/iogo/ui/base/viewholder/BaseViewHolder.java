@@ -57,9 +57,16 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
             if (state_subtitle.equals("role")) {
                 return state.getRole();
             }
-            if (state_subtitle.equals("timestamp")) {
+            if (state_subtitle.equals("ts")) {
                 Calendar cal = Calendar.getInstance(Locale.GERMAN);
                 cal.setTimeInMillis(state.getTs());
+                String date;
+                date = DateFormat.format("dd-MM-yyyy HH:mm:ss", cal).toString();
+                return date;
+            }
+            if (state_subtitle.equals("lc")) {
+                Calendar cal = Calendar.getInstance(Locale.GERMAN);
+                cal.setTimeInMillis(state.getLc());
                 String date;
                 date = DateFormat.format("dd-MM-yyyy HH:mm:ss", cal).toString();
                 return date;

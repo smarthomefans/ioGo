@@ -20,13 +20,15 @@
     <string-array name="state_subtitle">
         <item name="empty">Empty</item>
         <item name="role">Common.Role</item>
-        <item name="timestamp">Timestamp</item>
+        <item name="ts">Timestamp</item>
+        <item name="lc">LastChange</item>
     </string-array>
 
     <string-array name="state_subtitleValues">
         <item name="empty">empty</item>
         <item name="role">role</item>
-        <item name="timestamp">timestamp</item>
+        <item name="ts">ts</item>
+        <item name="lc">lc</item>
     </string-array>
 
 </resources>

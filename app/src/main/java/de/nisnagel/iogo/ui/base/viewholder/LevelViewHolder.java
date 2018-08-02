@@ -5,20 +5,15 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.service.Constants;
-import de.nisnagel.iogo.service.DataBus;
-import de.nisnagel.iogo.service.Events;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
-import timber.log.Timber;
 
 public class LevelViewHolder extends BaseViewHolder {
     @BindView(R.id.valueNumber)
@@ -47,11 +42,20 @@ public class LevelViewHolder extends BaseViewHolder {
         if (state.getWrite()) {
             if (state.getMax() != null) {
                 mSlider.setVisibility(View.VISIBLE);
-                mSlider.setMax(state.getMax().intValue());
+                int max = state.getMax().intValue();
+                int min;
+                if (state.getMin() != null) {
+                    min = state.getMin().intValue();
+                } else {
+                    min = 0;
+                }
+                int val = Integer.parseInt(state.getVal());
+                mSlider.setMax(max - min);
+                mSlider.setProgress(val - min);
                 mSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                        mViewModel.changeState(state.getId(), String.valueOf(seekBar.getProgress()));
+                        mViewModel.changeState(state.getId(), String.valueOf(seekBar.getProgress() + min));
                     }
 
                     @Override
@@ -60,7 +64,7 @@ public class LevelViewHolder extends BaseViewHolder {
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        mValue.setText(String.valueOf(progress));
+                        mValue.setText(String.valueOf(progress + min));
                     }
                 });
             } else {
