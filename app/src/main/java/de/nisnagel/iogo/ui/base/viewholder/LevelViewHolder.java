@@ -40,7 +40,7 @@ public class LevelViewHolder extends BaseViewHolder {
         setImageRessource(state.getRole());
 
         if (state.getWrite()) {
-            if (state.getMax() != null) {
+            if (state.getMax() != null && state.getVal() != null) {
                 mSlider.setVisibility(View.VISIBLE);
                 int max = state.getMax().intValue();
                 int min;
