@@ -6,20 +6,25 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-@Entity(tableName = "enum", indices = {@Index(value = {"id"},unique = true)})
+@Entity(tableName = "enum", indices = {@Index(value = {"id"}, unique = true)})
 public class Enum {
     @PrimaryKey
     @NonNull
     private String id;
     private String name;
     private String type;
+    private String color;
+    private String icon;
+
     private String favorite;
 
-    public Enum(@NonNull String id, String name, String type, String favorite) {
+    public Enum(@NonNull String id, String name, String type, String favorite, String color, String icon) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.favorite = favorite;
+        this.color = color;
+        this.icon = icon;
     }
 
     @NonNull
@@ -47,11 +52,29 @@ public class Enum {
         this.type = type;
     }
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
     public String getFavorite() {
         return favorite;
     }
 
-    public boolean isFavorite() { return "true".equals(favorite); }
+    public boolean isFavorite() {
+        return "true".equals(favorite);
+    }
 
     public void setFavorite(String favorite) {
         this.favorite = favorite;

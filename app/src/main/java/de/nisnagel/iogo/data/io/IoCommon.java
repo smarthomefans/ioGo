@@ -15,6 +15,8 @@ public class IoCommon {
     private String unit;
     private String def;
     private String desc;
+    private String color;
+    private String icon;
 
     private List<String> members = null;
 
@@ -114,5 +116,21 @@ public class IoCommon {
 
     public void setMax(Float max) {
         this.max = max;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

@@ -25,7 +25,6 @@ import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.di.Injectable;
 
-
 public class FunctionFragment extends Fragment implements Injectable {
 
     private EnumListAdapter mAdapter;

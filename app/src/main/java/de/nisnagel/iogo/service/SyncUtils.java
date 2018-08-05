@@ -50,7 +50,7 @@ public class SyncUtils {
             for (IoRow ioRow : ioEnum.getRows()) {
                 IoValue ioValue = ioRow.getValue();
                 IoCommon ioCommon = ioValue.getCommon();
-                Enum anEnum = new Enum(ioValue.getId(), ioCommon.getName(), type, "false");
+                Enum anEnum = new Enum(ioValue.getId(), ioCommon.getName(), type, "false", ioCommon.getColor(), ioCommon.getIcon());
                 repo.syncEnum(anEnum);
                 Timber.d("saveEnums: enum inserted enumId:" + anEnum.getId());
                 if (ioCommon.getMembers() != null) {

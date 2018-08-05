@@ -2,14 +2,18 @@ package de.nisnagel.iogo.ui.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.pixplicity.sharp.Sharp;
 
 import java.util.List;
 
@@ -18,6 +22,7 @@ import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.service.Constants;
+import de.nisnagel.iogo.service.ImageUtils;
 
 public class EnumListAdapter
         extends RecyclerView.Adapter<EnumListAdapter.ViewHolder> {
@@ -84,7 +89,7 @@ public class EnumListAdapter
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.bindRoom(mValues.get(position));
+        holder.bindEnum(mValues.get(position));
         holder.itemView.setTag(mValues.get(position));
         holder.itemView.setOnClickListener(mOnClickListener);
         holder.itemView.setOnLongClickListener(mOnLongClickListener);
@@ -99,16 +104,28 @@ public class EnumListAdapter
         @BindView(R.id.title)  TextView mTitle;
         @BindView(R.id.icon)
         ImageView mIcon;
+        @BindView(R.id.color)
+        View mColor;
 
         ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindRoom(Enum anEnum) {
+        public void bindEnum(Enum anEnum) {
             mTitle.setText(anEnum.getName());
-            if(anEnum.isFavorite()){
-                mIcon.setImageResource(R.drawable.star);
+            if(anEnum.getColor() != null && anEnum.getColor().contains("#")){
+                mColor.setBackgroundColor(Color.parseColor(anEnum.getColor()));
+            }
+            if(anEnum.getIcon() != null) {
+                if(anEnum.getIcon().contains("svg+xml")){
+                    String pureBase64Encoded = anEnum.getIcon().substring(anEnum.getIcon().indexOf(",") + 1);
+                    byte[] decodedString = Base64.decode(pureBase64Encoded, Base64.DEFAULT);
+                    String data = new String(decodedString);
+                    Sharp.loadString(data).into(mIcon);
+                }else {
+                    mIcon.setImageBitmap(ImageUtils.convertToBitmap(anEnum.getIcon()));
+                }
             }
         }
     }
