@@ -49,7 +49,7 @@ public class LevelViewHolder extends BaseViewHolder {
                 } else {
                     min = 0;
                 }
-                int val = Integer.parseInt(state.getVal());
+                int val = (Float.valueOf(state.getVal())).intValue();
                 mSlider.setMax(max - min);
                 mSlider.setProgress(val - min);
                 mSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
