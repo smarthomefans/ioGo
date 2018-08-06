@@ -4,6 +4,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
@@ -26,12 +28,20 @@ public class IndicatorViewHolder extends BaseViewHolder {
         mTitle.setText(state.getName());
         mSubtitle.setText(getSubtitle(state));
         mValue.setVisibility(View.VISIBLE);
-        mValue.setText(state.getVal());
+        setValue(state.getRole(), state.getVal(), state.getStates());
         setImageRessource(state.getRole());
     }
 
-    private void setImageRessource(String role){
-        if(role != null) {
+    private void setValue(String role, String val, Map<String, String> states) {
+        if (states != null) {
+            mValue.setText(states.get(val));
+        } else {
+            mValue.setText(val);
+        }
+    }
+
+    private void setImageRessource(String role) {
+        if (role != null) {
             switch (role) {
                 case Constants.ROLE_INDICATOR_CONNECTED:
                     mIcon.setImageResource(R.drawable.lan_connect);

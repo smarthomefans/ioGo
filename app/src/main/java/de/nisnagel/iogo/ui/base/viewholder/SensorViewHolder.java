@@ -5,6 +5,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
@@ -28,12 +30,14 @@ public class SensorViewHolder extends BaseViewHolder {
         mTitle.setText(state.getName());
         mSubtitle.setText(getSubtitle(state));
         mValue.setVisibility(View.VISIBLE);
-        setValue(state.getRole(), state.getVal());
+        setValue(state.getRole(), state.getVal(), state.getStates());
         setImageRessource(state.getRole());
     }
 
-    private void setValue(String role, String val) {
-        if (role != null) {
+    private void setValue(String role, String val, Map<String, String> states) {
+        if (states != null) {
+            mValue.setText(states.get(val));
+        } else if (role != null) {
             switch (role) {
                 case Constants.ROLE_SENSOR_DOOR:
                     mValue.setText(("true".equals(val)) ? "open" : "closed");
@@ -45,6 +49,8 @@ public class SensorViewHolder extends BaseViewHolder {
                     mValue.setText(val);
                     break;
             }
+        } else {
+            mValue.setText(val);
         }
     }
 
