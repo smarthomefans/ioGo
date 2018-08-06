@@ -27,8 +27,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public static final Migration MIGRATION_6_7 = new Migration(6, 7) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE enum ADD COLUMN color STRING");
-            database.execSQL("ALTER TABLE enum ADD COLUMN icon STRING");
+            database.execSQL("ALTER TABLE enum ADD COLUMN color TEXT");
+            database.execSQL("ALTER TABLE enum ADD COLUMN icon TEXT");
         }
     };
 }
