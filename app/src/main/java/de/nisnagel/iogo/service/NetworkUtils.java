@@ -162,7 +162,7 @@ public class NetworkUtils {
         try {
             return IO.socket(cleanUrl(url), opts);
         } catch (Throwable e) {
-            Timber.e(e);
+            Timber.w(e);
         }
 
         return null;
