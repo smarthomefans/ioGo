@@ -160,7 +160,7 @@ public class NetworkUtils {
         opts.transports = new String[]{WebSocket.NAME};
 
         try {
-            return IO.socket(cleanUrl(url), opts);
+            return IO.socket(url, opts);
         } catch (Throwable e) {
             Timber.w(e);
         }

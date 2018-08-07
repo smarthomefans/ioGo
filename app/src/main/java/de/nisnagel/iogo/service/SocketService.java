@@ -71,6 +71,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             init_pro(username, password);
         } else {
             String url = sharedPref.getString("mobile_socket_url", null);
+            url = NetworkUtils.cleanUrl(url);
             String username = sharedPref.getString("mobile_username", null);
             String password = sharedPref.getString("mobile_password", null);
             init_mobile(url, username, password);
