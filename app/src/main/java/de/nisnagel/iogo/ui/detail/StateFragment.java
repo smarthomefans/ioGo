@@ -69,7 +69,7 @@ public class StateFragment extends Fragment implements Injectable {
         View rootView = inflater.inflate(R.layout.fragment_state, container, false);
         ButterKnife.bind(this, rootView);
 
-        mName.setText("loading");
+        mName.setText(R.string.loading_date);
         mRoom.setText("");
         mFunction.setText("");
 
@@ -115,11 +115,11 @@ public class StateFragment extends Fragment implements Injectable {
                 if ("true".equals(state.getFavorite())) {
                     state.setFavorite("false");
                     setFavoriteIcon(item, true);
-                    Toast.makeText(getContext(), "unstarred", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.unstarred, Toast.LENGTH_SHORT).show();
                 } else {
                     state.setFavorite("true");
                     setFavoriteIcon(item, false);
-                    Toast.makeText(getContext(), "starred", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.starred, Toast.LENGTH_SHORT).show();
                 }
 
                 mViewModel.saveState(state);

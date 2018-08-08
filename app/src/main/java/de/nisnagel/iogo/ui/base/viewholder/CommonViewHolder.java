@@ -157,7 +157,7 @@ public class CommonViewHolder extends BaseViewHolder {
                                         public void onClick(DialogInterface dialog, int id) {
                                             // get user input and set it to result
                                             // edit text
-                                            mSubtitle.setText("syncing data...");
+                                            mSubtitle.setText(R.string.syncing_data);
                                             DataBus.getBus().post(new Events.SetState(state.getId(), userInput.getText().toString()));
                                         }
                                     })

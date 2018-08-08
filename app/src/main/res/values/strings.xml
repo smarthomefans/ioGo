@@ -1,17 +1,15 @@
 <resources>
     <string name="app_name">iogo</string>
-    <string name="action_info">Info</string>
-    <string name="action_settings">Settings</string>
+
+    <string name="menu_action_info">Info</string>
+    <string name="menu_action_settings">Settings</string>
+
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_home">Home</string>
     <string name="title_activity_room_list">Rooms</string>
     <string name="title_activity_function_list">Functions</string>
     <string name="title_activity_info">Information</string>
-    <string name="title_activity_state">StateActivity</string>
-    <string name="local_service_started">Local service has started</string>
-    <string name="main_title">YOUR FAVORITES</string>
-    <string name="main_room_button">rooms</string>
-    <string name="main_function_button">functions</string>
+
     <string name="info_sync_objects">sync objects</string>
     <string name="info_clear_database">clear database</string>
     <string name="info_count_states">Number of states:</string>
@@ -19,9 +17,19 @@
     <string name="info_count_rooms">Number of rooms:</string>
     <string name="info_socket_status">Socket Status:</string>
     <string name="info_app_version">App Version:</string>
-    <string name="enum_mark_favorite">Mark as favorite</string>
-    <string name="syncing_data">syncing data...</string>
+
     <string name="ad_unit_id">ca-app-pub-9046643317542583~2243544255</string>
     <string name="banner_ad_unit_id">ca-app-pub-9046643317542583/7100999122</string>
+
+    <string name="service_connected">connected</string>
+
+    <string name="value_open">open</string>
+    <string name="value_closed">closed</string>
+    <string name="value_tilted">tilted</string>
+
+    <string name="loading_date">loading</string>
+    <string name="syncing_data">syncing data&#8230;</string>
+    <string name="unstarred">unstarred</string>
+    <string name="starred">starred</string>
 
 </resources>

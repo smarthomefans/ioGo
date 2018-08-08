@@ -32,7 +32,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     protected Context context;
     protected EnumViewModel mViewModel;
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
 
     public BaseViewHolder(View itemView) {
         super(itemView);

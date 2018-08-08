@@ -3,7 +3,6 @@ package de.nisnagel.iogo.ui.base;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -14,9 +13,10 @@ import de.nisnagel.iogo.ui.settings.SettingsActivity;
 
 
 public class BaseActivity extends AppCompatActivity{
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onResume() {
+        super.onResume();
         startService(new Intent(this, SocketService.class));
     }
 
@@ -24,15 +24,15 @@ public class BaseActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            Toast.makeText(this,R.string.action_settings, Toast.LENGTH_LONG).show();
+        if (id == R.id.menu_action_settings) {
+            Toast.makeText(this,R.string.menu_action_settings, Toast.LENGTH_LONG).show();
             Intent i = new Intent(this, SettingsActivity.class);
             startActivity(i);
             return true;
         }
 
-        if (id == R.id.action_info) {
-            Toast.makeText(this,R.string.action_info, Toast.LENGTH_LONG).show();
+        if (id == R.id.menu_action_info) {
+            Toast.makeText(this,R.string.menu_action_info, Toast.LENGTH_LONG).show();
             Intent i = new Intent(this, InfoActivity.class);
             startActivity(i);
             return true;

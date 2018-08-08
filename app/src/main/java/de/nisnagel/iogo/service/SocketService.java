@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.preference.PreferenceManager;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
+import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
 import io.socket.client.Ack;
@@ -91,7 +93,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 Timber.e(e);
             }
             socketUrl = url + "/?key=nokey" + "&user=" + username + "&pass=" + password;
-        }else{
+        } else {
             socketUrl = url;
         }
 
@@ -140,7 +142,6 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         Timber.v(" onStartCommand called");
         if (!isConnected()) {
             new NetworkAsync().execute();
-            Toast.makeText(this, "connected", Toast.LENGTH_SHORT).show();
         }
         return Service.START_STICKY;
     }
@@ -170,6 +171,14 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             });
             stateRepository.saveSocketState("connected");
 
+            Handler mainHandler = new Handler(getMainLooper());
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    // Do your stuff here related to UI, e.g. show toast
+                    Toast.makeText(getApplicationContext(), R.string.service_connected, Toast.LENGTH_SHORT).show();
+                }
+            });
             Timber.i("connected");
         }
     };
