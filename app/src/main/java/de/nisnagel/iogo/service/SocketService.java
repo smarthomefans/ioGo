@@ -1,6 +1,7 @@
 package de.nisnagel.iogo.service;
 
 import android.app.Service;
+import android.arch.persistence.room.util.StringUtil;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -9,6 +10,7 @@ import android.os.IBinder;
 import android.support.v7.preference.PreferenceManager;
 import android.widget.Toast;
 
+import com.google.android.gms.flags.impl.DataUtils;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
@@ -83,7 +85,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     private void init_mobile(String url, String username, String password) {
         Timber.v(" init_mobile called");
         String socketUrl;
-        if (username != null && password != null) {
+        if (username != null && password != null && !username.isEmpty() && !password.isEmpty()) {
             //cookie = NetworkUtils.getCookie(url, username, password);
 
             try {
@@ -127,6 +129,8 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         if (mSocket != null) {
             if (cookie != null) {
                 mSocket.io().on(Manager.EVENT_TRANSPORT, onTransport);
+            }else{
+                Timber.d("cookie is null");
             }
             mSocket.on(Socket.EVENT_CONNECT, onConnect);
             mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
@@ -134,6 +138,8 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
             mSocket.on("stateChange", onStateChange);
             mSocket.connect();
+        }else{
+            Timber.w("socket is null");
         }
     }
 

@@ -1,7 +1,5 @@
 package de.nisnagel.iogo.service;
 
-import android.util.Patterns;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -9,12 +7,9 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import de.nisnagel.iogo.data.io.IoCommon;
 import de.nisnagel.iogo.data.io.IoEnum;
@@ -27,14 +22,6 @@ import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.EnumState;
 import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import io.socket.engineio.client.transports.WebSocket;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import timber.log.Timber;
 
 public class SyncUtils {

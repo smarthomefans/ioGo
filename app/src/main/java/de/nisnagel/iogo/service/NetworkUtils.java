@@ -1,21 +1,7 @@
 package de.nisnagel.iogo.service;
 
-import android.util.Patterns;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.security.cert.CertificateException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -24,18 +10,6 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import de.nisnagel.iogo.data.io.IoCommon;
-import de.nisnagel.iogo.data.io.IoEnum;
-import de.nisnagel.iogo.data.io.IoName;
-import de.nisnagel.iogo.data.io.IoObject;
-import de.nisnagel.iogo.data.io.IoRow;
-import de.nisnagel.iogo.data.io.IoState;
-import de.nisnagel.iogo.data.io.IoValue;
-import de.nisnagel.iogo.data.model.Enum;
-import de.nisnagel.iogo.data.model.EnumState;
-import de.nisnagel.iogo.data.model.State;
-import de.nisnagel.iogo.data.repository.EnumRepository;
-import de.nisnagel.iogo.data.repository.StateRepository;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.engineio.client.transports.WebSocket;
@@ -124,13 +98,6 @@ public class NetworkUtils {
         }
     }
 
-    public static boolean isValidUrl(String url) {
-        Timber.v("isValidUrl called");
-        Pattern p = Patterns.WEB_URL;
-        Matcher m = p.matcher(url.toLowerCase());
-        return m.matches();
-    }
-
     public static String cleanUrl(String url) {
         Timber.v("cleanUrl called");
         if (url == null) {
@@ -152,10 +119,8 @@ public class NetworkUtils {
         OkHttpClient okHttpClient = getUnsafeOkHttpClient();
 
         IO.Options opts = new IO.Options();
-        opts.callFactory = okHttpClient;
-        opts.webSocketFactory = okHttpClient;
-        opts.upgrade = true;
-        opts.reconnection = true;
+        //opts.callFactory = okHttpClient;
+        //opts.webSocketFactory = okHttpClient;
         opts.forceNew = true;
         opts.transports = new String[]{WebSocket.NAME};
 

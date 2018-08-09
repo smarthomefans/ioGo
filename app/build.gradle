@@ -25,8 +25,8 @@ android {
         applicationId 'de.nisnagel.iogo'
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 1906
-        versionName "0.19.6"
+        versionCode 1907
+        versionName "0.19.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -70,7 +70,7 @@ dependencies {
     // GSON
     implementation 'com.google.code.gson:gson:2.8.2'
     // SOCKET IO
-    implementation('io.socket:socket.io-client:1.0.0') {
+    implementation('io.socket:socket.io-client:0.8.3') {
         exclude group: 'org.json', module: 'json'
     }
     // OTTO BUS
