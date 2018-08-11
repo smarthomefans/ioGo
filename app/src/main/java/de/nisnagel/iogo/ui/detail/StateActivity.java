@@ -42,6 +42,8 @@ public class StateActivity extends BaseActivity implements HasSupportFragmentInj
             Bundle arguments = new Bundle();
             arguments.putString(Constants.ARG_STATE_ID,
                     getIntent().getStringExtra(Constants.ARG_STATE_ID));
+            arguments.putString(Constants.ARG_ENUM_ID,
+                    getIntent().getStringExtra(Constants.ARG_ENUM_ID));
             StateFragment fragment = new StateFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction().add(R.id.state_container, fragment).commit();

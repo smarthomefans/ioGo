@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +23,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -31,7 +37,9 @@ import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.di.Injectable;
 import de.nisnagel.iogo.service.Constants;
+import de.nisnagel.iogo.ui.base.StateItem;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
+import de.nisnagel.iogo.ui.main.StateListAdapter;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -43,14 +51,17 @@ public class StateFragment extends Fragment implements Injectable {
 
     @BindView(R.id.txtName)
     TextView mName;
-    @BindView(R.id.txtRoom)
-    TextView mRoom;
-    @BindView(R.id.txtFunction)
-    TextView mFunction;
+    @BindView(R.id.txtEnum)
+    TextView mEnum;
     Toolbar toolbar;
+    @BindView(R.id.stateItems) RecyclerView mRecyclerView;
+
+    private StateItemAdapter mAdapter;
+    private List<StateItem> mListStates = new ArrayList<>();
 
     private StateViewModel mViewModel;
     private String stateId;
+    private String enumId;
     private State state;
 
     @Override
@@ -58,6 +69,7 @@ public class StateFragment extends Fragment implements Injectable {
         super.onCreate(savedInstanceState);
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(StateViewModel.class);
         stateId = getArguments().getString(Constants.ARG_STATE_ID);
+        enumId = getArguments().getString(Constants.ARG_ENUM_ID);
         state = null;
         setHasOptionsMenu(true);
         toolbar = getActivity().findViewById(R.id.toolbar);
@@ -69,20 +81,52 @@ public class StateFragment extends Fragment implements Injectable {
         View rootView = inflater.inflate(R.layout.fragment_state, container, false);
         ButterKnife.bind(this, rootView);
 
+        mAdapter = new StateItemAdapter(mListStates, mViewModel);
+
         mName.setText(R.string.loading_date);
-        mRoom.setText("");
-        mFunction.setText("");
+        mEnum.setText("");
+
+        getActivity().runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                mRecyclerView.setAdapter(mAdapter);
+                RecyclerView.LayoutManager layoutManager =
+                        new LinearLayoutManager(getContext());
+                mRecyclerView.setLayoutManager(layoutManager);
+                mRecyclerView.setHasFixedSize(true);
+            }
+        });
 
         mViewModel.getState(stateId).observe(this, new Observer<State>() {
             @Override
             public void onChanged(@Nullable State elem) {
-                // update UI
                 if (elem != null) {
                     mName.setText(elem.getName());
+                    mViewModel.setValue(elem.getVal());
                     state = elem;
+                    if(state.getStates() != null){
+                        mAdapter.clearList();
+
+                        ArrayList<StateItem> stateItems = new ArrayList<>();
+                        for (Map.Entry<String, String> entry : state.getStates().entrySet()) {
+                            stateItems.add(new StateItem(entry.getKey(), entry.getValue()));
+                        }
+                        mAdapter.addAll(stateItems);
+                        mAdapter.notifyDataSetChanged();
+                    }
                     if(toolbar.getMenu().size() > 0) {
                         setFavoriteIcon(toolbar.getMenu().getItem(0), "true".equals(state.getFavorite()));
                     }
+                }
+            }
+        });
+
+        mViewModel.getEnum(enumId).observe(this, new Observer<Enum>() {
+            @Override
+            public void onChanged(@Nullable Enum elem) {
+                if (elem != null) {
+                    mEnum.setText(elem.getName());
                 }
             }
         });
@@ -109,7 +153,6 @@ public class StateFragment extends Fragment implements Injectable {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_favorite:
                 if ("true".equals(state.getFavorite())) {

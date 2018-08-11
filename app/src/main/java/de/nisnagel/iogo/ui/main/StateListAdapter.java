@@ -24,7 +24,6 @@ import de.nisnagel.iogo.ui.base.viewholder.SwitchViewHolder;
 import de.nisnagel.iogo.ui.base.viewholder.ValueViewHolder;
 import de.nisnagel.iogo.ui.detail.StateActivity;
 
-
 public class StateListAdapter
         extends RecyclerView.Adapter {
 
@@ -39,6 +38,7 @@ public class StateListAdapter
             Context context = view.getContext();
             Intent intent = new Intent(context, StateActivity.class);
             intent.putExtra(Constants.ARG_STATE_ID, item.getId());
+            intent.putExtra(Constants.ARG_ENUM_ID, mViewModel.getEnumId());
 
             context.startActivity(intent);
 

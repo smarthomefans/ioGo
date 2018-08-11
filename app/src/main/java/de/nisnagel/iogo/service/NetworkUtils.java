@@ -56,7 +56,7 @@ public class NetworkUtils {
         }
     }
 
-    private static OkHttpClient getUnsafeOkHttpClient() {
+    private static SSLContext getSSLContext() {
         try {
             // Create a trust manager that does not validate certificate chains
             final TrustManager[] trustAllCerts = new TrustManager[] {
@@ -79,20 +79,7 @@ public class NetworkUtils {
             // Install the all-trusting trust manager
             final SSLContext sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-            // Create an ssl socket factory with our all-trusting manager
-            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-
-            OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            builder.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0]);
-            builder.hostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
-
-            OkHttpClient okHttpClient = builder.build();
-            return okHttpClient;
+            return sslContext;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -116,8 +103,13 @@ public class NetworkUtils {
     public static Socket getSocket(String url) {
         Timber.v("getSocket called");
 
-        OkHttpClient okHttpClient = getUnsafeOkHttpClient();
-
+        IO.setDefaultHostnameVerifier(new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        });
+        IO.setDefaultSSLContext(getSSLContext());
         IO.Options opts = new IO.Options();
         //opts.callFactory = okHttpClient;
         //opts.webSocketFactory = okHttpClient;

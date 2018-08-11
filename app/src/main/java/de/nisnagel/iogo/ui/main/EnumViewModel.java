@@ -18,6 +18,8 @@ public class EnumViewModel extends ViewModel {
     private EnumRepository enumRepository;
     private StateRepository stateRepository;
 
+    private String enumId;
+
     @Inject
     public EnumViewModel(EnumRepository enumRepository, StateRepository stateRepository) {
         this.enumRepository = enumRepository;
@@ -44,6 +46,7 @@ public class EnumViewModel extends ViewModel {
     }
 
     public LiveData<Enum> getEnum(String enumId) {
+        this.enumId = enumId;
         return enumRepository.getEnum(enumId);
     }
 
@@ -62,4 +65,7 @@ public class EnumViewModel extends ViewModel {
         stateRepository.changeState(id, newVal);
     }
 
+    public String getEnumId() {
+        return enumId;
+    }
 }

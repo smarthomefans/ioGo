@@ -17,6 +17,8 @@ public class StateViewModel extends ViewModel {
 
     private EnumRepository enumRepository;
     private StateRepository stateRepository;
+    private String stateId;
+    private String value;
 
     @Inject
     public StateViewModel(EnumRepository enumRepository, StateRepository stateRepository) {
@@ -25,11 +27,27 @@ public class StateViewModel extends ViewModel {
     }
 
     public LiveData<State> getState(String stateId) {
+        this.stateId = stateId;
         return stateRepository.getState(stateId);
+    }
+    public LiveData<Enum> getEnum(String enumId) {
+        return enumRepository.getEnum(enumId);
     }
 
     public void saveState(State state) {
         stateRepository.saveState(state);
     }
 
+    public void changeValue(String newVal) {
+        this.value = newVal;
+        stateRepository.changeState(this.stateId, newVal);
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 }
