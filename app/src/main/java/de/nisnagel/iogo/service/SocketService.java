@@ -1,7 +1,6 @@
 package de.nisnagel.iogo.service;
 
 import android.app.Service;
-import android.arch.persistence.room.util.StringUtil;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -10,7 +9,6 @@ import android.os.IBinder;
 import android.support.v7.preference.PreferenceManager;
 import android.widget.Toast;
 
-import com.google.android.gms.flags.impl.DataUtils;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
@@ -22,6 +20,8 @@ import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -124,21 +124,27 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
     private void createSocket(String url) {
         Timber.v(" createSocket called");
-        mSocket = NetworkUtils.getSocket(url);
+        if (mSocket == null) {
+            mSocket = NetworkUtils.getSocket(url);
+            if (mSocket != null) {
+                if (cookie != null) {
+                    mSocket.io().on(Manager.EVENT_TRANSPORT, onTransport);
+                } else {
+                    Timber.d("cookie is null");
+                }
+                mSocket.on(Socket.EVENT_CONNECT, onConnect);
+                mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
+                mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+                mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+                mSocket.on("stateChange", onStateChange);
+            }
+        }
 
         if (mSocket != null) {
-            if (cookie != null) {
-                mSocket.io().on(Manager.EVENT_TRANSPORT, onTransport);
-            }else{
-                Timber.d("cookie is null");
+            if (!mSocket.connected()) {
+                mSocket.connect();
             }
-            mSocket.on(Socket.EVENT_CONNECT, onConnect);
-            mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
-            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-            mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-            mSocket.on("stateChange", onStateChange);
-            mSocket.connect();
-        }else{
+        } else {
             Timber.w("socket is null");
         }
     }
@@ -171,8 +177,13 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 public void run() {
                     List<String> stateIds = stateRepository.getAllStateIds();
                     JSONArray json = new JSONArray(stateIds);
-                    mSocket.emit("subscribe", json);
-                    syncStates();
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            mSocket.emit("subscribe", json);
+                            syncStates();
+                        }
+                    }, 2000);
                 }
             });
             stateRepository.saveSocketState("connected");
