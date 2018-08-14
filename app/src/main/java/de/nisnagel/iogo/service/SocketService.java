@@ -287,7 +287,9 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 @Override
                 public void call(Object... args) {
                     Timber.i("getEnumRooms: receiving enum.rooms");
-                    SyncUtils.saveEnums(enumRepository, args[1].toString(), EnumRepository.TYPE_ROOM);
+                    if(args[1] != null) {
+                        SyncUtils.saveEnums(enumRepository, args[1].toString(), EnumRepository.TYPE_ROOM);
+                    }
                     getEnumFunctions();
                 }
             });
@@ -309,7 +311,9 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 @Override
                 public void call(Object... args) {
                     Timber.i("getEnumFunctions: receiving enum.functions");
-                    SyncUtils.saveEnums(enumRepository, args[1].toString(), EnumRepository.TYPE_FUNCTION);
+                    if(args[1] != null) {
+                        SyncUtils.saveEnums(enumRepository, args[1].toString(), EnumRepository.TYPE_FUNCTION);
+                    }
                     getObjects();
                 }
             });
@@ -323,7 +327,9 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             mSocket.emit("getObjects", null, new Ack() {
                 @Override
                 public void call(Object... args) {
-                    SyncUtils.saveObjects(stateRepository, args[1].toString(), sharedPref.getBoolean("sync_children", false));
+                    if(args[1] != null) {
+                        SyncUtils.saveObjects(stateRepository, args[1].toString(), sharedPref.getBoolean("sync_children", false));
+                    }
                     getStates();
                 }
             });
@@ -347,7 +353,9 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                             @Override
                             public void call(Object... args) {
                                 Timber.i("getStates: receiving states");
-                                SyncUtils.saveStates(stateRepository, args[1].toString());
+                                if(args[1] != null) {
+                                    SyncUtils.saveStates(stateRepository, args[1].toString());
+                                }
                             }
                         });
                     } else {
