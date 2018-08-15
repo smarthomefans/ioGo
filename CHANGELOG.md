@@ -3,8 +3,27 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.19.x] - 2018-08-11
+### Added sync color and icon for enums
+### Added states to indicator and sensor roles
+
+## [0.18.x] - 2018-08-03
+### Added authentication for standard socket connection
+
+## [0.17.x] - 2018-08-03
+### Added slider and scrollbars
+
+## [0.16.x] - 2018-07-25
+### Added sync children states
+
+## [0.15.x] - 2018-07-19
+### Added multi language support for common.name
+### Fixed jump to top on data changed in listView
+
 ## [0.14.x] - 2018-07-15
 ### Added subtitle choice in settings
+### Added Default Sortierung
+### Fixed Performance von syncObjects
 
 ## [0.13.x] - 2018-07-14
 ### Added default icons for room, function, state
