@@ -54,43 +54,4 @@ public class SensorViewHolder extends BaseViewHolder {
         }
     }
 
-    private void setImageRessource(String role) {
-        if (role != null) {
-            switch (role) {
-                case Constants.ROLE_SENSOR_DOOR:
-                    mIcon.setImageResource(R.drawable.door);
-                    break;
-                case Constants.ROLE_SENSOR_WINDOW:
-                    mIcon.setImageResource(R.drawable.window_closed);
-                    break;
-                case Constants.ROLE_SENSOR_MOTION:
-                    mIcon.setImageResource(R.drawable.run_fast);
-                    break;
-                case Constants.ROLE_SENSOR_ALARM:
-                    mIcon.setImageResource(R.drawable.alarm_light);
-                    break;
-                case Constants.ROLE_SENSOR_ALARM_FIRE:
-                    mIcon.setImageResource(R.drawable.fire);
-                    break;
-                case Constants.ROLE_SENSOR_ALARM_SECURE:
-                    mIcon.setImageResource(R.drawable.security_close);
-                    break;
-                case Constants.ROLE_SENSOR_ALARM_FLOOD:
-                    mIcon.setImageResource(R.drawable.water);
-                    break;
-                case Constants.ROLE_SENSOR_ALARM_POWER:
-                    mIcon.setImageResource(R.drawable.flash);
-                    break;
-                case Constants.ROLE_SENSOR_LOCK:
-                    mIcon.setImageResource(R.drawable.lock);
-                    break;
-                case Constants.ROLE_SENSOR_LIGHT:
-                    mIcon.setImageResource(R.drawable.lightbulb);
-                    break;
-                case Constants.ROLE_SENSOR_RAIN:
-                    mIcon.setImageResource(R.drawable.weather_rainy);
-                    break;
-            }
-        }
-    }
 }

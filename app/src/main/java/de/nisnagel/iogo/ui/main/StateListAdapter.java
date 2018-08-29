@@ -11,18 +11,18 @@ import android.widget.Toast;
 import java.util.List;
 
 import de.nisnagel.iogo.R;
-import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.ui.base.viewholder.ButtonViewHolder;
+import de.nisnagel.iogo.ui.base.viewholder.CommonViewHolder;
 import de.nisnagel.iogo.ui.base.viewholder.IndicatorViewHolder;
 import de.nisnagel.iogo.ui.base.viewholder.LevelViewHolder;
-import de.nisnagel.iogo.ui.base.viewholder.CommonViewHolder;
 import de.nisnagel.iogo.ui.base.viewholder.SensorViewHolder;
 import de.nisnagel.iogo.ui.base.viewholder.SwitchViewHolder;
 import de.nisnagel.iogo.ui.base.viewholder.ValueViewHolder;
 import de.nisnagel.iogo.ui.detail.StateActivity;
+import de.nisnagel.iogo.ui.history.HistoryActivity;
 
 public class StateListAdapter
         extends RecyclerView.Adapter {
@@ -36,12 +36,17 @@ public class StateListAdapter
             State item = (State) view.getTag();
 
             Context context = view.getContext();
-            Intent intent = new Intent(context, StateActivity.class);
-            intent.putExtra(Constants.ARG_STATE_ID, item.getId());
-            intent.putExtra(Constants.ARG_ENUM_ID, mViewModel.getEnumId());
 
-            context.startActivity(intent);
-
+            if (item.hasHistory()) {
+                Intent intent = new Intent(context, HistoryActivity.class);
+                intent.putExtra(Constants.ARG_STATE_ID, item.getId());
+                context.startActivity(intent);
+            } else if (item.getStates() != null && item.getWrite()) {
+                Intent intent = new Intent(context, StateActivity.class);
+                intent.putExtra(Constants.ARG_STATE_ID, item.getId());
+                intent.putExtra(Constants.ARG_ENUM_ID, mViewModel.getEnumId());
+                context.startActivity(intent);
+            }
         }
     };
 
@@ -49,13 +54,13 @@ public class StateListAdapter
         @Override
         public boolean onLongClick(View view) {
             State item = (State) view.getTag();
-            if(item != null){
-                if("true".equals(item.getFavorite())){
+            if (item != null) {
+                if ("true".equals(item.getFavorite())) {
                     item.setFavorite("false");
-                    Toast.makeText(view.getContext(),"unstarred",Toast.LENGTH_SHORT).show();
-                }else{
+                    Toast.makeText(view.getContext(), "unstarred", Toast.LENGTH_SHORT).show();
+                } else {
                     item.setFavorite("true");
-                    Toast.makeText(view.getContext(),"starred",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), "starred", Toast.LENGTH_SHORT).show();
                 }
                 mViewModel.saveState(item);
 
@@ -80,11 +85,11 @@ public class StateListAdapter
         DataBus.getBus().register(this);
     }
 
-    public void clearList(){
+    public void clearList() {
         this.mValues.clear();
     }
 
-    public void addAll(List<State> stateList){
+    public void addAll(List<State> stateList) {
         this.mValues = stateList;
     }
 
@@ -127,7 +132,7 @@ public class StateListAdapter
             role = object.getRole();
         }
 
-        if(role != null){
+        if (role != null) {
             if (role.startsWith("sensor")) {
                 return C_SENSOR;
             }
@@ -181,14 +186,14 @@ public class StateListAdapter
                 ((CommonViewHolder) holder).bindState(mValues.get(position));
                 break;
         }
-        //holder.itemView.setOnClickListener(mOnClickListener);
+        holder.itemView.setOnClickListener(mOnClickListener);
         holder.itemView.setOnLongClickListener(mOnLongClickListener);
         holder.itemView.setTag(mValues.get(position));
     }
 
     @Override
     public int getItemCount() {
-        if(mValues == null){
+        if (mValues == null) {
             return 0;
         }
         return mValues.size();

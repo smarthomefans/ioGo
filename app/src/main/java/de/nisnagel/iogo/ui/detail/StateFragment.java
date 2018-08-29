@@ -4,12 +4,9 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -37,9 +34,8 @@ import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.di.Injectable;
 import de.nisnagel.iogo.service.Constants;
+import de.nisnagel.iogo.service.util.ImageUtils;
 import de.nisnagel.iogo.ui.base.StateItem;
-import de.nisnagel.iogo.ui.main.EnumViewModel;
-import de.nisnagel.iogo.ui.main.StateListAdapter;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -49,12 +45,16 @@ public class StateFragment extends Fragment implements Injectable {
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
 
+    Toolbar toolbar;
+
+    @BindView(R.id.icon)
+    ImageView mIcon;
     @BindView(R.id.txtName)
     TextView mName;
     @BindView(R.id.txtEnum)
     TextView mEnum;
-    Toolbar toolbar;
-    @BindView(R.id.stateItems) RecyclerView mRecyclerView;
+    @BindView(R.id.stateItems)
+    RecyclerView mRecyclerView;
 
     private StateItemAdapter mAdapter;
     private List<StateItem> mListStates = new ArrayList<>();
@@ -102,10 +102,11 @@ public class StateFragment extends Fragment implements Injectable {
             @Override
             public void onChanged(@Nullable State elem) {
                 if (elem != null) {
-                    mName.setText(elem.getName());
-                    mViewModel.setValue(elem.getVal());
                     state = elem;
-                    if(state.getStates() != null){
+                    mName.setText(elem.getName());
+                    mIcon.setImageResource(ImageUtils.getRoleImage(state.getRole()));
+                    mViewModel.setValue(elem.getVal());
+                    if (state.getStates() != null) {
                         mAdapter.clearList();
 
                         ArrayList<StateItem> stateItems = new ArrayList<>();
@@ -115,7 +116,7 @@ public class StateFragment extends Fragment implements Injectable {
                         mAdapter.addAll(stateItems);
                         mAdapter.notifyDataSetChanged();
                     }
-                    if(toolbar.getMenu().size() > 0) {
+                    if (toolbar.getMenu().size() > 0) {
                         setFavoriteIcon(toolbar.getMenu().getItem(0), "true".equals(state.getFavorite()));
                     }
                 }
@@ -134,7 +135,7 @@ public class StateFragment extends Fragment implements Injectable {
         return rootView;
     }
 
-    private void setFavoriteIcon(MenuItem item, boolean starred){
+    private void setFavoriteIcon(MenuItem item, boolean starred) {
         if (starred) {
             item.setIcon(R.drawable.starred);
         } else {
@@ -146,7 +147,7 @@ public class StateFragment extends Fragment implements Injectable {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_state, menu);
-        if(state != null){
+        if (state != null) {
             setFavoriteIcon(menu.getItem(0), "true".equals(state.getFavorite()));
         }
     }

@@ -32,6 +32,12 @@ public class Events {
 
     public static class SyncObjects {}
 
-    public static class LoadHistory {}
+    public static class LoadHistory {
+        public String id;
+
+        public LoadHistory(String id){
+            this.id = id;
+        }
+    }
 
 }

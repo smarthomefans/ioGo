@@ -17,10 +17,9 @@ public class IoCommon {
     private String desc;
     private String color;
     private String icon;
-
     private List<String> members = null;
-
-    private Map<String,String> states;
+    private Map<String, String> states;
+    private IoCustom custom;
 
     public String getName() {
         return name.toString();
@@ -132,5 +131,13 @@ public class IoCommon {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public IoCustom getCustom() {
+        return custom;
+    }
+
+    public void setCustom(IoCustom custom) {
+        this.custom = custom;
     }
 }

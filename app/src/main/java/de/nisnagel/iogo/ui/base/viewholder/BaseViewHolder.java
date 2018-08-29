@@ -17,6 +17,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.State;
+import de.nisnagel.iogo.service.Constants;
+import de.nisnagel.iogo.service.util.ImageUtils;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
 
 public class BaseViewHolder extends RecyclerView.ViewHolder {
@@ -45,7 +47,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         if (state.isSync()) {
             mSync.setVisibility(View.GONE);
             mIcon.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             mSync.setVisibility(View.VISIBLE);
             mIcon.setVisibility(View.GONE);
         }
@@ -76,5 +78,12 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
             return context.getResources().getText(R.string.syncing_data).toString();
         }
         return "";
+    }
+
+    void setImageRessource(String role) {
+        if (role != null) {
+            int drawable = ImageUtils.getRoleImage(role);
+            mIcon.setImageResource(drawable);
+        }
     }
 }

@@ -56,25 +56,4 @@ public class ValueViewHolder extends BaseViewHolder {
         mValue.setText(value);
     }
 
-    private void setImageRessource(String role) {
-        if (role != null) {
-            switch (role) {
-                case Constants.ROLE_VALUE_TEMPERATURE:
-                    mIcon.setImageResource(R.drawable.thermometer);
-                    break;
-                case Constants.ROLE_VALUE_HUMIDITY:
-                    mIcon.setImageResource(R.drawable.water_percent);
-                    break;
-                case Constants.ROLE_VALUE_BRIGHTNESS:
-                    mIcon.setImageResource(R.drawable.brightness_5);
-                    break;
-                case Constants.ROLE_VALUE_BATTERY:
-                    mIcon.setImageResource(R.drawable.battery);
-                    break;
-                case Constants.ROLE_VALUE_BLIND:
-                    mIcon.setImageResource(R.drawable.blinds);
-                    break;
-            }
-        }
-    }
 }

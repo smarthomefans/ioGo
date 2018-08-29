@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.20.x] - 2018-08-29
+### Added statistics view (day, week, month, year)
+### Changed state chooser from popup to new detail view
+
 ## [0.19.x] - 2018-08-11
 ### Added sync color and icon for enums
 ### Added states to indicator and sensor roles

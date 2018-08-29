@@ -3,6 +3,7 @@ package de.nisnagel.iogo.di.builder;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 import de.nisnagel.iogo.ui.detail.StateActivity;
+import de.nisnagel.iogo.ui.history.HistoryActivity;
 import de.nisnagel.iogo.ui.info.InfoActivity;
 import de.nisnagel.iogo.ui.main.EnumActivity;
 import de.nisnagel.iogo.ui.main.MainActivity;
@@ -21,6 +22,9 @@ public abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector(modules = FragmentBuildersModule.class)
     abstract StateActivity bindStateActivity();
+
+    @ContributesAndroidInjector(modules = FragmentBuildersModule.class)
+    abstract HistoryActivity bindHistoryActivity();
 
     @ContributesAndroidInjector(modules = FragmentBuildersModule.class)
     abstract InfoActivity bindInfoActivity();

@@ -15,11 +15,13 @@
             android:inputType="text"
             android:key="mobile_username"
             android:selectAllOnFocus="true"
+            android:singleLine="true"
             android:title="Username (Optional)" />
         <EditTextPreference
             android:inputType="textPassword"
             android:key="mobile_password"
             android:selectAllOnFocus="true"
+            android:singleLine="true"
             android:title="Password (Optional)" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Cloud Connection">
@@ -33,11 +35,13 @@
             android:inputType="textEmailAddress"
             android:key="pro_username"
             android:selectAllOnFocus="true"
+            android:singleLine="true"
             android:title="Username" />
         <EditTextPreference
             android:inputType="textPassword"
             android:key="pro_password"
             android:selectAllOnFocus="true"
+            android:singleLine="true"
             android:title="Password" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Expert">

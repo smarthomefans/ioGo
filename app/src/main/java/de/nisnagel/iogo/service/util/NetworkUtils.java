@@ -1,4 +1,4 @@
-package de.nisnagel.iogo.service;
+package de.nisnagel.iogo.service.util;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;

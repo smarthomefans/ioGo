@@ -29,6 +29,9 @@ import dagger.android.AndroidInjection;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
+import de.nisnagel.iogo.service.util.HistoryUtils;
+import de.nisnagel.iogo.service.util.NetworkUtils;
+import de.nisnagel.iogo.service.util.SyncUtils;
 import io.socket.client.Ack;
 import io.socket.client.Manager;
 import io.socket.client.Socket;
@@ -287,7 +290,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 @Override
                 public void call(Object... args) {
                     Timber.i("getEnumRooms: receiving enum.rooms");
-                    if(args[1] != null) {
+                    if (args[1] != null) {
                         SyncUtils.saveEnums(enumRepository, args[1].toString(), EnumRepository.TYPE_ROOM);
                     }
                     getEnumFunctions();
@@ -311,7 +314,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 @Override
                 public void call(Object... args) {
                     Timber.i("getEnumFunctions: receiving enum.functions");
-                    if(args[1] != null) {
+                    if (args[1] != null) {
                         SyncUtils.saveEnums(enumRepository, args[1].toString(), EnumRepository.TYPE_FUNCTION);
                     }
                     getObjects();
@@ -327,7 +330,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             mSocket.emit("getObjects", null, new Ack() {
                 @Override
                 public void call(Object... args) {
-                    if(args[1] != null) {
+                    if (args[1] != null) {
                         SyncUtils.saveObjects(stateRepository, args[1].toString(), sharedPref.getBoolean("sync_children", false));
                     }
                     getStates();
@@ -353,13 +356,96 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                             @Override
                             public void call(Object... args) {
                                 Timber.i("getStates: receiving states");
-                                if(args[1] != null) {
+                                if (args[1] != null) {
                                     SyncUtils.saveStates(stateRepository, args[1].toString());
                                 }
                             }
                         });
                     } else {
                         Timber.w("getStates: no states found in database");
+                    }
+                }
+            });
+        }
+    }
+
+    @Subscribe
+    public void loadHistory(final Events.LoadHistory event) {
+        Timber.v("loadHistory called");
+        if (isConnected()) {
+            JSONObject json = new JSONObject();
+            try {
+                json.put("id", event.id);
+                json.put("start", HistoryUtils.startOfDay * 1000);
+                json.put("end", HistoryUtils.endOfDay * 1000);
+                json.put("step", "60000");
+                json.put("aggregate", "average");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            mSocket.emit("getHistory", event.id, json, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    if (args[1] != null && !"[]".equals(args[1].toString())) {
+                        stateRepository.syncHistoryDay(event.id, args[1].toString());
+                        Timber.i("loadHistory: receiving historical data");
+                    }
+                }
+            });
+            json = new JSONObject();
+            try {
+                json.put("id", event.id);
+                json.put("start", HistoryUtils.startOfWeek * 1000);
+                json.put("end", HistoryUtils.endOfDay * 1000);
+                json.put("step", (HistoryUtils.endOfDay - HistoryUtils.startOfWeek) * 1000 / 200);
+                json.put("aggregate", "average");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            mSocket.emit("getHistory", event.id, json, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    if (args[1] != null && !"[]".equals(args[1].toString())) {
+                        stateRepository.syncHistoryWeek(event.id, args[1].toString());
+                        Timber.i("loadHistory: receiving historical data");
+                    }
+                }
+            });
+            json = new JSONObject();
+            try {
+                json.put("id", event.id);
+                json.put("start", HistoryUtils.startOfMonth * 1000);
+                json.put("end", HistoryUtils.endOfDay * 1000);
+                json.put("step", (HistoryUtils.endOfDay - HistoryUtils.startOfMonth) * 1000 / 200);
+                json.put("aggregate", "average");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            mSocket.emit("getHistory", event.id, json, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    if (args[1] != null && !"[]".equals(args[1].toString())) {
+                        stateRepository.syncHistoryMonth(event.id, args[1].toString());
+                        Timber.i("loadHistory: receiving historical data");
+                    }
+                }
+            });
+            json = new JSONObject();
+            try {
+                json.put("id", event.id);
+                json.put("start", HistoryUtils.startOfYear * 1000);
+                json.put("end", HistoryUtils.endOfDay * 1000);
+                json.put("step", (HistoryUtils.endOfDay - HistoryUtils.startOfYear) * 1000 / 200);
+                json.put("aggregate", "average");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            mSocket.emit("getHistory", event.id, json, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    if (args[1] != null && !"[]".equals(args[1].toString())) {
+                        stateRepository.syncHistoryYear(event.id, args[1].toString());
+                        Timber.i("loadHistory: receiving historical data");
                     }
                 }
             });

@@ -3,6 +3,7 @@ package de.nisnagel.iogo.di.builder;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 import de.nisnagel.iogo.ui.detail.StateFragment;
+import de.nisnagel.iogo.ui.history.HistoryFragment;
 import de.nisnagel.iogo.ui.info.InfoFragment;
 import de.nisnagel.iogo.ui.main.EnumFragment;
 import de.nisnagel.iogo.ui.main.FunctionFragment;
@@ -17,6 +18,9 @@ public abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract StateFragment contributeStateFragment();
+
+    @ContributesAndroidInjector
+    abstract HistoryFragment contributeHistoryFragment();
 
     @ContributesAndroidInjector
     abstract InfoFragment contributeInfoFragment();

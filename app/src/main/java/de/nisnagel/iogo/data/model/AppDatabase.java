@@ -8,7 +8,7 @@ import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
-@Database(entities = { Enum.class, EnumState.class, State.class}, version = 7, exportSchema = false)
+@Database(entities = { Enum.class, EnumState.class, State.class}, version = 8, exportSchema = false)
 @TypeConverters({ListConverters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -29,6 +29,12 @@ public abstract class AppDatabase extends RoomDatabase {
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE enum ADD COLUMN color TEXT");
             database.execSQL("ALTER TABLE enum ADD COLUMN icon TEXT");
+        }
+    };
+    public static final Migration MIGRATION_7_8 = new Migration(7, 8) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE state ADD COLUMN history INTEGER NOT NULL DEFAULT 0");
         }
     };
 }

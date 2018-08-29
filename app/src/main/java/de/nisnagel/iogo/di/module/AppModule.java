@@ -16,7 +16,10 @@ import de.nisnagel.iogo.App;
 import de.nisnagel.iogo.data.model.AppDatabase;
 import de.nisnagel.iogo.data.model.EnumDao;
 import de.nisnagel.iogo.data.model.EnumStateDao;
+import de.nisnagel.iogo.data.model.HistoryDatabase;
 import de.nisnagel.iogo.data.model.StateDao;
+import de.nisnagel.iogo.data.model.StateHistory;
+import de.nisnagel.iogo.data.model.StateHistoryDao;
 import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
 import de.nisnagel.iogo.ui.ViewModelFactory;
@@ -60,7 +63,13 @@ public class AppModule {
     @Singleton
     @Provides
     AppDatabase provideDb(App app) {
-        return Room.databaseBuilder(app, AppDatabase.class, "appDatabase.db").addMigrations(AppDatabase.MIGRATION_5_6, AppDatabase.MIGRATION_6_7).build();
+        return Room.databaseBuilder(app, AppDatabase.class, "appDatabase.db").addMigrations(AppDatabase.MIGRATION_5_6, AppDatabase.MIGRATION_6_7, AppDatabase.MIGRATION_7_8).build();
+    }
+
+    @Singleton
+    @Provides
+    HistoryDatabase provideHistoryDb(App app) {
+        return Room.databaseBuilder(app, HistoryDatabase.class, "historyDatabase.db").fallbackToDestructiveMigration().build();
     }
 
     @Singleton
@@ -71,8 +80,8 @@ public class AppModule {
 
     @Singleton
     @Provides
-    StateRepository provideStateRepository(StateDao stateDao, EnumStateDao enumStateDao, Executor executor) {
-        return new StateRepository(stateDao, enumStateDao, executor);
+    StateRepository provideStateRepository(StateDao stateDao, StateHistoryDao stateHistoryDao, EnumStateDao enumStateDao, Executor executor) {
+        return new StateRepository(stateDao, stateHistoryDao, enumStateDao, executor);
     }
 
     @Singleton
@@ -85,6 +94,12 @@ public class AppModule {
     @Provides
     StateDao provideStateDao(AppDatabase db) {
         return db.getStateDao();
+    }
+
+    @Singleton
+    @Provides
+    StateHistoryDao provideStateHistoryDao(HistoryDatabase db) {
+        return db.getStateHistoryDao();
     }
 
     @Singleton

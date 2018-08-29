@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.service.Constants;
-import de.nisnagel.iogo.service.ImageUtils;
+import de.nisnagel.iogo.service.util.ImageUtils;
 
 public class EnumListAdapter
         extends RecyclerView.Adapter<EnumListAdapter.ViewHolder> {

@@ -42,16 +42,4 @@ public class SwitchViewHolder extends BaseViewHolder {
         setImageRessource(state.getRole());
     }
 
-    private void setImageRessource(String role) {
-        if (role != null) {
-            switch (role) {
-                case Constants.ROLE_SWITCH:
-                    mIcon.setImageResource(R.drawable.toggle_switch);
-                    break;
-                case Constants.ROLE_SWITCH_LIGHT:
-                    mIcon.setImageResource(R.drawable.lightbulb);
-                    break;
-            }
-        }
-    }
 }

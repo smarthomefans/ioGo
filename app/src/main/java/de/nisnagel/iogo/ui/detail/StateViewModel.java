@@ -1,15 +1,13 @@
 package de.nisnagel.iogo.ui.detail;
 
-
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
 import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.State;
+import de.nisnagel.iogo.data.model.StateHistory;
 import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
 
@@ -30,8 +28,13 @@ public class StateViewModel extends ViewModel {
         this.stateId = stateId;
         return stateRepository.getState(stateId);
     }
+
     public LiveData<Enum> getEnum(String enumId) {
         return enumRepository.getEnum(enumId);
+    }
+
+    public LiveData<StateHistory> getHistory(String stateId) {
+        return stateRepository.getHistory(stateId);
     }
 
     public void saveState(State state) {

@@ -42,7 +42,10 @@
         </activity>
         <activity
             android:name=".ui.detail.StateActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.history.HistoryActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.info.InfoActivity"
             android:parentActivityName=".ui.main.MainActivity">

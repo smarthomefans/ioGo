@@ -32,4 +32,7 @@
     <string name="unstarred">unstarred</string>
     <string name="starred">starred</string>
 
+    <string name="title_activity_history">HistoryActivity</string>
+    <string name="action_settings">Settings</string>
+
 </resources>

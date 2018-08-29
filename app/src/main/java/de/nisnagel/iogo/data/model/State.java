@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import java.util.Date;
 import java.util.Map;
 
+import de.nisnagel.iogo.data.io.IoCommon;
 import de.nisnagel.iogo.data.io.IoObject;
 import de.nisnagel.iogo.data.io.IoState;
 
@@ -41,6 +42,7 @@ public class State {
     private Map<String,String> states;
 
     private String favorite;
+    private boolean history;
 
     @Ignore
     public State(@NonNull String id) {
@@ -73,7 +75,8 @@ public class State {
     }
 
     public void update(IoObject ioObject) {
-        this.min = ioObject.getCommon().getMin();
+        IoCommon ioCommon = ioObject.getCommon();
+        this.min = ioCommon.getMin();
         this.max = ioObject.getCommon().getMax();
         this.name = ioObject.getCommon().getName();
         this.type = ioObject.getCommon().getType();
@@ -82,6 +85,14 @@ public class State {
         this.read = ioObject.getCommon().isRead();
         this.write = ioObject.getCommon().isWrite();
         this.states = ioObject.getCommon().getStates();
+        this.history = false;
+        if(ioCommon.getCustom() != null) {
+            if (ioCommon.getCustom().getHistory0() != null && ioCommon.getCustom().getHistory0().isEnabled()) {
+                this.history = true;
+            } else if (ioCommon.getCustom().getSql0() != null && ioCommon.getCustom().getSql0().isEnabled()) {
+                this.history = true;
+            }
+        }
     }
 
     @NonNull
@@ -199,5 +210,13 @@ public class State {
 
     public void setSync(boolean sync) {
         this.sync = sync;
+    }
+
+    public boolean hasHistory() {
+        return history;
+    }
+
+    public void setHistory(boolean history) {
+        this.history = history;
     }
 }

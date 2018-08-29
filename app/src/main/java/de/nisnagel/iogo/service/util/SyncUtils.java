@@ -1,4 +1,4 @@
-package de.nisnagel.iogo.service;
+package de.nisnagel.iogo.service.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

@@ -1,7 +1,8 @@
 package de.nisnagel.iogo.ui.detail;
 
-import android.graphics.PorterDuff;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +66,8 @@ public class StateItemAdapter
     class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.title)
         TextView mTitle;
+        @BindView(R.id.card_view)
+        CardView mCard;
 
         ViewHolder(View view) {
             super(view);
@@ -74,10 +77,11 @@ public class StateItemAdapter
         public void bindItem(StateItem item) {
 
             if (mViewModel.getValue() != null && mViewModel.getValue().equals(item.getId())) {
-                mTitle.setText("> "+item.getName());
+                mTitle.setTextColor(Color.WHITE);
             } else {
-                mTitle.setText(item.getName());
+                mTitle.setTextColor(Color.BLACK);
             }
+            mTitle.setText(item.getName());
         }
     }
 

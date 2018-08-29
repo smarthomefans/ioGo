@@ -178,14 +178,4 @@ public class CommonViewHolder extends BaseViewHolder {
         }
     }
 
-    private void setImageRessource(String role) {
-        if (role != null) {
-            switch (role) {
-                case Constants.ROLE_TEXT:
-                    mIcon.setImageResource(R.drawable.text);
-                    break;
-            }
-        }
-    }
-
 }

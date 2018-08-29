@@ -40,16 +40,4 @@ public class IndicatorViewHolder extends BaseViewHolder {
         }
     }
 
-    private void setImageRessource(String role) {
-        if (role != null) {
-            switch (role) {
-                case Constants.ROLE_INDICATOR_CONNECTED:
-                    mIcon.setImageResource(R.drawable.lan_connect);
-                    break;
-                case Constants.ROLE_INDICATOR_LOWBAT:
-                    mIcon.setImageResource(R.drawable.battery_10);
-                    break;
-            }
-        }
-    }
 }
