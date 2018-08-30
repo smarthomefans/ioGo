@@ -70,43 +70,31 @@ public class InfoFragment extends Fragment implements Injectable {
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(InfoViewModel.class);
 
-        mViewModel.countRooms().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer value) {
-                // update UI
-                if(value != null) {
-                    mCountRooms.setText(value.toString());
-                }
+        mViewModel.countRooms().observe(this, value -> {
+            // update UI
+            if(value != null) {
+                mCountRooms.setText(value.toString());
             }
         });
 
-        mViewModel.countFunctions().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer value) {
-                // update UI
-                if(value != null) {
-                    mCountFunctions.setText(value.toString());
-                }
+        mViewModel.countFunctions().observe(this, value -> {
+            // update UI
+            if(value != null) {
+                mCountFunctions.setText(value.toString());
             }
         });
 
-        mViewModel.countStates().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer value) {
-                // update UI
-                if(value != null) {
-                    mCountStates.setText(value.toString());
-                }
+        mViewModel.countStates().observe(this, value -> {
+            // update UI
+            if(value != null) {
+                mCountStates.setText(value.toString());
             }
         });
 
-        mViewModel.getSocketState().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String value) {
-                // update UI
-                if(value != null) {
-                    mSocketState.setText(value);
-                }
+        mViewModel.getSocketState().observe(this, value -> {
+            // update UI
+            if(value != null) {
+                mSocketState.setText(value);
             }
         });
 

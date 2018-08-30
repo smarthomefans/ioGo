@@ -30,18 +30,15 @@ public class EnumListAdapter
     private EnumViewModel mViewModel;
     private List<Enum> mValues;
 
-    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Enum item = (Enum) view.getTag();
+    private final View.OnClickListener mOnClickListener = view -> {
+        Enum item = (Enum) view.getTag();
 
-            Context context = view.getContext();
-            Intent intent = new Intent(context, EnumActivity.class);
-            intent.putExtra(Constants.ARG_ENUM_ID, item.getId());
+        Context context = view.getContext();
+        Intent intent = new Intent(context, EnumActivity.class);
+        intent.putExtra(Constants.ARG_ENUM_ID, item.getId());
 
-            context.startActivity(intent);
+        context.startActivity(intent);
 
-        }
     };
 
     private final View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {

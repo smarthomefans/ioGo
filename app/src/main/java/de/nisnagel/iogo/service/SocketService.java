@@ -44,7 +44,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     private Socket mSocket;
     private String cookie;
 
-    SharedPreferences sharedPref;
+    private SharedPreferences sharedPref;
 
     @Inject
     public EnumRepository enumRepository;
@@ -175,29 +175,23 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
         @Override
         public void call(Object... args) {
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    List<String> stateIds = stateRepository.getAllStateIds();
-                    JSONArray json = new JSONArray(stateIds);
-                    new Timer().schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            mSocket.emit("subscribe", json);
-                            syncStates();
-                        }
-                    }, 2000);
-                }
+            AsyncTask.execute(() -> {
+                List<String> stateIds = stateRepository.getAllStateIds();
+                JSONArray json = new JSONArray(stateIds);
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        mSocket.emit("subscribe", json);
+                        syncStates();
+                    }
+                }, 2000);
             });
             stateRepository.saveSocketState("connected");
 
             Handler mainHandler = new Handler(getMainLooper());
-            mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    // Do your stuff here related to UI, e.g. show toast
-                    Toast.makeText(getApplicationContext(), R.string.service_connected, Toast.LENGTH_SHORT).show();
-                }
+            mainHandler.post(() -> {
+                // Do your stuff here related to UI, e.g. show toast
+                Toast.makeText(getApplicationContext(), R.string.service_connected, Toast.LENGTH_SHORT).show();
             });
             Timber.i("connected");
         }
@@ -212,25 +206,17 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         }
     };
 
-    private Emitter.Listener onConnectError = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            Timber.w("connect error");
-        }
-    };
+    private Emitter.Listener onConnectError = args -> Timber.w("connect error");
 
     private Emitter.Listener onTransport = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
             Transport transport = (Transport) args[0];
 
-            transport.on(Transport.EVENT_REQUEST_HEADERS, new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    @SuppressWarnings("unchecked")
-                    Map<String, List<String>> headers = (Map<String, List<String>>) args[0];
-                    headers.put("Cookie", Arrays.asList(cookie));
-                }
+            transport.on(Transport.EVENT_REQUEST_HEADERS, args1 -> {
+                @SuppressWarnings("unchecked")
+                Map<String, List<String>> headers = (Map<String, List<String>>) args1[0];
+                headers.put("Cookie", Arrays.asList(cookie));
             });
         }
     };
@@ -266,7 +252,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     public void syncObjects(final Events.SyncObjects event) {
         Timber.v("syncObjects called");
         if (isConnected()) {
-            AsyncTask.execute(() -> getEnumRooms());
+            AsyncTask.execute(this::getEnumRooms);
         }
     }
 
@@ -281,15 +267,12 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 Timber.e(e);
             }
             Timber.i("getEnumRooms: reuquesting enum.rooms from server");
-            mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    Timber.i("getEnumRooms: receiving enum.rooms");
-                    if (args[1] != null) {
-                        SyncUtils.saveEnums(enumRepository, args[1].toString(), EnumRepository.TYPE_ROOM);
-                    }
-                    getEnumFunctions();
+            mSocket.emit("getObjectView", "system", "enum", json, (Ack) args -> {
+                Timber.i("getEnumRooms: receiving enum.rooms");
+                if (args[1] != null) {
+                    SyncUtils.saveEnums(enumRepository, args[1].toString(), EnumRepository.TYPE_ROOM);
                 }
+                getEnumFunctions();
             });
         }
     }
@@ -305,15 +288,12 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 Timber.e(e);
             }
             Timber.i("getEnumFunctions: reuquesting enum.functions from server");
-            mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    Timber.i("getEnumFunctions: receiving enum.functions");
-                    if (args[1] != null) {
-                        SyncUtils.saveEnums(enumRepository, args[1].toString(), EnumRepository.TYPE_FUNCTION);
-                    }
-                    getObjects();
+            mSocket.emit("getObjectView", "system", "enum", json, (Ack) args -> {
+                Timber.i("getEnumFunctions: receiving enum.functions");
+                if (args[1] != null) {
+                    SyncUtils.saveEnums(enumRepository, args[1].toString(), EnumRepository.TYPE_FUNCTION);
                 }
+                getObjects();
             });
         }
     }
@@ -322,14 +302,11 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         Timber.v("getObjects called");
         if (isConnected()) {
             Timber.i("getObjects: requesting all objects from server");
-            mSocket.emit("getObjects", null, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    if (args[1] != null) {
-                        SyncUtils.saveObjects(stateRepository, args[1].toString(), sharedPref.getBoolean("sync_children", false));
-                    }
-                    getStates();
+            mSocket.emit("getObjects", null, args -> {
+                if (args[1] != null) {
+                    SyncUtils.saveObjects(stateRepository, args[1].toString(), sharedPref.getBoolean("sync_children", false));
                 }
+                getStates();
             });
         }
     }
@@ -337,28 +314,22 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     private void getStates() {
         Timber.v("getStates called");
         if (isConnected()) {
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    JSONArray json = new JSONArray();
-                    List<String> objectIds = stateRepository.getAllStateIds();
-                    if (objectIds != null && objectIds.size() > 0) {
-                        for (int i = 0; i < objectIds.size(); i++) {
-                            json.put(objectIds.get(i));
-                        }
-                        Timber.i("getStates: reuquesting " + objectIds.size() + " states from server");
-                        mSocket.emit("getStates", json, new Ack() {
-                            @Override
-                            public void call(Object... args) {
-                                Timber.i("getStates: receiving states");
-                                if (args[1] != null) {
-                                    SyncUtils.saveStates(stateRepository, args[1].toString());
-                                }
-                            }
-                        });
-                    } else {
-                        Timber.w("getStates: no states found in database");
+            AsyncTask.execute(() -> {
+                JSONArray json = new JSONArray();
+                List<String> objectIds = stateRepository.getAllStateIds();
+                if (objectIds != null && objectIds.size() > 0) {
+                    for (int i = 0; i < objectIds.size(); i++) {
+                        json.put(objectIds.get(i));
                     }
+                    Timber.i("getStates: reuquesting " + objectIds.size() + " states from server");
+                    mSocket.emit("getStates", json, (Ack) args -> {
+                        Timber.i("getStates: receiving states");
+                        if (args[1] != null) {
+                            SyncUtils.saveStates(stateRepository, args[1].toString());
+                        }
+                    });
+                } else {
+                    Timber.w("getStates: no states found in database");
                 }
             });
         }
@@ -378,13 +349,10 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            mSocket.emit("getHistory", event.id, json, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    if (args[1] != null && !"[]".equals(args[1].toString())) {
-                        stateRepository.syncHistoryDay(event.id, args[1].toString());
-                        Timber.i("loadHistory: receiving historical data");
-                    }
+            mSocket.emit("getHistory", event.id, json, (Ack) args -> {
+                if (args[1] != null && !"[]".equals(args[1].toString())) {
+                    stateRepository.syncHistoryDay(event.id, args[1].toString());
+                    Timber.i("loadHistory: receiving historical data");
                 }
             });
             json = new JSONObject();
@@ -397,13 +365,10 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            mSocket.emit("getHistory", event.id, json, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    if (args[1] != null && !"[]".equals(args[1].toString())) {
-                        stateRepository.syncHistoryWeek(event.id, args[1].toString());
-                        Timber.i("loadHistory: receiving historical data");
-                    }
+            mSocket.emit("getHistory", event.id, json, (Ack) args -> {
+                if (args[1] != null && !"[]".equals(args[1].toString())) {
+                    stateRepository.syncHistoryWeek(event.id, args[1].toString());
+                    Timber.i("loadHistory: receiving historical data");
                 }
             });
             json = new JSONObject();
@@ -416,13 +381,10 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            mSocket.emit("getHistory", event.id, json, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    if (args[1] != null && !"[]".equals(args[1].toString())) {
-                        stateRepository.syncHistoryMonth(event.id, args[1].toString());
-                        Timber.i("loadHistory: receiving historical data");
-                    }
+            mSocket.emit("getHistory", event.id, json, (Ack) args -> {
+                if (args[1] != null && !"[]".equals(args[1].toString())) {
+                    stateRepository.syncHistoryMonth(event.id, args[1].toString());
+                    Timber.i("loadHistory: receiving historical data");
                 }
             });
             json = new JSONObject();
@@ -435,13 +397,10 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            mSocket.emit("getHistory", event.id, json, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    if (args[1] != null && !"[]".equals(args[1].toString())) {
-                        stateRepository.syncHistoryYear(event.id, args[1].toString());
-                        Timber.i("loadHistory: receiving historical data");
-                    }
+            mSocket.emit("getHistory", event.id, json, (Ack) args -> {
+                if (args[1] != null && !"[]".equals(args[1].toString())) {
+                    stateRepository.syncHistoryYear(event.id, args[1].toString());
+                    Timber.i("loadHistory: receiving historical data");
                 }
             });
         }

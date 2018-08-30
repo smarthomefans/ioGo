@@ -24,7 +24,7 @@ import de.nisnagel.iogo.ui.base.viewholder.ValueViewHolder;
 import de.nisnagel.iogo.ui.detail.StateActivity;
 import de.nisnagel.iogo.ui.history.HistoryActivity;
 
-public class StateListAdapter
+class StateListAdapter
         extends RecyclerView.Adapter {
 
     private EnumViewModel mViewModel;

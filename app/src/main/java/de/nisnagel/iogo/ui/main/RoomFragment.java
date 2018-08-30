@@ -37,7 +37,7 @@ public class RoomFragment extends Fragment implements Injectable {
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
 
-    public ArrayList<Enum> list = new ArrayList<>();
+    private ArrayList<Enum> list = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,24 +52,14 @@ public class RoomFragment extends Fragment implements Injectable {
         ButterKnife.bind(this, rootView);
 
         mAdapter = new EnumListAdapter(list, mViewModel);
-        getActivity().runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-
-                recyclerView.setAdapter(mAdapter);
-            }
-        });
+        getActivity().runOnUiThread(() -> recyclerView.setAdapter(mAdapter));
 
         mViewModel.getEnums(EnumRepository.TYPE_ROOM)
-                .observe(this, new Observer<List<Enum>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Enum> newList) {
-                        // update UI
-                        mAdapter.clearList();
-                        mAdapter.addAll(newList);
-                        mAdapter.notifyDataSetChanged();
-                    }
+                .observe(this, newList -> {
+                    // update UI
+                    mAdapter.clearList();
+                    mAdapter.addAll(newList);
+                    mAdapter.notifyDataSetChanged();
                 });
 
         return rootView;

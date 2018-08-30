@@ -6,7 +6,7 @@ import com.crashlytics.android.Crashlytics;
 
 import timber.log.Timber;
 
-public class TimberReleaseTree extends Timber.Tree {
+class TimberReleaseTree extends Timber.Tree {
     @Override
     protected void log(int priority, String tag, String message, Throwable t) {
 

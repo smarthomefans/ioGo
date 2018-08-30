@@ -22,23 +22,20 @@ public class EnumHomeListAdapter
         extends RecyclerView.Adapter<EnumHomeListAdapter.ViewHolder> {
 
     private EnumViewModel mViewModel;
-    protected List<Enum> mValues;
+    private List<Enum> mValues;
 
-    protected final View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Enum item = (Enum) view.getTag();
+    private final View.OnClickListener mOnClickListener = view -> {
+        Enum item = (Enum) view.getTag();
 
-            Context context = view.getContext();
-            Intent intent = new Intent(context, EnumActivity.class);
-            intent.putExtra(Constants.ARG_ENUM_ID, item.getId());
+        Context context = view.getContext();
+        Intent intent = new Intent(context, EnumActivity.class);
+        intent.putExtra(Constants.ARG_ENUM_ID, item.getId());
 
-            context.startActivity(intent);
+        context.startActivity(intent);
 
-        }
     };
 
-    protected final View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
+    private final View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View view) {
             Enum item = (Enum) view.getTag();
@@ -102,7 +99,7 @@ public class EnumHomeListAdapter
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindEnum(Enum anEnum) {
+        void bindEnum(Enum anEnum) {
             mTitle.setText(anEnum.getName());
         }
     }

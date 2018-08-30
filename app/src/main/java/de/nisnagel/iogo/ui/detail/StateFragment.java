@@ -46,7 +46,7 @@ public class StateFragment extends Fragment implements Injectable {
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
 
-    Toolbar toolbar;
+    private Toolbar toolbar;
 
     @BindView(R.id.icon)
     ImageView mIcon;
@@ -89,54 +89,44 @@ public class StateFragment extends Fragment implements Injectable {
         mName.setText(R.string.loading_date);
         mEnum.setText("");
 
-        getActivity().runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                mRecyclerView.setAdapter(mAdapter);
-                RecyclerView.LayoutManager layoutManager =
-                        new LinearLayoutManager(getContext());
-                mRecyclerView.setLayoutManager(layoutManager);
-                mRecyclerView.setHasFixedSize(true);
-            }
+        getActivity().runOnUiThread(() -> {
+            mRecyclerView.setAdapter(mAdapter);
+            RecyclerView.LayoutManager layoutManager =
+                    new LinearLayoutManager(getContext());
+            mRecyclerView.setLayoutManager(layoutManager);
+            mRecyclerView.setHasFixedSize(true);
         });
 
-        mViewModel.getState(stateId).observe(this, new Observer<State>() {
-            @Override
-            public void onChanged(@Nullable State elem) {
-                if (elem != null) {
-                    state = elem;
-                    mName.setText(elem.getName());
-                    mIcon.setImageResource(ImageUtils.getRoleImage(state.getRole()));
-                    mViewModel.setValue(elem.getVal());
-                    if (state.getStates() != null) {
-                        mAdapter.clearList();
+        mViewModel.getState(stateId).observe(this, elem -> {
+            if (elem != null) {
+                state = elem;
+                mName.setText(elem.getName());
+                mIcon.setImageResource(ImageUtils.getRoleImage(state.getRole()));
+                mViewModel.setValue(elem.getVal());
+                if (state.getStates() != null) {
+                    mAdapter.clearList();
 
-                        ArrayList<StateItem> stateItems = new ArrayList<>();
-                        for (Map.Entry<String, String> entry : state.getStates().entrySet()) {
-                            stateItems.add(new StateItem(entry.getKey(), entry.getValue()));
-                        }
-                        mAdapter.addAll(stateItems);
-                        mAdapter.notifyDataSetChanged();
+                    ArrayList<StateItem> stateItems = new ArrayList<>();
+                    for (Map.Entry<String, String> entry : state.getStates().entrySet()) {
+                        stateItems.add(new StateItem(entry.getKey(), entry.getValue()));
                     }
-                    if(state.hasHistory() && "number".equals(state.getType())){
-                        mStatistics.setVisibility(View.VISIBLE);
-                    }else{
-                        mStatistics.setVisibility(View.GONE);
-                    }
-                    if (toolbar.getMenu().size() > 0) {
-                        setFavoriteIcon(toolbar.getMenu().getItem(0), "true".equals(state.getFavorite()));
-                    }
+                    mAdapter.addAll(stateItems);
+                    mAdapter.notifyDataSetChanged();
+                }
+                if(state.hasHistory() && "number".equals(state.getType())){
+                    mStatistics.setVisibility(View.VISIBLE);
+                }else{
+                    mStatistics.setVisibility(View.GONE);
+                }
+                if (toolbar.getMenu().size() > 0) {
+                    setFavoriteIcon(toolbar.getMenu().getItem(0), "true".equals(state.getFavorite()));
                 }
             }
         });
 
-        mViewModel.getEnum(enumId).observe(this, new Observer<Enum>() {
-            @Override
-            public void onChanged(@Nullable Enum elem) {
-                if (elem != null) {
-                    mEnum.setText(elem.getName());
-                }
+        mViewModel.getEnum(enumId).observe(this, elem -> {
+            if (elem != null) {
+                mEnum.setText(elem.getName());
             }
         });
 

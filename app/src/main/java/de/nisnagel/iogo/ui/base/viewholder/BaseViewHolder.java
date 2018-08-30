@@ -31,18 +31,18 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.sync)
     ProgressBar mSync;
 
-    protected Context context;
-    protected EnumViewModel mViewModel;
+    Context context;
+    EnumViewModel mViewModel;
     private SharedPreferences sharedPreferences;
 
-    public BaseViewHolder(View itemView) {
+    BaseViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.context = itemView.getContext();
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public void bindState(State state) {
+    void bindState(State state) {
         if (state.isSync()) {
             mSync.setVisibility(View.GONE);
             mIcon.setVisibility(View.VISIBLE);

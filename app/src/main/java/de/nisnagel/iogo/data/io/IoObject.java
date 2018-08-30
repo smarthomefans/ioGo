@@ -4,9 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class IoObject {
     @SerializedName("_id")
+    private
     String id;
-    String type;
-    IoCommon common;
+    private String type;
+    private IoCommon common;
 
     public String getId() {
         return this.id;

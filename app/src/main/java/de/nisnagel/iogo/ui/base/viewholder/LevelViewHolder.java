@@ -72,42 +72,33 @@ public class LevelViewHolder extends BaseViewHolder {
                 });
             } else {
                 mValue.setClickable(true);
-                mValue.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                mValue.setOnClickListener(v -> {
 
-                        LayoutInflater li = LayoutInflater.from(v.getContext());
-                        View promptsView = li.inflate(R.layout.prompts_number, null);
+                    LayoutInflater li = LayoutInflater.from(v.getContext());
+                    View promptsView = li.inflate(R.layout.prompts_number, null);
 
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
-                        alertDialogBuilder.setView(promptsView);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                    alertDialogBuilder.setView(promptsView);
 
-                        final EditText userInput = (EditText) promptsView
-                                .findViewById(R.id.editTextDialogUserInput);
+                    final EditText userInput = (EditText) promptsView
+                            .findViewById(R.id.editTextDialogUserInput);
 
-                        // set dialog message
-                        alertDialogBuilder
-                                .setCancelable(false)
-                                .setPositiveButton("OK",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                mSubtitle.setText(R.string.syncing_data);
-                                                mViewModel.changeState(state.getId(), userInput.getText().toString());
-                                            }
-                                        })
-                                .setNegativeButton("Cancel",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.cancel();
-                                            }
-                                        });
+                    // set dialog message
+                    alertDialogBuilder
+                            .setCancelable(false)
+                            .setPositiveButton("OK",
+                                    (dialog, id) -> {
+                                        mSubtitle.setText(R.string.syncing_data);
+                                        mViewModel.changeState(state.getId(), userInput.getText().toString());
+                                    })
+                            .setNegativeButton("Cancel",
+                                    (dialog, id) -> dialog.cancel());
 
-                        // create alert dialog
-                        AlertDialog alertDialog = alertDialogBuilder.create();
+                    // create alert dialog
+                    AlertDialog alertDialog = alertDialogBuilder.create();
 
-                        // show it
-                        alertDialog.show();
-                    }
+                    // show it
+                    alertDialog.show();
                 });
             }
         }

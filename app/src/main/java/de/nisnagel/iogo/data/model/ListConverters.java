@@ -35,9 +35,8 @@ public class ListConverters {
         Type type = new TypeToken<Map<String, String>>(){}.getType();
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
-        Map<String, String> map = gson.fromJson(value, type);
 
-        return map;
+        return gson.fromJson(value, type);
     }
 
     @TypeConverter

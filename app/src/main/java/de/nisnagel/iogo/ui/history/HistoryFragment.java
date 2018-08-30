@@ -1,6 +1,5 @@
 package de.nisnagel.iogo.ui.history;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -55,7 +54,7 @@ public class HistoryFragment extends Fragment implements Injectable {
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
 
-    Toolbar toolbar;
+    private Toolbar toolbar;
 
     @BindView(R.id.txtValue)
     TextView mValue;
@@ -97,28 +96,22 @@ public class HistoryFragment extends Fragment implements Injectable {
 
         mName.setText(R.string.loading_date);
 
-        mViewModel.getState(stateId).observe(this, new Observer<State>() {
-            @Override
-            public void onChanged(@Nullable State elem) {
-                if (elem != null) {
-                    mViewModel.setValue(elem.getVal());
-                    mValue.setText(elem.getVal());
-                    mName.setText(elem.getName());
-                    state = elem;
-                }
+        mViewModel.getState(stateId).observe(this, elem -> {
+            if (elem != null) {
+                mViewModel.setValue(elem.getVal());
+                mValue.setText(elem.getVal());
+                mName.setText(elem.getName());
+                state = elem;
             }
         });
 
-        mViewModel.getHistory(stateId).observe(this, new Observer<StateHistory>() {
-            @Override
-            public void onChanged(@Nullable StateHistory elem) {
-                if (elem != null) {
-                    if(stateHistory == null) {
-                        stateHistory = elem;
-                        showDay();
-                    }else {
-                        stateHistory = elem;
-                    }
+        mViewModel.getHistory(stateId).observe(this, elem -> {
+            if (elem != null) {
+                if(stateHistory == null) {
+                    stateHistory = elem;
+                    showDay();
+                }else {
+                    stateHistory = elem;
                 }
             }
         });
@@ -263,14 +256,14 @@ public class HistoryFragment extends Fragment implements Injectable {
         super.onAttach(context);
     }
 
-    public class Car {
-        public Long ts;
-        public Float val;
+    class Car {
+        Long ts;
+        Float val;
     }
 
-    public class DayXAxisValueFormatter implements IAxisValueFormatter {
+    class DayXAxisValueFormatter implements IAxisValueFormatter {
 
-        public DayXAxisValueFormatter() {
+        private DayXAxisValueFormatter() {
         }
 
         @Override
@@ -281,9 +274,9 @@ public class HistoryFragment extends Fragment implements Injectable {
         }
     }
 
-    public class WeekXAxisValueFormatter implements IAxisValueFormatter {
+    class WeekXAxisValueFormatter implements IAxisValueFormatter {
 
-        public WeekXAxisValueFormatter() {
+        private WeekXAxisValueFormatter() {
         }
 
         @Override
@@ -294,9 +287,9 @@ public class HistoryFragment extends Fragment implements Injectable {
         }
     }
 
-    public class MonthXAxisValueFormatter implements IAxisValueFormatter {
+    class MonthXAxisValueFormatter implements IAxisValueFormatter {
 
-        public MonthXAxisValueFormatter() {
+        private MonthXAxisValueFormatter() {
         }
 
         @Override
@@ -307,11 +300,11 @@ public class HistoryFragment extends Fragment implements Injectable {
         }
     }
 
-    public class YearXAxisValueFormatter implements IAxisValueFormatter {
+    class YearXAxisValueFormatter implements IAxisValueFormatter {
 
         String[] monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
-        public YearXAxisValueFormatter() {
+        private YearXAxisValueFormatter() {
         }
 
         @Override

@@ -30,23 +30,20 @@ import timber.log.Timber;
  */
 public class SettingsActivity extends AppCompatActivity {
 
-    SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (key.equals("logging_enabled") || key.equals("logging_level")) {
-                Timber.uprootAll();
-                if(isStoragePermissionGranted()) {
-                    LoggingUtils.setupLogging(getApplicationContext());
-                }else{
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean("logging_enabled",false);
-                    editor.apply();
-                }
+    private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = (sharedPreferences, key) -> {
+        if (key.equals("logging_enabled") || key.equals("logging_level")) {
+            Timber.uprootAll();
+            if(isStoragePermissionGranted()) {
+                LoggingUtils.setupLogging(getApplicationContext());
+            }else{
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("logging_enabled",false);
+                editor.apply();
             }
-            if(key.equals("pro_cloud_enabled")||key.equals("sync_children")) {
-                String value = (sharedPreferences.getBoolean(key, false)) ? "true" : "false";
-                FirebaseAnalytics.getInstance(getApplicationContext()).setUserProperty(key, value);
-            }
+        }
+        if(key.equals("pro_cloud_enabled")||key.equals("sync_children")) {
+            String value = (sharedPreferences.getBoolean(key, false)) ? "true" : "false";
+            FirebaseAnalytics.getInstance(getApplicationContext()).setUserProperty(key, value);
         }
     };
 
@@ -66,7 +63,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
 
-    public boolean isStoragePermissionGranted() {
+    private boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {

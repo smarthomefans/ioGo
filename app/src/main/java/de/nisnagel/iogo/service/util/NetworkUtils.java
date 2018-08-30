@@ -102,12 +102,7 @@ public class NetworkUtils {
     public static Socket getSocket(String url) {
         Timber.v("getSocket called");
 
-        IO.setDefaultHostnameVerifier(new HostnameVerifier() {
-            @Override
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        });
+        IO.setDefaultHostnameVerifier((hostname, session) -> true);
         IO.setDefaultSSLContext(getSSLContext());
         IO.Options opts = new IO.Options();
         //opts.callFactory = okHttpClient;

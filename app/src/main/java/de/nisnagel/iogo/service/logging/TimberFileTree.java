@@ -16,7 +16,7 @@ import java.util.Locale;
 import de.nisnagel.iogo.BuildConfig;
 import timber.log.Timber;
 
-public class TimberFileTree extends Timber.DebugTree {
+class TimberFileTree extends Timber.DebugTree {
 
     private static final String LOG_TAG = TimberFileTree.class.getSimpleName();
     private int priority;

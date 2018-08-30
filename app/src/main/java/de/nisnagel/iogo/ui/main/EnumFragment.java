@@ -61,37 +61,27 @@ public class EnumFragment extends Fragment implements Injectable {
 
         mAdapter = new StateListAdapter(mListStates, mViewModel, getActivity());
 
-        getActivity().runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                mRecyclerView.setAdapter(mAdapter);
-                RecyclerView.LayoutManager layoutManager =
-                        new LinearLayoutManager(getContext());
-                mRecyclerView.setLayoutManager(layoutManager);
-                mRecyclerView.setHasFixedSize(true);
-            }
+        getActivity().runOnUiThread(() -> {
+            mRecyclerView.setAdapter(mAdapter);
+            RecyclerView.LayoutManager layoutManager =
+                    new LinearLayoutManager(getContext());
+            mRecyclerView.setLayoutManager(layoutManager);
+            mRecyclerView.setHasFixedSize(true);
         });
 
-        mViewModel.getEnum(enumId).observe(this, new Observer<Enum>() {
-            @Override
-            public void onChanged(@Nullable Enum anEnum) {
-                // update UI
-                if(anEnum != null) {
-                    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(anEnum.getName());
-                }
+        mViewModel.getEnum(enumId).observe(this, anEnum -> {
+            // update UI
+            if(anEnum != null) {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(anEnum.getName());
             }
         });
 
         mViewModel.getStates(enumId)
-                .observe(this, new Observer<List<State>>() {
-                    @Override
-                    public void onChanged(@Nullable List<State> newList) {
-                        // update UI
-                        mAdapter.clearList();
-                        mAdapter.addAll(newList);
-                        mAdapter.notifyDataSetChanged();
-                    }
+                .observe(this, newList -> {
+                    // update UI
+                    mAdapter.clearList();
+                    mAdapter.addAll(newList);
+                    mAdapter.notifyDataSetChanged();
                 });
 
         return rootView;

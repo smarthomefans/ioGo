@@ -5,7 +5,7 @@ import android.util.Log;
 
 import timber.log.Timber;
 
-public class TimberDebugTree extends Timber.DebugTree {
+class TimberDebugTree extends Timber.DebugTree {
 
     @Override
     protected void log(int priority, String tag, String message, Throwable t) {

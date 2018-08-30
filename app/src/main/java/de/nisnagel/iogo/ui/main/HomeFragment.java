@@ -46,8 +46,8 @@ public class HomeFragment extends Fragment implements Injectable {
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
 
-    public ArrayList<Enum> enumList = new ArrayList<>();
-    public ArrayList<State> stateList = new ArrayList<>();
+    private ArrayList<Enum> enumList = new ArrayList<>();
+    private ArrayList<State> stateList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,39 +67,29 @@ public class HomeFragment extends Fragment implements Injectable {
         mEnumAdapter = new EnumHomeListAdapter(enumList, mViewModel);
         mStateAdapter = new StateListAdapter(stateList, mViewModel, getActivity());
 
-        getActivity().runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(() -> {
 
-            @Override
-            public void run() {
+            rvEnums.setAdapter(mEnumAdapter);
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
+            rvEnums.setLayoutManager(mLayoutManager);
 
-                rvEnums.setAdapter(mEnumAdapter);
-                RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
-                rvEnums.setLayoutManager(mLayoutManager);
-
-                rvStates.setAdapter(mStateAdapter);
-            }
+            rvStates.setAdapter(mStateAdapter);
         });
 
         mViewModel.getFavoriteEnums()
-                .observe(this, new Observer<List<Enum>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Enum> newList) {
-                        // update UI
-                        mEnumAdapter.clearList();
-                        mEnumAdapter.addAll(newList);
-                        mEnumAdapter.notifyDataSetChanged();
-                    }
+                .observe(this, newList -> {
+                    // update UI
+                    mEnumAdapter.clearList();
+                    mEnumAdapter.addAll(newList);
+                    mEnumAdapter.notifyDataSetChanged();
                 });
 
         mViewModel.getFavoriteStates()
-                .observe(this, new Observer<List<State>>() {
-                    @Override
-                    public void onChanged(@Nullable List<State> newList) {
-                        // update UI
-                        mStateAdapter.clearList();
-                        mStateAdapter.addAll(newList);
-                        mStateAdapter.notifyDataSetChanged();
-                    }
+                .observe(this, newList -> {
+                    // update UI
+                    mStateAdapter.clearList();
+                    mStateAdapter.addAll(newList);
+                    mStateAdapter.notifyDataSetChanged();
                 });
 
         return rootView;

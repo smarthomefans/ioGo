@@ -56,71 +56,62 @@ public class CommonViewHolder extends BaseViewHolder {
         }
         if (state.getWrite()) {
             mValue.setClickable(true);
-            mValue.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    LayoutInflater li = LayoutInflater.from(v.getContext());
-                    View promptsView = li.inflate(R.layout.prompts_spinner, null);
+            mValue.setOnClickListener(v -> {
+                LayoutInflater li = LayoutInflater.from(v.getContext());
+                View promptsView = li.inflate(R.layout.prompts_spinner, null);
 
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
 
-                    alertDialogBuilder.setView(promptsView);
+                alertDialogBuilder.setView(promptsView);
 
-                    final Spinner userInput = (Spinner) promptsView
-                            .findViewById(R.id.spinner);
+                final Spinner userInput = (Spinner) promptsView
+                        .findViewById(R.id.spinner);
 
-                    ArrayList<StateItem> stateItems = new ArrayList<>();
-                    StateItem stateItem = null;
+                ArrayList<StateItem> stateItems = new ArrayList<>();
+                StateItem stateItem = null;
 
-                    for (Map.Entry<String, String> entry : state.getStates().entrySet()) {
-                        stateItems.add(new StateItem(entry.getKey(), entry.getValue()));
-                        if (entry.getKey().equals(state.getVal())) {
-                            stateItem = new StateItem(entry.getKey(), entry.getValue());
-                        }
+                for (Map.Entry<String, String> entry : state.getStates().entrySet()) {
+                    stateItems.add(new StateItem(entry.getKey(), entry.getValue()));
+                    if (entry.getKey().equals(state.getVal())) {
+                        stateItem = new StateItem(entry.getKey(), entry.getValue());
                     }
-
-                    ArrayAdapter<StateItem> arrayAdapter = new ArrayAdapter<>(promptsView.getContext(), android.R.layout.simple_spinner_item, stateItems);
-                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    userInput.setAdapter(arrayAdapter);
-                    userInput.setSelected(false);
-                    if (stateItem != null) {
-                        userInput.setSelection(arrayAdapter.getPosition(stateItem));
-                    }
-                    userInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            StateItem stateItem = (StateItem) parent.getSelectedItem();
-                            selected = stateItem.getId();
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-                        }
-                    });
-
-                    // set dialog message
-                    alertDialogBuilder
-                            .setCancelable(false)
-                            .setPositiveButton("OK",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            mSubtitle.setText(R.string.syncing_data);
-                                            mViewModel.changeState(state.getId(), selected);
-                                        }
-                                    })
-                            .setNegativeButton("Cancel",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
-
-                    // create alert dialog
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-
-                    // show it
-                    alertDialog.show();
                 }
+
+                ArrayAdapter<StateItem> arrayAdapter = new ArrayAdapter<>(promptsView.getContext(), android.R.layout.simple_spinner_item, stateItems);
+                arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                userInput.setAdapter(arrayAdapter);
+                userInput.setSelected(false);
+                if (stateItem != null) {
+                    userInput.setSelection(arrayAdapter.getPosition(stateItem));
+                }
+                userInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        StateItem stateItem = (StateItem) parent.getSelectedItem();
+                        selected = stateItem.getId();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                    }
+                });
+
+                // set dialog message
+                alertDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton("OK",
+                                (dialog, id) -> {
+                                    mSubtitle.setText(R.string.syncing_data);
+                                    mViewModel.changeState(state.getId(), selected);
+                                })
+                        .setNegativeButton("Cancel",
+                                (dialog, id) -> dialog.cancel());
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
             });
         }
     }
@@ -133,45 +124,36 @@ public class CommonViewHolder extends BaseViewHolder {
         }
         if (state.getWrite()) {
             mValue.setClickable(true);
-            mValue.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    LayoutInflater li = LayoutInflater.from(v.getContext());
-                    View promptsView = li.inflate(R.layout.prompts, null);
+            mValue.setOnClickListener(v -> {
+                LayoutInflater li = LayoutInflater.from(v.getContext());
+                View promptsView = li.inflate(R.layout.prompts, null);
 
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
 
-                    // set prompts.xml to alertdialog builder
-                    alertDialogBuilder.setView(promptsView);
+                // set prompts.xml to alertdialog builder
+                alertDialogBuilder.setView(promptsView);
 
-                    final EditText userInput = (EditText) promptsView
-                            .findViewById(R.id.editTextDialogUserInput);
+                final EditText userInput = (EditText) promptsView
+                        .findViewById(R.id.editTextDialogUserInput);
 
-                    // set dialog message
-                    alertDialogBuilder
-                            .setCancelable(false)
-                            .setPositiveButton("OK",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            // get user input and set it to result
-                                            // edit text
-                                            mSubtitle.setText(R.string.syncing_data);
-                                            DataBus.getBus().post(new Events.SetState(state.getId(), userInput.getText().toString()));
-                                        }
-                                    })
-                            .setNegativeButton("Cancel",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
+                // set dialog message
+                alertDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton("OK",
+                                (dialog, id) -> {
+                                    // get user input and set it to result
+                                    // edit text
+                                    mSubtitle.setText(R.string.syncing_data);
+                                    DataBus.getBus().post(new Events.SetState(state.getId(), userInput.getText().toString()));
+                                })
+                        .setNegativeButton("Cancel",
+                                (dialog, id) -> dialog.cancel());
 
-                    // create alert dialog
-                    AlertDialog alertDialog = alertDialogBuilder.create();
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
 
-                    // show it
-                    alertDialog.show();
-                }
+                // show it
+                alertDialog.show();
             });
         }
     }
