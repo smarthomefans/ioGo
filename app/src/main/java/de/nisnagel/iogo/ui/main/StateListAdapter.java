@@ -37,7 +37,7 @@ public class StateListAdapter
 
             Context context = view.getContext();
 
-            if (item.hasHistory()) {
+            if (item.hasHistory() && "number".equals(item.getType())) {
                 Intent intent = new Intent(context, HistoryActivity.class);
                 intent.putExtra(Constants.ARG_STATE_ID, item.getId());
                 context.startActivity(intent);

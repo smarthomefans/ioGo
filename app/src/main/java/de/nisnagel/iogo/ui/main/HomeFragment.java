@@ -45,9 +45,10 @@ public class HomeFragment extends Fragment implements Injectable {
     private StateListAdapter mStateAdapter;
     private EnumViewModel mViewModel;
 
+    @BindView(R.id.adView)
+    AdView mAdView;
     @BindView(R.id.favorite_enums)
     RecyclerView rvEnums;
-
     @BindView(R.id.favorite_states)
     RecyclerView rvStates;
 
@@ -68,6 +69,9 @@ public class HomeFragment extends Fragment implements Injectable {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, rootView);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         mEnumAdapter = new EnumHomeListAdapter(enumList, mViewModel);
         mStateAdapter = new StateListAdapter(stateList, mViewModel, getActivity());

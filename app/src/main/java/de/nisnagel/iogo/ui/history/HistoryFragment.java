@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -62,6 +63,14 @@ public class HistoryFragment extends Fragment implements Injectable {
     TextView mValue;
     @BindView(R.id.txtName)
     TextView mName;
+    @BindView(R.id.btnDay)
+    Button mDay;
+    @BindView(R.id.btnWeek)
+    Button mWeek;
+    @BindView(R.id.btnMonth)
+    Button mMonth;
+    @BindView(R.id.btnYear)
+    Button mYear;
     @BindView(R.id.chart)
     LineChart mChart;
 
@@ -165,8 +174,18 @@ public class HistoryFragment extends Fragment implements Injectable {
         mChart.getDescription().setEnabled(false);
     }
 
+    private void clearButtonStyles(){
+        mDay.setTextColor(Color.BLACK);
+        mWeek.setTextColor(Color.BLACK);
+        mMonth.setTextColor(Color.BLACK);
+        mYear.setTextColor(Color.BLACK);
+    }
+
     @OnClick(R.id.btnDay)
     public void showDay() {
+
+        clearButtonStyles();
+        mDay.setTextColor(Color.WHITE);
 
         setDataChart(stateHistory.getDay());
 
@@ -180,6 +199,9 @@ public class HistoryFragment extends Fragment implements Injectable {
 
     @OnClick(R.id.btnWeek)
     public void showWeek() {
+
+        clearButtonStyles();
+        mWeek.setTextColor(Color.WHITE);
 
         setDataChart(stateHistory.getWeek());
 
@@ -195,6 +217,9 @@ public class HistoryFragment extends Fragment implements Injectable {
     @OnClick(R.id.btnMonth)
     public void showMonth() {
 
+        clearButtonStyles();
+        mMonth.setTextColor(Color.WHITE);
+
         setDataChart(stateHistory.getMonth());
 
         XAxis xAxis = mChart.getXAxis();
@@ -208,6 +233,9 @@ public class HistoryFragment extends Fragment implements Injectable {
 
     @OnClick(R.id.btnYear)
     public void showYear() {
+
+        clearButtonStyles();
+        mYear.setTextColor(Color.WHITE);
 
         setDataChart(stateHistory.getYear());
 

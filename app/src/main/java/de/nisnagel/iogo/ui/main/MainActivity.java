@@ -9,6 +9,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -50,6 +54,10 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
 
         //getting bottom navigation view and attaching the listener
         bottombar.setOnNavigationItemSelectedListener(this);
+
+        // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
+        MobileAds.initialize(this, "@string/ad_unit_id");
+
     }
 
     @Override
