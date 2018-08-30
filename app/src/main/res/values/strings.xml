@@ -37,4 +37,6 @@
     <string name="new_value">New Value :</string>
     <string name="home">Home</string>
 
+    <string name="ad_unit_id">ca-app-pub-9046643317542583~5897351833</string>
+    <string name="banner_ad_unit_id">ca-app-pub-9046643317542583/6252575050</string>
 </resources>
