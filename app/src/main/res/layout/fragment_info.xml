@@ -28,7 +28,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/labelSocketState"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -79,7 +78,6 @@
         app:layout_constraintTop_toBottomOf="@+id/labelDatabase" />
 
     <TextView
-        android:id="@+id/labelCountFunctions"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -99,7 +97,6 @@
         app:layout_constraintTop_toBottomOf="@+id/labelCountRooms" />
 
     <TextView
-        android:id="@+id/labelCountStates"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -130,7 +127,6 @@
         app:layout_constraintTop_toBottomOf="@+id/countStates" />
 
     <TextView
-        android:id="@+id/labelAppVerion"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"

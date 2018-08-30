@@ -38,12 +38,16 @@ public class ValueViewHolder extends BaseViewHolder {
         } else if (role != null) {
             switch (role) {
                 case Constants.ROLE_VALUE_WINDOW:
-                    if ("0".equals(val)) {
-                        value = context.getString(R.string.value_closed);
-                    } else if ("1".equals(val)) {
-                        value = context.getString(R.string.value_tilted);
-                    } else if ("2".equals(val)) {
-                        value = context.getString(R.string.value_open);
+                    switch (val) {
+                        case "0":
+                            value = context.getString(R.string.value_closed);
+                            break;
+                        case "1":
+                            value = context.getString(R.string.value_tilted);
+                            break;
+                        case "2":
+                            value = context.getString(R.string.value_open);
+                            break;
                     }
                     break;
             }

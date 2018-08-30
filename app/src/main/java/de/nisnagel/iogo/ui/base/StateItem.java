@@ -38,7 +38,7 @@ public class StateItem {
         public boolean equals(Object obj) {
             if(obj instanceof StateItem){
                 StateItem c = (StateItem )obj;
-                if(c.getName().equals(name) && c.getId()==id ) return true;
+                return c.getName().equals(name) && c.getId().equals(id);
             }
 
             return false;

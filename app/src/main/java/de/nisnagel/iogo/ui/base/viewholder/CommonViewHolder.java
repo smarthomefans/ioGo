@@ -1,6 +1,5 @@
 package de.nisnagel.iogo.ui.base.viewholder;
 
-import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,7 +63,7 @@ public class CommonViewHolder extends BaseViewHolder {
 
                 alertDialogBuilder.setView(promptsView);
 
-                final Spinner userInput = (Spinner) promptsView
+                final Spinner userInput = promptsView
                         .findViewById(R.id.spinner);
 
                 ArrayList<StateItem> stateItems = new ArrayList<>();
@@ -133,7 +132,7 @@ public class CommonViewHolder extends BaseViewHolder {
                 // set prompts.xml to alertdialog builder
                 alertDialogBuilder.setView(promptsView);
 
-                final EditText userInput = (EditText) promptsView
+                final EditText userInput = promptsView
                         .findViewById(R.id.editTextDialogUserInput);
 
                 // set dialog message

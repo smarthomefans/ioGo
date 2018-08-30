@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -216,7 +216,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             transport.on(Transport.EVENT_REQUEST_HEADERS, args1 -> {
                 @SuppressWarnings("unchecked")
                 Map<String, List<String>> headers = (Map<String, List<String>>) args1[0];
-                headers.put("Cookie", Arrays.asList(cookie));
+                headers.put("Cookie", Collections.singletonList(cookie));
             });
         }
     };

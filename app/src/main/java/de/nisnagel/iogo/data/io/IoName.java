@@ -33,16 +33,17 @@ public class IoName {
     }
 
     public static JsonDeserializer<IoName> getDeserializer(){
-        JsonDeserializer<IoName> deserializer = (json, typeOfT, context) -> {
+
+        return (json, typeOfT, context) -> {
 
             IoName ioName = new IoName();
             try {
                 if (json.isJsonPrimitive()) {
                     ioName.setName(json.getAsString());
                 } else if (json.isJsonObject()) {
-                    String language = Locale.getDefault().getLanguage();
-                    if(json.getAsJsonObject().has(language)){
-                        ioName.setName(json.getAsJsonObject().get(language).getAsString());
+                    String language1 = Locale.getDefault().getLanguage();
+                    if(json.getAsJsonObject().has(language1)){
+                        ioName.setName(json.getAsJsonObject().get(language1).getAsString());
                     }else if(json.getAsJsonObject().has("en")){
                         ioName.setName(json.getAsJsonObject().get("en").getAsString());
                     }else if(json.getAsJsonObject().has("de")){
@@ -55,7 +56,5 @@ public class IoName {
 
             return ioName;
         };
-
-        return deserializer;
     }
 }

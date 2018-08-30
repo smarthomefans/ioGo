@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,8 +53,6 @@ public class HistoryFragment extends Fragment implements Injectable {
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
 
-    private Toolbar toolbar;
-
     @BindView(R.id.txtValue)
     TextView mValue;
     @BindView(R.id.txtName)
@@ -85,7 +82,6 @@ public class HistoryFragment extends Fragment implements Injectable {
         state = null;
         stateHistory = null;
         setHasOptionsMenu(true);
-        toolbar = getActivity().findViewById(R.id.toolbar);
     }
 
     @Override
