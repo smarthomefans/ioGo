@@ -12,7 +12,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.State;
-import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
 
 public class LevelViewHolder extends BaseViewHolder {

@@ -3,19 +3,14 @@ package de.nisnagel.iogo.data.repository;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import de.nisnagel.iogo.data.io.IoName;
 import de.nisnagel.iogo.data.io.IoObject;
 import de.nisnagel.iogo.data.io.IoState;
 import de.nisnagel.iogo.data.model.EnumState;
@@ -26,7 +21,6 @@ import de.nisnagel.iogo.data.model.StateHistory;
 import de.nisnagel.iogo.data.model.StateHistoryDao;
 import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.service.Events;
-import de.nisnagel.iogo.service.util.HistoryUtils;
 import timber.log.Timber;
 
 @Singleton

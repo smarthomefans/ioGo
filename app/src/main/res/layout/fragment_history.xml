@@ -13,7 +13,6 @@
         android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:layout_marginTop="24dp"
-        android:text="24.9°C"
         android:textSize="76sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -27,7 +26,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
-        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,28 +45,28 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Year"/>
+            android:text="@string/year"/>
 
         <Button
             android:id="@+id/btnMonth"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Month"/>
+            android:text="@string/month"/>
 
         <Button
             android:id="@+id/btnWeek"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Week"/>
+            android:text="@string/week"/>
 
         <Button
             android:id="@+id/btnDay"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Today" />
+            android:text="@string/today" />
     </LinearLayout>
 
     <com.github.mikephil.charting.charts.LineChart

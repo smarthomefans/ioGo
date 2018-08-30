@@ -1,17 +1,9 @@
 package de.nisnagel.iogo.data.model;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
-
-import java.util.Date;
-import java.util.Map;
-
-import de.nisnagel.iogo.data.io.IoObject;
-import de.nisnagel.iogo.data.io.IoState;
 
 @Entity(tableName = "state_history", indices = {@Index(value = {"id"},unique = true)})
 public class StateHistory {

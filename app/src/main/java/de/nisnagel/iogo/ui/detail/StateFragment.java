@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,8 @@ public class StateFragment extends Fragment implements Injectable {
 
     @BindView(R.id.icon)
     ImageView mIcon;
+    @BindView(R.id.btnStatistic)
+    Button mStatistics;
     @BindView(R.id.txtName)
     TextView mName;
     @BindView(R.id.txtEnum)
@@ -115,6 +118,11 @@ public class StateFragment extends Fragment implements Injectable {
                         }
                         mAdapter.addAll(stateItems);
                         mAdapter.notifyDataSetChanged();
+                    }
+                    if(state.hasHistory() && "number".equals(state.getType())){
+                        mStatistics.setVisibility(View.VISIBLE);
+                    }else{
+                        mStatistics.setVisibility(View.GONE);
                     }
                     if (toolbar.getMenu().size() > 0) {
                         setFavoriteIcon(toolbar.getMenu().getItem(0), "true".equals(state.getFavorite()));

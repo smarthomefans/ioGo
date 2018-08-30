@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -18,7 +17,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.State;
-import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.service.Events;
 import de.nisnagel.iogo.ui.base.StateItem;
@@ -81,7 +79,7 @@ public class CommonViewHolder extends BaseViewHolder {
                         }
                     }
 
-                    ArrayAdapter<StateItem> arrayAdapter = new ArrayAdapter<StateItem>(promptsView.getContext(), android.R.layout.simple_spinner_item, stateItems);
+                    ArrayAdapter<StateItem> arrayAdapter = new ArrayAdapter<>(promptsView.getContext(), android.R.layout.simple_spinner_item, stateItems);
                     arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     userInput.setAdapter(arrayAdapter);
                     userInput.setSelected(false);

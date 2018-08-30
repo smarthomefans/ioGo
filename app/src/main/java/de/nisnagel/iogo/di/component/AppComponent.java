@@ -6,7 +6,6 @@ import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.support.AndroidSupportInjectionModule;
 import de.nisnagel.iogo.App;
-import de.nisnagel.iogo.data.model.AppDatabase;
 import de.nisnagel.iogo.di.builder.ActivityBuildersModule;
 import de.nisnagel.iogo.di.builder.ServiceBuilderModule;
 import de.nisnagel.iogo.di.module.AppModule;

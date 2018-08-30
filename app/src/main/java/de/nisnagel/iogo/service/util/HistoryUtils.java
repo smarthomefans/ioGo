@@ -13,7 +13,7 @@ public class HistoryUtils {
     static public long startOfMonth = endOfDay -HistoryUtils.durMonth;
     static public long startOfYear = endOfDay - HistoryUtils.durYear;
 
-    static public long getEndOfToday() {
+    static private long getEndOfToday() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);

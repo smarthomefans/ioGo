@@ -2,9 +2,6 @@ package de.nisnagel.iogo.data.repository;
 
 import android.arch.lifecycle.LiveData;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +10,6 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import de.nisnagel.iogo.data.io.IoCommon;
-import de.nisnagel.iogo.data.io.IoEnum;
-import de.nisnagel.iogo.data.io.IoName;
-import de.nisnagel.iogo.data.io.IoRow;
-import de.nisnagel.iogo.data.io.IoValue;
 import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.EnumDao;
 import de.nisnagel.iogo.data.model.EnumState;

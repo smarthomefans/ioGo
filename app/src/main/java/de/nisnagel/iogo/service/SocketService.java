@@ -266,12 +266,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     public void syncObjects(final Events.SyncObjects event) {
         Timber.v("syncObjects called");
         if (isConnected()) {
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    getEnumRooms();
-                }
-            });
+            AsyncTask.execute(() -> getEnumRooms());
         }
     }
 

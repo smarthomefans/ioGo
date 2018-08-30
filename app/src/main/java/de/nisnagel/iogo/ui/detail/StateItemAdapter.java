@@ -20,9 +20,9 @@ public class StateItemAdapter
         extends RecyclerView.Adapter<StateItemAdapter.ViewHolder> {
 
     private StateViewModel mViewModel;
-    protected List<StateItem> mValues;
+    private List<StateItem> mValues;
 
-    protected final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             StateItem item = (StateItem) view.getTag();
@@ -30,7 +30,7 @@ public class StateItemAdapter
         }
     };
 
-    public StateItemAdapter(List<StateItem> list, StateViewModel mViewModel) {
+    StateItemAdapter(List<StateItem> list, StateViewModel mViewModel) {
         this.mValues = list;
         this.mViewModel = mViewModel;
     }
@@ -74,7 +74,7 @@ public class StateItemAdapter
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindItem(StateItem item) {
+        void bindItem(StateItem item) {
 
             if (mViewModel.getValue() != null && mViewModel.getValue().equals(item.getId())) {
                 mTitle.setTextColor(Color.WHITE);

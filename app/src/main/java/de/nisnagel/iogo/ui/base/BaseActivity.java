@@ -1,7 +1,6 @@
 package de.nisnagel.iogo.ui.base;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;

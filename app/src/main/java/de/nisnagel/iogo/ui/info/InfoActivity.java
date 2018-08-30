@@ -3,18 +3,15 @@ package de.nisnagel.iogo.ui.info;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
-import de.nisnagel.iogo.BuildConfig;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.ui.base.BaseActivity;
 

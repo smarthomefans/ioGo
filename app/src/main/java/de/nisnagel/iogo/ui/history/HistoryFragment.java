@@ -27,7 +27,6 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,7 +44,6 @@ import de.nisnagel.iogo.data.model.StateHistory;
 import de.nisnagel.iogo.di.Injectable;
 import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.service.DataBus;
-import de.nisnagel.iogo.service.Events;
 import de.nisnagel.iogo.service.util.HistoryUtils;
 import de.nisnagel.iogo.ui.detail.StateViewModel;
 
@@ -141,7 +139,7 @@ public class HistoryFragment extends Fragment implements Injectable {
         list = gson.fromJson(data, new TypeToken<List<Car>>() {
         }.getType());
 
-        List<Entry> entries = new ArrayList<Entry>();
+        List<Entry> entries = new ArrayList<>();
         for (Car elem : list) {
             if(elem.ts != null && elem.val != null) {
                 entries.add(new Entry(elem.ts / 1000f, elem.val));

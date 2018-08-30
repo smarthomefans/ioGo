@@ -1,14 +1,12 @@
 package de.nisnagel.iogo.ui.base.viewholder;
 
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.State;
-import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
 
 public class SwitchViewHolder extends BaseViewHolder {
@@ -29,13 +27,10 @@ public class SwitchViewHolder extends BaseViewHolder {
         mValue.setChecked("true".equals(state.getVal()));
         if (state.getWrite()) {
             mValue.setClickable(true);
-            mValue.setOnClickListener(new CompoundButton.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final Switch btn = (Switch) v;
-                    mSubtitle.setText(R.string.syncing_data);
-                    mViewModel.changeState(state.getId(), (btn.isChecked()) ? "true" : "false");
-                }
+            mValue.setOnClickListener(v -> {
+                final Switch btn = (Switch) v;
+                mSubtitle.setText(R.string.syncing_data);
+                mViewModel.changeState(state.getId(), (btn.isChecked()) ? "true" : "false");
             });
 
         }

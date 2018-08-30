@@ -28,9 +28,9 @@ public class EnumListAdapter
         extends RecyclerView.Adapter<EnumListAdapter.ViewHolder> {
 
     private EnumViewModel mViewModel;
-    protected List<Enum> mValues;
+    private List<Enum> mValues;
 
-    protected final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Enum item = (Enum) view.getTag();
@@ -44,7 +44,7 @@ public class EnumListAdapter
         }
     };
 
-    protected final View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
+    private final View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View view) {
             Enum item = (Enum) view.getTag();
@@ -66,7 +66,7 @@ public class EnumListAdapter
         }
     };
 
-    public EnumListAdapter(List<Enum> list, EnumViewModel mViewModel) {
+    EnumListAdapter(List<Enum> list, EnumViewModel mViewModel) {
         this.mValues = list;
         this.mViewModel = mViewModel;
     }
@@ -112,7 +112,7 @@ public class EnumListAdapter
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindEnum(Enum anEnum) {
+        void bindEnum(Enum anEnum) {
             mTitle.setText(anEnum.getName());
             if(anEnum.getColor() != null && anEnum.getColor().contains("#")){
                 mColor.setBackgroundColor(Color.parseColor(anEnum.getColor()));

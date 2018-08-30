@@ -1,8 +1,6 @@
 package de.nisnagel.iogo.ui.base.viewholder;
 
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Map;

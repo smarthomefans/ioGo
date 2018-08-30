@@ -18,7 +18,6 @@ import de.nisnagel.iogo.data.model.EnumDao;
 import de.nisnagel.iogo.data.model.EnumStateDao;
 import de.nisnagel.iogo.data.model.HistoryDatabase;
 import de.nisnagel.iogo.data.model.StateDao;
-import de.nisnagel.iogo.data.model.StateHistory;
 import de.nisnagel.iogo.data.model.StateHistoryDao;
 import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;

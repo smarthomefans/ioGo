@@ -2,7 +2,6 @@ package de.nisnagel.iogo.ui.base.viewholder;
 
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,13 +25,10 @@ public class ButtonViewHolder extends BaseViewHolder {
         mSubtitle.setText(getSubtitle(state));
         mValue.setVisibility(View.VISIBLE);
         mValue.setClickable(state.getWrite());
-        mValue.setOnClickListener(new CompoundButton.OnClickListener() {
-                                      @Override
-                                      public void onClick(View v) {
-                                          mSubtitle.setText(R.string.syncing_data);
-                                          mViewModel.changeState(state.getId(), "true");
-                                      }
-                                  }
+        mValue.setOnClickListener(v -> {
+            mSubtitle.setText(R.string.syncing_data);
+            mViewModel.changeState(state.getId(), "true");
+        }
         );
         setImageRessource(state.getRole());
     }

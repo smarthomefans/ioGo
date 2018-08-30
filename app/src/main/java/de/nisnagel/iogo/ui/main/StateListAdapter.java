@@ -30,7 +30,7 @@ public class StateListAdapter
     private EnumViewModel mViewModel;
     private List<State> mValues;
 
-    protected final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             State item = (State) view.getTag();
@@ -50,7 +50,7 @@ public class StateListAdapter
         }
     };
 
-    protected final View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
+    private final View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View view) {
             State item = (State) view.getTag();
@@ -79,7 +79,7 @@ public class StateListAdapter
     private final int C_SWITCH = 6;         //boolean read-write
     private final int C_COMMON = 99;        //string
 
-    public StateListAdapter(List<State> stateList, EnumViewModel mViewModel, Context context) {
+    StateListAdapter(List<State> stateList, EnumViewModel mViewModel, Context context) {
         this.mValues = stateList;
         this.mViewModel = mViewModel;
         DataBus.getBus().register(this);
