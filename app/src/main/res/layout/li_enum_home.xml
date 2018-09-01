@@ -16,24 +16,12 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:text="En"
-                android:textAlignment="center"
-                android:textColor="#616161"
-                android:textSize="30sp"
-                android:visibility="gone" />
-
-            <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="Primary text"
                 android:textAlignment="center"
                 android:textColor="@android:color/primary_text_dark"
                 android:textSize="20dp" />

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -103,10 +104,10 @@ public class HistoryFragment extends Fragment implements Injectable {
 
         mViewModel.getHistory(stateId).observe(this, elem -> {
             if (elem != null) {
-                if(stateHistory == null) {
+                if (stateHistory == null) {
                     stateHistory = elem;
                     showDay();
-                }else {
+                } else {
                     stateHistory = elem;
                 }
             }
@@ -130,7 +131,7 @@ public class HistoryFragment extends Fragment implements Injectable {
 
         List<Entry> entries = new ArrayList<>();
         for (Car elem : list) {
-            if(elem.ts != null && elem.val != null) {
+            if (elem.ts != null && elem.val != null) {
                 entries.add(new Entry(elem.ts / 1000f, elem.val));
             }
         }
@@ -161,7 +162,7 @@ public class HistoryFragment extends Fragment implements Injectable {
         mChart.getDescription().setEnabled(false);
     }
 
-    private void clearButtonStyles(){
+    private void clearButtonStyles() {
         mDay.setTextColor(Color.BLACK);
         mWeek.setTextColor(Color.BLACK);
         mMonth.setTextColor(Color.BLACK);

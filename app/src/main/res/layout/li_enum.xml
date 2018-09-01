@@ -35,7 +35,6 @@
                 android:layout_marginTop="18dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="Primary text"
                 android:textColor="@android:color/primary_text_dark"
                 android:textSize="20dp" />
 
