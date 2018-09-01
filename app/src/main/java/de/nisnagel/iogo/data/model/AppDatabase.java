@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.migration.Migration;
 
-@Database(entities = { Enum.class, EnumState.class, State.class}, version = 8, exportSchema = false)
+@Database(entities = { Enum.class, EnumState.class, State.class}, version = 9, exportSchema = false)
 @TypeConverters({ListConverters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -33,6 +33,26 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE state ADD COLUMN history INTEGER NOT NULL DEFAULT 0");
+        }
+    };
+    public static final Migration MIGRATION_8_9 = new Migration(8, 9) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE enum RENAME TO enum_old");
+            database.execSQL("DROP INDEX index_enum_id");
+            database.execSQL("CREATE TABLE enum (" +
+                    "id TEXT NOT NULL PRIMARY KEY, " +
+                    "name TEXT, " +
+                    "type TEXT, " +
+                    "color TEXT, " +
+                    "icon TEXT, " +
+                    "favorite INTEGER NOT NULL DEFAULT 0, " +
+                    "rank INTEGER DEFAULT 0, " +
+                    "hidden INTEGER NOT NULL DEFAULT 0 " +
+                    ")");
+            database.execSQL("CREATE UNIQUE INDEX index_enum_id ON enum(id)");
+            database.execSQL("INSERT INTO enum(id,name,type,color,icon,favorite,rank,hidden) SELECT id,name,type,color,icon,CASE favorite WHeN 'true' then 1 else 0 END,0,0 FROM enum_old");
+            database.execSQL("DROP TABLE enum_old");
         }
     };
 }

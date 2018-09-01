@@ -2,8 +2,11 @@ package de.nisnagel.iogo.ui.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v7.preference.PreferenceManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -15,7 +18,10 @@ import android.widget.Toast;
 
 import com.pixplicity.sharp.Sharp;
 
+import java.sql.Array;
+import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,9 +29,11 @@ import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.service.util.ImageUtils;
+import de.nisnagel.iogo.ui.helper.ItemTouchHelperAdapter;
+import de.nisnagel.iogo.ui.helper.ItemTouchHelperViewHolder;
 
 public class EnumListAdapter
-        extends RecyclerView.Adapter<EnumListAdapter.ViewHolder> {
+        extends RecyclerView.Adapter<EnumListAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private EnumViewModel mViewModel;
     private List<Enum> mValues;
@@ -45,13 +53,13 @@ public class EnumListAdapter
         @Override
         public boolean onLongClick(View view) {
             Enum item = (Enum) view.getTag();
-            if(item != null){
-                if("true".equals(item.getFavorite())){
-                    item.setFavorite("false");
-                    Toast.makeText(view.getContext(),"unstarred",Toast.LENGTH_SHORT).show();
-                }else{
-                    item.setFavorite("true");
-                    Toast.makeText(view.getContext(),"starred",Toast.LENGTH_SHORT).show();
+            if (item != null) {
+                if (item.isFavorite()) {
+                    item.setFavorite(false);
+                    Toast.makeText(view.getContext(), "unstarred", Toast.LENGTH_SHORT).show();
+                } else {
+                    item.setFavorite(true);
+                    Toast.makeText(view.getContext(), "starred", Toast.LENGTH_SHORT).show();
                 }
                 mViewModel.saveEnum(item);
 
@@ -68,12 +76,36 @@ public class EnumListAdapter
         this.mViewModel = mViewModel;
     }
 
-    public void clearList(){
+    public void clearList() {
         this.mValues.clear();
     }
 
-    public void addAll(List<Enum> list){
+    public void addAll(List<Enum> list, boolean filter) {
+        if(filter) {
+            for (Iterator iter = list.iterator();
+                 iter.hasNext(); ) {
+                Enum item = (Enum) iter.next();
+                if (item.isHidden()) {
+                    iter.remove();
+                }
+            }
+        }
         this.mValues = list;
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        Enum anEnum = mValues.remove(position);
+        anEnum.setHidden(true);
+        mViewModel.saveEnum(anEnum);
+        notifyItemRemoved(position);
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        Enum prev = mValues.remove(fromPosition);
+        mValues.add(toPosition > fromPosition ? toPosition - 1 : toPosition, prev);
+        notifyItemMoved(fromPosition, toPosition);
     }
 
     @Override
@@ -97,8 +129,13 @@ public class EnumListAdapter
         return mValues.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.title)  TextView mTitle;
+    class ViewHolder extends RecyclerView.ViewHolder implements
+            ItemTouchHelperViewHolder {
+
+        @BindView(R.id.card_view)
+        CardView mCard;
+        @BindView(R.id.title)
+        TextView mTitle;
         @BindView(R.id.icon)
         ImageView mIcon;
         @BindView(R.id.color)
@@ -111,19 +148,36 @@ public class EnumListAdapter
 
         void bindEnum(Enum anEnum) {
             mTitle.setText(anEnum.getName());
-            if(anEnum.getColor() != null && anEnum.getColor().contains("#")){
+            if (anEnum.getColor() != null && anEnum.getColor().contains("#")) {
                 mColor.setBackgroundColor(Color.parseColor(anEnum.getColor()));
             }
-            if(anEnum.getIcon() != null) {
-                if(anEnum.getIcon().contains("svg+xml")){
+            if(anEnum.isHidden()){
+                mCard.setCardBackgroundColor(Color.BLACK);
+            }
+            if (anEnum.getIcon() != null) {
+                if (anEnum.getIcon().contains("svg+xml")) {
                     String pureBase64Encoded = anEnum.getIcon().substring(anEnum.getIcon().indexOf(",") + 1);
                     byte[] decodedString = Base64.decode(pureBase64Encoded, Base64.DEFAULT);
                     String data = new String(decodedString);
                     Sharp.loadString(data).into(mIcon);
-                }else {
+                } else {
                     mIcon.setImageBitmap(ImageUtils.convertToBitmap(anEnum.getIcon()));
                 }
             }
+        }
+
+        @Override
+        public void onItemSelected() {
+            mCard.setCardBackgroundColor(Color.LTGRAY);
+        }
+
+        @Override
+        public void onItemClear() {
+            mCard.setCardBackgroundColor(Color.DKGRAY);
+            for (int i = 0; i < mValues.size(); i++) {
+                mValues.get(i).setRank(i);
+            }
+            mViewModel.saveEnum((Enum[]) mValues.toArray(new Enum[mValues.size()]));
         }
     }
 

@@ -16,15 +16,19 @@ public class Enum {
     private String color;
     private String icon;
 
-    private String favorite;
+    private boolean favorite;
+    private Integer rank;
+    private boolean hidden;
 
-    public Enum(@NonNull String id, String name, String type, String favorite, String color, String icon) {
+    public Enum(@NonNull String id, String name, String type, boolean favorite, String color, String icon) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.favorite = favorite;
         this.color = color;
         this.icon = icon;
+        this.rank = 0;
+        this.hidden = false;
     }
 
     @NonNull
@@ -68,15 +72,27 @@ public class Enum {
         this.icon = icon;
     }
 
-    public String getFavorite() {
-        return favorite;
-    }
-
     public boolean isFavorite() {
-        return "true".equals(favorite);
+        return this.favorite;
     }
 
-    public void setFavorite(String favorite) {
+    public void setFavorite(boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public Integer getRank() {
+        return rank;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 }

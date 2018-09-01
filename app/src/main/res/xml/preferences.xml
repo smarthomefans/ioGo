@@ -69,5 +69,10 @@
             android:defaultValue="false"
             android:title="Sync children states">
         </SwitchPreference>
+        <SwitchPreference
+            android:key="show_hidden"
+            android:defaultValue="false"
+            android:title="Show hidden enum">
+        </SwitchPreference>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -104,8 +104,9 @@ public class EnumRepository {
         enumStateDao.insert(item);
     }
 
-    public void saveEnum(Enum anEnum) {
+    public void saveEnum(Enum... anEnum) {
         Timber.v("saveEnum called");
         executor.execute(() -> enumDao.update(anEnum));
     }
+
 }

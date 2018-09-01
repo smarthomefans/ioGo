@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,11 +41,11 @@ public class EnumHomeListAdapter
         public boolean onLongClick(View view) {
             Enum item = (Enum) view.getTag();
             if(item != null){
-                if("true".equals(item.getFavorite())){
-                    item.setFavorite("false");
+                if(item.isFavorite()){
+                    item.setFavorite(false);
                     Toast.makeText(view.getContext(),"unstarred",Toast.LENGTH_SHORT).show();
                 }else{
-                    item.setFavorite("true");
+                    item.setFavorite(true);
                     Toast.makeText(view.getContext(),"starred",Toast.LENGTH_SHORT).show();
                 }
                 mViewModel.saveEnum(item);
@@ -66,7 +67,14 @@ public class EnumHomeListAdapter
         this.mValues.clear();
     }
 
-    public void addAll(List<Enum> list){
+    public void addAll(List<Enum> list) {
+        for(Iterator iter = list.iterator();
+            iter.hasNext();) {
+            Enum item = (Enum) iter.next();
+            if(item.isHidden()){
+                iter.remove();
+            }
+        }
         this.mValues = list;
     }
 

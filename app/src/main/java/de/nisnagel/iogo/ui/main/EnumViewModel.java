@@ -54,7 +54,7 @@ public class EnumViewModel extends ViewModel {
         return stateRepository.getStatesByEnum(enumId);
     }
 
-    public void saveEnum(Enum anEnum) {
+    public void saveEnum(Enum... anEnum) {
         enumRepository.saveEnum(anEnum);
     }
 
