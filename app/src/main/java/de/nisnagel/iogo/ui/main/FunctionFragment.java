@@ -3,10 +3,12 @@ package de.nisnagel.iogo.ui.main;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
@@ -31,6 +33,7 @@ public class FunctionFragment extends Fragment implements Injectable {
     private EnumListAdapter mAdapter;
     private EnumViewModel mViewModel;
     private ItemTouchHelper mItemTouchHelper;
+    private SharedPreferences sharedPref;
 
     @BindView(R.id.enum_list)
     RecyclerView recyclerView;
@@ -44,6 +47,7 @@ public class FunctionFragment extends Fragment implements Injectable {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
     }
 
     @Nullable
@@ -59,7 +63,7 @@ public class FunctionFragment extends Fragment implements Injectable {
                 .observe(this, newList -> {
                     // update UI
                     mAdapter.clearList();
-                    mAdapter.addAll(newList);
+                    mAdapter.addAll(newList, sharedPref.getBoolean("show_hidden", false));
                     mAdapter.notifyDataSetChanged();
                 });
 
