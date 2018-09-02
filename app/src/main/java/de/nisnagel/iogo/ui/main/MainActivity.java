@@ -54,7 +54,7 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
         bottombar.setOnNavigationItemSelectedListener(this);
 
         // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
-        MobileAds.initialize(this, "@string/ad_unit_id");
+        //MobileAds.initialize(this, "@string/ad_unit_id");
 
     }
 

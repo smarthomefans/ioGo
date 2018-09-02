@@ -113,12 +113,6 @@ public class InfoFragment extends Fragment implements Injectable {
         mFirebaseAnalytics.logEvent("sync_ojects", null);
     }
 
-    @OnClick(R.id.clearDatabase)
-    public void onClickClearDatabase(){
-        mViewModel.clearDatabase();
-        mFirebaseAnalytics.logEvent("clear_database", null);
-    }
-
     @Override
     public void onAttach(Context context) {
         AndroidSupportInjection.inject(this);

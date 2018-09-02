@@ -80,8 +80,8 @@ public class EnumListAdapter
         this.mValues.clear();
     }
 
-    public void addAll(List<Enum> list, boolean filter) {
-        if(filter) {
+    public void addAll(List<Enum> list, boolean show_hidden) {
+        if(!show_hidden) {
             for (Iterator iter = list.iterator();
                  iter.hasNext(); ) {
                 Enum item = (Enum) iter.next();
