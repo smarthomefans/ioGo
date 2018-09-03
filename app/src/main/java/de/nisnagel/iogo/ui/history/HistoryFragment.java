@@ -130,9 +130,11 @@ public class HistoryFragment extends Fragment implements Injectable {
         }.getType());
 
         List<Entry> entries = new ArrayList<>();
-        for (Car elem : list) {
-            if (elem.ts != null && elem.val != null) {
-                entries.add(new Entry(elem.ts / 1000f, elem.val));
+        if(list != null && list.size() > 0) {
+            for (Car elem : list) {
+                if (elem.ts != null && elem.val != null) {
+                    entries.add(new Entry(elem.ts / 1000f, elem.val));
+                }
             }
         }
 
