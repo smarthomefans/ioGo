@@ -12,6 +12,7 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,28 +48,6 @@ public class EnumListAdapter
 
         context.startActivity(intent);
 
-    };
-
-    private final View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View view) {
-            Enum item = (Enum) view.getTag();
-            if (item != null) {
-                if (item.isFavorite()) {
-                    item.setFavorite(false);
-                    Toast.makeText(view.getContext(), "unstarred", Toast.LENGTH_SHORT).show();
-                } else {
-                    item.setFavorite(true);
-                    Toast.makeText(view.getContext(), "starred", Toast.LENGTH_SHORT).show();
-                }
-                mViewModel.saveEnum(item);
-
-                return true;
-            }
-
-            return false;
-
-        }
     };
 
     EnumListAdapter(List<Enum> list, EnumViewModel mViewModel) {
@@ -119,9 +98,30 @@ public class EnumListAdapter
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.bindEnum(mValues.get(position));
-        holder.itemView.setTag(mValues.get(position));
-        holder.itemView.setOnClickListener(mOnClickListener);
-        holder.itemView.setOnLongClickListener(mOnLongClickListener);
+        holder.mCard.setTag(mValues.get(position));
+        holder.mCard.setOnClickListener(mOnClickListener);
+        holder.favoriteButton.setOnClickListener(v -> {
+            Enum item = mValues.get(position);
+            if (item != null) {
+                if (item.isFavorite()) {
+                    item.setFavorite(false);
+                    Toast.makeText(v.getContext(), "unstarred", Toast.LENGTH_SHORT).show();
+                } else {
+                    item.setFavorite(true);
+                    Toast.makeText(v.getContext(), "starred", Toast.LENGTH_SHORT).show();
+                }
+                mViewModel.saveEnum(item);
+            }
+        });
+        holder.hideButton.setOnClickListener((View v) -> {
+            Enum item = mValues.remove(position);
+            if (item != null) {
+                item.setHidden(!item.isHidden());
+                mViewModel.saveEnum(item);
+                notifyItemRemoved(position);
+                Toast.makeText(v.getContext(), "hidden", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -140,6 +140,10 @@ public class EnumListAdapter
         ImageView mIcon;
         @BindView(R.id.color)
         View mColor;
+        @BindView(R.id.favorite_button)
+        ImageButton favoriteButton;
+        @BindView(R.id.hide_button)
+        ImageButton hideButton;
 
         ViewHolder(View view) {
             super(view);
@@ -153,6 +157,9 @@ public class EnumListAdapter
             }
             if(anEnum.isHidden()){
                 mCard.setCardBackgroundColor(Color.BLACK);
+                hideButton.setImageResource(R.drawable.eye_off_white);
+            }else{
+                hideButton.setImageResource(R.drawable.eye_off);
             }
             if (anEnum.getIcon() != null) {
                 if (anEnum.getIcon().contains("svg+xml")) {
@@ -163,6 +170,11 @@ public class EnumListAdapter
                 } else {
                     mIcon.setImageBitmap(ImageUtils.convertToBitmap(anEnum.getIcon()));
                 }
+            }
+            if(anEnum.isFavorite()) {
+                favoriteButton.setImageResource(R.drawable.starred);
+            }else{
+                favoriteButton.setImageResource(R.drawable.unstarred);
             }
         }
 

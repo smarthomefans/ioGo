@@ -36,27 +36,6 @@ public class EnumHomeListAdapter
 
     };
 
-    private final View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View view) {
-            Enum item = (Enum) view.getTag();
-            if(item != null){
-                if(item.isFavorite()){
-                    item.setFavorite(false);
-                    Toast.makeText(view.getContext(),"unstarred",Toast.LENGTH_SHORT).show();
-                }else{
-                    item.setFavorite(true);
-                    Toast.makeText(view.getContext(),"starred",Toast.LENGTH_SHORT).show();
-                }
-                mViewModel.saveEnum(item);
-
-                return true;
-            }
-
-            return false;
-
-        }
-    };
 
     public EnumHomeListAdapter(List<Enum> list, EnumViewModel mViewModel) {
         this.mValues = list;
@@ -91,7 +70,6 @@ public class EnumHomeListAdapter
         holder.bindEnum(mValues.get(position));
         holder.itemView.setTag(mValues.get(position));
         holder.itemView.setOnClickListener(mOnClickListener);
-        holder.itemView.setOnLongClickListener(mOnLongClickListener);
     }
 
     @Override
