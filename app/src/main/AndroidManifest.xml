@@ -27,10 +27,19 @@
         </activity>
         <activity
             android:name=".ui.settings.SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".ui.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.settings.SettingsMainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".ui.settings.SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.settings.SettingsActivity" />
         </activity>
         <activity
             android:name=".ui.main.EnumActivity"

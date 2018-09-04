@@ -9,8 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.ads.MobileAds;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -44,7 +42,7 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
 
         DataBus.getBus().register(this);
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        PreferenceManager.setDefaultValues(this, R.xml.settings_design, false);
 
         //loading the default fragment
         setTitle(R.string.title_activity_home);

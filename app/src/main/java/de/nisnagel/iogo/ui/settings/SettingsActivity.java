@@ -1,21 +1,17 @@
 package de.nisnagel.iogo.ui.settings;
 
 
-import android.Manifest;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
-import de.nisnagel.iogo.service.logging.LoggingUtils;
-import timber.log.Timber;
+import de.nisnagel.iogo.ui.base.BaseActivity;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -28,57 +24,35 @@ import timber.log.Timber;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BaseActivity {
 
-    private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = (sharedPreferences, key) -> {
-        if (key.equals("logging_enabled") || key.equals("logging_level")) {
-            Timber.uprootAll();
-            if(isStoragePermissionGranted()) {
-                LoggingUtils.setupLogging(getApplicationContext());
-            }else{
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("logging_enabled",false);
-                editor.apply();
-            }
-        }
-        if(key.equals("pro_cloud_enabled")||key.equals("sync_children")) {
-            String value = (sharedPreferences.getBoolean(key, false)) ? "true" : "false";
-            FirebaseAnalytics.getInstance(getApplicationContext()).setUserProperty(key, value);
-        }
-    };
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        sharedPref.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
+        setContentView(R.layout.activity_settings);
+        ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
 
         getSupportActionBar().setTitle(R.string.title_activity_settings);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment())
-                .commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new SettingsFragment()).commit();
+        }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
 
-    private boolean isStoragePermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
-                Timber.v("Permission is granted");
-                return true;
-            } else {
-
-                Timber.v("Permission is revoked");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                return false;
-            }
-        }
-        else { //permission is automatically granted on sdk<23 upon installation
-            Timber.v("Permission is granted");
+        if (id == android.R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
             return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 }

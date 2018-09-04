@@ -8,7 +8,7 @@ import android.widget.Toast;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.service.SocketService;
 import de.nisnagel.iogo.ui.info.InfoActivity;
-import de.nisnagel.iogo.ui.settings.SettingsActivity;
+import de.nisnagel.iogo.ui.settings.SettingsMainActivity;
 
 
 public class BaseActivity extends AppCompatActivity{
@@ -25,7 +25,7 @@ public class BaseActivity extends AppCompatActivity{
 
         if (id == R.id.menu_action_settings) {
             Toast.makeText(this,R.string.menu_action_settings, Toast.LENGTH_LONG).show();
-            Intent i = new Intent(this, SettingsActivity.class);
+            Intent i = new Intent(this, SettingsMainActivity.class);
             startActivity(i);
             return true;
         }

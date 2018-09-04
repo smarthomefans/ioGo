@@ -44,35 +44,4 @@
             android:singleLine="true"
             android:title="Password" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Expert">
-        <SwitchPreference
-            android:key="logging_enabled"
-            android:selectAllOnFocus="true"
-            android:title="Logging">
-        </SwitchPreference>
-        <ListPreference
-            android:key="logging_level"
-            android:title="Logging level"
-            android:defaultValue="6"
-            android:entries="@array/logging_level"
-            android:entryValues="@array/logging_levelValues"
-            />
-        <ListPreference
-            android:key="state_subtitle"
-            android:title="State subtitle"
-            android:defaultValue="none"
-            android:entries="@array/state_subtitle"
-            android:entryValues="@array/state_subtitleValues"
-            />
-        <SwitchPreference
-            android:key="sync_children"
-            android:defaultValue="false"
-            android:title="Sync children states">
-        </SwitchPreference>
-        <SwitchPreference
-            android:key="show_hidden"
-            android:defaultValue="false"
-            android:title="Show hidden enum">
-        </SwitchPreference>
-    </PreferenceCategory>
 </PreferenceScreen>

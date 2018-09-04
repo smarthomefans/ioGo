@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Expert">
+        <ListPreference
+            android:key="state_subtitle"
+            android:title="State subtitle"
+            android:defaultValue="none"
+            android:entries="@array/state_subtitle"
+            android:entryValues="@array/state_subtitleValues"
+            />
+        <SwitchPreference
+            android:key="sync_children"
+            android:defaultValue="false"
+            android:title="Sync children states">
+        </SwitchPreference>
+        <SwitchPreference
+            android:key="show_hidden"
+            android:defaultValue="false"
+            android:title="Show hidden enum">
+        </SwitchPreference>
+    </PreferenceCategory>
+</PreferenceScreen>

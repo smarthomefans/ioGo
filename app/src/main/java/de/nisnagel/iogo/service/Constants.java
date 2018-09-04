@@ -60,4 +60,5 @@ public class Constants {
 
     public static final String ARG_ENUM_ID = "enum_id";
     public static final String ARG_STATE_ID = "state_id";
+    public static final String ARG_CLASS = "class";
 }

@@ -60,7 +60,7 @@ public class EnumListAdapter
     }
 
     public void addAll(List<Enum> list, boolean show_hidden) {
-        if(!show_hidden) {
+        if (!show_hidden) {
             for (Iterator iter = list.iterator();
                  iter.hasNext(); ) {
                 Enum item = (Enum) iter.next();
@@ -74,10 +74,7 @@ public class EnumListAdapter
 
     @Override
     public void onItemDismiss(int position) {
-        Enum anEnum = mValues.remove(position);
-        anEnum.setHidden(true);
-        mViewModel.saveEnum(anEnum);
-        notifyItemRemoved(position);
+        //do nothing
     }
 
     @Override
@@ -155,11 +152,11 @@ public class EnumListAdapter
             if (anEnum.getColor() != null && anEnum.getColor().contains("#")) {
                 mColor.setBackgroundColor(Color.parseColor(anEnum.getColor()));
             }
-            if(anEnum.isHidden()){
-                mCard.setCardBackgroundColor(Color.BLACK);
-                hideButton.setImageResource(R.drawable.eye_off_white);
-            }else{
+            if (anEnum.isHidden()) {
+                mTitle.setTextColor(Color.BLACK);
                 hideButton.setImageResource(R.drawable.eye_off);
+            } else {
+                hideButton.setImageResource(R.drawable.eye);
             }
             if (anEnum.getIcon() != null) {
                 if (anEnum.getIcon().contains("svg+xml")) {
@@ -171,9 +168,9 @@ public class EnumListAdapter
                     mIcon.setImageBitmap(ImageUtils.convertToBitmap(anEnum.getIcon()));
                 }
             }
-            if(anEnum.isFavorite()) {
+            if (anEnum.isFavorite()) {
                 favoriteButton.setImageResource(R.drawable.starred);
-            }else{
+            } else {
                 favoriteButton.setImageResource(R.drawable.unstarred);
             }
         }
