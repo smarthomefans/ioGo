@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.pixplicity.sharp.Sharp;
 
 import java.sql.Array;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -79,8 +80,9 @@ public class EnumListAdapter
 
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
-        Enum prev = mValues.remove(fromPosition);
-        mValues.add(toPosition > fromPosition ? toPosition - 1 : toPosition, prev);
+        //Enum prev = mValues.remove(fromPosition);
+        //mValues.add(toPosition > fromPosition ? toPosition - 1 : toPosition, prev);
+        Collections.swap(mValues, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
     }
 
