@@ -19,6 +19,7 @@
 
 package de.nisnagel.iogo.ui.main;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -28,9 +29,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -42,6 +53,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.service.DataBus;
+import de.nisnagel.iogo.service.Events;
 import de.nisnagel.iogo.ui.base.BaseActivity;
 import timber.log.Timber;
 
@@ -52,6 +64,9 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
+
+    private FirebaseAuth mAuth;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +80,12 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
         toolbar.setLogo(R.drawable.test48);
 
         DataBus.getBus().register(this);
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        PreferenceManager.setDefaultValues(this, R.xml.settings_connection, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_design, false);
+        PreferenceManager.setDefaultValues(this, R.xml.settings_error, false);
+        PreferenceManager.setDefaultValues(this, R.xml.settings_notification, false);
 
         //loading the default fragment
         setTitle(R.string.title_activity_home);
@@ -78,11 +97,41 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
         // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
         //MobileAds.initialize(this, "@string/ad_unit_id");
 
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( MainActivity.this, instanceIdResult -> {
-            String newToken = instanceIdResult.getToken();
-            Timber.e("newToken" + newToken);
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Timber.d("signInAnonymously:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( MainActivity.this, instanceIdResult -> {
+                                String newToken = instanceIdResult.getToken();
+                                Timber.d("newToken" + newToken);
 
-        });
+                                String uniqueId = user.getUid();
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                DatabaseReference myRef = database.getReference("users");
+                                myRef.child(uniqueId).child("token").setValue(newToken);
+
+                                String fcm_user = sharedPreferences.getString("fcm_user", null);
+                                if(fcm_user != null) {
+                                    new Timer().schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            DataBus.getBus().post(new Events.SetState("iogo.0." + fcm_user + ".token", newToken));
+                                        }
+                                    }, 10000);
+                                }
+
+                            });
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Timber.w("signInAnonymously:failure", task.getException());
+                        }
+                    }
+                });
     }
 
     @Override

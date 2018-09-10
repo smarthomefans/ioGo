@@ -59,6 +59,7 @@ public class SettingsFragment extends Fragment {
         list.add(new SettingsAdapter.SettingItem(R.drawable.satellite_uplink,"Connection","Connect to your server", "Connection"));
         list.add(new SettingsAdapter.SettingItem(R.drawable.television_guide,"Design","Adjust app behaviour", "Design"));
         list.add(new SettingsAdapter.SettingItem(R.drawable.bug,"Troubleshooting","What to do with bugs", "Error"));
+        list.add(new SettingsAdapter.SettingItem(R.drawable.message_text,"Notification","Push notification from server", "Notification"));
         mAdapter = new SettingsAdapter(list);
         getActivity().runOnUiThread(() -> recyclerView.setAdapter(mAdapter));
 

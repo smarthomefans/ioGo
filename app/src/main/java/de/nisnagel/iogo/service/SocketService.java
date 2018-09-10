@@ -212,9 +212,32 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 // Do your stuff here related to UI, e.g. show toast
                 Toast.makeText(getApplicationContext(), R.string.service_connected, Toast.LENGTH_SHORT).show();
             });
+            test();
             Timber.i("connected");
         }
     };
+
+    private void test() {
+        Timber.v("test called");
+        if (isConnected()) {
+            JSONObject json = new JSONObject();
+            JSONObject common = new JSONObject();
+            try {
+                json.put("type", "state");
+                common.put("read", "true");
+                common.put("write", "true");
+                common.put("desc", "nur ein test");
+                common.put("role", "app.token");
+                json.put("common", common);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String fcm_user = sharedPref.getString("fcm_user", null);
+            mSocket.emit("setObject", "iogo.0." + fcm_user + ".token", json, (Ack) args -> {
+                Timber.i("setObject: receiving data");
+            });
+        }
+    }
 
     private Emitter.Listener onDisconnect = new Emitter.Listener() {
         @Override

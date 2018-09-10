@@ -115,6 +115,11 @@ public class SettingsMainActivity extends BaseActivity {
                     setTitle(R.string.title_activity_settings_error);
                     break;
 
+                case "Notification":
+                    fragment = new SettingsNotificationFragment();
+                    setTitle(R.string.title_activity_settings_notification);
+                    break;
+
                 default:
                     fragment = new SettingsFragment();
                     setTitle(R.string.title_activity_settings);

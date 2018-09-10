@@ -31,6 +31,7 @@
     <string name="title_activity_settings_connection">Settings - Connection</string>
     <string name="title_activity_settings_design">Settings - Design</string>
     <string name="title_activity_settings_error">Settings - Error</string>
+    <string name="title_activity_settings_notification">Settings - Notification</string>
 
     <string name="info_sync_objects">sync objects</string>
     <string name="info_clear_database">clear database</string>
