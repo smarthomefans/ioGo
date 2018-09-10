@@ -84,7 +84,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         super.onNewToken(s);
         //now we will have the token
 
-        DataBus.getBus().post(new Events.SetState("iogo.0.nis.token", s));
+        String fcm_user = sharedPref.getString("fcm_user", null);
+        DataBus.getBus().post(new Events.SetState("iogo.0." + fcm_user + ".token", s));
         //for now we are displaying the token in the log
         //copy it as this method is called only when the new token is generated
         //and usually new token is only generated when the app is reinstalled or the data is cleared

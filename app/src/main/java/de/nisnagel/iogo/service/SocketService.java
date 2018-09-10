@@ -212,13 +212,13 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                 // Do your stuff here related to UI, e.g. show toast
                 Toast.makeText(getApplicationContext(), R.string.service_connected, Toast.LENGTH_SHORT).show();
             });
-            test();
             Timber.i("connected");
         }
     };
 
-    private void test() {
-        Timber.v("test called");
+    @Subscribe
+    public void addUser(final Events.User event) {
+        Timber.v("addUser called");
         if (isConnected()) {
             JSONObject json = new JSONObject();
             JSONObject common = new JSONObject();
@@ -232,10 +232,10 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            String fcm_user = sharedPref.getString("fcm_user", null);
-            mSocket.emit("setObject", "iogo.0." + fcm_user + ".token", json, (Ack) args -> {
+            mSocket.emit("setObject", "iogo.0." + event.name + ".token", json, (Ack) args -> {
                 Timber.i("setObject: receiving data");
             });
+            setState(new Events.SetState("iogo.0." + event.name + ".token", event.token));
         }
     }
 

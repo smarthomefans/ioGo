@@ -59,8 +59,10 @@ import timber.log.Timber;
 
 public class MainActivity extends BaseActivity implements HasSupportFragmentInjector, BottomNavigationView.OnNavigationItemSelectedListener {
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.bottombar) BottomNavigationView bottombar;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.bottombar)
+    BottomNavigationView bottombar;
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
@@ -106,7 +108,7 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
                             // Sign in success, update UI with the signed-in user's information
                             Timber.d("signInAnonymously:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( MainActivity.this, instanceIdResult -> {
+                            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this, instanceIdResult -> {
                                 String newToken = instanceIdResult.getToken();
                                 Timber.d("newToken" + newToken);
 
@@ -116,11 +118,11 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
                                 myRef.child(uniqueId).child("token").setValue(newToken);
 
                                 String fcm_user = sharedPreferences.getString("fcm_user", null);
-                                if(fcm_user != null) {
+                                if (fcm_user != null) {
                                     new Timer().schedule(new TimerTask() {
                                         @Override
                                         public void run() {
-                                            DataBus.getBus().post(new Events.SetState("iogo.0." + fcm_user + ".token", newToken));
+                                            DataBus.getBus().post(new Events.User(fcm_user, newToken));
                                         }
                                     }, 10000);
                                 }
@@ -135,7 +137,7 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         finish();
         return true;
     }
