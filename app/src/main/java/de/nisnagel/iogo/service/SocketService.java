@@ -201,7 +201,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                     @Override
                     public void run() {
                         mSocket.emit("subscribe", json);
-                        syncStates();
+                        getStates();
                     }
                 }, 2000);
             });
@@ -283,11 +283,6 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         if (isConnected()) {
             mSocket.emit("setState", event.getId(), event.getVal());
         }
-    }
-
-    private void syncStates() {
-        Timber.v("syncStates called");
-        getStates();
     }
 
     @Subscribe

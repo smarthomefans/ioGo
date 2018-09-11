@@ -21,16 +21,15 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="Notification">
-        <EditTextPreference
-            android:defaultValue="none"
-            android:key="fcm_user"
-            android:title="Username"
-            android:selectAllOnFocus="true"
-            android:singleLine="true" />
         <SwitchPreference
             android:key="fcm_enabled"
             android:defaultValue="none"
             android:title="Receive notifications">
         </SwitchPreference>
+        <EditTextPreference
+            android:key="fcm_user"
+            android:title="Username"
+            android:selectAllOnFocus="true"
+            android:singleLine="true" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -26,6 +26,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
@@ -36,7 +37,10 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -122,6 +126,36 @@ public class SettingsMainActivity extends BaseActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(SettingsMainActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Timber.d("signInAnonymously:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(SettingsMainActivity.this, instanceIdResult -> {
+                                String newToken = instanceIdResult.getToken();
+                                Timber.d("newToken" + newToken);
+
+                                String uniqueId = user.getUid();
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                DatabaseReference myRef = database.getReference("users");
+                                myRef.child(uniqueId).child("token").setValue(newToken);
+
+                                String fcm_user = sharedPref.getString("fcm_user", null);
+                                if (fcm_user != null) {
+                                    DataBus.getBus().post(new Events.User(fcm_user, newToken));
+                                }
+
+                            });
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Timber.w("signInAnonymously:failure", task.getException());
+                        }
+                    }
+                });
         if (savedInstanceState == null) {
             loadFragment(getIntent().getStringExtra(Constants.ARG_CLASS));
         }
