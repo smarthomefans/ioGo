@@ -128,32 +128,24 @@ public class SettingsMainActivity extends BaseActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mAuth.signInAnonymously()
-                .addOnCompleteListener(SettingsMainActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Timber.d("signInAnonymously:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(SettingsMainActivity.this, instanceIdResult -> {
-                                String newToken = instanceIdResult.getToken();
-                                Timber.d("newToken" + newToken);
+                .addOnCompleteListener(SettingsMainActivity.this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Timber.d("signInAnonymously:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(SettingsMainActivity.this, instanceIdResult -> {
+                            String newToken = instanceIdResult.getToken();
+                            Timber.d("newToken" + newToken);
 
-                                String uniqueId = user.getUid();
-                                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                DatabaseReference myRef = database.getReference("users");
-                                myRef.child(uniqueId).child("token").setValue(newToken);
+                            String fcm_user = sharedPref.getString("fcm_user", null);
+                            if (fcm_user != null) {
+                                DataBus.getBus().post(new Events.User(fcm_user, newToken));
+                            }
 
-                                String fcm_user = sharedPref.getString("fcm_user", null);
-                                if (fcm_user != null) {
-                                    DataBus.getBus().post(new Events.User(fcm_user, newToken));
-                                }
-
-                            });
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Timber.w("signInAnonymously:failure", task.getException());
-                        }
+                        });
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Timber.w("signInAnonymously:failure", task.getException());
                     }
                 });
         if (savedInstanceState == null) {
