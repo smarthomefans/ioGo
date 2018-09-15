@@ -31,7 +31,7 @@ import de.nisnagel.iogo.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsConnectionFragment extends PreferenceFragmentCompat {
+public class SettingsServerFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState,

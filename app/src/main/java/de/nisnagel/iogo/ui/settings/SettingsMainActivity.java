@@ -21,34 +21,21 @@ package de.nisnagel.iogo.ui.settings;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.EditTextPreference;
-import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,8 +44,8 @@ import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.service.Events;
 import de.nisnagel.iogo.service.logging.LoggingUtils;
+import de.nisnagel.iogo.ui.auth.UserProfilActivity;
 import de.nisnagel.iogo.ui.base.BaseActivity;
-import de.nisnagel.iogo.ui.main.MainActivity;
 import timber.log.Timber;
 
 /**
@@ -77,8 +64,6 @@ public class SettingsMainActivity extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    private FirebaseAuth mAuth;
-
     private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = (sharedPreferences, key) -> {
         if (key.equals("logging_enabled") || key.equals("logging_level")) {
             Timber.uprootAll();
@@ -95,16 +80,10 @@ public class SettingsMainActivity extends BaseActivity {
             FirebaseAnalytics.getInstance(getApplicationContext()).setUserProperty(key, value);
         }
         if(key.equals("fcm_user")){
-            mAuth = FirebaseAuth.getInstance();
-            FirebaseUser user = mAuth.getCurrentUser();
+
             FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( SettingsMainActivity.this, instanceIdResult -> {
                 String newToken = instanceIdResult.getToken();
                 Timber.d("newToken" + newToken);
-
-                String uniqueId = user.getUid();
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("users");
-                myRef.child(uniqueId).child("token").setValue(newToken);
 
                 String fcm_user = sharedPreferences.getString("fcm_user", null);
                 if(fcm_user != null) {
@@ -126,28 +105,6 @@ public class SettingsMainActivity extends BaseActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mAuth = FirebaseAuth.getInstance();
-        mAuth.signInAnonymously()
-                .addOnCompleteListener(SettingsMainActivity.this, task -> {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Timber.d("signInAnonymously:success");
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(SettingsMainActivity.this, instanceIdResult -> {
-                            String newToken = instanceIdResult.getToken();
-                            Timber.d("newToken" + newToken);
-
-                            String fcm_user = sharedPref.getString("fcm_user", null);
-                            if (fcm_user != null) {
-                                DataBus.getBus().post(new Events.User(fcm_user, newToken));
-                            }
-
-                        });
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Timber.w("signInAnonymously:failure", task.getException());
-                    }
-                });
         if (savedInstanceState == null) {
             loadFragment(getIntent().getStringExtra(Constants.ARG_CLASS));
         }
@@ -157,9 +114,9 @@ public class SettingsMainActivity extends BaseActivity {
         Fragment fragment = null;
         if(intent != null) {
             switch (intent) {
-                case "Connection":
-                    fragment = new SettingsConnectionFragment();
-                    setTitle(R.string.title_activity_settings_connection);
+                case "Server":
+                    fragment = new SettingsServerFragment();
+                    setTitle(R.string.title_activity_settings_server);
                     break;
 
                 case "Design":
@@ -177,6 +134,11 @@ public class SettingsMainActivity extends BaseActivity {
                     setTitle(R.string.title_activity_settings_notification);
                     break;
 
+                case "Account":
+                    startActivity(new Intent(SettingsMainActivity.this, UserProfilActivity.class));
+                    finish();
+                    break;
+
                 default:
                     fragment = new SettingsFragment();
                     setTitle(R.string.title_activity_settings);
@@ -186,7 +148,9 @@ public class SettingsMainActivity extends BaseActivity {
             setTitle(R.string.title_activity_settings);
         }
 
-        loadFragment(fragment);
+        if(fragment != null) {
+            loadFragment(fragment);
+        }
     }
 
     private void loadFragment(Fragment fragment) {

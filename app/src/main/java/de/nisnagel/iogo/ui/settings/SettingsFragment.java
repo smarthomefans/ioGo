@@ -56,10 +56,11 @@ public class SettingsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
         ButterKnife.bind(this, rootView);
 
-        list.add(new SettingsAdapter.SettingItem(R.drawable.satellite_uplink,"Connection","Connect to your server", "Connection"));
+        list.add(new SettingsAdapter.SettingItem(R.drawable.account,"Account","User authentication", "Account"));
+        list.add(new SettingsAdapter.SettingItem(R.drawable.server_network,"Server","Connect to your server", "Server"));
         list.add(new SettingsAdapter.SettingItem(R.drawable.television_guide,"Design","Adjust app behaviour", "Design"));
-        list.add(new SettingsAdapter.SettingItem(R.drawable.bug,"Troubleshooting","What to do with bugs", "Error"));
         list.add(new SettingsAdapter.SettingItem(R.drawable.message_text,"Notification","Push notification from server", "Notification"));
+        list.add(new SettingsAdapter.SettingItem(R.drawable.bug,"Troubleshooting","What to do with bugs", "Error"));
         mAdapter = new SettingsAdapter(list);
         getActivity().runOnUiThread(() -> recyclerView.setAdapter(mAdapter));
 
