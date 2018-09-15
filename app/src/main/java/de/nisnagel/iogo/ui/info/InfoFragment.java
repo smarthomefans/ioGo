@@ -32,6 +32,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
@@ -45,6 +47,7 @@ import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.di.Injectable;
 import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.service.Events;
+import timber.log.Timber;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -53,6 +56,9 @@ public class InfoFragment extends Fragment implements Injectable {
 
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
+
+    @BindView(R.id.account_state)
+    TextView mAccountState;
 
     @BindView(R.id.countRooms)
     TextView mCountRooms;
@@ -71,12 +77,16 @@ public class InfoFragment extends Fragment implements Injectable {
 
     private InfoViewModel mViewModel;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(InfoViewModel.class);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(Objects.requireNonNull(getActivity()));
+        mAuth = FirebaseAuth.getInstance();
+
     }
 
     @Override
@@ -84,6 +94,18 @@ public class InfoFragment extends Fragment implements Injectable {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_info, container, false);
         ButterKnife.bind(this, rootView);
+        mAccountState.setText("unknown");
+
+        mAuthListener = firebaseAuth -> {
+            FirebaseUser mUser = firebaseAuth.getCurrentUser();
+            if (mUser.isAnonymous()) {
+                mAccountState.setText("anonymous logged in");
+            } else if (mUser.isEmailVerified()) {
+                mAccountState.setText("loggen in");
+            } else if (mUser.isEmailVerified()) {
+                mAccountState.setText("email not verified");
+            }
+        };
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(InfoViewModel.class);
 
@@ -124,6 +146,19 @@ public class InfoFragment extends Fragment implements Injectable {
 
 
         return rootView;
+    }
+
+    public void onStart(){
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
     }
 
     @OnClick(R.id.syncObjects)

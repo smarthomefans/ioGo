@@ -235,7 +235,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             mSocket.emit("setObject", "iogo.0." + event.name + ".token", json, (Ack) args -> {
                 Timber.i("setObject: receiving data");
             });
-            setState(new Events.SetState("iogo.0." + event.name + ".token", event.token, null));
+            setState(new Events.SetState("iogo.0." + event.name + ".token", event.token, "string"));
         }
     }
 

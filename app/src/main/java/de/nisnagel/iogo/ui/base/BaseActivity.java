@@ -20,14 +20,21 @@
 package de.nisnagel.iogo.ui.base;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.service.SocketService;
 import de.nisnagel.iogo.ui.info.InfoActivity;
 import de.nisnagel.iogo.ui.settings.SettingsMainActivity;
+import timber.log.Timber;
 
 
 public class BaseActivity extends AppCompatActivity{
@@ -58,4 +65,5 @@ public class BaseActivity extends AppCompatActivity{
 
         return super.onOptionsItemSelected(item);
     }
+
 }
