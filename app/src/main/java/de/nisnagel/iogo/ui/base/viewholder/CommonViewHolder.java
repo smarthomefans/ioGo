@@ -162,7 +162,7 @@ public class CommonViewHolder extends BaseViewHolder {
                                     // get user input and set it to result
                                     // edit text
                                     mSubtitle.setText(R.string.syncing_data);
-                                    DataBus.getBus().post(new Events.SetState(state.getId(), userInput.getText().toString()));
+                                    mViewModel.changeState(state.getId(), userInput.getText().toString());
                                 })
                         .setNegativeButton("Cancel",
                                 (dialog, id) -> dialog.cancel());

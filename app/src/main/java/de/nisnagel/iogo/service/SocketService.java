@@ -235,7 +235,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             mSocket.emit("setObject", "iogo.0." + event.name + ".token", json, (Ack) args -> {
                 Timber.i("setObject: receiving data");
             });
-            setState(new Events.SetState("iogo.0." + event.name + ".token", event.token));
+            setState(new Events.SetState("iogo.0." + event.name + ".token", event.token, null));
         }
     }
 
@@ -281,7 +281,19 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     public void setState(final Events.SetState event) {
         Timber.v("setState called");
         if (isConnected()) {
-            mSocket.emit("setState", event.getId(), event.getVal());
+            switch (event.getType()) {
+                case "boolean":
+                    Boolean bool = "true".equals(event.getVal());
+                    mSocket.emit("setState", event.getId(), bool);
+                    break;
+                case "number":
+                    Float num = Float.parseFloat(event.getVal());
+                    mSocket.emit("setState", event.getId(), num);
+                    break;
+                default:
+                    mSocket.emit("setState", event.getId(), event.getVal());
+                    break;
+            }
         }
     }
 

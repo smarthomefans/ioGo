@@ -207,7 +207,7 @@ public class StateRepository {
                     state.update(newVal);
                     state.setSync(false);
                     stateDao.update(state);
-                    DataBus.getBus().post(new Events.SetState(id, newVal));
+                    DataBus.getBus().post(new Events.SetState(id, newVal, state.getType()));
                 }
         );
     }

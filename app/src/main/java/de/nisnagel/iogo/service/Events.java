@@ -25,10 +25,12 @@ public class Events {
 
         private String id;
         private String val;
+        private String type;
 
-        public SetState(String id, String val) {
+        public SetState(String id, String val, String type) {
             this.id = id;
             this.val = val;
+            this.type = type;
         }
 
         public String getId() {
@@ -47,6 +49,13 @@ public class Events {
             this.val = val;
         }
 
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
     }
 
     public static class SyncObjects {}
