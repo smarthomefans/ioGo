@@ -89,6 +89,8 @@ public class UserProfilActivity extends BaseActivity {
                 // user auth state is changed - user is null
                 // launch login activity
                 startActivity(new Intent(UserProfilActivity.this, LoginActivity.class));
+                mAuth.removeAuthStateListener(authListener);
+
                 finish();
             }
         };
@@ -219,7 +221,7 @@ public class UserProfilActivity extends BaseActivity {
         }
     }
 
-    @OnClick(R.id.sign_out)
+    @OnClick(R.id.remove_user_button)
     public void onClickRemoveUser() {
         progressBar.setVisibility(View.VISIBLE);
         if (mUser != null) {
@@ -244,6 +246,7 @@ public class UserProfilActivity extends BaseActivity {
     @OnClick(R.id.sign_out)
     public void onClickSignOut() {
         signOut();
+        finish();
     }
 
     public void signOut() {

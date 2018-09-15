@@ -207,6 +207,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guideline_middle"
-        android:layout_weight="50"/>
+        android:layout_weight="50"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/black"/>
 
 </android.support.constraint.ConstraintLayout>

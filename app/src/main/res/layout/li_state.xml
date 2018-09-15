@@ -108,6 +108,8 @@
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="@string/click"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/black"
         android:visibility="gone" />
 
     <SeekBar
