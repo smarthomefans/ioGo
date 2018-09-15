@@ -98,12 +98,14 @@ public class InfoFragment extends Fragment implements Injectable {
 
         mAuthListener = firebaseAuth -> {
             FirebaseUser mUser = firebaseAuth.getCurrentUser();
-            if (mUser.isAnonymous()) {
-                mAccountState.setText("anonymous logged in");
-            } else if (mUser.isEmailVerified()) {
-                mAccountState.setText("loggen in");
-            } else if (mUser.isEmailVerified()) {
-                mAccountState.setText("email not verified");
+            if(mUser != null) {
+                if (mUser.isAnonymous()) {
+                    mAccountState.setText("anonymous logged in");
+                } else if (mUser.isEmailVerified()) {
+                    mAccountState.setText("loggen in");
+                } else if (mUser.isEmailVerified()) {
+                    mAccountState.setText("email not verified");
+                }
             }
         };
 
