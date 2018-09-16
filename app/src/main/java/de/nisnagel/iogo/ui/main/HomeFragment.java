@@ -31,9 +31,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -53,8 +50,8 @@ public class HomeFragment extends Fragment implements Injectable {
     private StateListAdapter mStateAdapter;
     private EnumViewModel mViewModel;
 
-    @BindView(R.id.adView)
-    AdView mAdView;
+    //@BindView(R.id.adView)
+    //AdView mAdView;
     @BindView(R.id.favorite_enums)
     RecyclerView rvEnums;
     @BindView(R.id.favorite_states)
@@ -80,7 +77,7 @@ public class HomeFragment extends Fragment implements Injectable {
 
         //AdRequest adRequest = new AdRequest.Builder().build();
         //mAdView.loadAd(adRequest);
-        mAdView.setVisibility(View.GONE);
+        //mAdView.setVisibility(View.GONE);
 
         mEnumAdapter = new EnumHomeListAdapter(enumList, mViewModel);
         mStateAdapter = new StateListAdapter(stateList, mViewModel, getActivity());
