@@ -39,6 +39,9 @@ public interface EnumDao {
     @Query("SELECT * FROM enum WHERE id = :id")
     LiveData<Enum> getEnumById(String id);
 
+    @Query("SELECT * FROM enum WHERE type = :type")
+    List<Enum> getEnumsByType(String type);
+
     @Query("SELECT * FROM enum WHERE type = 'function' ORDER BY rank, name")
     LiveData<List<Enum>> getFunctionEnums();
 

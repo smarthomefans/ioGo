@@ -55,8 +55,4 @@ public class InfoViewModel extends ViewModel {
         return stateRepository.getSocketState();
     }
 
-    public void clearDatabase() {
-        stateRepository.deleteAll();
-        enumRepository.deleteAll();
-    }
 }

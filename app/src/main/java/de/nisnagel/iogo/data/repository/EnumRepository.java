@@ -69,6 +69,11 @@ public class EnumRepository {
         return enumCache.get(enumId);
     }
 
+    public List<Enum> getEnumsByType(String type) {
+        Timber.v("getEnumsByType called");
+        return enumDao.getEnumsByType(type);
+    }
+
     public LiveData<List<Enum>> getFunctionEnums() {
         Timber.v("getFunctionEnums called");
         if (mListFunctionEnums == null) {
@@ -107,15 +112,19 @@ public class EnumRepository {
         return enumDao.countRoomEnums();
     }
 
-    public void deleteAll() {
-        Timber.v("deleteAll called");
-        executor.execute(enumDao::deleteAll);
-        executor.execute(enumStateDao::deleteAll);
-    }
-
     public void syncEnum(Enum item){
         Timber.v("syncEnum called");
         enumDao.insert(item);
+    }
+
+    public void deleteEnum(Enum item){
+        Timber.v("deleteEnum called");
+        enumDao.delete(item);
+    }
+
+    public void deleteStateEnum(Enum item){
+        Timber.v("deleteStateEnum called");
+        enumStateDao.deleteByEnum(item.getId());
     }
 
     public void syncEnumState(EnumState item){

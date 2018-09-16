@@ -48,4 +48,7 @@ public interface EnumStateDao {
 
     @Query("DELETE FROM enum_state")
     void deleteAll();
+
+    @Query("DELETE FROM enum_state WHERE enum_id = :enum_id")
+    void deleteByEnum(String enum_id);
 }

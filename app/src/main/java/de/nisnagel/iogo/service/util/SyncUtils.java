@@ -26,9 +26,12 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.nisnagel.iogo.data.io.IoCommon;
 import de.nisnagel.iogo.data.io.IoEnum;
@@ -39,6 +42,7 @@ import de.nisnagel.iogo.data.io.IoState;
 import de.nisnagel.iogo.data.io.IoValue;
 import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.EnumState;
+import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
 import timber.log.Timber;
@@ -50,6 +54,7 @@ public class SyncUtils {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
         Gson gson = gsonBuilder.create();
+        Set<String> enumSet = new HashSet();
 
         try {
             IoEnum ioEnum = gson.fromJson(data, IoEnum.class);
@@ -58,6 +63,7 @@ public class SyncUtils {
                 IoCommon ioCommon = ioValue.getCommon();
                 Enum anEnum = new Enum(ioValue.getId(), ioCommon.getName(), type, false, ioCommon.getColor(), ioCommon.getIcon());
                 repo.syncEnum(anEnum);
+                repo.deleteStateEnum(anEnum);
                 Timber.d("saveEnums: enum inserted enumId:" + anEnum.getId());
                 if (ioCommon.getMembers() != null) {
                     for (int j = 0; j < ioCommon.getMembers().size(); j++) {
@@ -68,8 +74,20 @@ public class SyncUtils {
                 } else {
                     Timber.i("saveEnums: no members found for enumId:" + anEnum.getId());
                 }
+                enumSet.add(anEnum.getId());
+
                 Timber.d("saveEnums: enum saved enumId:" + anEnum.getId());
             }
+
+            List<Enum> enumList = repo.getEnumsByType(type);
+            for (Enum anEnum : enumList) {
+                if (!enumSet.contains(anEnum.getId())){
+                    repo.deleteStateEnum(anEnum);
+                    repo.deleteEnum(anEnum);
+                    Timber.d("saveEnums: enum deleted enumId:" + anEnum.getId());
+                }
+            }
+
         } catch (Throwable e) {
             Timber.e(e);
         }
@@ -85,25 +103,27 @@ public class SyncUtils {
         try {
             JSONObject obj = new JSONObject(data);
             List<String> ids = repo.getAllEnumStateIds();
+
+
             for (String id : ids) {
                 JSONObject json = obj.optJSONObject(id);
                 if (json != null) {
                     try {
                         IoObject ioObject = gson.fromJson(json.toString(), IoObject.class);
-                        repo.syncObject(id,ioObject);
+                        repo.syncObject(id, ioObject);
                         Timber.d("saveObjects: state updated from object stateId:" + id);
                     } catch (Throwable e) {
                         Timber.e(e);
                     }
-                }else if(syncChildren){
+                } else if (syncChildren) {
                     Iterator iter = obj.keys();
                     while (iter.hasNext()) {
-                        String key = (String)iter.next();
-                        if(key.contains(id)){
+                        String key = (String) iter.next();
+                        if (key.contains(id)) {
                             json = obj.optJSONObject(key);
                             try {
                                 IoObject ioObject = gson.fromJson(json.toString(), IoObject.class);
-                                repo.syncObject(key,ioObject);
+                                repo.syncObject(key, ioObject);
                                 repo.linkToEnum(id, key);
                                 Timber.d("saveObjects: state updated from object stateId:" + key);
                             } catch (Throwable e) {
@@ -111,7 +131,19 @@ public class SyncUtils {
                             }
                         }
                     }
+                } else {
+                    Timber.d("saveObjects: state deleted stateId:" + id);
+                    State state = new State(id);
+                    repo.deleteState(state);
                 }
+            }
+
+            List<String> stateIds = repo.getAllStateIds();
+            stateIds.removeAll(ids);
+            for(String id : stateIds){
+                Timber.d("saveObjects: state deleted stateId:" + id);
+                State state = new State(id);
+                repo.deleteState(state);
             }
         } catch (JSONException e) {
             Timber.e(e);

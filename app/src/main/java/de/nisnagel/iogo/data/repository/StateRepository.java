@@ -115,11 +115,6 @@ public class StateRepository {
         return connected;
     }
 
-    public void deleteAll() {
-        Timber.v("deleteAll called");
-        executor.execute(stateDao::deleteAll);
-    }
-
     public void syncObject(String id, IoObject ioObject) {
         Timber.v("syncObject called");
         State state = stateDao.getStateById(id);
@@ -215,6 +210,11 @@ public class StateRepository {
     public void saveState(State state) {
         Timber.v("saveState called");
         executor.execute(() -> stateDao.update(state));
+    }
+
+    public void deleteState(State state) {
+        Timber.v("deleteState called");
+        stateDao.delete(state);
     }
 
     public void linkToEnum(String parent, String id) {
