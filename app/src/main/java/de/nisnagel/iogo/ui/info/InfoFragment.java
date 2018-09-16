@@ -165,6 +165,9 @@ public class InfoFragment extends Fragment implements Injectable {
 
     @OnClick(R.id.syncObjects)
     public void onClickSyncObjects() {
+        mCountFunctions.setText(R.string.syncing_data);
+        mCountRooms.setText(R.string.syncing_data);
+        mCountStates.setText(R.string.syncing_data);
         DataBus.getBus().post(new Events.SyncObjects());
         mFirebaseAnalytics.logEvent("sync_ojects", null);
     }
