@@ -183,7 +183,9 @@ public class StateRepository {
                 if (dataSnapshot.getValue() != null) {
                     try {
                         IoState ioState = dataSnapshot.getValue(IoState.class);
-                        syncState(ioState.getId(), ioState);
+                        if(ioState.getFrom() != "app") {
+                            syncState(ioState.getId(), ioState);
+                        }
                     } catch (Throwable t) {
                         Timber.e(dataSnapshot.getKey(), t);
                     }
