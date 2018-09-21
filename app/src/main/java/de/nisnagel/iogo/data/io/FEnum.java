@@ -19,16 +19,18 @@
 
 package de.nisnagel.iogo.data.io;
 
-public class IoState {
+import java.util.List;
+
+public class FEnum {
 
     private String id;
-    private String val;
-    private boolean ack;
-    private long ts;
-    private long lc;
-    private String from;
-    private int q;
-    private String user;
+    private String name;
+    private String icon;
+    private String color;
+    private List<String> members;
+
+    public FEnum() {
+    }
 
     public String getId() {
         return id;
@@ -38,59 +40,35 @@ public class IoState {
         this.id = id;
     }
 
-    public String getVal() {
-        return val;
+    public String getName() {
+        return name;
     }
 
-    public void setVal(String val) {
-        this.val = val;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public boolean isAck() {
-        return ack;
+    public String getIcon() {
+        return icon;
     }
 
-    public void setAck(boolean ack) {
-        this.ack = ack;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
-    public long getTs() {
-        return ts;
+    public String getColor() {
+        return color;
     }
 
-    public void setTs(long ts) {
-        this.ts = ts;
+    public void setColor(String color) {
+        this.color = color;
     }
 
-    public long getLc() {
-        return lc;
+    public List<String> getMembers() {
+        return members;
     }
 
-    public void setLc(long lc) {
-        this.lc = lc;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public int getQ() {
-        return q;
-    }
-
-    public void setQ(int q) {
-        this.q = q;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
+    public void setMembers(List<String> members) {
+        this.members = members;
     }
 }

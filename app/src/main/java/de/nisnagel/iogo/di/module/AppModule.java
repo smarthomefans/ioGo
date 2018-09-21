@@ -98,8 +98,8 @@ public class AppModule {
 
     @Singleton
     @Provides
-    StateRepository provideStateRepository(StateDao stateDao, StateHistoryDao stateHistoryDao, EnumStateDao enumStateDao, Executor executor) {
-        return new StateRepository(stateDao, stateHistoryDao, enumStateDao, executor);
+    StateRepository provideStateRepository(StateDao stateDao, StateHistoryDao stateHistoryDao, EnumStateDao enumStateDao, Executor executor, Context context) {
+        return new StateRepository(stateDao, stateHistoryDao, enumStateDao, executor, context);
     }
 
     @Singleton

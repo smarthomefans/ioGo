@@ -20,29 +20,29 @@
 package de.nisnagel.iogo.ui.base;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.service.SocketService;
 import de.nisnagel.iogo.ui.info.InfoActivity;
 import de.nisnagel.iogo.ui.settings.SettingsMainActivity;
-import timber.log.Timber;
 
 
-public class BaseActivity extends AppCompatActivity{
+public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
         super.onResume();
-        startService(new Intent(this, SocketService.class));
+        SharedPreferences sharedPref;
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isFirebaseEnabled = sharedPref.getBoolean("firebase_enabled", false);
+        if(!isFirebaseEnabled) {
+            startService(new Intent(this, SocketService.class));
+        }
     }
 
     @Override
@@ -50,14 +50,14 @@ public class BaseActivity extends AppCompatActivity{
         int id = item.getItemId();
 
         if (id == R.id.menu_action_settings) {
-            Toast.makeText(this,R.string.menu_action_settings, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.menu_action_settings, Toast.LENGTH_LONG).show();
             Intent i = new Intent(this, SettingsMainActivity.class);
             startActivity(i);
             return true;
         }
 
         if (id == R.id.menu_action_info) {
-            Toast.makeText(this,R.string.menu_action_info, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.menu_action_info, Toast.LENGTH_LONG).show();
             Intent i = new Intent(this, InfoActivity.class);
             startActivity(i);
             return true;

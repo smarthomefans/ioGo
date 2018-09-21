@@ -20,6 +20,19 @@
 package de.nisnagel.iogo.data.repository;
 
 import android.arch.lifecycle.LiveData;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +42,10 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import de.nisnagel.iogo.data.io.FEnum;
+import de.nisnagel.iogo.data.io.IoName;
+import de.nisnagel.iogo.data.io.IoObject;
+import de.nisnagel.iogo.data.io.IoState;
 import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.EnumDao;
 import de.nisnagel.iogo.data.model.EnumState;
@@ -50,6 +67,10 @@ public class EnumRepository {
     private final EnumStateDao enumStateDao;
     private Executor executor;
 
+    FirebaseAuth mAuth;
+    FirebaseDatabase database;
+    DatabaseReference dbEnumsRef;
+
     @Inject
     public EnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, Executor executor) {
         this.enumDao = enumDao;
@@ -57,7 +78,105 @@ public class EnumRepository {
         this.executor = executor;
 
         enumCache = new HashMap<>();
+
+        mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+
+        init();
+
         Timber.v("instance created");
+    }
+
+    private void init() {
+        ValueEventListener enumListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    try {
+                        FEnum fEnum = postSnapshot.getValue(FEnum.class);
+                        String type;
+                        if(postSnapshot.getKey().contains("rooms")){
+                            type = "room";
+                        }else{
+                            type = "function";
+                        }
+                        Enum anEnum = new Enum(fEnum.getId(), fEnum.getName(), type, false, fEnum.getColor(), fEnum.getIcon());
+                        syncEnum(anEnum);
+                        deleteStateEnum(anEnum);
+                        for(String member : fEnum.getMembers()){
+                            EnumState enumState = new EnumState(anEnum.getId(), member);
+                            syncEnumState(enumState);
+                            Timber.d("saveEnums: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
+                        }
+                    } catch (Throwable t) {
+                        Timber.e(postSnapshot.getKey(), t);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        };
+
+        ChildEventListener enumChildListener = new ChildEventListener() {
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.getValue() != null) {
+                    try {
+                        FEnum fEnum = dataSnapshot.getValue(FEnum.class);
+                        String type;
+                        if(dataSnapshot.getKey().contains("rooms")){
+                            type = "room";
+                        }else{
+                            type = "function";
+                        }
+                        Enum anEnum = new Enum(fEnum.getId(), fEnum.getName(), type, false, fEnum.getColor(), fEnum.getIcon());
+                        syncEnum(anEnum);
+                        deleteStateEnum(anEnum);
+                        for(String member : fEnum.getMembers()){
+                            EnumState enumState = new EnumState(anEnum.getId(), member);
+                            syncEnumState(enumState);
+                            Timber.d("saveEnums: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
+                        }
+                    } catch (Throwable t) {
+                        Timber.e(dataSnapshot.getKey(), t);
+                    }
+                }
+            }
+
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+
+        FirebaseAuth.AuthStateListener authListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                dbEnumsRef = database.getReference("enums/" + user.getUid());
+                dbEnumsRef.addListenerForSingleValueEvent(enumListener);
+                dbEnumsRef.addChildEventListener(enumChildListener);
+            }
+        };
+
+        //mAuth.addAuthStateListener(authListener);
     }
 
     public LiveData<Enum> getEnum(String enumId) {
@@ -112,24 +231,24 @@ public class EnumRepository {
         return enumDao.countRoomEnums();
     }
 
-    public void syncEnum(Enum item){
+    public void syncEnum(Enum item) {
         Timber.v("syncEnum called");
-        enumDao.insert(item);
+        executor.execute(() -> enumDao.insert(item));
     }
 
-    public void deleteEnum(Enum item){
+    public void deleteEnum(Enum item) {
         Timber.v("deleteEnum called");
         enumDao.delete(item);
     }
 
-    public void deleteStateEnum(Enum item){
+    public void deleteStateEnum(Enum item) {
         Timber.v("deleteStateEnum called");
-        enumStateDao.deleteByEnum(item.getId());
+        executor.execute(() -> enumStateDao.deleteByEnum(item.getId()));
     }
 
-    public void syncEnumState(EnumState item){
+    public void syncEnumState(EnumState item) {
         Timber.v("syncEnumState called");
-        enumStateDao.insert(item);
+        executor.execute(() -> enumStateDao.insert(item));
     }
 
     public void saveEnum(Enum... anEnum) {

@@ -274,6 +274,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
                     Timber.w("onStateChange: state deleted stateId:" + args[0].toString());
                 }
             }
+            Timber.v("onStateChange");
         }
     };
 
