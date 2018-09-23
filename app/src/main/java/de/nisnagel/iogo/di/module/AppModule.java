@@ -23,6 +23,8 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.v7.preference.PreferenceManager;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -61,6 +63,12 @@ public class AppModule {
             ViewModelFactory factory
     ) {
         return factory;
+    }
+
+    @Provides
+    @Singleton
+    SharedPreferences providesSharedPreferences(App application) {
+        return PreferenceManager.getDefaultSharedPreferences(application);
     }
 
     @Provides
@@ -104,8 +112,8 @@ public class AppModule {
 
     @Singleton
     @Provides
-    EnumRepository provideEnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, Executor executor) {
-        return new EnumRepository(enumDao, enumStateDao, executor);
+    EnumRepository provideEnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, Executor executor, Context context) {
+        return new EnumRepository(enumDao, enumStateDao, executor, context);
     }
 
     @Singleton

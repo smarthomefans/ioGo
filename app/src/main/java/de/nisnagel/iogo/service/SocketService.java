@@ -63,7 +63,8 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     private Socket mSocket;
     private String cookie;
 
-    private SharedPreferences sharedPref;
+    @Inject
+    public SharedPreferences sharedPref;
 
     @Inject
     public EnumRepository enumRepository;
@@ -81,7 +82,6 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         AndroidInjection.inject(this);
         super.onCreate();
 
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPref.registerOnSharedPreferenceChangeListener(this);
         DataBus.getBus().register(this);
 

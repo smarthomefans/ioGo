@@ -43,20 +43,29 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 import de.nisnagel.iogo.R;
+import de.nisnagel.iogo.data.repository.StateRepository;
 import de.nisnagel.iogo.ui.main.MainActivity;
 import timber.log.Timber;
 
-public class MyFirebaseMessagingService extends FirebaseMessagingService {
+public class FCMService extends FirebaseMessagingService {
 
     private static int count = 0;
-    private SharedPreferences sharedPref;
+
+    @Inject
+    public SharedPreferences sharedPref;
+
+    @Inject
+    public StateRepository stateRepository;
 
     @Override
     public void onCreate() {
+        Timber.v(" onCreate called");
+        AndroidInjection.inject(this);
         super.onCreate();
-        DataBus.getBus().register(this);
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     @Override
@@ -67,13 +76,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        //Displaying data in log
-        //It is optional
-        Timber.d("Notification Message TITLE: " + remoteMessage.getNotification().getTitle());
-        Timber.d("Notification Message BODY: " + remoteMessage.getNotification().getBody());
-        //Calling method to generate notification
+        Timber.d("Message received: " + remoteMessage.getNotification().getTitle());
+
         boolean isEnabled = sharedPref.getBoolean("fcm_enabled", false);
-        if(isEnabled) {
+        if (isEnabled) {
             sendNotification(remoteMessage.getNotification().getTitle(),
                     remoteMessage.getNotification().getBody(), remoteMessage.getData());
         }
@@ -82,10 +88,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
-        //now we will have the token
 
         String fcm_user = sharedPref.getString("fcm_user", null);
-        DataBus.getBus().post(new Events.SetState("iogo.0." + fcm_user + ".token", s, "string"));
+        stateRepository.sendState(new Events.SetState("iogo.0." + fcm_user + ".token", s, "string"));
         //for now we are displaying the token in the log
         //copy it as this method is called only when the new token is generated
         //and usually new token is only generated when the app is reinstalled or the data is cleared
@@ -108,7 +113,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(notificationChannel);
         }
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,"main_channel")
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "main_channel")
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.test48))
                 .setSmallIcon(R.drawable.test48)
                 .setContentTitle(messageTitle)

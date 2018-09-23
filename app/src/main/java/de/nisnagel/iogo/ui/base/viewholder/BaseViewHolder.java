@@ -32,6 +32,8 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
@@ -52,6 +54,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     Context context;
     EnumViewModel mViewModel;
+
     private SharedPreferences sharedPreferences;
 
     BaseViewHolder(View itemView) {

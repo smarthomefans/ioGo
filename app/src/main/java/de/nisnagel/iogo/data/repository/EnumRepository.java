@@ -20,8 +20,11 @@
 package de.nisnagel.iogo.data.repository;
 
 import android.arch.lifecycle.LiveData;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.preference.PreferenceManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -66,16 +69,18 @@ public class EnumRepository {
     private final EnumDao enumDao;
     private final EnumStateDao enumStateDao;
     private Executor executor;
+    private Context context;
 
     FirebaseAuth mAuth;
     FirebaseDatabase database;
     DatabaseReference dbEnumsRef;
 
     @Inject
-    public EnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, Executor executor) {
+    public EnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, Executor executor, Context context) {
         this.enumDao = enumDao;
         this.enumStateDao = enumStateDao;
         this.executor = executor;
+        this.context = context;
 
         enumCache = new HashMap<>();
 
@@ -95,15 +100,15 @@ public class EnumRepository {
                     try {
                         FEnum fEnum = postSnapshot.getValue(FEnum.class);
                         String type;
-                        if(postSnapshot.getKey().contains("rooms")){
+                        if (postSnapshot.getKey().contains("rooms")) {
                             type = "room";
-                        }else{
+                        } else {
                             type = "function";
                         }
                         Enum anEnum = new Enum(fEnum.getId(), fEnum.getName(), type, false, fEnum.getColor(), fEnum.getIcon());
                         syncEnum(anEnum);
                         deleteStateEnum(anEnum);
-                        for(String member : fEnum.getMembers()){
+                        for (String member : fEnum.getMembers()) {
                             EnumState enumState = new EnumState(anEnum.getId(), member);
                             syncEnumState(enumState);
                             Timber.d("saveEnums: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
@@ -127,15 +132,15 @@ public class EnumRepository {
                     try {
                         FEnum fEnum = dataSnapshot.getValue(FEnum.class);
                         String type;
-                        if(dataSnapshot.getKey().contains("rooms")){
+                        if (dataSnapshot.getKey().contains("rooms")) {
                             type = "room";
-                        }else{
+                        } else {
                             type = "function";
                         }
                         Enum anEnum = new Enum(fEnum.getId(), fEnum.getName(), type, false, fEnum.getColor(), fEnum.getIcon());
                         syncEnum(anEnum);
                         deleteStateEnum(anEnum);
-                        for(String member : fEnum.getMembers()){
+                        for (String member : fEnum.getMembers()) {
                             EnumState enumState = new EnumState(anEnum.getId(), member);
                             syncEnumState(enumState);
                             Timber.d("saveEnums: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
@@ -176,7 +181,12 @@ public class EnumRepository {
             }
         };
 
-        //mAuth.addAuthStateListener(authListener);
+        SharedPreferences sharedPref;
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean isFirebaseEnabled = sharedPref.getBoolean("firebase_enabled", false);
+        if (isFirebaseEnabled) {
+            mAuth.addAuthStateListener(authListener);
+        }
     }
 
     public LiveData<Enum> getEnum(String enumId) {

@@ -52,7 +52,9 @@ public class FunctionFragment extends Fragment implements Injectable {
     private EnumListAdapter mAdapter;
     private EnumViewModel mViewModel;
     private ItemTouchHelper mItemTouchHelper;
-    private SharedPreferences sharedPref;
+
+    @Inject
+    public SharedPreferences sharedPref;
 
     @BindView(R.id.enum_list)
     RecyclerView recyclerView;
@@ -66,7 +68,6 @@ public class FunctionFragment extends Fragment implements Injectable {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(EnumViewModel.class);
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
     }
 
     @Nullable

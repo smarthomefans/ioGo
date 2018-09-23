@@ -72,10 +72,11 @@ public class StateRepository {
     private Executor executor;
     private Context context;
 
-    FirebaseAuth mAuth;
-    FirebaseDatabase database;
-    DatabaseReference dbObjectsRef;
-    DatabaseReference dbStatesRef;
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase database;
+    private DatabaseReference dbObjectsRef;
+    private DatabaseReference dbStatesRef;
+    private DatabaseReference dbStateQueuesRef;
 
     @Inject
     public StateRepository(StateDao stateDao, StateHistoryDao stateHistoryDao, EnumStateDao enumStateDao, Executor executor, Context context) {
@@ -116,7 +117,7 @@ public class StateRepository {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
+                Timber.e("Database read error: " + databaseError.getCode());
             }
         };
 
@@ -138,22 +139,18 @@ public class StateRepository {
 
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         };
 
@@ -172,7 +169,7 @@ public class StateRepository {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
+                Timber.e("Database read error: " + databaseError.getCode());
             }
         };
 
@@ -183,34 +180,27 @@ public class StateRepository {
                 if (dataSnapshot.getValue() != null) {
                     try {
                         IoState ioState = dataSnapshot.getValue(IoState.class);
-                        if(ioState.getFrom() != "app") {
-                            syncState(ioState.getId(), ioState);
-                        }
+                        syncState(ioState.getId(), ioState);
                     } catch (Throwable t) {
                         Timber.e(dataSnapshot.getKey(), t);
                     }
                 }
-                Timber.w("onChildChanged");
             }
 
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         };
 
@@ -224,6 +214,7 @@ public class StateRepository {
                 dbStatesRef = database.getReference("states/" + user.getUid());
                 dbStatesRef.addListenerForSingleValueEvent(stateListener);
                 dbStatesRef.addChildEventListener(statesChildListener);
+                dbStateQueuesRef = database.getReference("stateQueues/" + user.getUid());
             }
         };
         SharedPreferences sharedPref;
@@ -237,16 +228,12 @@ public class StateRepository {
     public void sendState(final Events.SetState event) {
         Timber.v("sendState called");
 
-        if(dbStatesRef != null) {
-            String node = event.getId();
-            node = node.replace(".", "_");
-
+        if(dbStateQueuesRef != null) {
             IoState ioState = new IoState();
             ioState.setId(event.getId());
             ioState.setVal(event.getVal());
             ioState.setFrom("app");
-            node = node + "x";
-            dbStatesRef.child(node).setValue(ioState);
+            dbStateQueuesRef.push().setValue(ioState);
         }
     }
 

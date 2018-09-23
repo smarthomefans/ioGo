@@ -27,8 +27,8 @@
             android:title="Receive notifications">
         </SwitchPreference>
         <EditTextPreference
-            android:key="fcm_user"
-            android:title="Username"
+            android:key="fcm_device"
+            android:title="Device"
             android:selectAllOnFocus="true"
             android:singleLine="true" />
     </PreferenceCategory>
