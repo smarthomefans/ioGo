@@ -26,6 +26,7 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -103,6 +104,7 @@ public class SyncUtils {
         try {
             JSONObject obj = new JSONObject(data);
             List<String> ids = repo.getAllEnumStateIds();
+            List<String> childIds = new ArrayList<>();
 
 
             for (String id : ids) {
@@ -125,6 +127,7 @@ public class SyncUtils {
                                 IoObject ioObject = gson.fromJson(json.toString(), IoObject.class);
                                 repo.syncObject(key, ioObject);
                                 repo.linkToEnum(id, key);
+                                childIds.add(key);
                                 Timber.d("saveObjects: state updated from object stateId:" + key);
                             } catch (Throwable e) {
                                 Timber.e(e);
@@ -140,6 +143,7 @@ public class SyncUtils {
 
             List<String> stateIds = repo.getAllStateIds();
             stateIds.removeAll(ids);
+            stateIds.removeAll(childIds);
             for(String id : stateIds){
                 Timber.d("saveObjects: state deleted stateId:" + id);
                 State state = new State(id);
