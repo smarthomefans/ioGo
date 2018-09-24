@@ -25,7 +25,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v7.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.squareup.otto.Subscribe;
@@ -82,10 +81,15 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         AndroidInjection.inject(this);
         super.onCreate();
 
-        sharedPref.registerOnSharedPreferenceChangeListener(this);
+        boolean isFirebaseEnabled = sharedPref.getBoolean("firebase_enabled", false);
+        if (isFirebaseEnabled) {
+            stopSelf();
+        } else {
+            stateRepository.saveSocketState("unknown");
+            sharedPref.registerOnSharedPreferenceChangeListener(this);
+        }
         DataBus.getBus().register(this);
 
-        stateRepository.saveSocketState("unknown");
     }
 
     private void init() {
@@ -174,7 +178,10 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Timber.v(" onStartCommand called");
-        if (!isConnected()) {
+        boolean isFirebaseEnabled = sharedPref.getBoolean("firebase_enabled", false);
+        if (isFirebaseEnabled) {
+            stopSelf();
+        } else if (!isConnected()) {
             new NetworkAsync().execute();
         }
         return Service.START_STICKY;

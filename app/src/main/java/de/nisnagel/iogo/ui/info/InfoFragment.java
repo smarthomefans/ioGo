@@ -22,6 +22,8 @@ package de.nisnagel.iogo.ui.info;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -47,6 +50,7 @@ import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.di.Injectable;
 import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.service.Events;
+import de.nisnagel.iogo.service.SocketService;
 import timber.log.Timber;
 
 /**
@@ -56,6 +60,9 @@ public class InfoFragment extends Fragment implements Injectable {
 
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
+
+    @Inject
+    SharedPreferences sharedPref;
 
     @BindView(R.id.account_state)
     TextView mAccountState;
@@ -74,6 +81,9 @@ public class InfoFragment extends Fragment implements Injectable {
 
     @BindView(R.id.appVersion)
     TextView mAppVersion;
+
+    @BindView(R.id.syncObjects)
+    Button mBtnSync;
 
     private InfoViewModel mViewModel;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -102,7 +112,7 @@ public class InfoFragment extends Fragment implements Injectable {
                 if (mUser.isAnonymous()) {
                     mAccountState.setText("anonymous logged in");
                 } else if (mUser.isEmailVerified()) {
-                    mAccountState.setText("loggen in");
+                    mAccountState.setText("logged in");
                 } else if (mUser.isEmailVerified()) {
                     mAccountState.setText("email not verified");
                 }
@@ -144,6 +154,11 @@ public class InfoFragment extends Fragment implements Injectable {
             mAppVersion.setText(packageInfo.versionName);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
+        }
+
+        boolean isFirebaseEnabled = sharedPref.getBoolean("firebase_enabled", false);
+        if(isFirebaseEnabled) {
+            mBtnSync.setVisibility(View.GONE);
         }
 
 

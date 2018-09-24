@@ -37,6 +37,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.otto.Subscribe;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +61,7 @@ import de.nisnagel.iogo.data.model.StateHistory;
 import de.nisnagel.iogo.data.model.StateHistoryDao;
 import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.service.Events;
+import io.socket.client.Ack;
 import timber.log.Timber;
 
 @Singleton
@@ -207,7 +212,7 @@ public class StateRepository {
         FirebaseAuth.AuthStateListener authListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if (user != null) {
-                this.saveSocketState("connected");
+                this.saveSocketState("connected iogo");
                 dbObjectsRef = database.getReference("objects/" + user.getUid());
                 dbObjectsRef.addListenerForSingleValueEvent(objectListener);
                 dbObjectsRef.addChildEventListener(objectChildListener);

@@ -21,11 +21,14 @@ package de.nisnagel.iogo.di.builder;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
+import de.nisnagel.iogo.ui.base.BaseActivity;
 import de.nisnagel.iogo.ui.detail.StateActivity;
 import de.nisnagel.iogo.ui.history.HistoryActivity;
 import de.nisnagel.iogo.ui.info.InfoActivity;
 import de.nisnagel.iogo.ui.main.EnumActivity;
 import de.nisnagel.iogo.ui.main.MainActivity;
+import de.nisnagel.iogo.ui.settings.SettingsActivity;
+import de.nisnagel.iogo.ui.settings.SettingsMainActivity;
 
 /**
  * Binds all sub-components within the app.

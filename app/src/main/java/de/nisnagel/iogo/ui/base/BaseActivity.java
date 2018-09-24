@@ -21,11 +21,16 @@ package de.nisnagel.iogo.ui.base;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.service.SocketService;
 import de.nisnagel.iogo.ui.info.InfoActivity;
@@ -37,12 +42,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences sharedPref;
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isFirebaseEnabled = sharedPref.getBoolean("firebase_enabled", false);
-        if(!isFirebaseEnabled) {
-            startService(new Intent(this, SocketService.class));
-        }
+        startService(new Intent(this, SocketService.class));
     }
 
     @Override

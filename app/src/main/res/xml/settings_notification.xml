@@ -20,7 +20,9 @@
 
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Notification">
+    <PreferenceCategory android:layout="@layout/preference_category_summary"
+        android:summary="app account needed"
+        android:title="Notification">
         <SwitchPreference
             android:key="fcm_enabled"
             android:defaultValue="none"

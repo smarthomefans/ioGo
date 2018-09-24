@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ ioGo - android app to control ioBroker home automation server.
   ~
   ~ Copyright (C) 2018  Nis Nagel
@@ -18,10 +17,12 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Server Connection">
+    <PreferenceCategory
+        android:layout="@layout/preference_category_summary"
+        android:summary="only with integrated socket-io"
+        android:title="ioBroker.web">
 
         <EditTextPreference
             android:dialogMessage="Please enter url and port from your web-adapter"
@@ -43,7 +44,10 @@
             android:singleLine="true"
             android:title="Password (Optional)" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Cloud Connection">
+    <PreferenceCategory
+        android:layout="@layout/preference_category_summary"
+        android:summary="only cloud.pro"
+        android:title="ioBroker.cloud">
 
         <CheckBoxPreference
             android:defaultValue="false"
@@ -63,7 +67,10 @@
             android:singleLine="true"
             android:title="Password" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Firebase Connection">
+    <PreferenceCategory
+        android:layout="@layout/preference_category_summary"
+        android:summary="app account needed"
+        android:title="ioBroker.iogo">
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="firebase_enabled"
