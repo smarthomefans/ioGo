@@ -81,12 +81,13 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         AndroidInjection.inject(this);
         super.onCreate();
 
-        boolean isFirebaseEnabled = sharedPref.getBoolean("firebase_enabled", false);
-        if (isFirebaseEnabled) {
-            stopSelf();
-        } else {
+        boolean isWebEnabled = sharedPref.getBoolean("connection_web", false);
+        boolean isCloudEnabled = sharedPref.getBoolean("connection_cloud", false);
+        if (isWebEnabled || isCloudEnabled) {
             stateRepository.saveSocketState("unknown");
             sharedPref.registerOnSharedPreferenceChangeListener(this);
+        } else {
+            stopSelf();
         }
         DataBus.getBus().register(this);
 
@@ -94,7 +95,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
     private void init() {
         Timber.v(" init called");
-        boolean isProEnabled = sharedPref.getBoolean("pro_cloud_enabled", false);
+        boolean isProEnabled = sharedPref.getBoolean("connection_cloud", false);
         if (isProEnabled) {
             String username = sharedPref.getString("pro_username", null);
             String password = sharedPref.getString("pro_password", null);
@@ -178,12 +179,15 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Timber.v(" onStartCommand called");
-        boolean isFirebaseEnabled = sharedPref.getBoolean("firebase_enabled", false);
-        if (isFirebaseEnabled) {
+
+        boolean isWebEnabled = sharedPref.getBoolean("connection_web", false);
+        boolean isCloudEnabled = sharedPref.getBoolean("connection_cloud", false);
+        if (!isWebEnabled && !isCloudEnabled) {
             stopSelf();
         } else if (!isConnected()) {
             new NetworkAsync().execute();
         }
+
         return Service.START_STICKY;
     }
 

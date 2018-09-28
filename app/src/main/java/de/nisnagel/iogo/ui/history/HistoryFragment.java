@@ -88,7 +88,7 @@ public class HistoryFragment extends Fragment implements Injectable {
     @BindView(R.id.chart)
     LineChart mChart;
 
-    private StateViewModel mViewModel;
+    private HistoryViewModel mViewModel;
     private String stateId;
     private State state;
     private StateHistory stateHistory;
@@ -96,8 +96,7 @@ public class HistoryFragment extends Fragment implements Injectable {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DataBus.getBus().register(this);
-        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(StateViewModel.class);
+        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(HistoryViewModel.class);
         stateId = getArguments().getString(Constants.ARG_STATE_ID);
         state = null;
         stateHistory = null;
@@ -133,12 +132,6 @@ public class HistoryFragment extends Fragment implements Injectable {
         });
 
         return rootView;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        DataBus.getBus().unregister(this);
     }
 
     private void setDataChart(String data) {

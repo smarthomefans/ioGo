@@ -37,7 +37,6 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import de.nisnagel.iogo.R;
-import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.ui.base.BaseActivity;
 
 public class MainActivity extends BaseActivity implements HasSupportFragmentInjector, BottomNavigationView.OnNavigationItemSelectedListener {
@@ -61,9 +60,7 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.drawable.test48);
 
-        DataBus.getBus().register(this);
-
-        PreferenceManager.setDefaultValues(this, R.xml.settings_connection, false);
+        PreferenceManager.setDefaultValues(this, R.xml.settings_connect, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_design, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_error, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_notification, false);
@@ -84,12 +81,6 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
     public boolean onSupportNavigateUp() {
         finish();
         return true;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        DataBus.getBus().unregister(this);
     }
 
     @Override

@@ -35,6 +35,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.otto.Subscribe;
@@ -50,6 +51,11 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import de.nisnagel.iogo.R;
+import de.nisnagel.iogo.data.io.FCommon;
+import de.nisnagel.iogo.data.io.FObject;
+import de.nisnagel.iogo.data.io.IoCommon;
+import de.nisnagel.iogo.data.io.IoCustom;
 import de.nisnagel.iogo.data.io.IoName;
 import de.nisnagel.iogo.data.io.IoObject;
 import de.nisnagel.iogo.data.io.IoState;
@@ -61,12 +67,19 @@ import de.nisnagel.iogo.data.model.StateHistory;
 import de.nisnagel.iogo.data.model.StateHistoryDao;
 import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.service.Events;
+import de.nisnagel.iogo.ui.settings.SettingsMainActivity;
 import io.socket.client.Ack;
 import timber.log.Timber;
 
 @Singleton
 public class StateRepository {
 
+    public static final String FROM = "app";
+    public static final String CONNECTION_IOGO = "connection_iogo";
+    public static final String STATE_QUEUES = "stateQueues/";
+    public static final String STATES = "states/";
+    public static final String OBJECT_QUEUES = "objectQueues/";
+    public static final String OBJECTS = "objects/";
     private Map<String, LiveData<List<State>>> stateEnumCache;
     private MutableLiveData<String> connected;
     private LiveData<List<State>> mListFavoriteStates;
@@ -80,6 +93,7 @@ public class StateRepository {
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
     private DatabaseReference dbObjectsRef;
+    private DatabaseReference dbObjectQueuesRef;
     private DatabaseReference dbStatesRef;
     private DatabaseReference dbStateQueuesRef;
 
@@ -212,20 +226,21 @@ public class StateRepository {
         FirebaseAuth.AuthStateListener authListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if (user != null) {
-                this.saveSocketState("connected iogo");
-                dbObjectsRef = database.getReference("objects/" + user.getUid());
+                this.saveSocketState(context.getString(R.string.pref_connect_iogo));
+                dbObjectsRef = database.getReference(OBJECTS + user.getUid());
                 dbObjectsRef.addListenerForSingleValueEvent(objectListener);
                 dbObjectsRef.addChildEventListener(objectChildListener);
-                dbStatesRef = database.getReference("states/" + user.getUid());
+                dbObjectQueuesRef = database.getReference(OBJECT_QUEUES + user.getUid());
+                dbStatesRef = database.getReference(STATES + user.getUid());
                 dbStatesRef.addListenerForSingleValueEvent(stateListener);
                 dbStatesRef.addChildEventListener(statesChildListener);
-                dbStateQueuesRef = database.getReference("stateQueues/" + user.getUid());
+                dbStateQueuesRef = database.getReference(STATE_QUEUES + user.getUid());
             }
         };
         SharedPreferences sharedPref;
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean isFirebaseEnabled = sharedPref.getBoolean("firebase_enabled", false);
-        if(isFirebaseEnabled) {
+        boolean isFirebaseEnabled = sharedPref.getBoolean(CONNECTION_IOGO, false);
+        if (isFirebaseEnabled) {
             mAuth.addAuthStateListener(authListener);
         }
     }
@@ -233,11 +248,11 @@ public class StateRepository {
     public void sendState(final Events.SetState event) {
         Timber.v("sendState called");
 
-        if(dbStateQueuesRef != null) {
+        if (dbStateQueuesRef != null) {
             IoState ioState = new IoState();
             ioState.setId(event.getId());
             ioState.setVal(event.getVal());
-            ioState.setFrom("app");
+            ioState.setFrom(FROM);
             dbStateQueuesRef.push().setValue(ioState);
         }
     }
@@ -410,4 +425,28 @@ public class StateRepository {
         stateDao.setSyncAll(sync);
     }
 
+    public void setDevice(String deviceName, String token) {
+        FObject fObject = new FObject();
+        FCommon fCommon = new FCommon();
+        fCommon.setName(deviceName + ".token");
+        fCommon.setRead(true);
+        fCommon.setWrite(true);
+        fCommon.setDesc("device token is used to address push notification to this device");
+        fCommon.setType("string");
+        fCommon.setRole("text");
+
+        fObject.setId(deviceName + ".token");
+        fObject.setType("state");
+        fObject.setVal(token);
+        fObject.setCommon(fCommon);
+
+        if (dbObjectQueuesRef != null) {
+            dbObjectQueuesRef.push().setValue(fObject);
+        }
+
+    }
+
+    public void syncObjects(){
+        DataBus.getBus().post(new Events.SyncObjects());
+    }
 }

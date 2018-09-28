@@ -17,47 +17,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.nisnagel.iogo.ui.info;
+package de.nisnagel.iogo.ui.history;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
-
 import javax.inject.Inject;
 
+import de.nisnagel.iogo.data.model.Enum;
+import de.nisnagel.iogo.data.model.State;
+import de.nisnagel.iogo.data.model.StateHistory;
 import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
-import de.nisnagel.iogo.service.DataBus;
-import de.nisnagel.iogo.service.Events;
 
-public class InfoViewModel extends ViewModel {
+public class HistoryViewModel extends ViewModel {
 
-    private EnumRepository enumRepository;
     private StateRepository stateRepository;
+    private String value;
 
     @Inject
-    public InfoViewModel(EnumRepository enumRepository, StateRepository stateRepository) {
-        this.enumRepository = enumRepository;
+    public HistoryViewModel(StateRepository stateRepository) {
         this.stateRepository = stateRepository;
     }
 
-    public LiveData<Integer> countStates() {
-        return stateRepository.countStates();
+    public LiveData<State> getState(String stateId) {
+        return stateRepository.getState(stateId);
     }
 
-    public LiveData<Integer> countRooms() {
-        return enumRepository.countRooms();
+    public LiveData<StateHistory> getHistory(String stateId) {
+        return stateRepository.getHistory(stateId);
     }
 
-    public LiveData<Integer> countFunctions() {
-        return enumRepository.countFunctions();
+    public String getValue() {
+        return value;
     }
 
-    public LiveData<String> getSocketState() {
-        return stateRepository.getSocketState();
-    }
-
-    public void syncObjects(){
-        stateRepository.syncObjects();
+    public void setValue(String value) {
+        this.value = value;
     }
 }

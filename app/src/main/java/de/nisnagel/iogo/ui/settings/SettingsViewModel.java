@@ -17,47 +17,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.nisnagel.iogo.ui.info;
+package de.nisnagel.iogo.ui.settings;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
-import de.nisnagel.iogo.data.repository.EnumRepository;
+import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.repository.StateRepository;
 import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.service.Events;
+import timber.log.Timber;
 
-public class InfoViewModel extends ViewModel {
+public class SettingsViewModel extends ViewModel {
 
-    private EnumRepository enumRepository;
     private StateRepository stateRepository;
 
     @Inject
-    public InfoViewModel(EnumRepository enumRepository, StateRepository stateRepository) {
-        this.enumRepository = enumRepository;
+    public SettingsViewModel(StateRepository stateRepository) {
         this.stateRepository = stateRepository;
     }
 
-    public LiveData<Integer> countStates() {
-        return stateRepository.countStates();
+    public void setDevice(String deviceName, String token) {
+        Timber.v("setDevice called");
+        stateRepository.setDevice(deviceName, token);
     }
 
-    public LiveData<Integer> countRooms() {
-        return enumRepository.countRooms();
+    public void activateWeb(){
+        Timber.v("activateWeb called");
     }
 
-    public LiveData<Integer> countFunctions() {
-        return enumRepository.countFunctions();
+    public void activateCloud(){
+        Timber.v("activateCloud called");
     }
 
-    public LiveData<String> getSocketState() {
-        return stateRepository.getSocketState();
-    }
-
-    public void syncObjects(){
-        stateRepository.syncObjects();
+    public void activateIogo(){
+        Timber.v("activateIogo called");
     }
 }

@@ -18,62 +18,63 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <PreferenceCategory
-        android:layout="@layout/preference_category_summary"
-        android:summary="only with integrated socket-io"
-        android:title="ioBroker.web">
-
-        <EditTextPreference
-            android:dialogMessage="Please enter url and port from your web-adapter"
-            android:key="mobile_socket_url"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="Socket URL" />
-        <EditTextPreference
-            android:editable="true"
-            android:inputType="text"
-            android:key="mobile_username"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="Username (Optional)" />
-        <EditTextPreference
-            android:inputType="textPassword"
-            android:key="mobile_password"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="Password (Optional)" />
-    </PreferenceCategory>
-    <PreferenceCategory
-        android:layout="@layout/preference_category_summary"
-        android:summary="only cloud.pro"
-        android:title="ioBroker.cloud">
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="pro_cloud_enabled"
-            android:title="Use ioBroker.pro" />
-        <EditTextPreference
-            android:editable="true"
-            android:inputType="textEmailAddress"
-            android:key="pro_username"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="Username" />
-        <EditTextPreference
-            android:inputType="textPassword"
-            android:key="pro_password"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="Password" />
-    </PreferenceCategory>
     <PreferenceCategory
         android:layout="@layout/preference_category_summary"
         android:summary="app account needed"
         android:title="ioBroker.iogo">
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="firebase_enabled"
-            android:title="Use firebase" />
+            android:key="@string/pref_connect_iogo"
+            android:title="Connect to iogo-adapter" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:layout="@layout/preference_category_summary"
+        android:summary="only cloud.pro"
+        android:title="ioBroker.cloud">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/pref_connect_cloud"
+            android:title="Connect to cloud-adapter" />
+        <EditTextPreference
+            android:editable="true"
+            android:inputType="textEmailAddress"
+            android:key="@string/pref_connect_cloud_user"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Username" />
+        <EditTextPreference
+            android:inputType="textPassword"
+            android:key="@string/pref_connect_cloud_password"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Password" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:layout="@layout/preference_category_summary"
+        android:summary="only with integrated socket-io"
+        android:title="ioBroker.web">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/pref_connect_web"
+            android:title="Connect to web-adapter" />
+        <EditTextPreference
+            android:dialogMessage="Please enter url and port from your web-adapter"
+            android:key="@string/pref_connect_web_url"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Socket URL" />
+        <EditTextPreference
+            android:editable="true"
+            android:inputType="text"
+            android:key="@string/pref_connect_web_user"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Username (Optional)" />
+        <EditTextPreference
+            android:inputType="textPassword"
+            android:key="@string/pref_connect_web_password"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Password (Optional)" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -44,8 +44,10 @@ import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
 import de.nisnagel.iogo.ui.ViewModelFactory;
 import de.nisnagel.iogo.ui.detail.StateViewModel;
+import de.nisnagel.iogo.ui.history.HistoryViewModel;
 import de.nisnagel.iogo.ui.info.InfoViewModel;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
+import de.nisnagel.iogo.ui.settings.SettingsViewModel;
 
 /**
  * This is where you will inject application-wide dependencies.
@@ -83,6 +85,16 @@ public class AppModule {
 
     @Provides
     ViewModel provideInfoViewModel(InfoViewModel viewModel) {
+        return viewModel;
+    }
+
+    @Provides
+    ViewModel provideSettingsViewModel(SettingsViewModel viewModel) {
+        return viewModel;
+    }
+
+    @Provides
+    ViewModel provideHistoryViewModel(HistoryViewModel viewModel) {
         return viewModel;
     }
 

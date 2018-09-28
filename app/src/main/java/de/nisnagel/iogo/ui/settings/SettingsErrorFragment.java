@@ -20,18 +20,76 @@
 package de.nisnagel.iogo.ui.settings;
 
 
+import android.Manifest;
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.text.TextUtils;
+import android.widget.Toast;
 
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
 import de.nisnagel.iogo.R;
+import de.nisnagel.iogo.di.Injectable;
+import de.nisnagel.iogo.service.logging.LoggingUtils;
+import timber.log.Timber;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsErrorFragment extends PreferenceFragmentCompat {
+public class SettingsErrorFragment extends PreferenceFragmentCompat implements Injectable {
+
+    @Inject
+    SharedPreferences sharedPref;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Preference loggingEnabled = findPreference(getString(R.string.pref_error_logging));
+        loggingEnabled.setOnPreferenceChangeListener((preference, newValue) -> {
+            if(isStoragePermissionGranted()) {
+                LoggingUtils.setupLogging(getContext());
+            }else{
+                return false;
+            }
+            return true;
+        });
+
+        Preference loggingLevel = findPreference(getString(R.string.pref_error_logging_level));
+        loggingLevel.setSummary("Logging level is set to: " + sharedPref.getString(getString(R.string.pref_error_logging_level),""));
+        loggingLevel.setOnPreferenceChangeListener((preference, newValue) -> {
+            loggingLevel.setSummary("Logging level is set to: " + newValue);
+            return true;
+        });
+    }
+
+    private boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (getActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Timber.v("Permission is granted");
+                return true;
+            } else {
+
+                Timber.v("Permission is revoked");
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Timber.v("Permission is granted");
+            return true;
+        }
+    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState,
@@ -42,5 +100,11 @@ public class SettingsErrorFragment extends PreferenceFragmentCompat {
     @Override
     public Preference findPreference(CharSequence key) {
         return super.findPreference(key);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
     }
 }

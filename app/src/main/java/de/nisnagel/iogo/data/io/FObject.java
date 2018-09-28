@@ -17,25 +17,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.nisnagel.iogo.ui.settings;
+package de.nisnagel.iogo.data.io;
 
+public class FObject {
+    private String id;
+    private String type;
+    private FCommon common;
+    private String val;
 
-import android.app.Fragment;
-import android.os.Bundle;
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.view.MenuItem;
+    public String getId() {
+        return this.id;
+    }
 
-import de.nisnagel.iogo.R;
+    public String getType() {
+        return type;
+    }
 
+    public FCommon getCommon() {
+        return common;
+    }
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class SettingsServerFragment extends PreferenceFragmentCompat {
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    @Override
-    public void onCreatePreferences(Bundle savedInstanceState,
-                                    String rootKey) {
-        setPreferencesFromResource(R.xml.settings_connection, rootKey);
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setCommon(FCommon common) {
+        this.common = common;
+    }
+
+    public String getVal() {
+        return val;
+    }
+
+    public void setVal(String val) {
+        this.val = val;
     }
 }

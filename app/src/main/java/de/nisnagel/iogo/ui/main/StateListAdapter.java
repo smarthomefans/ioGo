@@ -101,7 +101,6 @@ class StateListAdapter
     StateListAdapter(List<State> stateList, EnumViewModel mViewModel, Context context) {
         this.mValues = stateList;
         this.mViewModel = mViewModel;
-        DataBus.getBus().register(this);
     }
 
     public void clearList() {

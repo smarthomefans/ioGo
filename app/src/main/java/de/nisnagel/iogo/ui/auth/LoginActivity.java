@@ -78,8 +78,6 @@ public class LoginActivity extends BaseActivity {
         getSupportActionBar().setTitle(R.string.title_activity_settings_account);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @OnClick(R.id.btn_signup)

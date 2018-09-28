@@ -53,6 +53,7 @@ import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.EnumDao;
 import de.nisnagel.iogo.data.model.EnumState;
 import de.nisnagel.iogo.data.model.EnumStateDao;
+import de.nisnagel.iogo.service.Constants;
 import timber.log.Timber;
 
 @Singleton
@@ -60,6 +61,8 @@ public class EnumRepository {
 
     public static final String TYPE_FUNCTION = "function";
     public static final String TYPE_ROOM = "room";
+    public static final String CONNECTION_IOGO = "connection_iogo";
+    public static final String ENUMS = "enums/";
 
     private Map<String, LiveData<Enum>> enumCache;
     private LiveData<List<Enum>> mListFunctionEnums;
@@ -100,10 +103,10 @@ public class EnumRepository {
                     try {
                         FEnum fEnum = postSnapshot.getValue(FEnum.class);
                         String type;
-                        if (postSnapshot.getKey().contains("rooms")) {
-                            type = "room";
+                        if (postSnapshot.getKey().contains(TYPE_ROOM)) {
+                            type = TYPE_ROOM;
                         } else {
-                            type = "function";
+                            type = TYPE_FUNCTION;
                         }
                         Enum anEnum = new Enum(fEnum.getId(), fEnum.getName(), type, false, fEnum.getColor(), fEnum.getIcon());
                         syncEnum(anEnum);
@@ -132,10 +135,10 @@ public class EnumRepository {
                     try {
                         FEnum fEnum = dataSnapshot.getValue(FEnum.class);
                         String type;
-                        if (dataSnapshot.getKey().contains("rooms")) {
-                            type = "room";
+                        if (dataSnapshot.getKey().contains(TYPE_ROOM)) {
+                            type = TYPE_ROOM;
                         } else {
-                            type = "function";
+                            type = TYPE_FUNCTION;
                         }
                         Enum anEnum = new Enum(fEnum.getId(), fEnum.getName(), type, false, fEnum.getColor(), fEnum.getIcon());
                         syncEnum(anEnum);
@@ -175,15 +178,16 @@ public class EnumRepository {
         FirebaseAuth.AuthStateListener authListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if (user != null) {
-                dbEnumsRef = database.getReference("enums/" + user.getUid());
+                dbEnumsRef = database.getReference(ENUMS + user.getUid());
                 dbEnumsRef.addListenerForSingleValueEvent(enumListener);
                 dbEnumsRef.addChildEventListener(enumChildListener);
+
             }
         };
 
         SharedPreferences sharedPref;
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean isFirebaseEnabled = sharedPref.getBoolean("firebase_enabled", false);
+        boolean isFirebaseEnabled = sharedPref.getBoolean(CONNECTION_IOGO, false);
         if (isFirebaseEnabled) {
             mAuth.addAuthStateListener(authListener);
         }

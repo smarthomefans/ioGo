@@ -86,7 +86,6 @@ public class InfoFragment extends Fragment implements Injectable {
     Button mBtnSync;
 
     private InfoViewModel mViewModel;
-    private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -94,9 +93,7 @@ public class InfoFragment extends Fragment implements Injectable {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(InfoViewModel.class);
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(Objects.requireNonNull(getActivity()));
         mAuth = FirebaseAuth.getInstance();
-
     }
 
     @Override
@@ -161,7 +158,6 @@ public class InfoFragment extends Fragment implements Injectable {
             mBtnSync.setVisibility(View.GONE);
         }
 
-
         return rootView;
     }
 
@@ -183,8 +179,7 @@ public class InfoFragment extends Fragment implements Injectable {
         mCountFunctions.setText(R.string.syncing_data);
         mCountRooms.setText(R.string.syncing_data);
         mCountStates.setText(R.string.syncing_data);
-        DataBus.getBus().post(new Events.SyncObjects());
-        mFirebaseAnalytics.logEvent("sync_ojects", null);
+        mViewModel.syncObjects();
     }
 
     @Override

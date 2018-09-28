@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ ioGo - android app to control ioBroker home automation server.
   ~
   ~ Copyright (C) 2018  Nis Nagel
@@ -18,25 +17,21 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="Expert">
         <ListPreference
-            android:key="state_subtitle"
-            android:title="State subtitle"
             android:defaultValue="none"
             android:entries="@array/state_subtitle"
             android:entryValues="@array/state_subtitleValues"
-            />
+            android:key="state_subtitle"
+            android:title="State subtitle" />
         <SwitchPreference
+            android:defaultValue="false"
             android:key="sync_children"
-            android:defaultValue="false"
-            android:title="Sync children states">
-        </SwitchPreference>
+            android:title="Sync children states" />
         <SwitchPreference
-            android:key="show_hidden"
             android:defaultValue="false"
-            android:title="Show hidden enum">
-        </SwitchPreference>
+            android:key="show_hidden"
+            android:title="Show hidden enum" />
     </PreferenceCategory>
 </PreferenceScreen>

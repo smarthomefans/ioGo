@@ -26,20 +26,26 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import de.nisnagel.iogo.ui.detail.StateViewModel;
+import de.nisnagel.iogo.ui.history.HistoryViewModel;
 import de.nisnagel.iogo.ui.info.InfoViewModel;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
+import de.nisnagel.iogo.ui.settings.SettingsViewModel;
 
 @Singleton
 public class ViewModelFactory implements ViewModelProvider.Factory {
     private EnumViewModel mEnumViewModel;
     private StateViewModel mStateViewModel;
     private InfoViewModel mInfoViewModel;
+    private SettingsViewModel mSettingsViewModel;
+    private HistoryViewModel mHistoryViewModel;
 
     @Inject
-    public ViewModelFactory(EnumViewModel mEnumViewModel, StateViewModel mStateViewModel, InfoViewModel mInfoViewModel) {
+    public ViewModelFactory(EnumViewModel mEnumViewModel, StateViewModel mStateViewModel, InfoViewModel mInfoViewModel, SettingsViewModel mSettingsViewModel, HistoryViewModel mHistoryViewModel) {
         this.mEnumViewModel = mEnumViewModel;
         this.mStateViewModel = mStateViewModel;
         this.mInfoViewModel = mInfoViewModel;
+        this.mSettingsViewModel = mSettingsViewModel;
+        this.mHistoryViewModel = mHistoryViewModel;
     }
 
     @SuppressWarnings("unchecked")
@@ -53,6 +59,12 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         }
         if (modelClass.isAssignableFrom(InfoViewModel.class)) {
             return (T) mInfoViewModel;
+        }
+        if (modelClass.isAssignableFrom(SettingsViewModel.class)) {
+            return (T) mSettingsViewModel;
+        }
+        if (modelClass.isAssignableFrom(HistoryViewModel.class)) {
+            return (T) mHistoryViewModel;
         }
         throw new IllegalArgumentException("Unknown class name");
     }

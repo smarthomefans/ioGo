@@ -28,6 +28,9 @@ import de.nisnagel.iogo.ui.main.EnumFragment;
 import de.nisnagel.iogo.ui.main.FunctionFragment;
 import de.nisnagel.iogo.ui.main.HomeFragment;
 import de.nisnagel.iogo.ui.main.RoomFragment;
+import de.nisnagel.iogo.ui.settings.SettingsErrorFragment;
+import de.nisnagel.iogo.ui.settings.SettingsNotificationFragment;
+import de.nisnagel.iogo.ui.settings.SettingsConnectFragment;
 
 @Module
 public abstract class FragmentBuildersModule {
@@ -52,4 +55,13 @@ public abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract FunctionFragment contributeFunctionFragment();
+
+    @ContributesAndroidInjector
+    abstract SettingsNotificationFragment contributeSettingsNotificationFragment();
+
+    @ContributesAndroidInjector
+    abstract SettingsErrorFragment contributeSettingsErrorFragment();
+
+    @ContributesAndroidInjector
+    abstract SettingsConnectFragment contributeSettingsServerFragment();
 }

@@ -50,14 +50,12 @@ public class BaseActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.menu_action_settings) {
-            Toast.makeText(this, R.string.menu_action_settings, Toast.LENGTH_LONG).show();
             Intent i = new Intent(this, SettingsMainActivity.class);
             startActivity(i);
             return true;
         }
 
         if (id == R.id.menu_action_info) {
-            Toast.makeText(this, R.string.menu_action_info, Toast.LENGTH_LONG).show();
             Intent i = new Intent(this, InfoActivity.class);
             startActivity(i);
             return true;

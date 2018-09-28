@@ -18,20 +18,20 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:layout="@layout/preference_category_summary"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="prefScreen">
+    <PreferenceCategory
+        android:layout="@layout/preference_category_summary"
         android:summary="app account needed"
         android:title="Notification">
         <SwitchPreference
-            android:key="fcm_enabled"
             android:defaultValue="none"
-            android:title="Receive notifications">
-        </SwitchPreference>
+            android:key="fcm_enabled"
+            android:title="Receive notifications" />
         <EditTextPreference
             android:key="fcm_device"
-            android:title="Device"
             android:selectAllOnFocus="true"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:title="Device" />
     </PreferenceCategory>
 </PreferenceScreen>

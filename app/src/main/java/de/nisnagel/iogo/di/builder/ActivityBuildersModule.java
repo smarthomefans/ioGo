@@ -51,4 +51,7 @@ public abstract class ActivityBuildersModule {
     @ContributesAndroidInjector(modules = FragmentBuildersModule.class)
     abstract InfoActivity bindInfoActivity();
 
+    @ContributesAndroidInjector(modules = FragmentBuildersModule.class)
+    abstract SettingsMainActivity bindSettingsMainActivity();
+
 }

@@ -40,4 +40,15 @@ public class IoObject {
         return common;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setCommon(IoCommon common) {
+        this.common = common;
+    }
 }

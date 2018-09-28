@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ ioGo - android app to control ioBroker home automation server.
   ~
   ~ Copyright (C) 2018  Nis Nagel
@@ -18,21 +17,21 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Expert">
+    <PreferenceCategory
+        android:layout="@layout/preference_category_summary"
+        android:summary="logging into filesystem at storage/de.nisnagel.iogo/logs"
+        android:title="Error Logging">
         <SwitchPreference
-            android:key="logging_enabled"
+            android:key="@string/pref_error_logging"
             android:selectAllOnFocus="true"
-            android:title="Logging">
-        </SwitchPreference>
+            android:title="Enable logging" />
         <ListPreference
-            android:key="logging_level"
-            android:title="Logging level"
             android:defaultValue="6"
             android:entries="@array/logging_level"
             android:entryValues="@array/logging_levelValues"
-            />
+            android:key="@string/pref_error_logging_level"
+            android:title="Choose logging level" />
     </PreferenceCategory>
 </PreferenceScreen>
