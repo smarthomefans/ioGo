@@ -75,11 +75,10 @@ import timber.log.Timber;
 public class StateRepository {
 
     public static final String FROM = "app";
-    public static final String CONNECTION_IOGO = "connection_iogo";
-    public static final String STATE_QUEUES = "stateQueues/";
-    public static final String STATES = "states/";
-    public static final String OBJECT_QUEUES = "objectQueues/";
-    public static final String OBJECTS = "objects/";
+    private static final String STATE_QUEUES = "stateQueues/";
+    private static final String STATES = "states/";
+    private static final String OBJECT_QUEUES = "objectQueues/";
+    private static final String OBJECTS = "objects/";
     private Map<String, LiveData<List<State>>> stateEnumCache;
     private MutableLiveData<String> connected;
     private LiveData<List<State>> mListFavoriteStates;
@@ -239,7 +238,7 @@ public class StateRepository {
         };
         SharedPreferences sharedPref;
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean isFirebaseEnabled = sharedPref.getBoolean(CONNECTION_IOGO, false);
+        boolean isFirebaseEnabled = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo), false);
         if (isFirebaseEnabled) {
             mAuth.addAuthStateListener(authListener);
         }
@@ -443,10 +442,28 @@ public class StateRepository {
         if (dbObjectQueuesRef != null) {
             dbObjectQueuesRef.push().setValue(fObject);
         }
-
     }
 
     public void syncObjects(){
         DataBus.getBus().post(new Events.SyncObjects());
     }
+
+    /*
+    private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.equals(FCM_DEVICE)) {
+
+                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( getActivity(), instanceIdResult -> {
+                    String newToken = instanceIdResult.getToken();
+                    Timber.d("newToken" + newToken);
+
+                    String deviceName = sharedPreferences.getString(FCM_DEVICE, null);
+                    if(deviceName != null) {
+                        mViewModel.setDevice(sharedPreferences.getString(key, ""), newToken);
+                    }
+                });
+            }
+        }
+    };*/
 }

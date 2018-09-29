@@ -110,4 +110,9 @@
 
     <string name="pref_error_logging">logging_enabled</string>
     <string name="pref_error_logging_level">logging_level</string>
+
+    <string name="pref_device_name">fcm_device</string>
+    <string name="pref_device_notification">fcm_enabled</string>
+    <string name="pref_layout_state_subtitle">state_subtitle</string>
+    <string name="pref_layout_hidden_enum">show_hidden</string>
 </resources>

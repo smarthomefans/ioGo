@@ -22,6 +22,8 @@ package de.nisnagel.iogo.ui.settings;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.preference.EditTextPreference;
+import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 import de.nisnagel.iogo.R;
@@ -30,11 +32,27 @@ import de.nisnagel.iogo.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsDesignFragment extends PreferenceFragmentCompat {
+public class SettingsLayoutFragment extends PreferenceFragmentCompat {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ListPreference stateSubtitle = (ListPreference)findPreference(getString(R.string.pref_layout_state_subtitle));
+        if(stateSubtitle.getEntry() == null){
+            stateSubtitle.setSummary("Nothing is shown as subtitle");
+        }else {
+            stateSubtitle.setSummary("The " + stateSubtitle.getEntry() + " is shown as subtitle");
+        }
+        stateSubtitle.setOnPreferenceChangeListener((preference, newValue) -> {
+            stateSubtitle.setSummary("The " + newValue + " is shown as subtitle");
+            return true;
+        });
+    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState,
                                     String rootKey) {
-        setPreferencesFromResource(R.xml.settings_design, rootKey);
+        setPreferencesFromResource(R.xml.settings_layout, rootKey);
     }
 }

@@ -28,10 +28,14 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.preference.EditTextPreference;
+import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import com.google.android.gms.flags.impl.DataUtils;
 
 import javax.inject.Inject;
 
@@ -45,10 +49,7 @@ import timber.log.Timber;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsErrorFragment extends PreferenceFragmentCompat implements Injectable {
-
-    @Inject
-    SharedPreferences sharedPref;
+public class SettingsErrorFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,10 +65,10 @@ public class SettingsErrorFragment extends PreferenceFragmentCompat implements I
             return true;
         });
 
-        Preference loggingLevel = findPreference(getString(R.string.pref_error_logging_level));
-        loggingLevel.setSummary("Logging level is set to: " + sharedPref.getString(getString(R.string.pref_error_logging_level),""));
+        ListPreference loggingLevel = (ListPreference)findPreference(getString(R.string.pref_error_logging_level));
+        loggingLevel.setSummary("Logging level is set to " + loggingLevel.getEntry());
         loggingLevel.setOnPreferenceChangeListener((preference, newValue) -> {
-            loggingLevel.setSummary("Logging level is set to: " + newValue);
+            loggingLevel.setSummary("Logging level is set to " + newValue);
             return true;
         });
     }
@@ -102,9 +103,4 @@ public class SettingsErrorFragment extends PreferenceFragmentCompat implements I
         return super.findPreference(key);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
-        super.onAttach(context);
-    }
 }

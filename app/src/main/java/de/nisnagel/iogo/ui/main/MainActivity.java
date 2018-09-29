@@ -61,9 +61,9 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
         toolbar.setLogo(R.drawable.test48);
 
         PreferenceManager.setDefaultValues(this, R.xml.settings_connect, false);
-        PreferenceManager.setDefaultValues(this, R.xml.settings_design, false);
+        PreferenceManager.setDefaultValues(this, R.xml.settings_layout, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_error, false);
-        PreferenceManager.setDefaultValues(this, R.xml.settings_notification, false);
+        PreferenceManager.setDefaultValues(this, R.xml.settings_device, false);
 
         //loading the default fragment
         setTitle(R.string.title_activity_home);

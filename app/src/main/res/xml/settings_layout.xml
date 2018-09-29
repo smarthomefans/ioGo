@@ -18,20 +18,24 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Expert">
+    <PreferenceCategory
+        android:layout="@layout/preference_category_summary"
+        android:summary=""
+        android:title="State">
         <ListPreference
             android:defaultValue="none"
             android:entries="@array/state_subtitle"
             android:entryValues="@array/state_subtitleValues"
-            android:key="state_subtitle"
-            android:title="State subtitle" />
+            android:key="@string/pref_layout_state_subtitle"
+            android:title="Subtitle" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:layout="@layout/preference_category_summary"
+        android:summary=""
+        android:title="Enum">
         <SwitchPreference
             android:defaultValue="false"
-            android:key="sync_children"
-            android:title="Sync children states" />
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="show_hidden"
+            android:key="@string/pref_layout_hidden_enum"
             android:title="Show hidden enum" />
     </PreferenceCategory>
 </PreferenceScreen>

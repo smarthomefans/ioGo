@@ -28,14 +28,8 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.ui.auth.UserProfilActivity;
@@ -52,17 +46,19 @@ import de.nisnagel.iogo.ui.base.BaseActivity;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsMainActivity extends BaseActivity implements HasSupportFragmentInjector {
+public class SettingsMainActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @Inject
-    DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
+    public static final String intentAccount = "ACCOUNT";
+    public static final String intentServer = "SERVER";
+    public static final String intentLayout = "LAYOUT";
+    public static final String intentDevice = "DEVICE";
+    public static final String intentError = "ERROR";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
@@ -79,27 +75,27 @@ public class SettingsMainActivity extends BaseActivity implements HasSupportFrag
         Fragment fragment = null;
         if(intent != null) {
             switch (intent) {
-                case "Server":
+                case intentServer:
                     fragment = new SettingsConnectFragment();
                     setTitle(R.string.title_activity_settings_server);
                     break;
 
-                case "Design":
-                    fragment = new SettingsDesignFragment();
+                case intentLayout:
+                    fragment = new SettingsLayoutFragment();
                     setTitle(R.string.title_activity_settings_design);
                     break;
 
-                case "Error":
+                case intentError:
                     fragment = new SettingsErrorFragment();
                     setTitle(R.string.title_activity_settings_error);
                     break;
 
-                case "Notification":
-                    fragment = new SettingsNotificationFragment();
+                case intentDevice:
+                    fragment = new SettingsDeviceFragment();
                     setTitle(R.string.title_activity_settings_notification);
                     break;
 
-                case "Account":
+                case intentAccount:
                     startActivity(new Intent(SettingsMainActivity.this, UserProfilActivity.class));
                     finish();
                     break;
@@ -137,10 +133,5 @@ public class SettingsMainActivity extends BaseActivity implements HasSupportFrag
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
-        return dispatchingAndroidInjector;
     }
 }

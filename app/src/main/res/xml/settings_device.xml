@@ -20,18 +20,18 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="prefScreen">
+    <EditTextPreference
+        android:key="@string/pref_device_name"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Devicename" />
     <PreferenceCategory
         android:layout="@layout/preference_category_summary"
         android:summary="app account needed"
-        android:title="Notification">
+        android:title="Device features">
         <SwitchPreference
             android:defaultValue="none"
-            android:key="fcm_enabled"
+            android:key="@string/pref_device_notification"
             android:title="Receive notifications" />
-        <EditTextPreference
-            android:key="fcm_device"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="Device" />
     </PreferenceCategory>
 </PreferenceScreen>

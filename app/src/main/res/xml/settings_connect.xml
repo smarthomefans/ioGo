@@ -22,7 +22,7 @@
         android:layout="@layout/preference_category_summary"
         android:summary="app account needed"
         android:title="ioBroker.iogo">
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_connect_iogo"
             android:title="Connect to iogo-adapter" />
@@ -31,7 +31,7 @@
         android:layout="@layout/preference_category_summary"
         android:summary="only cloud.pro"
         android:title="ioBroker.cloud">
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_connect_cloud"
             android:title="Connect to cloud-adapter" />
@@ -53,7 +53,7 @@
         android:layout="@layout/preference_category_summary"
         android:summary="only with integrated socket-io"
         android:title="ioBroker.web">
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_connect_web"
             android:title="Connect to web-adapter" />
