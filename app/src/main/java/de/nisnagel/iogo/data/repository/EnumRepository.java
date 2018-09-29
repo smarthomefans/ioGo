@@ -34,8 +34,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,14 +44,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import de.nisnagel.iogo.data.io.FEnum;
-import de.nisnagel.iogo.data.io.IoName;
-import de.nisnagel.iogo.data.io.IoObject;
-import de.nisnagel.iogo.data.io.IoState;
 import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.EnumDao;
 import de.nisnagel.iogo.data.model.EnumState;
 import de.nisnagel.iogo.data.model.EnumStateDao;
-import de.nisnagel.iogo.service.Constants;
 import timber.log.Timber;
 
 @Singleton

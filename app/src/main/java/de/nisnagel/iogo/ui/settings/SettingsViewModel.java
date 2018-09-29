@@ -21,15 +21,9 @@ package de.nisnagel.iogo.ui.settings;
 
 import android.arch.lifecycle.ViewModel;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javax.inject.Inject;
 
-import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.repository.StateRepository;
-import de.nisnagel.iogo.service.DataBus;
-import de.nisnagel.iogo.service.Events;
 import timber.log.Timber;
 
 public class SettingsViewModel extends ViewModel {

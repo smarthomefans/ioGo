@@ -24,10 +24,8 @@ import android.arch.lifecycle.ViewModel;
 
 import javax.inject.Inject;
 
-import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.model.StateHistory;
-import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
 
 public class HistoryViewModel extends ViewModel {

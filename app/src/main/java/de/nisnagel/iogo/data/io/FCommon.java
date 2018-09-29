@@ -19,9 +19,6 @@
 
 package de.nisnagel.iogo.data.io;
 
-import java.util.List;
-import java.util.Map;
-
 public class FCommon {
 
     private Float min;

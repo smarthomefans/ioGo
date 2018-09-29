@@ -22,7 +22,6 @@ package de.nisnagel.iogo.ui.info;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -34,11 +33,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -48,10 +44,6 @@ import butterknife.OnClick;
 import dagger.android.support.AndroidSupportInjection;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.di.Injectable;
-import de.nisnagel.iogo.service.DataBus;
-import de.nisnagel.iogo.service.Events;
-import de.nisnagel.iogo.service.SocketService;
-import timber.log.Timber;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -153,7 +145,7 @@ public class InfoFragment extends Fragment implements Injectable {
             e.printStackTrace();
         }
 
-        boolean isFirebaseEnabled = sharedPref.getBoolean("firebase_enabled", false);
+        boolean isFirebaseEnabled = sharedPref.getBoolean(getString(R.string.pref_connect_iogo), false);
         if(isFirebaseEnabled) {
             mBtnSync.setVisibility(View.GONE);
         }

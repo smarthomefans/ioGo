@@ -21,23 +21,15 @@ package de.nisnagel.iogo.ui.settings;
 
 
 import android.app.Fragment;
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v14.preference.SwitchPreference;
-import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import javax.inject.Inject;
-
-import dagger.android.support.AndroidSupportInjection;
 import de.nisnagel.iogo.R;
-import de.nisnagel.iogo.di.Injectable;
 
 
 /**

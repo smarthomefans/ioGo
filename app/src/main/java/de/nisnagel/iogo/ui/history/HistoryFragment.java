@@ -25,7 +25,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -61,9 +60,7 @@ import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.model.StateHistory;
 import de.nisnagel.iogo.di.Injectable;
 import de.nisnagel.iogo.service.Constants;
-import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.service.util.HistoryUtils;
-import de.nisnagel.iogo.ui.detail.StateViewModel;
 
 /**
  * A placeholder fragment containing a simple view.

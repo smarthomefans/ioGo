@@ -35,13 +35,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.squareup.otto.Subscribe;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -54,8 +49,6 @@ import javax.inject.Singleton;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.io.FCommon;
 import de.nisnagel.iogo.data.io.FObject;
-import de.nisnagel.iogo.data.io.IoCommon;
-import de.nisnagel.iogo.data.io.IoCustom;
 import de.nisnagel.iogo.data.io.IoName;
 import de.nisnagel.iogo.data.io.IoObject;
 import de.nisnagel.iogo.data.io.IoState;
@@ -67,8 +60,6 @@ import de.nisnagel.iogo.data.model.StateHistory;
 import de.nisnagel.iogo.data.model.StateHistoryDao;
 import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.service.Events;
-import de.nisnagel.iogo.ui.settings.SettingsMainActivity;
-import io.socket.client.Ack;
 import timber.log.Timber;
 
 @Singleton

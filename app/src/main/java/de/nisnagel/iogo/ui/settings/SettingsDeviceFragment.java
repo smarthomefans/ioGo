@@ -21,25 +21,12 @@ package de.nisnagel.iogo.ui.settings;
 
 
 import android.app.Fragment;
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
-import android.text.TextUtils;
-import android.widget.Toast;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-
-import javax.inject.Inject;
-
-import dagger.android.support.AndroidSupportInjection;
 import de.nisnagel.iogo.R;
-import de.nisnagel.iogo.di.Injectable;
-import timber.log.Timber;
 
 
 /**

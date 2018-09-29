@@ -32,7 +32,6 @@ import java.util.List;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.service.Constants;
-import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.ui.base.viewholder.ButtonViewHolder;
 import de.nisnagel.iogo.ui.base.viewholder.CommonViewHolder;
 import de.nisnagel.iogo.ui.base.viewholder.IndicatorViewHolder;

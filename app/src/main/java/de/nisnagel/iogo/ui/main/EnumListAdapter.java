@@ -21,10 +21,8 @@ package de.nisnagel.iogo.ui.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
@@ -38,11 +36,9 @@ import android.widget.Toast;
 
 import com.pixplicity.sharp.Sharp;
 
-import java.sql.Array;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Predicate;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

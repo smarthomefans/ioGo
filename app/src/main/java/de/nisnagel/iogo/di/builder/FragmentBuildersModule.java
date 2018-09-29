@@ -28,7 +28,6 @@ import de.nisnagel.iogo.ui.main.EnumFragment;
 import de.nisnagel.iogo.ui.main.FunctionFragment;
 import de.nisnagel.iogo.ui.main.HomeFragment;
 import de.nisnagel.iogo.ui.main.RoomFragment;
-import de.nisnagel.iogo.ui.settings.SettingsDeviceFragment;
 
 @Module
 public abstract class FragmentBuildersModule {

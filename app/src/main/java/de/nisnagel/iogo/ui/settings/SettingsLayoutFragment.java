@@ -22,7 +22,6 @@ package de.nisnagel.iogo.ui.settings;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 

@@ -32,8 +32,6 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Locale;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
@@ -76,7 +74,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     String getSubtitle(State state) {
         if (state.isSync()) {
-            String state_subtitle = sharedPreferences.getString("state_subtitle", "none");
+            String state_subtitle = sharedPreferences.getString(context.getString(R.string.pref_layout_state_subtitle), "none");
             if (state_subtitle.equals("role")) {
                 return state.getRole();
             }

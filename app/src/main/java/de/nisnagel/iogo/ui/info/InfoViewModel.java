@@ -27,8 +27,6 @@ import javax.inject.Inject;
 
 import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
-import de.nisnagel.iogo.service.DataBus;
-import de.nisnagel.iogo.service.Events;
 
 public class InfoViewModel extends ViewModel {
 

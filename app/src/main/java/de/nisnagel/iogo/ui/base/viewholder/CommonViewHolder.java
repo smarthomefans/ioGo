@@ -35,8 +35,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.State;
-import de.nisnagel.iogo.service.DataBus;
-import de.nisnagel.iogo.service.Events;
 import de.nisnagel.iogo.ui.base.StateItem;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
 
