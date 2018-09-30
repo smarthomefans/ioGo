@@ -95,7 +95,7 @@ public class SyncUtils {
         Timber.v("saveEnums finished");
     }
 
-    public static void saveObjects(StateRepository repo, String data, boolean syncChildren) {
+    public static void saveObjects(StateRepository repo, String data) {
         Timber.v("saveObjects called");
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
@@ -116,7 +116,7 @@ public class SyncUtils {
                     } catch (Throwable e) {
                         Timber.e(e);
                     }
-                } else if (syncChildren) {
+                } else if (false) {
                     Iterator iter = obj.keys();
                     while (iter.hasNext()) {
                         String key = (String) iter.next();

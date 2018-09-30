@@ -52,10 +52,6 @@ public class StateViewModel extends ViewModel {
         return enumRepository.getEnum(enumId);
     }
 
-    public LiveData<StateHistory> getHistory(String stateId) {
-        return stateRepository.getHistory(stateId);
-    }
-
     public void saveState(State state) {
         stateRepository.saveState(state);
     }

@@ -25,7 +25,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.preference.PreferenceManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,6 +34,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -56,10 +56,9 @@ import de.nisnagel.iogo.data.model.EnumState;
 import de.nisnagel.iogo.data.model.EnumStateDao;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.model.StateDao;
-import de.nisnagel.iogo.data.model.StateHistory;
-import de.nisnagel.iogo.data.model.StateHistoryDao;
 import de.nisnagel.iogo.service.DataBus;
 import de.nisnagel.iogo.service.Events;
+import de.nisnagel.iogo.service.SocketService;
 import timber.log.Timber;
 
 @Singleton
@@ -75,25 +74,33 @@ public class StateRepository {
     private LiveData<List<State>> mListFavoriteStates;
 
     private final StateDao stateDao;
-    private final StateHistoryDao stateHistoryDao;
     private final EnumStateDao enumStateDao;
     private Executor executor;
     private Context context;
+    private SharedPreferences sharedPref;
 
+    private boolean bFirebase;
+    private boolean bSocket;
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
     private DatabaseReference dbObjectsRef;
     private DatabaseReference dbObjectQueuesRef;
     private DatabaseReference dbStatesRef;
     private DatabaseReference dbStateQueuesRef;
+    private ValueEventListener objectListener;
+    private ChildEventListener objectChildListener;
+    private ValueEventListener stateListener;
+    private ChildEventListener stateChildListener;
 
     @Inject
-    public StateRepository(StateDao stateDao, StateHistoryDao stateHistoryDao, EnumStateDao enumStateDao, Executor executor, Context context) {
+    public StateRepository(StateDao stateDao, EnumStateDao enumStateDao, Executor executor, Context context, SharedPreferences sharedPref) {
         this.stateDao = stateDao;
-        this.stateHistoryDao = stateHistoryDao;
         this.enumStateDao = enumStateDao;
         this.executor = executor;
         this.context = context;
+        this.sharedPref = sharedPref;
+
+        sharedPref.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
 
         stateEnumCache = new HashMap<>();
         connected = new MutableLiveData<>();
@@ -101,14 +108,21 @@ public class StateRepository {
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
 
-        init();
+        bFirebase = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo), false);
+        bSocket = sharedPref.getBoolean(context.getString(R.string.pref_connect_web), false) || sharedPref.getBoolean(context.getString(R.string.pref_connect_cloud), false);
+
+        if (bFirebase) {
+            initFirebase();
+        } else if (bSocket){
+            initSocket();
+        }
 
         Timber.v("instance created");
     }
 
-    private void init() {
+    private void initFirebase() {
 
-        ValueEventListener objectListener = new ValueEventListener() {
+        objectListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 GsonBuilder gsonBuilder = new GsonBuilder();
@@ -130,7 +144,7 @@ public class StateRepository {
             }
         };
 
-        ChildEventListener objectChildListener = new ChildEventListener() {
+        objectChildListener = new ChildEventListener() {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot.getValue() != null) {
@@ -163,7 +177,7 @@ public class StateRepository {
             }
         };
 
-        ValueEventListener stateListener = new ValueEventListener() {
+        stateListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -182,7 +196,7 @@ public class StateRepository {
             }
         };
 
-        ChildEventListener statesChildListener = new ChildEventListener() {
+        stateChildListener = new ChildEventListener() {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Timber.w("onChildChanged: state deleted stateId:" + dataSnapshot.getKey());
@@ -223,38 +237,39 @@ public class StateRepository {
                 dbObjectQueuesRef = database.getReference(OBJECT_QUEUES + user.getUid());
                 dbStatesRef = database.getReference(STATES + user.getUid());
                 dbStatesRef.addListenerForSingleValueEvent(stateListener);
-                dbStatesRef.addChildEventListener(statesChildListener);
+                dbStatesRef.addChildEventListener(stateChildListener);
                 dbStateQueuesRef = database.getReference(STATE_QUEUES + user.getUid());
             }
         };
-        SharedPreferences sharedPref;
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean isFirebaseEnabled = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo), false);
-        if (isFirebaseEnabled) {
-            mAuth.addAuthStateListener(authListener);
-        }
+
+        mAuth.addAuthStateListener(authListener);
+    }
+
+    private void initSocket(){
+        DataBus.getBus().register(this);
+        SocketService socketService = new SocketService();
+
     }
 
     public void sendState(final Events.SetState event) {
         Timber.v("sendState called");
 
-        if (dbStateQueuesRef != null) {
-            IoState ioState = new IoState();
-            ioState.setId(event.getId());
-            ioState.setVal(event.getVal());
-            ioState.setFrom(FROM);
-            dbStateQueuesRef.push().setValue(ioState);
+        if(bFirebase) {
+            if (dbStateQueuesRef != null) {
+                IoState ioState = new IoState();
+                ioState.setId(event.getId());
+                ioState.setVal(event.getVal());
+                ioState.setFrom(FROM);
+                dbStateQueuesRef.push().setValue(ioState);
+            }
+        }else if (bSocket){
+            DataBus.getBus().post(event);
         }
     }
 
     public LiveData<State> getState(String stateId) {
         Timber.v("getState called");
         return stateDao.getStateById2(stateId);
-    }
-
-    public LiveData<StateHistory> getHistory(String stateId) {
-        DataBus.getBus().post(new Events.LoadHistory(stateId));
-        return stateHistoryDao.getStateById2(stateId);
     }
 
     public List<String> getAllStateIds() {
@@ -335,46 +350,6 @@ public class StateRepository {
         );
     }
 
-    public void syncHistoryDay(String id, String data) {
-        Timber.v("syncHistoryDay called");
-        StateHistory stateHistory = stateHistoryDao.getStateById(id);
-        if (stateHistory == null) {
-            stateHistory = new StateHistory(id);
-        }
-        stateHistory.setDay(data);
-        stateHistoryDao.insert(stateHistory);
-    }
-
-    public void syncHistoryWeek(String id, String data) {
-        Timber.v("syncHistoryDay called");
-        StateHistory stateHistory = stateHistoryDao.getStateById(id);
-        if (stateHistory == null) {
-            stateHistory = new StateHistory(id);
-        }
-        stateHistory.setWeek(data);
-        stateHistoryDao.insert(stateHistory);
-    }
-
-    public void syncHistoryMonth(String id, String data) {
-        Timber.v("syncHistoryDay called");
-        StateHistory stateHistory = stateHistoryDao.getStateById(id);
-        if (stateHistory == null) {
-            stateHistory = new StateHistory(id);
-        }
-        stateHistory.setMonth(data);
-        stateHistoryDao.insert(stateHistory);
-    }
-
-    public void syncHistoryYear(String id, String data) {
-        Timber.v("syncHistoryDay called");
-        StateHistory stateHistory = stateHistoryDao.getStateById(id);
-        if (stateHistory == null) {
-            stateHistory = new StateHistory(id);
-        }
-        stateHistory.setYear(data);
-        stateHistoryDao.insert(stateHistory);
-    }
-
     public void saveSocketState(String state) {
         Timber.v("saveSocketState called");
         connected.postValue(state);
@@ -389,7 +364,6 @@ public class StateRepository {
                     state.setSync(false);
                     stateDao.update(state);
                     sendState(new Events.SetState(id, newVal, state.getType()));
-                    DataBus.getBus().post(new Events.SetState(id, newVal, state.getType()));
                 }
         );
     }
@@ -435,26 +409,43 @@ public class StateRepository {
         }
     }
 
-    public void syncObjects(){
-        DataBus.getBus().post(new Events.SyncObjects());
+    public void syncObjects() {
+        if(bSocket) {
+            DataBus.getBus().post(new Events.SyncObjects());
+        }
     }
 
-    /*
     private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (key.equals(FCM_DEVICE)) {
+            if (key.equals(context.getString(R.string.pref_device_name))) {
 
-                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( getActivity(), instanceIdResult -> {
+                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( executor, instanceIdResult -> {
                     String newToken = instanceIdResult.getToken();
                     Timber.d("newToken" + newToken);
 
-                    String deviceName = sharedPreferences.getString(FCM_DEVICE, null);
+                    String deviceName = sharedPreferences.getString(context.getString(R.string.pref_device_name), null);
                     if(deviceName != null) {
-                        mViewModel.setDevice(sharedPreferences.getString(key, ""), newToken);
+                        setDevice(sharedPreferences.getString(key, ""), newToken);
                     }
                 });
             }
+            if(key.equals(context.getString(R.string.pref_connect_web))
+                    || key.equals(context.getString(R.string.pref_connect_cloud))
+                    || key.equals(context.getString(R.string.pref_connect_iogo))){
+                bFirebase = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo), false);
+                bSocket = sharedPref.getBoolean(context.getString(R.string.pref_connect_web), false) || sharedPref.getBoolean(context.getString(R.string.pref_connect_cloud), false);
+
+                if (bFirebase) {
+                    initFirebase();
+                } else if (bSocket){
+                    initSocket();
+                    dbObjectsRef.removeEventListener(objectListener);
+                    dbObjectsRef.removeEventListener(objectChildListener);
+                    dbStatesRef.removeEventListener(stateListener);
+                    dbStatesRef.removeEventListener(stateChildListener);
+                }
+            }
         }
-    };*/
+    };
 }

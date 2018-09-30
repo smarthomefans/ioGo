@@ -43,6 +43,7 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.io.FEnum;
 import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.EnumDao;
@@ -55,7 +56,6 @@ public class EnumRepository {
 
     public static final String TYPE_FUNCTION = "function";
     public static final String TYPE_ROOM = "room";
-    public static final String CONNECTION_IOGO = "connection_iogo";
     public static final String ENUMS = "enums/";
 
     private Map<String, LiveData<Enum>> enumCache;
@@ -67,29 +67,36 @@ public class EnumRepository {
     private final EnumStateDao enumStateDao;
     private Executor executor;
     private Context context;
+    private SharedPreferences sharedPref;
 
-    FirebaseAuth mAuth;
-    FirebaseDatabase database;
-    DatabaseReference dbEnumsRef;
+    private boolean bFirebase;
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase database;
+    private DatabaseReference dbEnumsRef;
 
     @Inject
-    public EnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, Executor executor, Context context) {
+    public EnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, Executor executor, Context context, SharedPreferences sharedPref) {
         this.enumDao = enumDao;
         this.enumStateDao = enumStateDao;
         this.executor = executor;
         this.context = context;
+        this.sharedPref = sharedPref;
 
         enumCache = new HashMap<>();
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
 
-        init();
+        bFirebase = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo), false);
+
+        if (bFirebase) {
+            initFirebase();
+        }
 
         Timber.v("instance created");
     }
 
-    private void init() {
+    private void initFirebase() {
         ValueEventListener enumListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -179,12 +186,7 @@ public class EnumRepository {
             }
         };
 
-        SharedPreferences sharedPref;
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean isFirebaseEnabled = sharedPref.getBoolean(CONNECTION_IOGO, false);
-        if (isFirebaseEnabled) {
-            mAuth.addAuthStateListener(authListener);
-        }
+        mAuth.addAuthStateListener(authListener);
     }
 
     public LiveData<Enum> getEnum(String enumId) {

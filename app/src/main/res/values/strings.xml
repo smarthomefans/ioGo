@@ -99,20 +99,21 @@
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
 
-    <string name="pref_connect_iogo">connection_iogo</string>
-    <string name="pref_connect_cloud">connection_cloud</string>
-    <string name="pref_connect_cloud_user">pro_username</string>
-    <string name="pref_connect_cloud_password">pro_password</string>
-    <string name="pref_connect_web">connection_web</string>
-    <string name="pref_connect_web_url">mobile_socket_url</string>
-    <string name="pref_connect_web_user">mobile_username</string>
-    <string name="pref_connect_web_password">mobile_password</string>
+    <string name="pref_connect_iogo">pref_connect_iogo</string>
+    <string name="pref_connect_cloud">pref_connect_cloud</string>
+    <string name="pref_connect_cloud_user">pref_connect_cloud_user</string>
+    <string name="pref_connect_cloud_password">pref_connect_cloud_password</string>
+    <string name="pref_connect_web">pref_connect_web</string>
+    <string name="pref_connect_web_url">pref_connect_web_url</string>
+    <string name="pref_connect_web_user">pref_connect_web_user</string>
+    <string name="pref_connect_web_password">pref_connect_web_password</string>
 
-    <string name="pref_error_logging">logging_enabled</string>
-    <string name="pref_error_logging_level">logging_level</string>
+    <string name="pref_error_logging">pref_error_logging</string>
+    <string name="pref_error_logging_level">pref_error_logging_level</string>
 
-    <string name="pref_device_name">fcm_device</string>
-    <string name="pref_device_notification">fcm_enabled</string>
-    <string name="pref_layout_state_subtitle">state_subtitle</string>
-    <string name="pref_layout_hidden_enum">show_hidden</string>
+    <string name="pref_device_name">pref_device_name</string>
+    <string name="pref_device_notification">pref_device_notification</string>
+
+    <string name="pref_layout_state_subtitle">pref_layout_state_subtitle</string>
+    <string name="pref_layout_hidden_enum">pref_layout_hidden_enum</string>
 </resources>

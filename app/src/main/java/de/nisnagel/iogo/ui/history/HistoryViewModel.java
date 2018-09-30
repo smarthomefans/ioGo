@@ -26,16 +26,19 @@ import javax.inject.Inject;
 
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.model.StateHistory;
+import de.nisnagel.iogo.data.repository.StateHistoryRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
 
 public class HistoryViewModel extends ViewModel {
 
     private StateRepository stateRepository;
+    private StateHistoryRepository stateHistoryRepository;
     private String value;
 
     @Inject
-    public HistoryViewModel(StateRepository stateRepository) {
+    public HistoryViewModel(StateRepository stateRepository, StateHistoryRepository stateHistoryRepository) {
         this.stateRepository = stateRepository;
+        this.stateHistoryRepository = stateHistoryRepository;
     }
 
     public LiveData<State> getState(String stateId) {
@@ -43,7 +46,7 @@ public class HistoryViewModel extends ViewModel {
     }
 
     public LiveData<StateHistory> getHistory(String stateId) {
-        return stateRepository.getHistory(stateId);
+        return stateHistoryRepository.getHistory(stateId);
     }
 
     public String getValue() {

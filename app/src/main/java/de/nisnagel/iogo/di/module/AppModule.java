@@ -39,8 +39,10 @@ import de.nisnagel.iogo.data.model.EnumDao;
 import de.nisnagel.iogo.data.model.EnumStateDao;
 import de.nisnagel.iogo.data.model.HistoryDatabase;
 import de.nisnagel.iogo.data.model.StateDao;
+import de.nisnagel.iogo.data.model.StateHistory;
 import de.nisnagel.iogo.data.model.StateHistoryDao;
 import de.nisnagel.iogo.data.repository.EnumRepository;
+import de.nisnagel.iogo.data.repository.StateHistoryRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
 import de.nisnagel.iogo.ui.ViewModelFactory;
 import de.nisnagel.iogo.ui.detail.StateViewModel;
@@ -118,14 +120,20 @@ public class AppModule {
 
     @Singleton
     @Provides
-    StateRepository provideStateRepository(StateDao stateDao, StateHistoryDao stateHistoryDao, EnumStateDao enumStateDao, Executor executor, Context context) {
-        return new StateRepository(stateDao, stateHistoryDao, enumStateDao, executor, context);
+    StateRepository provideStateRepository(StateDao stateDao, EnumStateDao enumStateDao, Executor executor, Context context, SharedPreferences sharedPref) {
+        return new StateRepository(stateDao, enumStateDao, executor, context, sharedPref);
     }
 
     @Singleton
     @Provides
-    EnumRepository provideEnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, Executor executor, Context context) {
-        return new EnumRepository(enumDao, enumStateDao, executor, context);
+    StateHistoryRepository provideStateHistoryRepository(StateHistoryDao stateHistoryDao, Executor executor, Context context) {
+        return new StateHistoryRepository(stateHistoryDao, executor, context);
+    }
+
+    @Singleton
+    @Provides
+    EnumRepository provideEnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, Executor executor, Context context, SharedPreferences sharedPref) {
+        return new EnumRepository(enumDao, enumStateDao, executor, context, sharedPref);
     }
 
     @Singleton

@@ -23,7 +23,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.os.IBinder;
 import android.widget.Toast;
 
@@ -46,6 +45,7 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjection;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.repository.EnumRepository;
+import de.nisnagel.iogo.data.repository.StateHistoryRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
 import de.nisnagel.iogo.service.util.HistoryUtils;
 import de.nisnagel.iogo.service.util.NetworkUtils;
@@ -71,6 +71,9 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     @Inject
     public StateRepository stateRepository;
 
+    @Inject
+    public StateHistoryRepository stateHistoryRepository;
+
     public SocketService() {
         Timber.v("instance created");
     }
@@ -81,36 +84,35 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         AndroidInjection.inject(this);
         super.onCreate();
 
-        boolean isWebEnabled = sharedPref.getBoolean("connection_web", false);
-        boolean isCloudEnabled = sharedPref.getBoolean("connection_cloud", false);
+        boolean isWebEnabled = sharedPref.getBoolean(getString(R.string.pref_connect_web), false);
+        boolean isCloudEnabled = sharedPref.getBoolean(getString(R.string.pref_connect_cloud), false);
         if (isWebEnabled || isCloudEnabled) {
             stateRepository.saveSocketState("unknown");
-            sharedPref.registerOnSharedPreferenceChangeListener(this);
-        } else {
-            stopSelf();
         }
+        sharedPref.registerOnSharedPreferenceChangeListener(this);
         DataBus.getBus().register(this);
 
     }
 
     private void init() {
         Timber.v(" init called");
-        boolean isProEnabled = sharedPref.getBoolean("connection_cloud", false);
-        if (isProEnabled) {
-            String username = sharedPref.getString("pro_username", null);
-            String password = sharedPref.getString("pro_password", null);
-            init_pro(username, password);
-        } else {
-            String url = sharedPref.getString("mobile_socket_url", null);
+        boolean isCloud = sharedPref.getBoolean(getString(R.string.pref_connect_cloud), false);
+        boolean isWeb = sharedPref.getBoolean(getString(R.string.pref_connect_web), false);
+        if (isCloud) {
+            String username = sharedPref.getString(getString(R.string.pref_connect_cloud_user), null);
+            String password = sharedPref.getString(getString(R.string.pref_connect_cloud_password), null);
+            init_cloud(username, password);
+        } else if (isWeb) {
+            String url = sharedPref.getString(getString(R.string.pref_connect_web_url), null);
             url = NetworkUtils.cleanUrl(url);
-            String username = sharedPref.getString("mobile_username", null);
-            String password = sharedPref.getString("mobile_password", null);
-            init_mobile(url, username, password);
+            String username = sharedPref.getString(getString(R.string.pref_connect_web_user), null);
+            String password = sharedPref.getString(getString(R.string.pref_connect_web_password), null);
+            init_web(url, username, password);
         }
     }
 
-    private void init_mobile(String url, String username, String password) {
-        Timber.v(" init_mobile called");
+    private void init_web(String url, String username, String password) {
+        Timber.v(" init_web called");
         String socketUrl;
         if (username != null && password != null && !username.isEmpty() && !password.isEmpty()) {
             //cookie = NetworkUtils.getCookie(url, username, password);
@@ -129,8 +131,8 @@ public class SocketService extends Service implements SharedPreferences.OnShared
         createSocket(socketUrl);
     }
 
-    private void init_pro(String username, String password) {
-        Timber.v(" init_pro called");
+    private void init_cloud(String username, String password) {
+        Timber.v(" init_cloud called");
         if (username != null && password != null) {
             cookie = NetworkUtils.getProCookie(username, password);
 
@@ -180,14 +182,13 @@ public class SocketService extends Service implements SharedPreferences.OnShared
     public int onStartCommand(Intent intent, int flags, int startId) {
         Timber.v(" onStartCommand called");
 
-        boolean isWebEnabled = sharedPref.getBoolean("connection_web", false);
-        boolean isCloudEnabled = sharedPref.getBoolean("connection_cloud", false);
-        if (!isWebEnabled && !isCloudEnabled) {
-            stopSelf();
-        } else if (!isConnected()) {
-            new NetworkAsync().execute();
+        boolean isWebEnabled = sharedPref.getBoolean(getString(R.string.pref_connect_web), false);
+        boolean isCloudEnabled = sharedPref.getBoolean(getString(R.string.pref_connect_cloud), false);
+        if (isWebEnabled || isCloudEnabled) {
+            if (!isConnected()) {
+                new NetworkAsync().execute();
+            }
         }
-
         return Service.START_STICKY;
     }
 
@@ -218,11 +219,6 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             });
             stateRepository.saveSocketState("connected");
 
-            Handler mainHandler = new Handler(getMainLooper());
-            mainHandler.post(() -> {
-                // Do your stuff here related to UI, e.g. show toast
-                Toast.makeText(getApplicationContext(), R.string.service_connected, Toast.LENGTH_SHORT).show();
-            });
             Timber.i("connected");
         }
     };
@@ -365,7 +361,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             Timber.i("getObjects: requesting all objects from server");
             mSocket.emit("getObjects", null, args -> {
                 if (args[1] != null) {
-                    SyncUtils.saveObjects(stateRepository, args[1].toString(), sharedPref.getBoolean("sync_children", false));
+                    SyncUtils.saveObjects(stateRepository, args[1].toString());
                 }
                 getStates();
             });
@@ -412,7 +408,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             }
             mSocket.emit("getHistory", event.id, json, (Ack) args -> {
                 if (args[1] != null && !"[]".equals(args[1].toString())) {
-                    stateRepository.syncHistoryDay(event.id, args[1].toString());
+                    stateHistoryRepository.syncHistoryDay(event.id, args[1].toString());
                     Timber.i("loadHistory: receiving historical data");
                 }
             });
@@ -428,7 +424,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             }
             mSocket.emit("getHistory", event.id, json, (Ack) args -> {
                 if (args[1] != null && !"[]".equals(args[1].toString())) {
-                    stateRepository.syncHistoryWeek(event.id, args[1].toString());
+                    stateHistoryRepository.syncHistoryWeek(event.id, args[1].toString());
                     Timber.i("loadHistory: receiving historical data");
                 }
             });
@@ -444,7 +440,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             }
             mSocket.emit("getHistory", event.id, json, (Ack) args -> {
                 if (args[1] != null && !"[]".equals(args[1].toString())) {
-                    stateRepository.syncHistoryMonth(event.id, args[1].toString());
+                    stateHistoryRepository.syncHistoryMonth(event.id, args[1].toString());
                     Timber.i("loadHistory: receiving historical data");
                 }
             });
@@ -460,7 +456,7 @@ public class SocketService extends Service implements SharedPreferences.OnShared
             }
             mSocket.emit("getHistory", event.id, json, (Ack) args -> {
                 if (args[1] != null && !"[]".equals(args[1].toString())) {
-                    stateRepository.syncHistoryYear(event.id, args[1].toString());
+                    stateHistoryRepository.syncHistoryYear(event.id, args[1].toString());
                     Timber.i("loadHistory: receiving historical data");
                 }
             });
@@ -478,7 +474,13 @@ public class SocketService extends Service implements SharedPreferences.OnShared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals("mobile_socket_url") || key.equals("pro_cloud_enabled") || key.equals("pro_username") || key.equals("pro_password")) {
+        if (key.equals(getString(R.string.pref_connect_web))
+                || key.equals(getString(R.string.pref_connect_web_url))
+                || key.equals(getString(R.string.pref_connect_web_user))
+                || key.equals(getString(R.string.pref_connect_web_password))
+                || key.equals(getString(R.string.pref_connect_cloud))
+                || key.equals(getString(R.string.pref_connect_cloud_user))
+                || key.equals(getString(R.string.pref_connect_cloud_password))) {
             Toast.makeText(getApplicationContext(), "Settings changed", Toast.LENGTH_LONG).show();
 
             new NetworkAsync().execute();
