@@ -25,7 +25,7 @@
         <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_connect_iogo"
-            android:title="Connect to iogo-adapter" />
+            android:title="Use iogo adapter" />
     </PreferenceCategory>
     <PreferenceCategory
         android:layout="@layout/preference_category_summary"
@@ -34,7 +34,7 @@
         <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_connect_cloud"
-            android:title="Connect to cloud-adapter" />
+            android:title="Use cloud adapter" />
         <EditTextPreference
             android:editable="true"
             android:inputType="textEmailAddress"
@@ -56,7 +56,7 @@
         <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_connect_web"
-            android:title="Connect to web-adapter" />
+            android:title="Use web adapter" />
         <EditTextPreference
             android:dialogMessage="Please enter url and port from your web-adapter"
             android:key="@string/pref_connect_web_url"
