@@ -24,7 +24,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.preference.PreferenceManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,9 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -56,12 +53,7 @@ public class EnumRepository {
 
     public static final String TYPE_FUNCTION = "function";
     public static final String TYPE_ROOM = "room";
-    public static final String ENUMS = "enums/";
-
-    private Map<String, LiveData<Enum>> enumCache;
-    private LiveData<List<Enum>> mListFunctionEnums;
-    private LiveData<List<Enum>> mListRoomEnums;
-    private LiveData<List<Enum>> mListFavoriteEnums;
+    private static final String PATH_ENUMS = "enums/";
 
     private final EnumDao enumDao;
     private final EnumStateDao enumStateDao;
@@ -82,8 +74,6 @@ public class EnumRepository {
         this.context = context;
         this.sharedPref = sharedPref;
 
-        enumCache = new HashMap<>();
-
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
 
@@ -101,25 +91,7 @@ public class EnumRepository {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    try {
-                        FEnum fEnum = postSnapshot.getValue(FEnum.class);
-                        String type;
-                        if (postSnapshot.getKey().contains(TYPE_ROOM)) {
-                            type = TYPE_ROOM;
-                        } else {
-                            type = TYPE_FUNCTION;
-                        }
-                        Enum anEnum = new Enum(fEnum.getId(), fEnum.getName(), type, false, fEnum.getColor(), fEnum.getIcon());
-                        syncEnum(anEnum);
-                        deleteStateEnum(anEnum);
-                        for (String member : fEnum.getMembers()) {
-                            EnumState enumState = new EnumState(anEnum.getId(), member);
-                            syncEnumState(enumState);
-                            Timber.d("saveEnums: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
-                        }
-                    } catch (Throwable t) {
-                        Timber.e(postSnapshot.getKey(), t);
-                    }
+                    refreshEnum(postSnapshot);
                 }
             }
 
@@ -132,54 +104,30 @@ public class EnumRepository {
         ChildEventListener enumChildListener = new ChildEventListener() {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.getValue() != null) {
-                    try {
-                        FEnum fEnum = dataSnapshot.getValue(FEnum.class);
-                        String type;
-                        if (dataSnapshot.getKey().contains(TYPE_ROOM)) {
-                            type = TYPE_ROOM;
-                        } else {
-                            type = TYPE_FUNCTION;
-                        }
-                        Enum anEnum = new Enum(fEnum.getId(), fEnum.getName(), type, false, fEnum.getColor(), fEnum.getIcon());
-                        syncEnum(anEnum);
-                        deleteStateEnum(anEnum);
-                        for (String member : fEnum.getMembers()) {
-                            EnumState enumState = new EnumState(anEnum.getId(), member);
-                            syncEnumState(enumState);
-                            Timber.d("saveEnums: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
-                        }
-                    } catch (Throwable t) {
-                        Timber.e(dataSnapshot.getKey(), t);
-                    }
-                }
+                refreshEnum(dataSnapshot);
             }
 
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         };
 
         FirebaseAuth.AuthStateListener authListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if (user != null) {
-                dbEnumsRef = database.getReference(ENUMS + user.getUid());
+                dbEnumsRef = database.getReference(PATH_ENUMS + user.getUid());
                 dbEnumsRef.addListenerForSingleValueEvent(enumListener);
                 dbEnumsRef.addChildEventListener(enumChildListener);
 
@@ -189,13 +137,33 @@ public class EnumRepository {
         mAuth.addAuthStateListener(authListener);
     }
 
+    private void refreshEnum(DataSnapshot dataSnapshot){
+        if (dataSnapshot.getValue() != null) {
+            try {
+                FEnum fEnum = dataSnapshot.getValue(FEnum.class);
+                String type;
+                if (dataSnapshot.getKey().contains(TYPE_ROOM)) {
+                    type = TYPE_ROOM;
+                } else {
+                    type = TYPE_FUNCTION;
+                }
+                Enum anEnum = new Enum(fEnum.getId(), fEnum.getName(), type, false, fEnum.getColor(), fEnum.getIcon());
+                insertEnum(anEnum);
+                deleteStateEnum(anEnum);
+                for (String member : fEnum.getMembers()) {
+                    EnumState enumState = new EnumState(anEnum.getId(), member);
+                    insertEnumState(enumState);
+                    Timber.d("saveEnums: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
+                }
+            } catch (Throwable t) {
+                Timber.e(dataSnapshot.getKey(), t);
+            }
+        }
+    }
+
     public LiveData<Enum> getEnum(String enumId) {
         Timber.v("getEnum called");
-        if (!enumCache.containsKey(enumId)) {
-            enumCache.put(enumId, enumDao.getEnumById(enumId));
-            Timber.d("getEnum: load enum from database enumId:" + enumId);
-        }
-        return enumCache.get(enumId);
+        return enumDao.getEnumById(enumId);
     }
 
     public List<Enum> getEnumsByType(String type) {
@@ -205,30 +173,17 @@ public class EnumRepository {
 
     public LiveData<List<Enum>> getFunctionEnums() {
         Timber.v("getFunctionEnums called");
-        if (mListFunctionEnums == null) {
-            mListFunctionEnums = enumDao.getFunctionEnums();
-            Timber.d("getFunctionEnums: load function enums from database");
-        }
-        return mListFunctionEnums;
+        return enumDao.getFunctionEnums();
     }
 
     public LiveData<List<Enum>> getRoomEnums() {
         Timber.v("getRoomEnums called");
-        if (mListRoomEnums == null) {
-            mListRoomEnums = enumDao.getRoomEnums();
-            Timber.d("getFunctionEnums: load room enums from database");
-        }
-        Timber.v("getRoomEnums");
-        return mListRoomEnums;
+        return enumDao.getRoomEnums();
     }
 
     public LiveData<List<Enum>> getFavoriteEnums() {
         Timber.v("getFavoriteEnums called");
-        if (mListFavoriteEnums == null) {
-            mListFavoriteEnums = enumDao.getFavoriteEnums();
-            Timber.d("getFunctionEnums: load favorite enums from database");
-        }
-        return mListFavoriteEnums;
+        return enumDao.getFavoriteEnums();
     }
 
     public LiveData<Integer> countFunctions() {
@@ -241,9 +196,14 @@ public class EnumRepository {
         return enumDao.countRoomEnums();
     }
 
-    public void syncEnum(Enum item) {
-        Timber.v("syncEnum called");
+    public void insertEnum(Enum item) {
+        Timber.v("insertEnum called");
         executor.execute(() -> enumDao.insert(item));
+    }
+
+    public void saveEnum(Enum... anEnum) {
+        Timber.v("saveEnum called");
+        executor.execute(() -> enumDao.update(anEnum));
     }
 
     public void deleteEnum(Enum item) {
@@ -251,19 +211,14 @@ public class EnumRepository {
         enumDao.delete(item);
     }
 
-    public void deleteStateEnum(Enum item) {
-        Timber.v("deleteStateEnum called");
-        executor.execute(() -> enumStateDao.deleteByEnum(item.getId()));
-    }
-
-    public void syncEnumState(EnumState item) {
-        Timber.v("syncEnumState called");
+    public void insertEnumState(EnumState item) {
+        Timber.v("insertEnumState called");
         executor.execute(() -> enumStateDao.insert(item));
     }
 
-    public void saveEnum(Enum... anEnum) {
-        Timber.v("saveEnum called");
-        executor.execute(() -> enumDao.update(anEnum));
+    public void deleteStateEnum(Enum item) {
+        Timber.v("deleteStateEnum called");
+        executor.execute(() -> enumStateDao.deleteByEnum(item.getId()));
     }
 
 }

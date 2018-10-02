@@ -62,13 +62,13 @@ public class SyncUtils {
                 IoValue ioValue = ioRow.getValue();
                 IoCommon ioCommon = ioValue.getCommon();
                 Enum anEnum = new Enum(ioValue.getId(), ioCommon.getName(), type, false, ioCommon.getColor(), ioCommon.getIcon());
-                repo.syncEnum(anEnum);
+                repo.insertEnum(anEnum);
                 repo.deleteStateEnum(anEnum);
                 Timber.d("saveEnums: enum inserted enumId:" + anEnum.getId());
                 if (ioCommon.getMembers() != null) {
                     for (int j = 0; j < ioCommon.getMembers().size(); j++) {
                         EnumState enumState = new EnumState(anEnum.getId(), ioCommon.getMembers().get(j));
-                        repo.syncEnumState(enumState);
+                        repo.insertEnumState(enumState);
                         Timber.d("saveEnums: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
                     }
                 } else {
