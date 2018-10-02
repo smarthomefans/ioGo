@@ -440,10 +440,18 @@ public class StateRepository {
                     initFirebase();
                 } else if (bSocket){
                     initSocket();
-                    dbObjectsRef.removeEventListener(objectListener);
-                    dbObjectsRef.removeEventListener(objectChildListener);
-                    dbStatesRef.removeEventListener(stateListener);
-                    dbStatesRef.removeEventListener(stateChildListener);
+                    try {
+                        if(dbObjectsRef != null) {
+                            dbObjectsRef.removeEventListener(objectListener);
+                            dbObjectsRef.removeEventListener(objectChildListener);
+                        }
+                        if(dbStatesRef != null) {
+                            dbStatesRef.removeEventListener(stateListener);
+                            dbStatesRef.removeEventListener(stateChildListener);
+                        }
+                    }catch (Throwable t){
+                        Timber.e(t);
+                    }
                 }
             }
         }
