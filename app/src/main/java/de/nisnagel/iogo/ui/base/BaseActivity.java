@@ -24,18 +24,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import de.nisnagel.iogo.R;
-import de.nisnagel.iogo.service.SocketService;
 import de.nisnagel.iogo.ui.info.InfoActivity;
 import de.nisnagel.iogo.ui.settings.SettingsMainActivity;
 
 
 public class BaseActivity extends AppCompatActivity {
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        startService(new Intent(this, SocketService.class));
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -74,7 +74,7 @@ public class FCMService extends FirebaseMessagingService {
         super.onNewToken(s);
 
         String fcm_device = sharedPref.getString("fcm_device", null);
-        stateRepository.sendState(new Events.SetState("iogo.0." + fcm_device + ".token", s, "string"));
+        stateRepository.sendState("iogo.0." + fcm_device + ".token", s, "string");
         //for now we are displaying the token in the log
         //copy it as this method is called only when the new token is generated
         //and usually new token is only generated when the app is reinstalled or the data is cleared

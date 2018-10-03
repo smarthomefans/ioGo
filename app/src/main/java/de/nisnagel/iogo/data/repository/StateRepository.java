@@ -37,6 +37,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -56,9 +61,8 @@ import de.nisnagel.iogo.data.model.EnumState;
 import de.nisnagel.iogo.data.model.EnumStateDao;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.model.StateDao;
-import de.nisnagel.iogo.service.DataBus;
-import de.nisnagel.iogo.service.Events;
-import de.nisnagel.iogo.service.SocketService;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 import timber.log.Timber;
 
 @Singleton
@@ -78,6 +82,8 @@ public class StateRepository {
     private Executor executor;
     private Context context;
     private SharedPreferences sharedPref;
+    private WebService webService;
+    private Gson gson;
 
     private boolean bFirebase;
     private boolean bSocket;
@@ -93,14 +99,19 @@ public class StateRepository {
     private ChildEventListener stateChildListener;
 
     @Inject
-    public StateRepository(StateDao stateDao, EnumStateDao enumStateDao, Executor executor, Context context, SharedPreferences sharedPref) {
+    public StateRepository(StateDao stateDao, EnumStateDao enumStateDao, Executor executor, Context context, SharedPreferences sharedPref, WebService webService) {
         this.stateDao = stateDao;
         this.enumStateDao = enumStateDao;
         this.executor = executor;
         this.context = context;
         this.sharedPref = sharedPref;
+        this.webService = webService;
 
         sharedPref.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
+        gson = gsonBuilder.create();
 
         stateEnumCache = new HashMap<>();
         connected = new MutableLiveData<>();
@@ -113,7 +124,7 @@ public class StateRepository {
 
         if (bFirebase) {
             initFirebase();
-        } else if (bSocket){
+        } else if (bSocket) {
             initSocket();
         }
 
@@ -125,9 +136,6 @@ public class StateRepository {
         objectListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                GsonBuilder gsonBuilder = new GsonBuilder();
-                gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
-                Gson gson = gsonBuilder.create();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     try {
                         IoObject ioObject = gson.fromJson(postSnapshot.getValue().toString(), IoObject.class);
@@ -245,25 +253,127 @@ public class StateRepository {
         mAuth.addAuthStateListener(authListener);
     }
 
-    private void initSocket(){
-        DataBus.getBus().register(this);
-        SocketService socketService = new SocketService();
-
+    private void initSocket() {
+        if(webService.isConnected()){
+            initialLoad();
+        }else {
+            webService.init();
+            webService.on(Socket.EVENT_CONNECT, onConnect);
+            webService.on(Socket.EVENT_DISCONNECT, onDisconnect);
+            //webService.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+            //webService.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+            webService.on("stateChange", onStateChange);
+            webService.start();
+        }
     }
 
-    public void sendState(final Events.SetState event) {
+    private Emitter.Listener onConnect = args -> initialLoad();
+
+    private void initialLoad() {
+        List<String> stateIds = getAllStateIds();
+        JSONArray json = new JSONArray(stateIds);
+        webService.subscribe(json);
+        webService.getObjects(null, args1 -> saveObjects(args1[1].toString()));
+
+        json = new JSONArray();
+        List<String> objectIds = getAllStateIds();
+        if (objectIds != null && objectIds.size() > 0) {
+            for (int i = 0; i < objectIds.size(); i++) {
+                json.put(objectIds.get(i));
+            }
+            webService.getStates(json, args1 -> saveStates(args1[1].toString()));
+        }
+    }
+
+    private Emitter.Listener onDisconnect = args -> {
+        setSyncAll(false);
+        Timber.i("disconnected");
+    };
+
+    private void saveObjects(String data) {
+        Timber.v("saveObjects called");
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
+        Gson gson = gsonBuilder.create();
+        try {
+            JSONObject obj = new JSONObject(data);
+            List<String> ids = getAllEnumStateIds();
+
+            for (String id : ids) {
+                JSONObject json = obj.optJSONObject(id);
+                if (json != null) {
+                    try {
+                        IoObject ioObject = gson.fromJson(json.toString(), IoObject.class);
+                        syncObject(id, ioObject);
+                        Timber.d("saveObjects: state updated from object stateId:" + id);
+                    } catch (Throwable e) {
+                        Timber.e(e);
+                    }
+                } else {
+                    Timber.d("saveObjects: state deleted stateId:" + id);
+                    State state = new State(id);
+                    deleteState(state);
+                }
+            }
+
+            List<String> stateIds = getAllStateIds();
+            stateIds.removeAll(ids);
+            for(String id : stateIds){
+                Timber.d("saveObjects: state deleted stateId:" + id);
+                State state = new State(id);
+                deleteState(state);
+            }
+        } catch (JSONException e) {
+            Timber.e(e);
+        }
+        Timber.v("saveObjects finished");
+    }
+
+    private void saveStates(String data) {
+        Timber.v("saveStates called");
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.create();
+        try {
+            TypeToken<Map<String, IoState>> token = new TypeToken<Map<String, IoState>>() {
+            };
+            Map<String, IoState> states = gson.fromJson(data, token.getType());
+            for (Map.Entry<String, IoState> entry : states.entrySet()) {
+                syncState(entry.getKey(), entry.getValue());
+            }
+        } catch (Throwable e) {
+            Timber.e(e);
+        }
+        Timber.v("saveStates finished");
+    }
+
+    private Emitter.Listener onStateChange = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            Timber.v("onStateChange called");
+            if (args[0] != null && args[1] != null) {
+                try {
+                    IoState ioState = gson.fromJson(args[1].toString(), IoState.class);
+                    syncState(args[0].toString(), ioState);
+                } catch (Throwable e) {
+                    Timber.e(e);
+                }
+            }
+        }
+    };
+
+    public void sendState(String id, String val, String type) {
         Timber.v("sendState called");
 
-        if(bFirebase) {
+        if (bFirebase) {
             if (dbStateQueuesRef != null) {
                 IoState ioState = new IoState();
-                ioState.setId(event.getId());
-                ioState.setVal(event.getVal());
+                ioState.setId(id);
+                ioState.setVal(val);
                 ioState.setFrom(FROM);
                 dbStateQueuesRef.push().setValue(ioState);
             }
-        }else if (bSocket){
-            DataBus.getBus().post(event);
+        } else if (bSocket) {
+            webService.setState(id, val, type);
         }
     }
 
@@ -350,7 +460,7 @@ public class StateRepository {
         );
     }
 
-    public void saveSocketState(String state) {
+    private void saveSocketState(String state) {
         Timber.v("saveSocketState called");
         connected.postValue(state);
     }
@@ -363,7 +473,7 @@ public class StateRepository {
                     state.update(newVal);
                     state.setSync(false);
                     stateDao.update(state);
-                    sendState(new Events.SetState(id, newVal, state.getType()));
+                    sendState(id, newVal, state.getType());
                 }
         );
     }
@@ -385,7 +495,7 @@ public class StateRepository {
         enumStateDao.insert(enumState);
     }
 
-    public void setSyncAll(boolean sync) {
+    private void setSyncAll(boolean sync) {
         stateDao.setSyncAll(sync);
     }
 
@@ -409,47 +519,41 @@ public class StateRepository {
         }
     }
 
-    public void syncObjects() {
-        if(bSocket) {
-            DataBus.getBus().post(new Events.SyncObjects());
-        }
-    }
-
     private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (key.equals(context.getString(R.string.pref_device_name))) {
 
-                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( executor, instanceIdResult -> {
+                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(executor, instanceIdResult -> {
                     String newToken = instanceIdResult.getToken();
                     Timber.d("newToken" + newToken);
 
                     String deviceName = sharedPreferences.getString(context.getString(R.string.pref_device_name), null);
-                    if(deviceName != null) {
+                    if (deviceName != null) {
                         setDevice(sharedPreferences.getString(key, ""), newToken);
                     }
                 });
             }
-            if(key.equals(context.getString(R.string.pref_connect_web))
+            if (key.equals(context.getString(R.string.pref_connect_web))
                     || key.equals(context.getString(R.string.pref_connect_cloud))
-                    || key.equals(context.getString(R.string.pref_connect_iogo))){
+                    || key.equals(context.getString(R.string.pref_connect_iogo))) {
                 bFirebase = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo), false);
                 bSocket = sharedPref.getBoolean(context.getString(R.string.pref_connect_web), false) || sharedPref.getBoolean(context.getString(R.string.pref_connect_cloud), false);
 
                 if (bFirebase) {
                     initFirebase();
-                } else if (bSocket){
+                } else if (bSocket) {
                     initSocket();
                     try {
-                        if(dbObjectsRef != null) {
+                        if (dbObjectsRef != null) {
                             dbObjectsRef.removeEventListener(objectListener);
                             dbObjectsRef.removeEventListener(objectChildListener);
                         }
-                        if(dbStatesRef != null) {
+                        if (dbStatesRef != null) {
                             dbStatesRef.removeEventListener(stateListener);
                             dbStatesRef.removeEventListener(stateChildListener);
                         }
-                    }catch (Throwable t){
+                    } catch (Throwable t) {
                         Timber.e(t);
                     }
                 }

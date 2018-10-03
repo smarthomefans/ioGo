@@ -33,8 +33,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -42,10 +47,17 @@ import javax.inject.Singleton;
 
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.io.FEnum;
+import de.nisnagel.iogo.data.io.IoCommon;
+import de.nisnagel.iogo.data.io.IoEnum;
+import de.nisnagel.iogo.data.io.IoName;
+import de.nisnagel.iogo.data.io.IoRow;
+import de.nisnagel.iogo.data.io.IoValue;
 import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.EnumDao;
 import de.nisnagel.iogo.data.model.EnumState;
 import de.nisnagel.iogo.data.model.EnumStateDao;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 import timber.log.Timber;
 
 @Singleton
@@ -60,34 +72,41 @@ public class EnumRepository {
     private Executor executor;
     private Context context;
     private SharedPreferences sharedPref;
+    private WebService webService;
 
     private boolean bFirebase;
+    private boolean bSocket;
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
     private DatabaseReference dbEnumsRef;
+    private ValueEventListener enumListener;
+    private ChildEventListener enumChildListener;
 
     @Inject
-    public EnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, Executor executor, Context context, SharedPreferences sharedPref) {
+    public EnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, Executor executor, Context context, SharedPreferences sharedPref, WebService webService) {
         this.enumDao = enumDao;
         this.enumStateDao = enumStateDao;
         this.executor = executor;
         this.context = context;
         this.sharedPref = sharedPref;
+        this.webService = webService;
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
 
         bFirebase = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo), false);
+        bSocket = sharedPref.getBoolean(context.getString(R.string.pref_connect_web), false) || sharedPref.getBoolean(context.getString(R.string.pref_connect_cloud), false);
 
         if (bFirebase) {
             initFirebase();
+        } else if (bSocket) {
+            initSocket();
         }
-
         Timber.v("instance created");
     }
 
     private void initFirebase() {
-        ValueEventListener enumListener = new ValueEventListener() {
+        enumListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -101,7 +120,7 @@ public class EnumRepository {
             }
         };
 
-        ChildEventListener enumChildListener = new ChildEventListener() {
+        enumChildListener = new ChildEventListener() {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 refreshEnum(dataSnapshot);
@@ -130,12 +149,90 @@ public class EnumRepository {
                 dbEnumsRef = database.getReference(PATH_ENUMS + user.getUid());
                 dbEnumsRef.addListenerForSingleValueEvent(enumListener);
                 dbEnumsRef.addChildEventListener(enumChildListener);
-
             }
         };
 
         mAuth.addAuthStateListener(authListener);
     }
+
+    private void initSocket() {
+        if(webService.isConnected()){
+            initialLoad();
+        }else {
+            webService.init();
+            webService.on(Socket.EVENT_CONNECT, onConnect);
+            webService.on(Socket.EVENT_DISCONNECT, onDisconnect);
+            //webService.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+            //webService.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+            //webService.on("stateChange", onStateChange);
+            webService.start();
+        }
+    }
+
+    private Emitter.Listener onConnect = args -> initialLoad();
+
+    private void initialLoad(){
+        webService.getEnumObjects("enum.rooms", args -> {
+            if (args[1] != null) {
+                saveEnums(args[1].toString(), EnumRepository.TYPE_ROOM);
+            }
+        });
+        webService.getEnumObjects("enum.functions", args -> {
+            if (args[1] != null) {
+                saveEnums(args[1].toString(), EnumRepository.TYPE_FUNCTION);
+            }
+        });
+    }
+
+    private void saveEnums(String data, String type) {
+        Timber.v("saveEnums called");
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
+        Gson gson = gsonBuilder.create();
+        Set<String> enumSet = new HashSet();
+
+        try {
+            IoEnum ioEnum = gson.fromJson(data, IoEnum.class);
+            for (IoRow ioRow : ioEnum.getRows()) {
+                IoValue ioValue = ioRow.getValue();
+                IoCommon ioCommon = ioValue.getCommon();
+                Enum anEnum = new Enum(ioValue.getId(), ioCommon.getName(), type, false, ioCommon.getColor(), ioCommon.getIcon());
+                insertEnum(anEnum);
+                deleteStateEnum(anEnum);
+                Timber.d("saveEnums: enum inserted enumId:" + anEnum.getId());
+                if (ioCommon.getMembers() != null) {
+                    for (int j = 0; j < ioCommon.getMembers().size(); j++) {
+                        EnumState enumState = new EnumState(anEnum.getId(), ioCommon.getMembers().get(j));
+                        insertEnumState(enumState);
+                        Timber.d("saveEnums: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
+                    }
+                } else {
+                    Timber.i("saveEnums: no members found for enumId:" + anEnum.getId());
+                }
+                enumSet.add(anEnum.getId());
+
+                Timber.d("saveEnums: enum saved enumId:" + anEnum.getId());
+            }
+
+            List<Enum> enumList = getEnumsByType(type);
+            for (Enum anEnum : enumList) {
+                if (!enumSet.contains(anEnum.getId())){
+                    deleteStateEnum(anEnum);
+                    deleteEnum(anEnum);
+                    Timber.d("saveEnums: enum deleted enumId:" + anEnum.getId());
+                }
+            }
+
+        } catch (Throwable e) {
+            Timber.e(e);
+        }
+
+        Timber.v("saveEnums finished");
+    }
+
+    private Emitter.Listener onDisconnect = args -> {
+        Timber.i("disconnected");
+    };
 
     private void refreshEnum(DataSnapshot dataSnapshot){
         if (dataSnapshot.getValue() != null) {
@@ -166,7 +263,7 @@ public class EnumRepository {
         return enumDao.getEnumById(enumId);
     }
 
-    public List<Enum> getEnumsByType(String type) {
+    private List<Enum> getEnumsByType(String type) {
         Timber.v("getEnumsByType called");
         return enumDao.getEnumsByType(type);
     }
@@ -196,7 +293,7 @@ public class EnumRepository {
         return enumDao.countRoomEnums();
     }
 
-    public void insertEnum(Enum item) {
+    private void insertEnum(Enum item) {
         Timber.v("insertEnum called");
         executor.execute(() -> enumDao.insert(item));
     }
@@ -206,19 +303,44 @@ public class EnumRepository {
         executor.execute(() -> enumDao.update(anEnum));
     }
 
-    public void deleteEnum(Enum item) {
+    private void deleteEnum(Enum item) {
         Timber.v("deleteEnum called");
         enumDao.delete(item);
     }
 
-    public void insertEnumState(EnumState item) {
+    private void insertEnumState(EnumState item) {
         Timber.v("insertEnumState called");
         executor.execute(() -> enumStateDao.insert(item));
     }
 
-    public void deleteStateEnum(Enum item) {
+    private void deleteStateEnum(Enum item) {
         Timber.v("deleteStateEnum called");
         executor.execute(() -> enumStateDao.deleteByEnum(item.getId()));
     }
 
+    private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.equals(context.getString(R.string.pref_connect_web))
+                    || key.equals(context.getString(R.string.pref_connect_cloud))
+                    || key.equals(context.getString(R.string.pref_connect_iogo))) {
+                bFirebase = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo), false);
+                bSocket = sharedPref.getBoolean(context.getString(R.string.pref_connect_web), false) || sharedPref.getBoolean(context.getString(R.string.pref_connect_cloud), false);
+
+                if (bFirebase) {
+                    initFirebase();
+                } else if (bSocket) {
+                    initSocket();
+                    try {
+                        if (dbEnumsRef != null) {
+                            dbEnumsRef.removeEventListener(enumListener);
+                            dbEnumsRef.removeEventListener(enumChildListener);
+                        }
+                    } catch (Throwable t) {
+                        Timber.e(t);
+                    }
+                }
+            }
+        }
+    };
 }

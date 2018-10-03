@@ -20,46 +20,21 @@
 package de.nisnagel.iogo.data.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.preference.PreferenceManager;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import de.nisnagel.iogo.R;
-import de.nisnagel.iogo.data.io.FCommon;
-import de.nisnagel.iogo.data.io.FObject;
-import de.nisnagel.iogo.data.io.IoName;
-import de.nisnagel.iogo.data.io.IoObject;
-import de.nisnagel.iogo.data.io.IoState;
-import de.nisnagel.iogo.data.model.EnumState;
-import de.nisnagel.iogo.data.model.EnumStateDao;
-import de.nisnagel.iogo.data.model.State;
-import de.nisnagel.iogo.data.model.StateDao;
 import de.nisnagel.iogo.data.model.StateHistory;
 import de.nisnagel.iogo.data.model.StateHistoryDao;
-import de.nisnagel.iogo.service.DataBus;
-import de.nisnagel.iogo.service.Events;
+import de.nisnagel.iogo.service.util.HistoryUtils;
+import io.socket.client.Ack;
 import timber.log.Timber;
 
 @Singleton
@@ -68,23 +43,95 @@ public class StateHistoryRepository {
     private final StateHistoryDao stateHistoryDao;
     private Executor executor;
     private Context context;
+    private SharedPreferences sharedPref;
+    private WebService webService;
 
 
     @Inject
-    public StateHistoryRepository(StateHistoryDao stateHistoryDao, Executor executor, Context context) {
+    public StateHistoryRepository(StateHistoryDao stateHistoryDao, Executor executor, Context context, SharedPreferences sharedPref, WebService webService) {
         this.stateHistoryDao = stateHistoryDao;
         this.executor = executor;
         this.context = context;
+        this.sharedPref = sharedPref;
+        this.webService = webService;
 
         Timber.v("instance created");
     }
 
     public LiveData<StateHistory> getHistory(String stateId) {
-        DataBus.getBus().post(new Events.LoadHistory(stateId));
+        loadHistory(stateId);
         return stateHistoryDao.getStateById2(stateId);
     }
 
-    public void syncHistoryDay(String id, String data) {
+    private void loadHistory(String id) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("id", id);
+            json.put("start", HistoryUtils.startOfDay * 1000);
+            json.put("end", HistoryUtils.endOfDay * 1000);
+            json.put("step", "60000");
+            json.put("aggregate", "average");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        webService.getHistory(id, json, args -> {
+            if (args[1] != null && !"[]".equals(args[1].toString())) {
+                syncHistoryDay(id, args[1].toString());
+                Timber.i("loadHistory: receiving historical data");
+            }
+        });
+
+        json = new JSONObject();
+        try {
+            json.put("id", id);
+            json.put("start", HistoryUtils.startOfWeek * 1000);
+            json.put("end", HistoryUtils.endOfDay * 1000);
+            json.put("step", (HistoryUtils.endOfDay - HistoryUtils.startOfWeek) * 1000 / 200);
+            json.put("aggregate", "average");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        webService.getHistory(id, json, args -> {
+            if (args[1] != null && !"[]".equals(args[1].toString())) {
+                syncHistoryWeek(id, args[1].toString());
+                Timber.i("loadHistory: receiving historical data");
+            }
+        });
+        json = new JSONObject();
+        try {
+            json.put("id", id);
+            json.put("start", HistoryUtils.startOfMonth * 1000);
+            json.put("end", HistoryUtils.endOfDay * 1000);
+            json.put("step", (HistoryUtils.endOfDay - HistoryUtils.startOfMonth) * 1000 / 200);
+            json.put("aggregate", "average");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        webService.getHistory(id, json, args -> {
+            if (args[1] != null && !"[]".equals(args[1].toString())) {
+                syncHistoryMonth(id, args[1].toString());
+                Timber.i("loadHistory: receiving historical data");
+            }
+        });
+        json = new JSONObject();
+        try {
+            json.put("id", id);
+            json.put("start", HistoryUtils.startOfYear * 1000);
+            json.put("end", HistoryUtils.endOfDay * 1000);
+            json.put("step", (HistoryUtils.endOfDay - HistoryUtils.startOfYear) * 1000 / 200);
+            json.put("aggregate", "average");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        webService.getHistory(id, json, args -> {
+            if (args[1] != null && !"[]".equals(args[1].toString())) {
+                syncHistoryYear(id, args[1].toString());
+                Timber.i("loadHistory: receiving historical data");
+            }
+        });
+    }
+
+    private void syncHistoryDay(String id, String data) {
         Timber.v("syncHistoryDay called");
         StateHistory stateHistory = stateHistoryDao.getStateById(id);
         if (stateHistory == null) {
@@ -94,7 +141,7 @@ public class StateHistoryRepository {
         stateHistoryDao.insert(stateHistory);
     }
 
-    public void syncHistoryWeek(String id, String data) {
+    private void syncHistoryWeek(String id, String data) {
         Timber.v("syncHistoryDay called");
         StateHistory stateHistory = stateHistoryDao.getStateById(id);
         if (stateHistory == null) {
@@ -104,7 +151,7 @@ public class StateHistoryRepository {
         stateHistoryDao.insert(stateHistory);
     }
 
-    public void syncHistoryMonth(String id, String data) {
+    private void syncHistoryMonth(String id, String data) {
         Timber.v("syncHistoryDay called");
         StateHistory stateHistory = stateHistoryDao.getStateById(id);
         if (stateHistory == null) {
@@ -114,7 +161,7 @@ public class StateHistoryRepository {
         stateHistoryDao.insert(stateHistory);
     }
 
-    public void syncHistoryYear(String id, String data) {
+    private void syncHistoryYear(String id, String data) {
         Timber.v("syncHistoryDay called");
         StateHistory stateHistory = stateHistoryDao.getStateById(id);
         if (stateHistory == null) {

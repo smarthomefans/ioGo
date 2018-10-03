@@ -116,11 +116,6 @@
         </activity>
 
         <service
-            android:name=".service.SocketService"
-            android:enabled="true"
-            android:exported="false"
-            android:stopWithTask="false" />
-        <service
             android:name=".service.FCMService"
             android:stopWithTask="false">
             <intent-filter>
@@ -132,10 +127,6 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <service
-            android:name=".service.ObjectService"
-            android:enabled="true"
-            android:exported="true" />
     </application>
 
 </manifest>

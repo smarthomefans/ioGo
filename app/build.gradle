@@ -26,8 +26,8 @@ android {
         applicationId 'de.nisnagel.iogo'
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 2706
-        versionName "0.27.06"
+        versionCode 2707
+        versionName "0.27.07"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -75,7 +75,7 @@ dependencies {
         exclude group: 'org.json', module: 'json'
     }
     // OTTO BUS
-    implementation 'com.squareup:otto:1.3.8'
+    //implementation 'com.squareup:otto:1.3.8'
     // DAGGER
     annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
     implementation 'com.google.dagger:dagger:2.15'

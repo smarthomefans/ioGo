@@ -74,9 +74,6 @@ public class InfoFragment extends Fragment implements Injectable {
     @BindView(R.id.appVersion)
     TextView mAppVersion;
 
-    @BindView(R.id.syncObjects)
-    Button mBtnSync;
-
     private InfoViewModel mViewModel;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -145,11 +142,6 @@ public class InfoFragment extends Fragment implements Injectable {
             e.printStackTrace();
         }
 
-        boolean isFirebaseEnabled = sharedPref.getBoolean(getString(R.string.pref_connect_iogo), false);
-        if(isFirebaseEnabled) {
-            mBtnSync.setVisibility(View.GONE);
-        }
-
         return rootView;
     }
 
@@ -164,14 +156,6 @@ public class InfoFragment extends Fragment implements Injectable {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
-    }
-
-    @OnClick(R.id.syncObjects)
-    public void onClickSyncObjects() {
-        mCountFunctions.setText(R.string.syncing_data);
-        mCountRooms.setText(R.string.syncing_data);
-        mCountStates.setText(R.string.syncing_data);
-        mViewModel.syncObjects();
     }
 
     @Override

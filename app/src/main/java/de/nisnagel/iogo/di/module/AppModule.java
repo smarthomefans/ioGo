@@ -44,6 +44,7 @@ import de.nisnagel.iogo.data.model.StateHistoryDao;
 import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.data.repository.StateHistoryRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
+import de.nisnagel.iogo.data.repository.WebService;
 import de.nisnagel.iogo.ui.ViewModelFactory;
 import de.nisnagel.iogo.ui.detail.StateViewModel;
 import de.nisnagel.iogo.ui.history.HistoryViewModel;
@@ -120,20 +121,26 @@ public class AppModule {
 
     @Singleton
     @Provides
-    StateRepository provideStateRepository(StateDao stateDao, EnumStateDao enumStateDao, Executor executor, Context context, SharedPreferences sharedPref) {
-        return new StateRepository(stateDao, enumStateDao, executor, context, sharedPref);
+    StateRepository provideStateRepository(StateDao stateDao, EnumStateDao enumStateDao, Executor executor, Context context, SharedPreferences sharedPref, WebService webService) {
+        return new StateRepository(stateDao, enumStateDao, executor, context, sharedPref, webService);
     }
 
     @Singleton
     @Provides
-    StateHistoryRepository provideStateHistoryRepository(StateHistoryDao stateHistoryDao, Executor executor, Context context) {
-        return new StateHistoryRepository(stateHistoryDao, executor, context);
+    WebService provideWebService(SharedPreferences sharedPref, Context context) {
+        return new WebService(sharedPref, context);
     }
 
     @Singleton
     @Provides
-    EnumRepository provideEnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, Executor executor, Context context, SharedPreferences sharedPref) {
-        return new EnumRepository(enumDao, enumStateDao, executor, context, sharedPref);
+    StateHistoryRepository provideStateHistoryRepository(StateHistoryDao stateHistoryDao, Executor executor, Context context, SharedPreferences sharedPref, WebService webService) {
+        return new StateHistoryRepository(stateHistoryDao, executor, context, sharedPref, webService);
+    }
+
+    @Singleton
+    @Provides
+    EnumRepository provideEnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, Executor executor, Context context, SharedPreferences sharedPref, WebService webService) {
+        return new EnumRepository(enumDao, enumStateDao, executor, context, sharedPref, webService);
     }
 
     @Singleton
