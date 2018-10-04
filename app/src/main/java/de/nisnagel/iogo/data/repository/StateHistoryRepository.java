@@ -46,7 +46,6 @@ public class StateHistoryRepository {
     private SharedPreferences sharedPref;
     private WebService webService;
 
-
     @Inject
     public StateHistoryRepository(StateHistoryDao stateHistoryDao, Executor executor, Context context, SharedPreferences sharedPref, WebService webService) {
         this.stateHistoryDao = stateHistoryDao;

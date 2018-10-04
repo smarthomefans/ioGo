@@ -254,20 +254,20 @@ public class StateRepository {
     }
 
     private void initSocket() {
-        if(webService.isConnected()){
+        if (webService.isConnected()) {
             initialLoad();
-        }else {
-            webService.init();
-            webService.on(Socket.EVENT_CONNECT, onConnect);
-            webService.on(Socket.EVENT_DISCONNECT, onDisconnect);
-            //webService.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-            //webService.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-            webService.on("stateChange", onStateChange);
-            webService.start();
+        } else {
+            executor.execute(() -> {
+                webService.init();
+                webService.on(Socket.EVENT_CONNECT, onConnect);
+                webService.on(Socket.EVENT_DISCONNECT, onDisconnect);
+                webService.on("stateChange", onStateChange);
+                webService.start();
+            });
         }
     }
 
-    private Emitter.Listener onConnect = args -> initialLoad();
+    private Emitter.Listener onConnect = args -> executor.execute(this::initialLoad);
 
     private void initialLoad() {
         List<String> stateIds = getAllStateIds();
@@ -318,7 +318,7 @@ public class StateRepository {
 
             List<String> stateIds = getAllStateIds();
             stateIds.removeAll(ids);
-            for(String id : stateIds){
+            for (String id : stateIds) {
                 Timber.d("saveObjects: state deleted stateId:" + id);
                 State state = new State(id);
                 deleteState(state);

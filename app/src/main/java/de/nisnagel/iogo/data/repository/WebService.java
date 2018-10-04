@@ -127,7 +127,11 @@ public class WebService {
     }
 
     public void on(String event, Emitter.Listener fn){
-        mSocket.on(event, fn);
+        if(mSocket != null) {
+            mSocket.on(event, fn);
+        }else{
+            Timber.w("socket is null");
+        }
     }
 
     public void start() {

@@ -33,7 +33,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -110,7 +109,7 @@ public class EnumRepository {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    refreshEnum(postSnapshot);
+                    saveEnums(postSnapshot);
                 }
             }
 
@@ -123,7 +122,7 @@ public class EnumRepository {
         enumChildListener = new ChildEventListener() {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                refreshEnum(dataSnapshot);
+                saveEnums(dataSnapshot);
             }
 
             @Override
@@ -156,22 +155,23 @@ public class EnumRepository {
     }
 
     private void initSocket() {
-        if(webService.isConnected()){
+        if (webService.isConnected()) {
             initialLoad();
-        }else {
+        } else {
             webService.init();
             webService.on(Socket.EVENT_CONNECT, onConnect);
             webService.on(Socket.EVENT_DISCONNECT, onDisconnect);
-            //webService.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-            //webService.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-            //webService.on("stateChange", onStateChange);
             webService.start();
         }
     }
 
     private Emitter.Listener onConnect = args -> initialLoad();
 
-    private void initialLoad(){
+    private Emitter.Listener onDisconnect = args -> {
+        Timber.i("disconnected");
+    };
+
+    private void initialLoad() {
         webService.getEnumObjects("enum.rooms", args -> {
             if (args[1] != null) {
                 saveEnums(args[1].toString(), EnumRepository.TYPE_ROOM);
@@ -214,9 +214,9 @@ public class EnumRepository {
                 Timber.d("saveEnums: enum saved enumId:" + anEnum.getId());
             }
 
-            List<Enum> enumList = getEnumsByType(type);
+            List<Enum> enumList = enumDao.getEnumsByType(type);
             for (Enum anEnum : enumList) {
-                if (!enumSet.contains(anEnum.getId())){
+                if (!enumSet.contains(anEnum.getId())) {
                     deleteStateEnum(anEnum);
                     deleteEnum(anEnum);
                     Timber.d("saveEnums: enum deleted enumId:" + anEnum.getId());
@@ -230,11 +230,7 @@ public class EnumRepository {
         Timber.v("saveEnums finished");
     }
 
-    private Emitter.Listener onDisconnect = args -> {
-        Timber.i("disconnected");
-    };
-
-    private void refreshEnum(DataSnapshot dataSnapshot){
+    private void saveEnums(DataSnapshot dataSnapshot) {
         if (dataSnapshot.getValue() != null) {
             try {
                 FEnum fEnum = dataSnapshot.getValue(FEnum.class);
@@ -261,11 +257,6 @@ public class EnumRepository {
     public LiveData<Enum> getEnum(String enumId) {
         Timber.v("getEnum called");
         return enumDao.getEnumById(enumId);
-    }
-
-    private List<Enum> getEnumsByType(String type) {
-        Timber.v("getEnumsByType called");
-        return enumDao.getEnumsByType(type);
     }
 
     public LiveData<List<Enum>> getFunctionEnums() {
