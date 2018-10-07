@@ -130,7 +130,7 @@ public class HomeFragment extends Fragment implements Injectable {
             mRegister.setVisibility(View.GONE);
         }
 
-        if(!mViewModel.hasConnection()){
+        if(mViewModel.hasConnection()){
             mConnect.setVisibility(View.GONE);
         }
 
