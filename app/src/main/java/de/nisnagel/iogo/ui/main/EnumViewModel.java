@@ -22,6 +22,7 @@ package de.nisnagel.iogo.ui.main;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
+import android.content.SharedPreferences;
 
 import java.util.List;
 
@@ -36,23 +37,25 @@ public class EnumViewModel extends ViewModel {
 
     private EnumRepository enumRepository;
     private StateRepository stateRepository;
-
+    private SharedPreferences sharedPref;
     private String enumId;
 
     @Inject
-    public EnumViewModel(EnumRepository enumRepository, StateRepository stateRepository) {
+    public EnumViewModel(EnumRepository enumRepository, StateRepository stateRepository, SharedPreferences sharedPref) {
         this.enumRepository = enumRepository;
         this.stateRepository = stateRepository;
+        this.sharedPref = sharedPref;
     }
 
     public LiveData<List<Enum>> getEnums(String type) {
-        if(EnumRepository.TYPE_FUNCTION.equals(type)) {
+        if (EnumRepository.TYPE_FUNCTION.equals(type)) {
             return enumRepository.getFunctionEnums();
-        }else if(EnumRepository.TYPE_ROOM.equals(type)) {
+        } else if (EnumRepository.TYPE_ROOM.equals(type)) {
             return enumRepository.getRoomEnums();
         }
         return null;
     }
+
     public LiveData<List<Enum>> getFunctions() {
         return enumRepository.getFunctionEnums();
     }
@@ -60,6 +63,7 @@ public class EnumViewModel extends ViewModel {
     public LiveData<List<Enum>> getFavoriteEnums() {
         return enumRepository.getFavoriteEnums();
     }
+
     public LiveData<List<State>> getFavoriteStates() {
         return stateRepository.getFavoriteStates();
     }
@@ -80,11 +84,16 @@ public class EnumViewModel extends ViewModel {
     public void saveState(State state) {
         stateRepository.saveState(state);
     }
+
     public void changeState(String id, String newVal) {
         stateRepository.changeState(id, newVal);
     }
 
     public String getEnumId() {
         return enumId;
+    }
+
+    public boolean hasConnection(){
+        return stateRepository.hasConnection();
     }
 }

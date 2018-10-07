@@ -57,7 +57,6 @@ import de.nisnagel.iogo.data.io.FObject;
 import de.nisnagel.iogo.data.io.IoName;
 import de.nisnagel.iogo.data.io.IoObject;
 import de.nisnagel.iogo.data.io.IoState;
-import de.nisnagel.iogo.data.model.EnumState;
 import de.nisnagel.iogo.data.model.EnumStateDao;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.model.StateDao;
@@ -238,19 +237,34 @@ public class StateRepository {
         FirebaseAuth.AuthStateListener authListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if (user != null) {
-                this.saveSocketState(context.getString(R.string.pref_connect_iogo));
-                dbObjectsRef = database.getReference(OBJECTS + user.getUid());
-                dbObjectsRef.addListenerForSingleValueEvent(objectListener);
-                dbObjectsRef.addChildEventListener(objectChildListener);
-                dbObjectQueuesRef = database.getReference(OBJECT_QUEUES + user.getUid());
-                dbStatesRef = database.getReference(STATES + user.getUid());
-                dbStatesRef.addListenerForSingleValueEvent(stateListener);
-                dbStatesRef.addChildEventListener(stateChildListener);
-                dbStateQueuesRef = database.getReference(STATE_QUEUES + user.getUid());
+                addListener(user);
             }
         };
 
+        if (mAuth.getCurrentUser() != null) {
+            addListener(mAuth.getCurrentUser());
+        }
         mAuth.addAuthStateListener(authListener);
+    }
+
+    public boolean hasConnection(){
+        boolean bIogo = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo),false);
+        boolean bWeb = sharedPref.getBoolean(context.getString(R.string.pref_connect_web),false);
+        boolean bCloud = sharedPref.getBoolean(context.getString(R.string.pref_connect_cloud),false);
+
+        return(bIogo || bWeb || bCloud);
+    }
+
+    private void addListener(FirebaseUser user) {
+        this.saveSocketState(context.getString(R.string.pref_connect_iogo));
+        dbObjectsRef = database.getReference(OBJECTS + user.getUid());
+        dbObjectsRef.addListenerForSingleValueEvent(objectListener);
+        dbObjectsRef.addChildEventListener(objectChildListener);
+        dbObjectQueuesRef = database.getReference(OBJECT_QUEUES + user.getUid());
+        dbStatesRef = database.getReference(STATES + user.getUid());
+        dbStatesRef.addListenerForSingleValueEvent(stateListener);
+        dbStatesRef.addChildEventListener(stateChildListener);
+        dbStateQueuesRef = database.getReference(STATE_QUEUES + user.getUid());
     }
 
     private void initSocket() {
@@ -486,13 +500,6 @@ public class StateRepository {
     public void deleteState(State state) {
         Timber.v("deleteState called");
         stateDao.delete(state);
-    }
-
-    public void linkToEnum(String parent, String id) {
-        Timber.v("linkToEnum called");
-        String enumId = enumStateDao.getEnumId(parent);
-        EnumState enumState = new EnumState(enumId, id);
-        enumStateDao.insert(enumState);
     }
 
     private void setSyncAll(boolean sync) {

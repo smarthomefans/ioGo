@@ -145,13 +145,20 @@ public class EnumRepository {
         FirebaseAuth.AuthStateListener authListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if (user != null) {
-                dbEnumsRef = database.getReference(PATH_ENUMS + user.getUid());
-                dbEnumsRef.addListenerForSingleValueEvent(enumListener);
-                dbEnumsRef.addChildEventListener(enumChildListener);
+                addListener(user);
             }
         };
 
+        if (mAuth.getCurrentUser() != null) {
+            addListener(mAuth.getCurrentUser());
+        }
         mAuth.addAuthStateListener(authListener);
+    }
+
+    private void addListener(FirebaseUser user) {
+        dbEnumsRef = database.getReference(PATH_ENUMS + user.getUid());
+        dbEnumsRef.addListenerForSingleValueEvent(enumListener);
+        dbEnumsRef.addChildEventListener(enumChildListener);
     }
 
     private void initSocket() {

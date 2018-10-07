@@ -22,6 +22,8 @@ package de.nisnagel.iogo.ui.main;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -30,6 +32,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -37,11 +43,16 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.android.support.AndroidSupportInjection;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.di.Injectable;
+import de.nisnagel.iogo.service.Constants;
+import de.nisnagel.iogo.ui.auth.LoginActivity;
+import de.nisnagel.iogo.ui.auth.SignupActivity;
+import de.nisnagel.iogo.ui.settings.SettingsMainActivity;
 
 
 public class HomeFragment extends Fragment implements Injectable {
@@ -49,19 +60,23 @@ public class HomeFragment extends Fragment implements Injectable {
     private EnumHomeListAdapter mEnumAdapter;
     private StateListAdapter mStateAdapter;
     private EnumViewModel mViewModel;
+    private ArrayList<Enum> enumList = new ArrayList<>();
+    private ArrayList<State> stateList = new ArrayList<>();
+    private FirebaseAuth mAuth;
 
-    //@BindView(R.id.adView)
-    //AdView mAdView;
     @BindView(R.id.favorite_enums)
     RecyclerView rvEnums;
     @BindView(R.id.favorite_states)
     RecyclerView rvStates;
+    @BindView(R.id.welcome)
+    LinearLayout mWelcome;
+    @BindView(R.id.btnRegister)
+    Button mRegister;
+    @BindView(R.id.btnConnect)
+    Button mConnect;
 
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
-
-    private ArrayList<Enum> enumList = new ArrayList<>();
-    private ArrayList<State> stateList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,10 +89,6 @@ public class HomeFragment extends Fragment implements Injectable {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, rootView);
-
-        //AdRequest adRequest = new AdRequest.Builder().build();
-        //mAdView.loadAd(adRequest);
-        //mAdView.setVisibility(View.GONE);
 
         mEnumAdapter = new EnumHomeListAdapter(enumList, mViewModel);
         mStateAdapter = new StateListAdapter(stateList, mViewModel, getActivity());
@@ -94,6 +105,9 @@ public class HomeFragment extends Fragment implements Injectable {
         mViewModel.getFavoriteEnums()
                 .observe(this, newList -> {
                     // update UI
+                    if (newList.size() > 0) {
+                        mWelcome.setVisibility(View.GONE);
+                    }
                     mEnumAdapter.clearList();
                     mEnumAdapter.addAll(newList);
                     mEnumAdapter.notifyDataSetChanged();
@@ -102,12 +116,37 @@ public class HomeFragment extends Fragment implements Injectable {
         mViewModel.getFavoriteStates()
                 .observe(this, newList -> {
                     // update UI
+                    if (newList.size() > 0) {
+                        mWelcome.setVisibility(View.GONE);
+                    }
                     mStateAdapter.clearList();
                     mStateAdapter.addAll(newList);
                     mStateAdapter.notifyDataSetChanged();
                 });
 
+        mAuth = FirebaseAuth.getInstance();
+
+        if (mAuth.getCurrentUser() != null) {
+            mRegister.setVisibility(View.GONE);
+        }
+
+        if(!mViewModel.hasConnection()){
+            mConnect.setVisibility(View.GONE);
+        }
+
         return rootView;
+    }
+
+    @OnClick(R.id.btnRegister)
+    public void onClickRegister() {
+        startActivity(new Intent(getActivity(), SignupActivity.class));
+    }
+
+    @OnClick(R.id.btnConnect)
+    public void onClickConnect() {
+        Intent i = new Intent(getActivity(), SettingsMainActivity.class);
+        i.putExtra(Constants.ARG_CLASS, SettingsMainActivity.intentServer);
+        startActivity(i);
     }
 
     @Override
