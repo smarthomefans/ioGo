@@ -34,7 +34,6 @@ import javax.inject.Singleton;
 import de.nisnagel.iogo.data.model.StateHistory;
 import de.nisnagel.iogo.data.model.StateHistoryDao;
 import de.nisnagel.iogo.service.util.HistoryUtils;
-import io.socket.client.Ack;
 import timber.log.Timber;
 
 @Singleton

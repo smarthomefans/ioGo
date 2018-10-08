@@ -94,7 +94,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
             }
 
         } else {
-            return context.getResources().getText(R.string.syncing_data).toString();
+            return context.getResources().getText(R.string.main_syncing_data).toString();
         }
         return "";
     }

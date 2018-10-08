@@ -30,7 +30,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,7 +39,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import dagger.android.support.AndroidSupportInjection;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.di.Injectable;
@@ -90,17 +88,17 @@ public class InfoFragment extends Fragment implements Injectable {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_info, container, false);
         ButterKnife.bind(this, rootView);
-        mAccountState.setText("unknown");
+        mAccountState.setText(R.string.info_account_state_unknown);
 
         mAuthListener = firebaseAuth -> {
             FirebaseUser mUser = firebaseAuth.getCurrentUser();
             if(mUser != null) {
                 if (mUser.isAnonymous()) {
-                    mAccountState.setText("anonymous logged in");
+                    mAccountState.setText(R.string.info_account_state_anonymous);
                 } else if (mUser.isEmailVerified()) {
-                    mAccountState.setText("logged in");
+                    mAccountState.setText(R.string.info_account_state_logged_in);
                 } else if (mUser.isEmailVerified()) {
-                    mAccountState.setText("email not verified");
+                    mAccountState.setText(R.string.info_account_state_not_verified);
                 }
             }
         };

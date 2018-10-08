@@ -58,7 +58,7 @@ public class ResetPasswordActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.title_activity_settings_account);
+        getSupportActionBar().setTitle(R.string.settings_title_activity_settings_account);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mAuth = FirebaseAuth.getInstance();

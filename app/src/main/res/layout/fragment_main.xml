@@ -52,7 +52,7 @@
             android:textSize="32sp"
             android:layout_marginBottom="30dp"
             android:textStyle="bold"
-            android:text="W E L C O M E" />
+            android:text="@string/main_w_e_l_c_o_m_e" />
 
         <TextView
             android:id="@+id/txtThanks"
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:layout_marginBottom="20dp"
-            android:text="Thank you for using this app!" />
+            android:text="@string/main_thank_you_for_using_this_app" />
 
         <Button
             android:id="@+id/btnRegister"
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:background="@null"
-            android:text="Get registered now"
+            android:text="@string/main_get_registered_now"
             android:textAllCaps="false"
             android:textSize="16sp" />
 
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:background="@null"
-            android:text="Connect to your ioBroker"
+            android:text="@string/main_connect_to_your_iobroker"
             android:textAllCaps="false"
             android:textSize="16sp" />
 

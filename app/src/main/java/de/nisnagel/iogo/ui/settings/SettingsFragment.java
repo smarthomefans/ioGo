@@ -53,11 +53,11 @@ public class SettingsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
         ButterKnife.bind(this, rootView);
 
-        list.add(new SettingsAdapter.SettingItem(R.drawable.account,"Account","User authentication", SettingsMainActivity.intentAccount));
-        list.add(new SettingsAdapter.SettingItem(R.drawable.server_network,"Server","Connect to your server", SettingsMainActivity.intentServer));
-        list.add(new SettingsAdapter.SettingItem(R.drawable.television_guide,"Layout","Adjust look and feel", SettingsMainActivity.intentLayout));
-        list.add(new SettingsAdapter.SettingItem(R.drawable.cellphone_android,"Device","Enable device features", SettingsMainActivity.intentDevice));
-        list.add(new SettingsAdapter.SettingItem(R.drawable.bug,"Troubleshooting","What to do with bugs", SettingsMainActivity.intentError));
+        list.add(new SettingsAdapter.SettingItem(R.drawable.account,getString(R.string.settings_account_title),getString(R.string.settings_server_account_desc), SettingsMainActivity.intentAccount));
+        list.add(new SettingsAdapter.SettingItem(R.drawable.server_network,getString(R.string.settings_server_title),getString(R.string.settings_server_server_desc), SettingsMainActivity.intentServer));
+        list.add(new SettingsAdapter.SettingItem(R.drawable.television_guide,getString(R.string.settings_server_layout),getString(R.string.settings_server_layout_desc), SettingsMainActivity.intentLayout));
+        list.add(new SettingsAdapter.SettingItem(R.drawable.cellphone_android,getString(R.string.settings_server_device),getString(R.string.settings_server_device_desc), SettingsMainActivity.intentDevice));
+        list.add(new SettingsAdapter.SettingItem(R.drawable.bug,getString(R.string.settings_server_error),getString(R.string.settings_server_error_desc), SettingsMainActivity.intentError));
         mAdapter = new SettingsAdapter(list);
         getActivity().runOnUiThread(() -> recyclerView.setAdapter(mAdapter));
 

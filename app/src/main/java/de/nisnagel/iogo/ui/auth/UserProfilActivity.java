@@ -75,7 +75,7 @@ public class UserProfilActivity extends BaseActivity {
         setContentView(R.layout.activity_userprofil);
         ButterKnife.bind(this);
 
-        toolbar.setTitle(R.string.title_activity_settings_account);
+        toolbar.setTitle(R.string.settings_title_activity_settings_account);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

@@ -46,7 +46,7 @@ public class InfoActivity extends BaseActivity implements HasSupportFragmentInje
         setContentView(R.layout.activity_info);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setTitle(R.string.title_activity_info);
+        getSupportActionBar().setTitle(R.string.info_title_activity_info);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {

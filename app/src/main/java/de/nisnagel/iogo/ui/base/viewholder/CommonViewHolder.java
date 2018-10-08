@@ -117,7 +117,7 @@ public class CommonViewHolder extends BaseViewHolder {
                         .setCancelable(false)
                         .setPositiveButton("OK",
                                 (dialog, id) -> {
-                                    mSubtitle.setText(R.string.syncing_data);
+                                    mSubtitle.setText(R.string.main_syncing_data);
                                     mViewModel.changeState(state.getId(), selected);
                                 })
                         .setNegativeButton("Cancel",
@@ -159,7 +159,7 @@ public class CommonViewHolder extends BaseViewHolder {
                                 (dialog, id) -> {
                                     // get user input and set it to result
                                     // edit text
-                                    mSubtitle.setText(R.string.syncing_data);
+                                    mSubtitle.setText(R.string.main_syncing_data);
                                     mViewModel.changeState(state.getId(), userInput.getText().toString());
                                 })
                         .setNegativeButton("Cancel",

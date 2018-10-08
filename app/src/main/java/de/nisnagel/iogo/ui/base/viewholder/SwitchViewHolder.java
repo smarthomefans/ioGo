@@ -48,7 +48,7 @@ public class SwitchViewHolder extends BaseViewHolder {
             mValue.setClickable(true);
             mValue.setOnClickListener(v -> {
                 final Switch btn = (Switch) v;
-                mSubtitle.setText(R.string.syncing_data);
+                mSubtitle.setText(R.string.main_syncing_data);
                 mViewModel.changeState(state.getId(), (btn.isChecked()) ? "true" : "false");
             });
 

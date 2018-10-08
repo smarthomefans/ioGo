@@ -77,22 +77,22 @@ public class SettingsMainActivity extends BaseActivity {
             switch (intent) {
                 case intentServer:
                     fragment = new SettingsConnectFragment();
-                    setTitle(R.string.title_activity_settings_server);
+                    setTitle(R.string.settings_title_activity_settings_server);
                     break;
 
                 case intentLayout:
                     fragment = new SettingsLayoutFragment();
-                    setTitle(R.string.title_activity_settings_design);
+                    setTitle(R.string.settings_title_activity_settings_design);
                     break;
 
                 case intentError:
                     fragment = new SettingsErrorFragment();
-                    setTitle(R.string.title_activity_settings_error);
+                    setTitle(R.string.settings_title_activity_settings_error);
                     break;
 
                 case intentDevice:
                     fragment = new SettingsDeviceFragment();
-                    setTitle(R.string.title_activity_settings_notification);
+                    setTitle(R.string.settings_title_activity_settings_device);
                     break;
 
                 case intentAccount:
@@ -102,11 +102,11 @@ public class SettingsMainActivity extends BaseActivity {
 
                 default:
                     fragment = new SettingsFragment();
-                    setTitle(R.string.title_activity_settings);
+                    setTitle(R.string.settings_title_activity_settings);
             }
         }else{
             fragment = new SettingsFragment();
-            setTitle(R.string.title_activity_settings);
+            setTitle(R.string.settings_title_activity_settings);
         }
 
         if(fragment != null) {

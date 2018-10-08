@@ -59,13 +59,13 @@ public class ValueViewHolder extends BaseViewHolder {
                 case Constants.ROLE_VALUE_WINDOW:
                     switch (val) {
                         case "0":
-                            value = context.getString(R.string.value_closed);
+                            value = context.getString(R.string.main_value_closed);
                             break;
                         case "1":
-                            value = context.getString(R.string.value_tilted);
+                            value = context.getString(R.string.main_value_tilted);
                             break;
                         case "2":
-                            value = context.getString(R.string.value_open);
+                            value = context.getString(R.string.main_value_open);
                             break;
                     }
                     break;

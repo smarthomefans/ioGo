@@ -44,7 +44,7 @@
                 android:layout_height="50dp"
                 android:src="@drawable/star"
                 android:background="@color/common_google_signin_btn_text_dark_disabled"
-                android:text="Star"/>
+                android:text="@string/main_star"/>
 
             <ImageButton
                 android:id="@+id/hide_button"
@@ -52,7 +52,7 @@
                 android:layout_height="50dp"
                 android:src="@drawable/eye_off"
                 android:background="@color/common_google_signin_btn_text_dark_disabled"
-                android:text="Hide"/>
+                android:text="@string/main_hide"/>
 
         </LinearLayout>
     </FrameLayout>

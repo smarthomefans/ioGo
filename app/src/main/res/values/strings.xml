@@ -18,58 +18,57 @@
   -->
 
 <resources>
-    <string name="app_name">iogo</string>
+    <string name="app_name" translatable="false">iogo</string>
 
     <string name="menu_action_info">Info</string>
     <string name="menu_action_settings">Settings</string>
 
-    <string name="title_activity_home">Home</string>
-    <string name="title_activity_room_list">Rooms</string>
-    <string name="title_activity_function_list">Functions</string>
-    <string name="title_activity_info">Information</string>
-    <string name="title_activity_settings">Settings</string>
-    <string name="title_activity_settings_server">Settings - Connection</string>
-    <string name="title_activity_settings_design">Settings - Design</string>
-    <string name="title_activity_settings_error">Settings - Error</string>
-    <string name="title_activity_settings_notification">Settings - Notification</string>
-    <string name="title_activity_settings_account">Settings - Account</string>
+    <!-- main activity -->
+    <string name="main_title_activity_home">Home</string>
+    <string name="main_title_activity_room_list">Rooms</string>
+    <string name="main_title_activity_function_list">Functions</string>
+    <string name="main_w_e_l_c_o_m_e">W E L C O M E</string>
+    <string name="main_thank_you_for_using_this_app">Thank you for using this app!</string>
+    <string name="main_get_registered_now">Get registered now</string>
+    <string name="main_connect_to_your_iobroker">Connect to your ioBroker</string>
+    <string name="main_star">Star</string>
+    <string name="main_hide">Hide</string>
+    <string name="main_value_open">open</string>
+    <string name="main_value_closed">closed</string>
+    <string name="main_value_tilted">tilted</string>
+    <string name="main_loading_date">loading</string>
+    <string name="main_syncing_data">syncing data&#8230;</string>
+    <string name="main_unstarred">unstarred</string>
+    <string name="main_starred">starred</string>
+    <string name="main_new_value">New Value :</string>
+    <string name="main_home">Home</string>
+    <string name="main_click">click</string>
 
-    <string name="info_sync_objects">sync objects</string>
-    <string name="info_clear_database">clear database</string>
+    <!-- info activity -->
+    <string name="info_title_activity_info">Information</string>
     <string name="info_count_states">Number of states:</string>
     <string name="info_count_funktions">Number of functions:</string>
     <string name="info_count_rooms">Number of rooms:</string>
     <string name="info_socket_status">Socket Status:</string>
     <string name="info_app_version">App Version:</string>
     <string name="info_account_state">Status:</string>
-    <string name="account">Account:</string>
-    <string name="connectivity">Server:</string>
-    <string name="database">Database:</string>
-    <string name="app">App:</string>
+    <string name="info_account_lbl">Account:</string>
+    <string name="info_connectivity_lbl">Server:</string>
+    <string name="info_database_lbl">Database:</string>
+    <string name="info_app_lbl">App:</string>
+    <string name="info_account_state_unknown">unknown</string>
+    <string name="info_account_state_anonymous">anonymous logged in</string>
+    <string name="info_account_state_logged_in">logged in</string>
+    <string name="info_account_state_not_verified">email not verified</string>
 
-    <string name="service_connected">connected</string>
-
-    <string name="value_open">open</string>
-    <string name="value_closed">closed</string>
-    <string name="value_tilted">tilted</string>
-
-    <string name="loading_date">loading</string>
-    <string name="syncing_data">syncing data&#8230;</string>
-    <string name="unstarred">unstarred</string>
-    <string name="starred">starred</string>
-
-    <string name="click">click</string>
+    <!-- statistics activity -->
     <string name="year">Year</string>
     <string name="month">Month</string>
     <string name="week">Week</string>
     <string name="today">Today</string>
-    <string name="new_value">New Value :</string>
-    <string name="home">Home</string>
-
-    <string name="ad_unit_id">ca-app-pub-9046643317542583~5897351833</string>
-    <string name="banner_ad_unit_id">ca-app-pub-9046643317542583/6252575050</string>
     <string name="statistics">Statistics</string>
 
+    <!-- account activity -->
     <string name="action_sign_in_short">Register</string>
     <string name="email">Email</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
@@ -79,15 +78,11 @@
     <string name="send_password_reset_email">Send Password reset email</string>
     <string name="remove_user">Remove user</string>
     <string name="new_pass">New Password</string>
-    <string name="title_activity_profile">Firebase</string>
-    <string name="title_activity_login">Sign in</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
-    <string name="hint_name">Fullname</string>
     <string name="btn_login">LOGIN</string>
     <string name="btn_link_to_register">Not a member? Get registered now!</string>
     <string name="btn_link_to_login">Already registered. Login Me!</string>
-    <string name="title_activity_reset_password">ResetPasswordActivity</string>
     <string name="btn_forgot_password">Forgot your password?</string>
     <string name="btn_reset_password">Reset Password</string>
     <string name="btn_back"><![CDATA[<< Back]]></string>
@@ -99,21 +94,43 @@
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
 
-    <string name="pref_connect_iogo">pref_connect_iogo</string>
-    <string name="pref_connect_cloud">pref_connect_cloud</string>
-    <string name="pref_connect_cloud_user">pref_connect_cloud_user</string>
-    <string name="pref_connect_cloud_password">pref_connect_cloud_password</string>
-    <string name="pref_connect_web">pref_connect_web</string>
-    <string name="pref_connect_web_url">pref_connect_web_url</string>
-    <string name="pref_connect_web_user">pref_connect_web_user</string>
-    <string name="pref_connect_web_password">pref_connect_web_password</string>
+    <!-- settings activity -->
+    <string name="settings_title_activity_settings">Settings</string>
+    <string name="settings_title_activity_settings_server">Settings - Server</string>
+    <string name="settings_title_activity_settings_design">Settings - Design</string>
+    <string name="settings_title_activity_settings_error">Settings - Error</string>
+    <string name="settings_title_activity_settings_device">Settings - Device</string>
+    <string name="settings_title_activity_settings_account">Settings - Account</string>
+    <string name="settings_account_title">Account</string>
+    <string name="settings_server_title">Server</string>
+    <string name="settings_server_layout">Layout</string>
+    <string name="settings_server_device">Device</string>
+    <string name="settings_server_error">Troubleshooting</string>
+    <string name="settings_server_account_desc">User authentication</string>
+    <string name="settings_server_server_desc">Connect to your server</string>
+    <string name="settings_server_layout_desc">Adjust look and feel</string>
+    <string name="settings_server_device_desc">Enable device features</string>
+    <string name="settings_server_error_desc">What to do with bugs</string>
 
-    <string name="pref_error_logging">pref_error_logging</string>
-    <string name="pref_error_logging_level">pref_error_logging_level</string>
+    <!-- preferences -->
+    <string name="pref_connect_iogo" translatable="false">pref_connect_iogo</string>
+    <string name="pref_connect_cloud" translatable="false">pref_connect_cloud</string>
+    <string name="pref_connect_cloud_user" translatable="false">pref_connect_cloud_user</string>
+    <string name="pref_connect_cloud_password" translatable="false">pref_connect_cloud_password</string>
+    <string name="pref_connect_web" translatable="false">pref_connect_web</string>
+    <string name="pref_connect_web_url" translatable="false">pref_connect_web_url</string>
+    <string name="pref_connect_web_user" translatable="false">pref_connect_web_user</string>
+    <string name="pref_connect_web_password" translatable="false">pref_connect_web_password</string>
 
-    <string name="pref_device_name">pref_device_name</string>
-    <string name="pref_device_notification">pref_device_notification</string>
+    <string name="pref_error_logging" translatable="false">pref_error_logging</string>
+    <string name="pref_error_logging_level" translatable="false">pref_error_logging_level</string>
 
-    <string name="pref_layout_state_subtitle">pref_layout_state_subtitle</string>
-    <string name="pref_layout_hidden_enum">pref_layout_hidden_enum</string>
+    <string name="pref_device_name" translatable="false">pref_device_name</string>
+    <string name="pref_device_notification" translatable="false">pref_device_notification</string>
+
+    <string name="pref_layout_state_subtitle" translatable="false">pref_layout_state_subtitle</string>
+    <string name="pref_layout_hidden_enum" translatable="false">pref_layout_hidden_enum</string>
+
+
+
 </resources>

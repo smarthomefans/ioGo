@@ -54,7 +54,7 @@ public class SettingsActivity extends BaseActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setTitle(R.string.title_activity_settings);
+        getSupportActionBar().setTitle(R.string.settings_title_activity_settings);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {

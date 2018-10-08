@@ -106,7 +106,7 @@ public class HistoryFragment extends Fragment implements Injectable {
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
         ButterKnife.bind(this, rootView);
 
-        mName.setText(R.string.loading_date);
+        mName.setText(R.string.main_loading_date);
 
         mViewModel.getState(stateId).observe(this, elem -> {
             if (elem != null) {

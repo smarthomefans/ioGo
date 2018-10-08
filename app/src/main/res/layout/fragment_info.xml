@@ -41,7 +41,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical"
-        android:text="@string/account"
+        android:text="@string/info_account_lbl"
         android:textColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -72,7 +72,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical"
-        android:text="@string/connectivity"
+        android:text="@string/info_connectivity_lbl"
         android:textColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/account_state" />
@@ -102,7 +102,7 @@
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
         android:gravity="center_vertical"
-        android:text="@string/database"
+        android:text="@string/info_database_lbl"
         android:textColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/socketState" />
@@ -171,7 +171,7 @@
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
         android:gravity="center_vertical"
-        android:text="@string/app"
+        android:text="@string/info_app_lbl"
         android:textColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/countStates" />

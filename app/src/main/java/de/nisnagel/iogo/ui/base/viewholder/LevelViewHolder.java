@@ -106,7 +106,7 @@ public class LevelViewHolder extends BaseViewHolder {
                             .setCancelable(false)
                             .setPositiveButton("OK",
                                     (dialog, id) -> {
-                                        mSubtitle.setText(R.string.syncing_data);
+                                        mSubtitle.setText(R.string.main_syncing_data);
                                         mViewModel.changeState(state.getId(), userInput.getText().toString());
                                     })
                             .setNegativeButton("Cancel",

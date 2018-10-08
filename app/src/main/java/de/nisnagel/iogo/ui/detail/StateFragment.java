@@ -102,7 +102,7 @@ public class StateFragment extends Fragment implements Injectable {
 
         mAdapter = new StateItemAdapter(mListStates, mViewModel);
 
-        mName.setText(R.string.loading_date);
+        mName.setText(R.string.main_loading_date);
         mEnum.setText("");
 
         getActivity().runOnUiThread(() -> {
@@ -173,11 +173,11 @@ public class StateFragment extends Fragment implements Injectable {
                 if ("true".equals(state.getFavorite())) {
                     state.setFavorite("false");
                     setFavoriteIcon(item, true);
-                    Toast.makeText(getContext(), R.string.unstarred, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.main_unstarred, Toast.LENGTH_SHORT).show();
                 } else {
                     state.setFavorite("true");
                     setFavoriteIcon(item, false);
-                    Toast.makeText(getContext(), R.string.starred, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.main_starred, Toast.LENGTH_SHORT).show();
                 }
 
                 mViewModel.saveState(state);

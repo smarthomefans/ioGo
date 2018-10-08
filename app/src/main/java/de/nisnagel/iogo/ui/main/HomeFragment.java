@@ -23,7 +23,6 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -50,7 +49,6 @@ import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.di.Injectable;
 import de.nisnagel.iogo.service.Constants;
-import de.nisnagel.iogo.ui.auth.LoginActivity;
 import de.nisnagel.iogo.ui.auth.SignupActivity;
 import de.nisnagel.iogo.ui.settings.SettingsMainActivity;
 

@@ -45,7 +45,7 @@ public class ButtonViewHolder extends BaseViewHolder {
         mValue.setVisibility(View.VISIBLE);
         mValue.setClickable(state.getWrite());
         mValue.setOnClickListener(v -> {
-            mSubtitle.setText(R.string.syncing_data);
+            mSubtitle.setText(R.string.main_syncing_data);
             mViewModel.changeState(state.getId(), "true");
         }
         );
