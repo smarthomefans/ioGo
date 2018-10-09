@@ -90,6 +90,8 @@ public class HomeFragment extends Fragment implements Injectable {
 
         mEnumAdapter = new EnumHomeListAdapter(enumList, mViewModel);
         mStateAdapter = new StateListAdapter(stateList, mViewModel, getActivity());
+        rvEnums.setVisibility(View.GONE);
+        rvStates.setVisibility(View.GONE);
 
         getActivity().runOnUiThread(() -> {
 
@@ -105,6 +107,7 @@ public class HomeFragment extends Fragment implements Injectable {
                     // update UI
                     if (newList.size() > 0) {
                         mWelcome.setVisibility(View.GONE);
+                        rvEnums.setVisibility(View.VISIBLE);
                     }
                     mEnumAdapter.clearList();
                     mEnumAdapter.addAll(newList);
@@ -116,6 +119,7 @@ public class HomeFragment extends Fragment implements Injectable {
                     // update UI
                     if (newList.size() > 0) {
                         mWelcome.setVisibility(View.GONE);
+                        rvStates.setVisibility(View.VISIBLE);
                     }
                     mStateAdapter.clearList();
                     mStateAdapter.addAll(newList);

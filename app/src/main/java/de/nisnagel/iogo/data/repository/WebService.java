@@ -22,6 +22,9 @@ package de.nisnagel.iogo.data.repository;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -198,9 +201,17 @@ public class WebService {
             } catch (JSONException e) {
                 Timber.e(e);
             }
+            Trace trace = FirebasePerformance.getInstance().newTrace("WebService.getEnumObjects");
+            trace.start();
             mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
                 @Override
                 public void call(Object... args) {
+                    if (args[1] != null) {
+                        trace.putMetric("length", args[1].toString().getBytes().length);
+                    }else{
+                        trace.putMetric("length", 0);
+                    }
+                    trace.stop();
                     if (args[1] != null) {
                         listener.onEnumReceived(args[1].toString(), type);
                     }
@@ -212,9 +223,17 @@ public class WebService {
     public void getObjects(OnObjectsReceived listener) {
         Timber.v("getObjects called");
         if (isConnected()) {
+            Trace trace = FirebasePerformance.getInstance().newTrace("WebService.getObjects");
+            trace.start();
             mSocket.emit("getObjects", null, new Ack() {
                 @Override
                 public void call(Object... args) {
+                    if (args[1] != null) {
+                        trace.putMetric("length", args[1].toString().getBytes().length);
+                    }else{
+                        trace.putMetric("length", 0);
+                    }
+                    trace.stop();
                     if (args[1] != null) {
                         listener.onObjectsReceived(args[1].toString());
                     }
@@ -232,14 +251,24 @@ public class WebService {
 
     public void getStates(Object args, OnStatesReceived listener){
         Timber.v("getStates called");
-        mSocket.emit("getStates", args, new Ack() {
-            @Override
-            public void call(Object... args) {
-                if (args[1] != null) {
-                    listener.onStatesReceived(args[1].toString());
+        if(isConnected()){
+            Trace trace = FirebasePerformance.getInstance().newTrace("WebService.getStates");
+            trace.start();
+            mSocket.emit("getStates", args, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    if (args[1] != null) {
+                        trace.putMetric("length", args[1].toString().getBytes().length);
+                    }else{
+                        trace.putMetric("length", 0);
+                    }
+                    trace.stop();
+                    if (args[1] != null) {
+                        listener.onStatesReceived(args[1].toString());
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     /*
