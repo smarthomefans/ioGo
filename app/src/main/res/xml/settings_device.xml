@@ -24,14 +24,14 @@
         android:key="@string/pref_device_name"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:title="Devicename" />
+        android:title="@string/settings_device_name_title" />
     <PreferenceCategory
         android:layout="@layout/preference_category_summary"
-        android:summary="app account needed"
-        android:title="Device features">
+        android:summary="@string/settings_device_features_summary"
+        android:title="@string/settings_device_features_title">
         <SwitchPreference
             android:defaultValue="none"
             android:key="@string/pref_device_notification"
-            android:title="Receive notifications" />
+            android:title="@string/settings_device_notification_title" />
     </PreferenceCategory>
 </PreferenceScreen>

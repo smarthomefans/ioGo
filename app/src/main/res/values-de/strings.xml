@@ -109,4 +109,21 @@
     <string name="settings_server_layout_desc">Erscheinungsbild einstellen</string>
     <string name="settings_server_device_desc">Aktiviere weitere Features</string>
     <string name="settings_server_error_desc">Umgang mit Fehlern</string>
+    <string name="settings_connect_iogo_summary">app account benötigt</string>
+    <string name="settings_connect_iogo_title">iogo Adapter nutzen</string>
+    <string name="settings_connect_cloud_summary">nur für cloud.pro</string>
+    <string name="settings_connect_cloud_title">cloud Adapter nutzen</string>
+    <string name="settings_connect_cloud_user_title">Benutzer</string>
+    <string name="settings_connect_cloud_password_title">Passwort</string>
+    <string name="settings_connect_web_summary">nur mit integrierter socket-io Instanz</string>
+    <string name="settings_connect_web_title">web Adapter nutzen</string>
+    <string name="settings_connect_web_url_message">Bitte die URL und den Port des web-Adapter eintragen</string>
+    <string name="settings_connect_web_url_title">Socket URL</string>
+    <string name="settings_connect_web_user_title">Benutzer (Optional)</string>
+    <string name="settings_connect_web_password_title">Passwort (Optional)</string>
+    <string name="settings_device_name_title">Gerätename</string>
+    <string name="settings_device_features_summary">app account benötigt</string>
+    <string name="settings_device_features_title">Geräte features</string>
+    <string name="settings_device_notification_title">Benachrichtigungen erhalten</string>
+
 </resources>
