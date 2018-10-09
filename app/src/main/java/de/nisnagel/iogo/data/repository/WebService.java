@@ -188,7 +188,7 @@ public class WebService {
         }
     }
 
-    public void getEnumObjects(String key, Ack callback){
+    public void getEnumObjects(String key, String type, OnEnumReceived listener){
         Timber.v("getEnumRooms called");
         if (isConnected()) {
             JSONObject json = new JSONObject();
@@ -198,14 +198,28 @@ public class WebService {
             } catch (JSONException e) {
                 Timber.e(e);
             }
-            mSocket.emit("getObjectView", "system", "enum", json, callback);
+            mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    if (args[1] != null) {
+                        listener.onEnumReceived(args[1].toString(), type);
+                    }
+                }
+            });
         }
     }
 
-    public void getObjects(Object args, Ack callback) {
+    public void getObjects(OnObjectsReceived listener) {
         Timber.v("getObjects called");
         if (isConnected()) {
-            mSocket.emit("getObjects", args, callback);
+            mSocket.emit("getObjects", null, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    if (args[1] != null) {
+                        listener.onObjectsReceived(args[1].toString());
+                    }
+                }
+            });
         }
     }
 
@@ -216,9 +230,16 @@ public class WebService {
         }
     }
 
-    public void getStates(Object args, Ack callback){
+    public void getStates(Object args, OnStatesReceived listener){
         Timber.v("getStates called");
-        mSocket.emit("getStates", args, callback);
+        mSocket.emit("getStates", args, new Ack() {
+            @Override
+            public void call(Object... args) {
+                if (args[1] != null) {
+                    listener.onStatesReceived(args[1].toString());
+                }
+            }
+        });
     }
 
     /*

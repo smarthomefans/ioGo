@@ -21,6 +21,15 @@
     <PreferenceCategory
         android:layout="@layout/preference_category_summary"
         android:summary=""
+        android:title="Object">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/pref_layout_object_sync"
+            android:title="Sync all objects on startup" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:layout="@layout/preference_category_summary"
+        android:summary=""
         android:title="State">
         <ListPreference
             android:defaultValue="none"
@@ -35,7 +44,7 @@
         android:title="Enum">
         <SwitchPreference
             android:defaultValue="false"
-            android:key="@string/pref_layout_hidden_enum"
+            android:key="@string/pref_layout_enum_show_hidden"
             android:title="Show hidden enum" />
     </PreferenceCategory>
 </PreferenceScreen>

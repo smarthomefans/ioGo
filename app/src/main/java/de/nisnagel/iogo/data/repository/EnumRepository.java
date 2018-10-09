@@ -60,7 +60,7 @@ import io.socket.emitter.Emitter;
 import timber.log.Timber;
 
 @Singleton
-public class EnumRepository {
+public class EnumRepository implements OnEnumReceived{
 
     public static final String TYPE_FUNCTION = "function";
     public static final String TYPE_ROOM = "room";
@@ -163,32 +163,26 @@ public class EnumRepository {
 
     private void initSocket() {
         if (webService.isConnected()) {
-            initialLoad();
+            executor.execute(this::initialLoad);
         } else {
-            webService.init();
-            webService.on(Socket.EVENT_CONNECT, onConnect);
-            webService.on(Socket.EVENT_DISCONNECT, onDisconnect);
-            webService.start();
+            executor.execute(() -> {
+                webService.init();
+                webService.on(Socket.EVENT_CONNECT, onConnect);
+                webService.on(Socket.EVENT_DISCONNECT, onDisconnect);
+                webService.start();
+            });
         }
     }
 
-    private Emitter.Listener onConnect = args -> initialLoad();
+    private Emitter.Listener onConnect = args -> executor.execute(this::initialLoad);
 
     private Emitter.Listener onDisconnect = args -> {
         Timber.i("disconnected");
     };
 
     private void initialLoad() {
-        webService.getEnumObjects("enum.rooms", args -> {
-            if (args[1] != null) {
-                saveEnums(args[1].toString(), EnumRepository.TYPE_ROOM);
-            }
-        });
-        webService.getEnumObjects("enum.functions", args -> {
-            if (args[1] != null) {
-                saveEnums(args[1].toString(), EnumRepository.TYPE_FUNCTION);
-            }
-        });
+        webService.getEnumObjects("enum.rooms", EnumRepository.TYPE_ROOM, this);
+        webService.getEnumObjects("enum.functions", EnumRepository.TYPE_FUNCTION, this);
     }
 
     private void saveEnums(String data, String type) {
@@ -341,4 +335,9 @@ public class EnumRepository {
             }
         }
     };
+
+    @Override
+    public void onEnumReceived(String data, String type) {
+        saveEnums(data, type);
+    }
 }

@@ -65,7 +65,7 @@ import io.socket.emitter.Emitter;
 import timber.log.Timber;
 
 @Singleton
-public class StateRepository {
+public class StateRepository implements OnObjectsReceived, OnStatesReceived {
 
     public static final String FROM = "app";
     private static final String STATE_QUEUES = "stateQueues/";
@@ -247,18 +247,21 @@ public class StateRepository {
         mAuth.addAuthStateListener(authListener);
     }
 
-    public boolean hasConnection(){
-        boolean bIogo = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo),false);
-        boolean bWeb = sharedPref.getBoolean(context.getString(R.string.pref_connect_web),false);
-        boolean bCloud = sharedPref.getBoolean(context.getString(R.string.pref_connect_cloud),false);
+    public boolean hasConnection() {
+        boolean bIogo = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo), false);
+        boolean bWeb = sharedPref.getBoolean(context.getString(R.string.pref_connect_web), false);
+        boolean bCloud = sharedPref.getBoolean(context.getString(R.string.pref_connect_cloud), false);
 
-        return(bIogo || bWeb || bCloud);
+        return (bIogo || bWeb || bCloud);
     }
 
     private void addListener(FirebaseUser user) {
         this.saveSocketState(context.getString(R.string.pref_connect_iogo));
         dbObjectsRef = database.getReference(OBJECTS + user.getUid());
-        dbObjectsRef.addListenerForSingleValueEvent(objectListener);
+        boolean bSync = sharedPref.getBoolean(context.getString(R.string.pref_layout_object_sync), false);
+        if(bSync) {
+            dbObjectsRef.addListenerForSingleValueEvent(objectListener);
+        }
         dbObjectsRef.addChildEventListener(objectChildListener);
         dbObjectQueuesRef = database.getReference(OBJECT_QUEUES + user.getUid());
         dbStatesRef = database.getReference(STATES + user.getUid());
@@ -269,7 +272,7 @@ public class StateRepository {
 
     private void initSocket() {
         if (webService.isConnected()) {
-            initialLoad();
+            executor.execute(this::initialLoad);
         } else {
             executor.execute(() -> {
                 webService.init();
@@ -284,18 +287,11 @@ public class StateRepository {
     private Emitter.Listener onConnect = args -> executor.execute(this::initialLoad);
 
     private void initialLoad() {
-        List<String> stateIds = getAllStateIds();
-        JSONArray json = new JSONArray(stateIds);
-        webService.subscribe(json);
-        webService.getObjects(null, args1 -> saveObjects(args1[1].toString()));
-
-        json = new JSONArray();
-        List<String> objectIds = getAllStateIds();
-        if (objectIds != null && objectIds.size() > 0) {
-            for (int i = 0; i < objectIds.size(); i++) {
-                json.put(objectIds.get(i));
-            }
-            webService.getStates(json, args1 -> saveStates(args1[1].toString()));
+        boolean bSync = sharedPref.getBoolean(context.getString(R.string.pref_layout_object_sync), false);
+        if(bSync) {
+            webService.getObjects(this);
+        }else{
+            requestStates();
         }
     }
 
@@ -567,4 +563,22 @@ public class StateRepository {
             }
         }
     };
+
+    @Override
+    public void onObjectsReceived(String data) {
+        saveObjects(data);
+        requestStates();
+    }
+
+    private void requestStates() {
+        List<String> objectIds = getAllStateIds();
+        JSONArray json = new JSONArray(objectIds);
+        webService.subscribe(json);
+        webService.getStates(json, this);
+    }
+
+    @Override
+    public void onStatesReceived(String data) {
+        saveStates(data);
+    }
 }

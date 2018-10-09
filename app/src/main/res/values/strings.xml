@@ -128,8 +128,9 @@
     <string name="pref_device_name" translatable="false">pref_device_name</string>
     <string name="pref_device_notification" translatable="false">pref_device_notification</string>
 
+    <string name="pref_layout_object_sync" translatable="false">pref_layout_object_sync</string>
     <string name="pref_layout_state_subtitle" translatable="false">pref_layout_state_subtitle</string>
-    <string name="pref_layout_hidden_enum" translatable="false">pref_layout_hidden_enum</string>
+    <string name="pref_layout_enum_show_hidden" translatable="false">pref_layout_hidden_enum</string>
 
 
 

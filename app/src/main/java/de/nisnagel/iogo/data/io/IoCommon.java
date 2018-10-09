@@ -33,7 +33,7 @@ public class IoCommon {
     private boolean write;
     private String unit;
     private String def;
-    private String desc;
+    private IoName desc;
     private String color;
     private String icon;
     private List<String> members = null;
@@ -96,11 +96,11 @@ public class IoCommon {
         this.def = def;
     }
 
-    public String getDesc() {
+    public IoName getDesc() {
         return desc;
     }
 
-    public void setDesc(String desc) {
+    public void setDesc(IoName desc) {
         this.desc = desc;
     }
 

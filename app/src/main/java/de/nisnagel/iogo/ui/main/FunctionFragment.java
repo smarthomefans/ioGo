@@ -82,7 +82,7 @@ public class FunctionFragment extends Fragment implements Injectable {
                 .observe(this, newList -> {
                     // update UI
                     mAdapter.clearList();
-                    mAdapter.addAll(newList, sharedPref.getBoolean(getString(R.string.pref_layout_hidden_enum), false));
+                    mAdapter.addAll(newList, sharedPref.getBoolean(getString(R.string.pref_layout_enum_show_hidden), false));
                     mAdapter.notifyDataSetChanged();
                 });
 
