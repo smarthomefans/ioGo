@@ -39,12 +39,12 @@ public class SettingsLayoutFragment extends PreferenceFragmentCompat {
 
         ListPreference stateSubtitle = (ListPreference)findPreference(getString(R.string.pref_layout_state_subtitle));
         if(stateSubtitle.getEntry() == null){
-            stateSubtitle.setSummary("Nothing is shown as subtitle");
+            stateSubtitle.setSummary(getString(R.string.settings_layout_state_subtitle_summary, "Nothing"));
         }else {
-            stateSubtitle.setSummary("The " + stateSubtitle.getEntry() + " is shown as subtitle");
+            stateSubtitle.setSummary(getString(R.string.settings_layout_state_subtitle_summary, stateSubtitle.getEntry()));
         }
         stateSubtitle.setOnPreferenceChangeListener((preference, newValue) -> {
-            stateSubtitle.setSummary("The " + newValue + " is shown as subtitle");
+            stateSubtitle.setSummary(getString(R.string.settings_layout_state_subtitle_summary, newValue));
             return true;
         });
     }

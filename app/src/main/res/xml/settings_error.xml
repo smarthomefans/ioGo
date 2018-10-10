@@ -21,17 +21,17 @@
 
     <PreferenceCategory
         android:layout="@layout/preference_category_summary"
-        android:summary="logging into filesystem at storage/de.nisnagel.iogo/logs"
+        android:summary="@string/settings_error_logging_summary"
         android:title="Error Logging">
         <SwitchPreference
             android:key="@string/pref_error_logging"
             android:selectAllOnFocus="true"
-            android:title="Enable logging" />
+            android:title="@string/settings_error_logging_title" />
         <ListPreference
             android:defaultValue="6"
             android:entries="@array/logging_level"
             android:entryValues="@array/logging_levelValues"
             android:key="@string/pref_error_logging_level"
-            android:title="Choose logging level" />
+            android:title="@string/settings_error_logging_level_title" />
     </PreferenceCategory>
 </PreferenceScreen>

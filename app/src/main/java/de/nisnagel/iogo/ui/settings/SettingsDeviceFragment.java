@@ -41,10 +41,10 @@ public class SettingsDeviceFragment extends PreferenceFragmentCompat {
         super.onCreate(savedInstanceState);
 
         EditTextPreference prefName = (EditTextPreference) findPreference(getString(R.string.pref_device_name));
-        prefName.setSummary("Current device is: " + prefName.getText());
+        prefName.setSummary(getString(R.string.settings_device_name_summary, prefName.getText()));
         prefName.setOnPreferenceChangeListener((preference, newValue) -> {
             String newValueString = (String) newValue;
-            preference.setSummary("Current device is: " + newValueString);
+            preference.setSummary(getString(R.string.settings_device_name_summary, newValueString));
 
             //enable all device features
             prefNotification.setEnabled(true);

@@ -55,9 +55,9 @@ public class SettingsErrorFragment extends PreferenceFragmentCompat {
         });
 
         ListPreference loggingLevel = (ListPreference)findPreference(getString(R.string.pref_error_logging_level));
-        loggingLevel.setSummary("Logging level is set to " + loggingLevel.getEntry());
+        loggingLevel.setSummary(getString(R.string.settings_error_logging_level_summary, loggingLevel.getEntry()));
         loggingLevel.setOnPreferenceChangeListener((preference, newValue) -> {
-            loggingLevel.setSummary("Logging level is set to " + newValue);
+            loggingLevel.setSummary(getString(R.string.settings_error_logging_level_summary, newValue));
             return true;
         });
     }

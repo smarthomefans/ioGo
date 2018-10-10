@@ -114,16 +114,27 @@
     <string name="settings_connect_cloud_summary">nur für cloud.pro</string>
     <string name="settings_connect_cloud_title">cloud Adapter nutzen</string>
     <string name="settings_connect_cloud_user_title">Benutzer</string>
+    <string name="settings_connect_cloud_user_summary">Benutzername ist: %s</string>
     <string name="settings_connect_cloud_password_title">Passwort</string>
     <string name="settings_connect_web_summary">nur mit integrierter socket-io Instanz</string>
     <string name="settings_connect_web_title">web Adapter nutzen</string>
     <string name="settings_connect_web_url_message">Bitte die URL und den Port des web-Adapter eintragen</string>
     <string name="settings_connect_web_url_title">Socket URL</string>
+    <string name="settings_connect_web_url_summary">URL ist: %s</string>
     <string name="settings_connect_web_user_title">Benutzer (Optional)</string>
+    <string name="settings_connect_web_user_summary">Benutzer ist: %s</string>
     <string name="settings_connect_web_password_title">Passwort (Optional)</string>
+    <string name="settings_layout_state_sutitle_title">Untertitel</string>
+    <string name="settings_layout_state_subtitle_summary">%s wird als Untertitel angezeigt</string>
+    <string name="settings_layout_enum_hidden_title">Ausgeblendete Enum anzeigen</string>
     <string name="settings_device_name_title">Gerätename</string>
+    <string name="settings_device_name_summary">Aktueller Name ist: %s</string>
     <string name="settings_device_features_summary">app account benötigt</string>
     <string name="settings_device_features_title">Geräte features</string>
     <string name="settings_device_notification_title">Benachrichtigungen erhalten</string>
+    <string name="settings_error_logging_summary">Loggt in eine Datei im Ordner storage/de.nisnagel.iogo/logs</string>
+    <string name="settings_error_logging_title">Aktiviere Logging</string>
+    <string name="settings_error_logging_level_title">Wähle Logginglevel</string>
+    <string name="settings_error_logging_level_summary">Logginglevel ist aktuell: %s</string>
 
 </resources>

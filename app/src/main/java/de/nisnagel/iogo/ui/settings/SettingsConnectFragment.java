@@ -79,13 +79,13 @@ public class SettingsConnectFragment extends PreferenceFragmentCompat {
         }
 
         EditTextPreference prefCloudUser = (EditTextPreference) findPreference(getString(R.string.pref_connect_cloud_user));
-        prefCloudUser.setSummary("Username is: " + prefCloudUser.getText());
+        prefCloudUser.setSummary(getString(R.string.settings_connect_cloud_user_summary, prefCloudUser.getText()));
 
         EditTextPreference prefWebUrl = (EditTextPreference) findPreference(getString(R.string.pref_connect_web_url));
-        prefWebUrl.setSummary("URL is: " + prefWebUrl.getText());
+        prefWebUrl.setSummary(getString(R.string.settings_connect_web_url_summary, prefWebUrl.getText()));
 
         EditTextPreference prefWebUser = (EditTextPreference) findPreference(getString(R.string.pref_connect_web_user));
-        prefWebUser.setSummary("Username is: " + prefWebUser.getText());
+        prefWebUser.setSummary(getString(R.string.settings_connect_web_user_summary, prefWebUser.getText()));
     }
 
     @Override

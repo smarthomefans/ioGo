@@ -116,17 +116,28 @@
     <string name="settings_connect_cloud_summary">only cloud.pro</string>
     <string name="settings_connect_cloud_title">Use cloud adapter</string>
     <string name="settings_connect_cloud_user_title">Username</string>
+    <string name="settings_connect_cloud_user_summary">Username is: %s</string>
     <string name="settings_connect_cloud_password_title">Password</string>
     <string name="settings_connect_web_summary">only with integrated socket-io</string>
     <string name="settings_connect_web_title">Use web adapter</string>
     <string name="settings_connect_web_url_message">Please enter url and port from your web-adapter</string>
     <string name="settings_connect_web_url_title">Socket URL</string>
+    <string name="settings_connect_web_url_summary">URL is: %s</string>
     <string name="settings_connect_web_user_title">Username (Optional)</string>
+    <string name="settings_connect_web_user_summary">Username is: %s</string>
     <string name="settings_connect_web_password_title">Password (Optional)</string>
+    <string name="settings_layout_state_sutitle_title">Subtitle</string>
+    <string name="settings_layout_state_subtitle_summary">%s is shown as subtitle</string>
+    <string name="settings_layout_enum_hidden_title">Show hidden enum</string>
     <string name="settings_device_name_title">Devicename</string>
+    <string name="settings_device_name_summary">Current device is: %s</string>
     <string name="settings_device_features_summary">app account needed</string>
     <string name="settings_device_features_title">Device features</string>
     <string name="settings_device_notification_title">Receive notifications</string>
+    <string name="settings_error_logging_summary">logging into filesystem at storage/de.nisnagel.iogo/logs</string>
+    <string name="settings_error_logging_title">Enable logging</string>
+    <string name="settings_error_logging_level_title">Choose logging level</string>
+    <string name="settings_error_logging_level_summary">Logging level is set to: %s</string>
 
     <!-- preferences -->
     <string name="pref_connect_iogo" translatable="false">pref_connect_iogo</string>

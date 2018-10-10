@@ -21,22 +21,13 @@
     <PreferenceCategory
         android:layout="@layout/preference_category_summary"
         android:summary=""
-        android:title="Object">
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="@string/pref_layout_object_sync"
-            android:title="Sync all objects on startup" />
-    </PreferenceCategory>
-    <PreferenceCategory
-        android:layout="@layout/preference_category_summary"
-        android:summary=""
         android:title="State">
         <ListPreference
             android:defaultValue="none"
             android:entries="@array/state_subtitle"
             android:entryValues="@array/state_subtitleValues"
             android:key="@string/pref_layout_state_subtitle"
-            android:title="Subtitle" />
+            android:title="@string/settings_layout_state_sutitle_title" />
     </PreferenceCategory>
     <PreferenceCategory
         android:layout="@layout/preference_category_summary"
@@ -45,6 +36,6 @@
         <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_layout_enum_show_hidden"
-            android:title="Show hidden enum" />
+            android:title="@string/settings_layout_enum_hidden_title" />
     </PreferenceCategory>
 </PreferenceScreen>
