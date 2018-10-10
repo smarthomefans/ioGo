@@ -22,6 +22,7 @@ package de.nisnagel.iogo.ui.info;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -39,9 +40,11 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.android.support.AndroidSupportInjection;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.di.Injectable;
+import de.nisnagel.iogo.ui.auth.SignupActivity;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -154,6 +157,14 @@ public class InfoFragment extends Fragment implements Injectable {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+    @OnClick(R.id.btnSyncObjects)
+    public void onClickSyncObjects() {
+        mViewModel.syncObjects();
+        mCountRooms.setText(getString(R.string.main_loading_date));
+        mCountFunctions.setText(getString(R.string.main_loading_date));
+        mCountStates.setText(getString(R.string.main_loading_date));
     }
 
     @Override

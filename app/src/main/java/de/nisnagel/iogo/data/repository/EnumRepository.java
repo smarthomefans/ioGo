@@ -60,7 +60,7 @@ import io.socket.emitter.Emitter;
 import timber.log.Timber;
 
 @Singleton
-public class EnumRepository implements OnEnumReceived{
+public class EnumRepository implements OnEnumReceived {
 
     public static final String TYPE_FUNCTION = "function";
     public static final String TYPE_ROOM = "room";
@@ -89,6 +89,8 @@ public class EnumRepository implements OnEnumReceived{
         this.context = context;
         this.sharedPref = sharedPref;
         this.webService = webService;
+
+        sharedPref.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -157,17 +159,11 @@ public class EnumRepository implements OnEnumReceived{
 
     private void addListener(FirebaseUser user) {
         dbEnumsRef = database.getReference(PATH_ENUMS + user.getUid());
-        boolean bSync = sharedPref.getBoolean(context.getString(R.string.pref_layout_object_sync), false);
-        if(bSync) {
-            dbEnumsRef.addListenerForSingleValueEvent(enumListener);
-        }
         dbEnumsRef.addChildEventListener(enumChildListener);
     }
 
     private void initSocket() {
-        if (webService.isConnected()) {
-            executor.execute(this::initialLoad);
-        } else {
+        if (!webService.isConnected()) {
             executor.execute(() -> {
                 webService.init();
                 webService.on(Socket.EVENT_CONNECT, onConnect);
@@ -177,7 +173,12 @@ public class EnumRepository implements OnEnumReceived{
         }
     }
 
-    private Emitter.Listener onConnect = args -> executor.execute(this::initialLoad);
+    private Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+
+        }
+    };
 
     private Emitter.Listener onDisconnect = args -> Timber.i("disconnected");
 
@@ -340,5 +341,13 @@ public class EnumRepository implements OnEnumReceived{
     @Override
     public void onEnumReceived(String data, String type) {
         saveEnums(data, type);
+    }
+
+    public void syncObjects() {
+        if (bFirebase && dbEnumsRef != null) {
+            dbEnumsRef.addListenerForSingleValueEvent(enumListener);
+        } else if (bSocket) {
+            initialLoad();
+        }
     }
 }

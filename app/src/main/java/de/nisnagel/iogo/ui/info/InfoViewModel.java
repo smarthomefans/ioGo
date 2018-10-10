@@ -55,4 +55,8 @@ public class InfoViewModel extends ViewModel {
         return stateRepository.getSocketState();
     }
 
+    public void syncObjects() {
+        stateRepository.syncObjects();
+        enumRepository.syncObjects();
+    }
 }

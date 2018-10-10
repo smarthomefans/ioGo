@@ -58,6 +58,7 @@
     <string name="info_account_state_anonymous">anonym eingeloggt</string>
     <string name="info_account_state_logged_in">eingeloggt</string>
     <string name="info_account_state_not_verified">email nicht bestätigt</string>
+    <string name="info_sync_objects">Sync Objects/Enums</string>
 
     <!-- statistics activity -->
     <string name="year">Jahr</string>

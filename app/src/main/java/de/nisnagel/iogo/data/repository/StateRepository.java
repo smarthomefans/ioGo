@@ -296,10 +296,6 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
     private void addListener(FirebaseUser user) {
         this.saveSocketState(context.getString(R.string.pref_connect_iogo));
         dbObjectsRef = database.getReference(OBJECTS + user.getUid());
-        boolean bSync = sharedPref.getBoolean(context.getString(R.string.pref_layout_object_sync), false);
-        if(bSync) {
-            dbObjectsRef.addListenerForSingleValueEvent(objectListener);
-        }
         dbObjectsRef.addChildEventListener(objectChildListener);
         dbObjectQueuesRef = database.getReference(OBJECT_QUEUES + user.getUid());
         dbStatesRef = database.getReference(STATES + user.getUid());
@@ -309,9 +305,7 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
     }
 
     private void initSocket() {
-        if (webService.isConnected()) {
-            executor.execute(this::initialLoad);
-        } else {
+        if (!webService.isConnected()) {
             executor.execute(() -> {
                 webService.init();
                 webService.on(Socket.EVENT_CONNECT, onConnect);
@@ -322,15 +316,15 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
         }
     }
 
-    private Emitter.Listener onConnect = args -> executor.execute(this::initialLoad);
-
-    private void initialLoad() {
-        boolean bSync = sharedPref.getBoolean(context.getString(R.string.pref_layout_object_sync), false);
-        if(bSync) {
-            webService.getObjects(this);
-        }else{
+    private Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
             requestStates();
         }
+    };
+
+    private void initialLoad() {
+        webService.getObjects(this);
     }
 
     private Emitter.Listener onDisconnect = args -> {
@@ -576,5 +570,13 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
     @Override
     public void onStatesReceived(String data) {
         saveStates(data);
+    }
+
+    public void syncObjects() {
+        if (bFirebase && dbObjectsRef != null) {
+            dbObjectsRef.addListenerForSingleValueEvent(objectListener);
+        } else if (bSocket) {
+            initialLoad();
+        }
     }
 }
