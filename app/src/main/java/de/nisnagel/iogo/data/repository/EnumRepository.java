@@ -157,7 +157,10 @@ public class EnumRepository implements OnEnumReceived{
 
     private void addListener(FirebaseUser user) {
         dbEnumsRef = database.getReference(PATH_ENUMS + user.getUid());
-        dbEnumsRef.addListenerForSingleValueEvent(enumListener);
+        boolean bSync = sharedPref.getBoolean(context.getString(R.string.pref_layout_object_sync), false);
+        if(bSync) {
+            dbEnumsRef.addListenerForSingleValueEvent(enumListener);
+        }
         dbEnumsRef.addChildEventListener(enumChildListener);
     }
 
