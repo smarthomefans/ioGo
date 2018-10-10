@@ -48,9 +48,9 @@ public class WebService {
     private Socket mSocket;
     private String cookie;
 
-    public Context context;
+    private Context context;
 
-    public SharedPreferences sharedPref;
+    private SharedPreferences sharedPref;
 
     public WebService(SharedPreferences sharedPref, Context context) {
         Timber.v("instance created");
@@ -203,18 +203,15 @@ public class WebService {
             }
             Trace trace = FirebasePerformance.getInstance().newTrace("WebService.getEnumObjects");
             trace.start();
-            mSocket.emit("getObjectView", "system", "enum", json, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    if (args[1] != null) {
-                        trace.putMetric("length", args[1].toString().getBytes().length);
-                    }else{
-                        trace.putMetric("length", 0);
-                    }
-                    trace.stop();
-                    if (args[1] != null) {
-                        listener.onEnumReceived(args[1].toString(), type);
-                    }
+            mSocket.emit("getObjectView", "system", "enum", json, (Ack) args -> {
+                if (args[1] != null) {
+                    trace.putMetric("length", args[1].toString().getBytes().length);
+                }else{
+                    trace.putMetric("length", 0);
+                }
+                trace.stop();
+                if (args[1] != null) {
+                    listener.onEnumReceived(args[1].toString(), type);
                 }
             });
         }
@@ -225,18 +222,15 @@ public class WebService {
         if (isConnected()) {
             Trace trace = FirebasePerformance.getInstance().newTrace("WebService.getObjects");
             trace.start();
-            mSocket.emit("getObjects", null, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    if (args[1] != null) {
-                        trace.putMetric("length", args[1].toString().getBytes().length);
-                    }else{
-                        trace.putMetric("length", 0);
-                    }
-                    trace.stop();
-                    if (args[1] != null) {
-                        listener.onObjectsReceived(args[1].toString());
-                    }
+            mSocket.emit("getObjects", null, args -> {
+                if (args[1] != null) {
+                    trace.putMetric("length", args[1].toString().getBytes().length);
+                }else{
+                    trace.putMetric("length", 0);
+                }
+                trace.stop();
+                if (args[1] != null) {
+                    listener.onObjectsReceived(args[1].toString());
                 }
             });
         }
@@ -254,18 +248,15 @@ public class WebService {
         if(isConnected()){
             Trace trace = FirebasePerformance.getInstance().newTrace("WebService.getStates");
             trace.start();
-            mSocket.emit("getStates", args, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    if (args[1] != null) {
-                        trace.putMetric("length", args[1].toString().getBytes().length);
-                    }else{
-                        trace.putMetric("length", 0);
-                    }
-                    trace.stop();
-                    if (args[1] != null) {
-                        listener.onStatesReceived(args[1].toString());
-                    }
+            mSocket.emit("getStates", args, (Ack) args1 -> {
+                if (args1[1] != null) {
+                    trace.putMetric("length", args1[1].toString().getBytes().length);
+                }else{
+                    trace.putMetric("length", 0);
+                }
+                trace.stop();
+                if (args1[1] != null) {
+                    listener.onStatesReceived(args1[1].toString());
                 }
             });
         }

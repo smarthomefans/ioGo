@@ -60,7 +60,6 @@ public class HomeFragment extends Fragment implements Injectable {
     private EnumViewModel mViewModel;
     private ArrayList<Enum> enumList = new ArrayList<>();
     private ArrayList<State> stateList = new ArrayList<>();
-    private FirebaseAuth mAuth;
 
     @BindView(R.id.favorite_enums)
     RecyclerView rvEnums;
@@ -126,7 +125,7 @@ public class HomeFragment extends Fragment implements Injectable {
                     mStateAdapter.notifyDataSetChanged();
                 });
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
         if (mAuth.getCurrentUser() != null) {
             mRegister.setVisibility(View.GONE);

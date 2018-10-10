@@ -40,17 +40,11 @@ import timber.log.Timber;
 public class StateHistoryRepository {
 
     private final StateHistoryDao stateHistoryDao;
-    private Executor executor;
-    private Context context;
-    private SharedPreferences sharedPref;
     private WebService webService;
 
     @Inject
     public StateHistoryRepository(StateHistoryDao stateHistoryDao, Executor executor, Context context, SharedPreferences sharedPref, WebService webService) {
         this.stateHistoryDao = stateHistoryDao;
-        this.executor = executor;
-        this.context = context;
-        this.sharedPref = sharedPref;
         this.webService = webService;
 
         Timber.v("instance created");

@@ -52,7 +52,7 @@ public class EnumFragment extends Fragment implements Injectable {
 
     private StateListAdapter mAdapter;
 
-    private List<State> mListStates = new ArrayList<>();
+    private final List<State> mListStates = new ArrayList<>();
     private EnumViewModel mViewModel;
 
     private String enumId;

@@ -40,7 +40,6 @@ import de.nisnagel.iogo.service.Constants;
 public class EnumHomeListAdapter
         extends RecyclerView.Adapter<EnumHomeListAdapter.ViewHolder> {
 
-    private EnumViewModel mViewModel;
     private List<Enum> mValues;
 
     private final View.OnClickListener mOnClickListener = view -> {
@@ -57,7 +56,6 @@ public class EnumHomeListAdapter
 
     public EnumHomeListAdapter(List<Enum> list, EnumViewModel mViewModel) {
         this.mValues = list;
-        this.mViewModel = mViewModel;
     }
 
     public void clearList(){

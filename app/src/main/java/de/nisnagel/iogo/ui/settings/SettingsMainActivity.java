@@ -71,7 +71,7 @@ public class SettingsMainActivity extends BaseActivity {
         }
     }
 
-    public void loadFragment(String intent) {
+    private void loadFragment(String intent) {
         Fragment fragment = null;
         if(intent != null) {
             switch (intent) {

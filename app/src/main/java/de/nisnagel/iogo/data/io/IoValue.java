@@ -62,7 +62,7 @@ public class IoValue {
     }
 
     public void setAcl(IoAcl ioAcl) {
-        this.acl = acl;
+        this.acl = ioAcl;
     }
 
     public String getFrom() {

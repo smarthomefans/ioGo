@@ -37,14 +37,12 @@ public class EnumViewModel extends ViewModel {
 
     private EnumRepository enumRepository;
     private StateRepository stateRepository;
-    private SharedPreferences sharedPref;
     private String enumId;
 
     @Inject
     public EnumViewModel(EnumRepository enumRepository, StateRepository stateRepository, SharedPreferences sharedPref) {
         this.enumRepository = enumRepository;
         this.stateRepository = stateRepository;
-        this.sharedPref = sharedPref;
     }
 
     public LiveData<List<Enum>> getEnums(String type) {

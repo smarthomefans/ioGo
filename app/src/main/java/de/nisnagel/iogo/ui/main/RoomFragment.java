@@ -51,7 +51,6 @@ public class RoomFragment extends Fragment implements Injectable {
 
     private EnumListAdapter mAdapter;
     private EnumViewModel mViewModel;
-    private ItemTouchHelper mItemTouchHelper;
 
     @Inject
     public SharedPreferences sharedPref;
@@ -95,7 +94,7 @@ public class RoomFragment extends Fragment implements Injectable {
         super.onViewCreated(view, savedInstanceState);
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
-        mItemTouchHelper = new ItemTouchHelper(callback);
+        ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(recyclerView);
     }
 

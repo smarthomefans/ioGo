@@ -203,7 +203,7 @@ public class EnumListAdapter
             for (int i = 0; i < mValues.size(); i++) {
                 mValues.get(i).setRank(i);
             }
-            mViewModel.saveEnum((Enum[]) mValues.toArray(new Enum[mValues.size()]));
+            mViewModel.saveEnum((Enum[]) mValues.toArray(new Enum[0]));
         }
     }
 

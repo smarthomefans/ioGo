@@ -34,14 +34,13 @@ import de.nisnagel.iogo.R;
  */
 public class SettingsDeviceFragment extends PreferenceFragmentCompat {
 
-    private EditTextPreference prefName;
     private Preference prefNotification;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        prefName = (EditTextPreference)findPreference(getString(R.string.pref_device_name));
+        EditTextPreference prefName = (EditTextPreference) findPreference(getString(R.string.pref_device_name));
         prefName.setSummary("Current device is: " + prefName.getText());
         prefName.setOnPreferenceChangeListener((preference, newValue) -> {
             String newValueString = (String) newValue;

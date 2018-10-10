@@ -67,7 +67,7 @@ import timber.log.Timber;
 @Singleton
 public class StateRepository implements OnObjectsReceived, OnStatesReceived {
 
-    public static final String FROM = "app";
+    private static final String FROM = "app";
     private static final String STATE_QUEUES = "stateQueues/";
     private static final String STATES = "states/";
     private static final String OBJECT_QUEUES = "objectQueues/";
@@ -106,6 +106,44 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
         this.sharedPref = sharedPref;
         this.webService = webService;
 
+        SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = (sharedPreferences, key) -> {
+            if (key.equals(context.getString(R.string.pref_device_name))) {
+
+                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(executor, instanceIdResult -> {
+                    String newToken = instanceIdResult.getToken();
+                    Timber.d("newToken" + newToken);
+
+                    String deviceName = sharedPreferences.getString(context.getString(R.string.pref_device_name), null);
+                    if (deviceName != null) {
+                        setDevice(sharedPreferences.getString(key, ""), newToken);
+                    }
+                });
+            }
+            if (key.equals(context.getString(R.string.pref_connect_web))
+                    || key.equals(context.getString(R.string.pref_connect_cloud))
+                    || key.equals(context.getString(R.string.pref_connect_iogo))) {
+                bFirebase = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo), false);
+                bSocket = sharedPref.getBoolean(context.getString(R.string.pref_connect_web), false) || sharedPref.getBoolean(context.getString(R.string.pref_connect_cloud), false);
+
+                if (bFirebase) {
+                    initFirebase();
+                } else if (bSocket) {
+                    initSocket();
+                    try {
+                        if (dbObjectsRef != null) {
+                            dbObjectsRef.removeEventListener(objectListener);
+                            dbObjectsRef.removeEventListener(objectChildListener);
+                        }
+                        if (dbStatesRef != null) {
+                            dbStatesRef.removeEventListener(stateListener);
+                            dbStatesRef.removeEventListener(stateChildListener);
+                        }
+                    } catch (Throwable t) {
+                        Timber.e(t);
+                    }
+                }
+            }
+        };
         sharedPref.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
 
         GsonBuilder gsonBuilder = new GsonBuilder();
@@ -296,7 +334,7 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
     }
 
     private Emitter.Listener onDisconnect = args -> {
-        setSyncAll(false);
+        setSyncFalseAll();
         Timber.i("disconnected");
     };
 
@@ -392,12 +430,12 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
         return stateDao.getStateById2(stateId);
     }
 
-    public List<String> getAllStateIds() {
+    private List<String> getAllStateIds() {
         Timber.v("getAllStateIds called");
         return stateDao.getAllObjectIds();
     }
 
-    public List<String> getAllEnumStateIds() {
+    private List<String> getAllEnumStateIds() {
         Timber.v("getAllEnumStateIds called");
         return enumStateDao.getAllObjectIds();
     }
@@ -430,7 +468,7 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
         return connected;
     }
 
-    public void syncObject(String id, IoObject ioObject) {
+    private void syncObject(String id, IoObject ioObject) {
         Timber.v("syncObject called");
         executor.execute(() -> {
                     State state = stateDao.getStateById(id);
@@ -450,7 +488,7 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
         );
     }
 
-    public void syncState(String id, IoState ioState) {
+    private void syncState(String id, IoState ioState) {
         Timber.v("syncState called");
         executor.execute(() -> {
                     State state = stateDao.getStateById(id);
@@ -493,13 +531,13 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
         executor.execute(() -> stateDao.update(state));
     }
 
-    public void deleteState(State state) {
+    private void deleteState(State state) {
         Timber.v("deleteState called");
         stateDao.delete(state);
     }
 
-    private void setSyncAll(boolean sync) {
-        stateDao.setSyncAll(sync);
+    private void setSyncFalseAll() {
+        stateDao.setSyncAll(false);
     }
 
     public void setDevice(String deviceName, String token) {
@@ -521,48 +559,6 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
             dbObjectQueuesRef.push().setValue(fObject);
         }
     }
-
-    private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (key.equals(context.getString(R.string.pref_device_name))) {
-
-                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(executor, instanceIdResult -> {
-                    String newToken = instanceIdResult.getToken();
-                    Timber.d("newToken" + newToken);
-
-                    String deviceName = sharedPreferences.getString(context.getString(R.string.pref_device_name), null);
-                    if (deviceName != null) {
-                        setDevice(sharedPreferences.getString(key, ""), newToken);
-                    }
-                });
-            }
-            if (key.equals(context.getString(R.string.pref_connect_web))
-                    || key.equals(context.getString(R.string.pref_connect_cloud))
-                    || key.equals(context.getString(R.string.pref_connect_iogo))) {
-                bFirebase = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo), false);
-                bSocket = sharedPref.getBoolean(context.getString(R.string.pref_connect_web), false) || sharedPref.getBoolean(context.getString(R.string.pref_connect_cloud), false);
-
-                if (bFirebase) {
-                    initFirebase();
-                } else if (bSocket) {
-                    initSocket();
-                    try {
-                        if (dbObjectsRef != null) {
-                            dbObjectsRef.removeEventListener(objectListener);
-                            dbObjectsRef.removeEventListener(objectChildListener);
-                        }
-                        if (dbStatesRef != null) {
-                            dbStatesRef.removeEventListener(stateListener);
-                            dbStatesRef.removeEventListener(stateChildListener);
-                        }
-                    } catch (Throwable t) {
-                        Timber.e(t);
-                    }
-                }
-            }
-        }
-    };
 
     @Override
     public void onObjectsReceived(String data) {

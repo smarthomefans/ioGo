@@ -35,7 +35,7 @@ public class FCommon {
     private String icon;
 
     public String getName() {
-        return name.toString();
+        return name;
     }
 
     public void setName(String name) {

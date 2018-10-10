@@ -179,9 +179,7 @@ public class EnumRepository implements OnEnumReceived{
 
     private Emitter.Listener onConnect = args -> executor.execute(this::initialLoad);
 
-    private Emitter.Listener onDisconnect = args -> {
-        Timber.i("disconnected");
-    };
+    private Emitter.Listener onDisconnect = args -> Timber.i("disconnected");
 
     private void initialLoad() {
         webService.getEnumObjects("enum.rooms", EnumRepository.TYPE_ROOM, this);
@@ -193,7 +191,7 @@ public class EnumRepository implements OnEnumReceived{
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
         Gson gson = gsonBuilder.create();
-        Set<String> enumSet = new HashSet();
+        Set<String> enumSet = new HashSet<>();
 
         try {
             IoEnum ioEnum = gson.fromJson(data, IoEnum.class);

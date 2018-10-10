@@ -87,9 +87,4 @@ public class SettingsErrorFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.settings_error, rootKey);
     }
 
-    @Override
-    public Preference findPreference(CharSequence key) {
-        return super.findPreference(key);
-    }
-
 }
