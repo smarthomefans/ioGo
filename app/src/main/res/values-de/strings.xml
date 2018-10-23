@@ -47,11 +47,11 @@
     <string name="info_count_states">Anzahl States:</string>
     <string name="info_count_funktions">Anzahl Funktionen:</string>
     <string name="info_count_rooms">Anzahl Räume:</string>
-    <string name="info_socket_status">Socket Status:</string>
+    <string name="info_connect_status">Socket Status:</string>
     <string name="info_app_version">App Version:</string>
     <string name="info_account_state">Status:</string>
     <string name="info_account_lbl">Account:</string>
-    <string name="info_connectivity_lbl">Server:</string>
+    <string name="info_connect_lbl">Server:</string>
     <string name="info_database_lbl">Datenbank:</string>
     <string name="info_app_lbl">App:</string>
     <string name="info_account_state_unknown">unbekannt</string>

@@ -20,6 +20,7 @@
 package de.nisnagel.iogo.data.repository;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -31,7 +32,6 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -55,12 +55,13 @@ import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.EnumDao;
 import de.nisnagel.iogo.data.model.EnumState;
 import de.nisnagel.iogo.data.model.EnumStateDao;
+import de.nisnagel.iogo.service.util.NetworkUtils;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import timber.log.Timber;
 
 @Singleton
-public class EnumRepository implements OnEnumReceived {
+public class EnumRepository extends BaseRepository implements OnEnumReceived {
 
     public static final String TYPE_FUNCTION = "function";
     public static final String TYPE_ROOM = "room";
@@ -68,45 +69,24 @@ public class EnumRepository implements OnEnumReceived {
 
     private final EnumDao enumDao;
     private final EnumStateDao enumStateDao;
-    private Executor executor;
-    private Context context;
-    private SharedPreferences sharedPref;
-    private WebService webService;
 
-    private boolean bFirebase;
-    private boolean bSocket;
-    private FirebaseAuth mAuth;
-    private FirebaseDatabase database;
+
     private DatabaseReference dbEnumsRef;
     private ValueEventListener enumListener;
     private ChildEventListener enumChildListener;
 
     @Inject
     public EnumRepository(EnumDao enumDao, EnumStateDao enumStateDao, Executor executor, Context context, SharedPreferences sharedPref, WebService webService) {
+        super(executor, context, sharedPref, webService);
         this.enumDao = enumDao;
         this.enumStateDao = enumStateDao;
-        this.executor = executor;
-        this.context = context;
-        this.sharedPref = sharedPref;
-        this.webService = webService;
 
         sharedPref.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
 
-        mAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
-
-        bFirebase = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo), false);
-        bSocket = sharedPref.getBoolean(context.getString(R.string.pref_connect_web), false) || sharedPref.getBoolean(context.getString(R.string.pref_connect_cloud), false);
-
-        if (bFirebase) {
-            initFirebase();
-        } else if (bSocket) {
-            initSocket();
-        }
         Timber.v("instance created");
     }
 
-    private void initFirebase() {
+    void initFirebase() {
         enumListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -157,19 +137,54 @@ public class EnumRepository implements OnEnumReceived {
         mAuth.addAuthStateListener(authListener);
     }
 
+    @Override
+    void removeListener() {
+        try {
+            if (dbEnumsRef != null) {
+                dbEnumsRef.removeEventListener(enumListener);
+                dbEnumsRef.removeEventListener(enumChildListener);
+            }
+        } catch (Throwable t) {
+            Timber.e(t);
+        }
+    }
+
     private void addListener(FirebaseUser user) {
         dbEnumsRef = database.getReference(PATH_ENUMS + user.getUid());
         dbEnumsRef.addChildEventListener(enumChildListener);
     }
 
-    private void initSocket() {
+    void initWeb() {
         if (!webService.isConnected()) {
+            connected.postValue("web - pending");
             executor.execute(() -> {
-                webService.init();
+                String url = sharedPref.getString(context.getString(R.string.pref_connect_web_url), null);
+                url = NetworkUtils.cleanUrl(url);
+                String username = sharedPref.getString(context.getString(R.string.pref_connect_web_user), null);
+                String password = sharedPref.getString(context.getString(R.string.pref_connect_web_password), null);
+                webService.initWeb(url, username, password);
                 webService.on(Socket.EVENT_CONNECT, onConnect);
                 webService.on(Socket.EVENT_DISCONNECT, onDisconnect);
                 webService.start();
             });
+        } else {
+            connected.postValue("web - connected");
+        }
+    }
+
+    void initCloud() {
+        if (!webService.isConnected()) {
+            connected.postValue("cloud - pending");
+            executor.execute(() -> {
+                String username = sharedPref.getString(context.getString(R.string.pref_connect_cloud_user), null);
+                String password = sharedPref.getString(context.getString(R.string.pref_connect_cloud_password), null);
+                webService.initCloud(username, password);
+                webService.on(Socket.EVENT_CONNECT, onConnect);
+                webService.on(Socket.EVENT_DISCONNECT, onDisconnect);
+                webService.start();
+            });
+        } else {
+            connected.postValue("cloud - connected");
         }
     }
 
@@ -181,11 +196,6 @@ public class EnumRepository implements OnEnumReceived {
     };
 
     private Emitter.Listener onDisconnect = args -> Timber.i("disconnected");
-
-    private void initialLoad() {
-        webService.getEnumObjects("enum.rooms", EnumRepository.TYPE_ROOM, this);
-        webService.getEnumObjects("enum.functions", EnumRepository.TYPE_FUNCTION, this);
-    }
 
     private void saveEnums(String data, String type) {
         Timber.v("saveEnums called");
@@ -318,22 +328,7 @@ public class EnumRepository implements OnEnumReceived {
             if (key.equals(context.getString(R.string.pref_connect_web))
                     || key.equals(context.getString(R.string.pref_connect_cloud))
                     || key.equals(context.getString(R.string.pref_connect_iogo))) {
-                bFirebase = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo), false);
-                bSocket = sharedPref.getBoolean(context.getString(R.string.pref_connect_web), false) || sharedPref.getBoolean(context.getString(R.string.pref_connect_cloud), false);
-
-                if (bFirebase) {
-                    initFirebase();
-                } else if (bSocket) {
-                    initSocket();
-                    try {
-                        if (dbEnumsRef != null) {
-                            dbEnumsRef.removeEventListener(enumListener);
-                            dbEnumsRef.removeEventListener(enumChildListener);
-                        }
-                    } catch (Throwable t) {
-                        Timber.e(t);
-                    }
-                }
+                checkSettings(context, sharedPref);
             }
         }
     };
@@ -347,7 +342,8 @@ public class EnumRepository implements OnEnumReceived {
         if (bFirebase && dbEnumsRef != null) {
             dbEnumsRef.addListenerForSingleValueEvent(enumListener);
         } else if (bSocket) {
-            initialLoad();
+            webService.getEnumObjects("enum.rooms", EnumRepository.TYPE_ROOM, this);
+            webService.getEnumObjects("enum.functions", EnumRepository.TYPE_FUNCTION, this);
         }
     }
 }

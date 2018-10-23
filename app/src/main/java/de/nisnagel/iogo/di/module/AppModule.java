@@ -126,8 +126,8 @@ public class AppModule {
 
     @Singleton
     @Provides
-    WebService provideWebService(SharedPreferences sharedPref, Context context) {
-        return new WebService(sharedPref, context);
+    WebService provideWebService() {
+        return new WebService();
     }
 
     @Singleton

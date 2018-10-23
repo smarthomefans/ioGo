@@ -31,6 +31,7 @@ import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
+import timber.log.Timber;
 
 public class LevelViewHolder extends BaseViewHolder {
     @BindView(R.id.valueNumber)
@@ -57,7 +58,16 @@ public class LevelViewHolder extends BaseViewHolder {
         setImageRessource(state.getRole());
 
         if (state.getWrite()) {
-            if (state.getMax() != null && state.getVal() != null) {
+            int val;
+            boolean isNumber = false;
+            try{
+               val = (Float.valueOf(state.getVal())).intValue();
+               isNumber = true;
+            }catch(Throwable t){
+               Timber.w(t.getMessage());
+               val = 0; // dummy
+            }
+            if (state.getMax() != null && state.getVal() != null && isNumber) {
                 mSlider.setVisibility(View.VISIBLE);
                 int max = state.getMax().intValue();
                 int min;
@@ -66,7 +76,7 @@ public class LevelViewHolder extends BaseViewHolder {
                 } else {
                     min = 0;
                 }
-                int val = (Float.valueOf(state.getVal())).intValue();
+
                 mSlider.setMax(max - min);
                 mSlider.setProgress(val - min);
                 mSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

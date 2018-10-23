@@ -49,11 +49,11 @@
     <string name="info_count_states">Number of states:</string>
     <string name="info_count_funktions">Number of functions:</string>
     <string name="info_count_rooms">Number of rooms:</string>
-    <string name="info_socket_status">Socket Status:</string>
+    <string name="info_connect_status">Status:</string>
     <string name="info_app_version">App Version:</string>
     <string name="info_account_state">Status:</string>
     <string name="info_account_lbl">Account:</string>
-    <string name="info_connectivity_lbl">Server:</string>
+    <string name="info_connect_lbl">Server:</string>
     <string name="info_database_lbl">Database:</string>
     <string name="info_app_lbl">App:</string>
     <string name="info_account_state_unknown">unknown</string>
@@ -160,5 +160,20 @@
     <string name="pref_layout_state_subtitle" translatable="false">pref_layout_state_subtitle</string>
     <string name="pref_layout_enum_show_hidden" translatable="false">pref_layout_hidden_enum</string>
 
+
+    <string name="error_no_skus">We didn\'t find any SKUs to display&#8230; Check your internet
+        connection and make sure your Google Developer Console was setup correctly.</string>
+    <string name="error_billing_unavailable">Billing unavailable. Make sure your Google Play app
+        is setup correctly</string>
+    <string name="error_billing_default">Billing unavailable. Please check your device.</string>
+    <string name="error_appsgit_not_finished">TODO: Here you will need to perform the
+        integration with Play Store to study the New way of integration with Play Billing.
+    </string>
+
+    <string name="button_purchase">Purchase Items</string>
+    <string name="button_buy">Buy</string>
+
+    <string name="content_description_app_loading_image">App loading image</string>
+    <string name="content_desc_free_vs_premium_indicator">Free or Premium Image Indicator</string>
 
 </resources>

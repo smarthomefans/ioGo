@@ -199,12 +199,16 @@ public class State {
         this.states = states;
     }
 
-    public String getFavorite() {
-        return favorite;
+    public boolean isFavorite() {
+        return "true".equals(favorite);
     }
 
-    public void setFavorite(String favorite) {
-        this.favorite = favorite;
+    public String getFavorite(){return this.favorite;}
+
+    public void setFavorite(String favorite){ this.favorite = favorite;}
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = (favorite) ? "true" : "false";
     }
 
     public Float getMin() {
@@ -238,4 +242,5 @@ public class State {
     public void setHistory(boolean history) {
         this.history = history;
     }
+
 }

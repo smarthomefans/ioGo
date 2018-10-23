@@ -37,13 +37,13 @@ import de.nisnagel.iogo.service.util.HistoryUtils;
 import timber.log.Timber;
 
 @Singleton
-public class StateHistoryRepository {
+public class StateHistoryRepository extends BaseRepository implements OnHistoryReceived {
 
     private final StateHistoryDao stateHistoryDao;
-    private WebService webService;
 
     @Inject
     public StateHistoryRepository(StateHistoryDao stateHistoryDao, Executor executor, Context context, SharedPreferences sharedPref, WebService webService) {
+        super(executor,context,sharedPref,webService);
         this.stateHistoryDao = stateHistoryDao;
         this.webService = webService;
 
@@ -66,12 +66,7 @@ public class StateHistoryRepository {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        webService.getHistory(id, json, args -> {
-            if (args[1] != null && !"[]".equals(args[1].toString())) {
-                syncHistoryDay(id, args[1].toString());
-                Timber.i("loadHistory: receiving historical data");
-            }
-        });
+        webService.getHistory(id, "day", json, this);
 
         json = new JSONObject();
         try {
@@ -83,12 +78,8 @@ public class StateHistoryRepository {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        webService.getHistory(id, json, args -> {
-            if (args[1] != null && !"[]".equals(args[1].toString())) {
-                syncHistoryWeek(id, args[1].toString());
-                Timber.i("loadHistory: receiving historical data");
-            }
-        });
+        webService.getHistory(id, "week", json, this);
+
         json = new JSONObject();
         try {
             json.put("id", id);
@@ -99,12 +90,8 @@ public class StateHistoryRepository {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        webService.getHistory(id, json, args -> {
-            if (args[1] != null && !"[]".equals(args[1].toString())) {
-                syncHistoryMonth(id, args[1].toString());
-                Timber.i("loadHistory: receiving historical data");
-            }
-        });
+        webService.getHistory(id, "month", json, this);
+
         json = new JSONObject();
         try {
             json.put("id", id);
@@ -115,12 +102,7 @@ public class StateHistoryRepository {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        webService.getHistory(id, json, args -> {
-            if (args[1] != null && !"[]".equals(args[1].toString())) {
-                syncHistoryYear(id, args[1].toString());
-                Timber.i("loadHistory: receiving historical data");
-            }
-        });
+        webService.getHistory(id, "year", json, this);
     }
 
     private void syncHistoryDay(String id, String data) {
@@ -163,4 +145,41 @@ public class StateHistoryRepository {
         stateHistoryDao.insert(stateHistory);
     }
 
+    @Override
+    void initFirebase() {
+
+    }
+
+    @Override
+    void removeListener() {
+
+    }
+
+    @Override
+    void initWeb() {
+
+    }
+
+    @Override
+    void initCloud() {
+
+    }
+
+    @Override
+    public void onHistoryReceived(String id, String data, String type) {
+        switch (type) {
+            case "day":
+                syncHistoryDay(id,data);
+                break;
+            case "week":
+                syncHistoryWeek(id,data);
+                break;
+            case "month":
+                syncHistoryMonth(id,data);
+                break;
+            case "year":
+                syncHistoryYear(id,data);
+                break;
+        }
+    }
 }

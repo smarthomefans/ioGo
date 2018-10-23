@@ -20,5 +20,5 @@
 package de.nisnagel.iogo.data.repository;
 
 public interface OnHistoryReceived {
-    void onHistoryReceived(String data, String type);
+    void onHistoryReceived(String id, String data, String type);
 }

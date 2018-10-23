@@ -60,12 +60,13 @@ import de.nisnagel.iogo.data.io.IoState;
 import de.nisnagel.iogo.data.model.EnumStateDao;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.model.StateDao;
+import de.nisnagel.iogo.service.util.NetworkUtils;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import timber.log.Timber;
 
 @Singleton
-public class StateRepository implements OnObjectsReceived, OnStatesReceived {
+public class StateRepository extends BaseRepository implements OnObjectsReceived, OnStatesReceived {
 
     private static final String FROM = "app";
     private static final String STATE_QUEUES = "stateQueues/";
@@ -73,21 +74,12 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
     private static final String OBJECT_QUEUES = "objectQueues/";
     private static final String OBJECTS = "objects/";
     private Map<String, LiveData<List<State>>> stateEnumCache;
-    private MutableLiveData<String> connected;
+
     private LiveData<List<State>> mListFavoriteStates;
 
     private final StateDao stateDao;
     private final EnumStateDao enumStateDao;
-    private Executor executor;
-    private Context context;
-    private SharedPreferences sharedPref;
-    private WebService webService;
-    private Gson gson;
 
-    private boolean bFirebase;
-    private boolean bSocket;
-    private FirebaseAuth mAuth;
-    private FirebaseDatabase database;
     private DatabaseReference dbObjectsRef;
     private DatabaseReference dbObjectQueuesRef;
     private DatabaseReference dbStatesRef;
@@ -99,12 +91,9 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
 
     @Inject
     public StateRepository(StateDao stateDao, EnumStateDao enumStateDao, Executor executor, Context context, SharedPreferences sharedPref, WebService webService) {
+        super(executor,context,sharedPref,webService);
         this.stateDao = stateDao;
         this.enumStateDao = enumStateDao;
-        this.executor = executor;
-        this.context = context;
-        this.sharedPref = sharedPref;
-        this.webService = webService;
 
         SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = (sharedPreferences, key) -> {
             if (key.equals(context.getString(R.string.pref_device_name))) {
@@ -122,53 +111,32 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
             if (key.equals(context.getString(R.string.pref_connect_web))
                     || key.equals(context.getString(R.string.pref_connect_cloud))
                     || key.equals(context.getString(R.string.pref_connect_iogo))) {
-                bFirebase = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo), false);
-                bSocket = sharedPref.getBoolean(context.getString(R.string.pref_connect_web), false) || sharedPref.getBoolean(context.getString(R.string.pref_connect_cloud), false);
-
-                if (bFirebase) {
-                    initFirebase();
-                } else if (bSocket) {
-                    initSocket();
-                    try {
-                        if (dbObjectsRef != null) {
-                            dbObjectsRef.removeEventListener(objectListener);
-                            dbObjectsRef.removeEventListener(objectChildListener);
-                        }
-                        if (dbStatesRef != null) {
-                            dbStatesRef.removeEventListener(stateListener);
-                            dbStatesRef.removeEventListener(stateChildListener);
-                        }
-                    } catch (Throwable t) {
-                        Timber.e(t);
-                    }
-                }
+                checkSettings(context, sharedPref);
             }
         };
         sharedPref.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
 
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
-        gson = gsonBuilder.create();
-
         stateEnumCache = new HashMap<>();
-        connected = new MutableLiveData<>();
-
-        mAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
-
-        bFirebase = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo), false);
-        bSocket = sharedPref.getBoolean(context.getString(R.string.pref_connect_web), false) || sharedPref.getBoolean(context.getString(R.string.pref_connect_cloud), false);
-
-        if (bFirebase) {
-            initFirebase();
-        } else if (bSocket) {
-            initSocket();
-        }
 
         Timber.v("instance created");
     }
 
-    private void initFirebase() {
+    void removeListener() {
+        try {
+            if (dbObjectsRef != null) {
+                dbObjectsRef.removeEventListener(objectListener);
+                dbObjectsRef.removeEventListener(objectChildListener);
+            }
+            if (dbStatesRef != null) {
+                dbStatesRef.removeEventListener(stateListener);
+                dbStatesRef.removeEventListener(stateChildListener);
+            }
+        } catch (Throwable t) {
+            Timber.e(t);
+        }
+    }
+
+    void initFirebase() {
 
         objectListener = new ValueEventListener() {
             @Override
@@ -272,25 +240,21 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
             }
         };
 
+        connected.postValue("iogo - pending");
+
         FirebaseAuth.AuthStateListener authListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if (user != null) {
                 addListener(user);
+                connected.postValue("iogo - connected");
             }
         };
 
         if (mAuth.getCurrentUser() != null) {
             addListener(mAuth.getCurrentUser());
+            connected.postValue("iogo - connected");
         }
         mAuth.addAuthStateListener(authListener);
-    }
-
-    public boolean hasConnection() {
-        boolean bIogo = sharedPref.getBoolean(context.getString(R.string.pref_connect_iogo), false);
-        boolean bWeb = sharedPref.getBoolean(context.getString(R.string.pref_connect_web), false);
-        boolean bCloud = sharedPref.getBoolean(context.getString(R.string.pref_connect_cloud), false);
-
-        return (bIogo || bWeb || bCloud);
     }
 
     private void addListener(FirebaseUser user) {
@@ -304,31 +268,61 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
         dbStateQueuesRef = database.getReference(STATE_QUEUES + user.getUid());
     }
 
-    private void initSocket() {
+    void initWeb() {
         if (!webService.isConnected()) {
+            connected.postValue("web - pending");
             executor.execute(() -> {
-                webService.init();
+                String url = sharedPref.getString(context.getString(R.string.pref_connect_web_url), null);
+                url = NetworkUtils.cleanUrl(url);
+                String username = sharedPref.getString(context.getString(R.string.pref_connect_web_user), null);
+                String password = sharedPref.getString(context.getString(R.string.pref_connect_web_password), null);
+                webService.initWeb(url, username, password);
                 webService.on(Socket.EVENT_CONNECT, onConnect);
                 webService.on(Socket.EVENT_DISCONNECT, onDisconnect);
                 webService.on("stateChange", onStateChange);
                 webService.start();
             });
+        }else{
+            connected.postValue("web - connected");
+        }
+    }
+
+    void initCloud() {
+        if (!webService.isConnected()) {
+            connected.postValue("cloud - pending");
+            executor.execute(() -> {
+                String username = sharedPref.getString(context.getString(R.string.pref_connect_cloud_user), null);
+                String password = sharedPref.getString(context.getString(R.string.pref_connect_cloud_password), null);
+                webService.initCloud(username, password);
+                webService.on(Socket.EVENT_CONNECT, onConnect);
+                webService.on(Socket.EVENT_DISCONNECT, onDisconnect);
+                webService.on("stateChange", onStateChange);
+                webService.start();
+            });
+        }else{
+            connected.postValue("cloud - connected");
         }
     }
 
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
+            if(bWeb) {
+                connected.postValue("web - connected");
+            }else if (bCloud){
+                connected.postValue("cloud - connected");
+            }
             requestStates();
         }
     };
 
-    private void initialLoad() {
-        webService.getObjects(this);
-    }
-
     private Emitter.Listener onDisconnect = args -> {
         setSyncFalseAll();
+        if(bWeb) {
+            connected.postValue("web - disconnected");
+        }else if (bCloud){
+            connected.postValue("cloud - disconnected");
+        }
         Timber.i("disconnected");
     };
 
@@ -576,7 +570,7 @@ public class StateRepository implements OnObjectsReceived, OnStatesReceived {
         if (bFirebase && dbObjectsRef != null) {
             dbObjectsRef.addListenerForSingleValueEvent(objectListener);
         } else if (bSocket) {
-            initialLoad();
+            webService.getObjects(this);
         }
     }
 }

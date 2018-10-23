@@ -49,11 +49,11 @@
     <string name="info_count_states">Número de estados:</string>
     <string name="info_count_funktions">Número de función:</string>
     <string name="info_count_rooms">Número de piezas:</string>
-    <string name="info_socket_status">Socket estatus:</string>
+    <string name="info_connect_status">Socket estatus:</string>
     <string name="info_app_version">Versión de la aplicación:</string>
     <string name="info_account_state">Estatus:</string>
     <string name="info_account_lbl">Cuenta:</string>
-    <string name="info_connectivity_lbl">Servidor:</string>
+    <string name="info_connect_lbl">Servidor:</string>
     <string name="info_database_lbl">Base de deatos:</string>
     <string name="info_app_lbl">Aplicación:</string>
     <string name="info_account_state_unknown">desconocido</string>

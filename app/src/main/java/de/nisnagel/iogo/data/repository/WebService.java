@@ -19,9 +19,6 @@
 
 package de.nisnagel.iogo.data.repository;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import com.google.firebase.perf.FirebasePerformance;
 import com.google.firebase.perf.metrics.Trace;
 
@@ -34,7 +31,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.service.util.NetworkUtils;
 import io.socket.client.Ack;
 import io.socket.client.Manager;
@@ -48,38 +44,14 @@ public class WebService {
     private Socket mSocket;
     private String cookie;
 
-    private Context context;
-
-    private SharedPreferences sharedPref;
-
-    public WebService(SharedPreferences sharedPref, Context context) {
+    public WebService() {
         Timber.v("instance created");
-        this.sharedPref = sharedPref;
-        this.context = context;
     }
 
-    public void init() {
-        Timber.v(" init called");
-        boolean isCloud = sharedPref.getBoolean(context.getString(R.string.pref_connect_cloud), false);
-        boolean isWeb = sharedPref.getBoolean(context.getString(R.string.pref_connect_web), false);
-        if (isCloud) {
-            String username = sharedPref.getString(context.getString(R.string.pref_connect_cloud_user), null);
-            String password = sharedPref.getString(context.getString(R.string.pref_connect_cloud_password), null);
-            init_cloud(username, password);
-        } else if (isWeb) {
-            String url = sharedPref.getString(context.getString(R.string.pref_connect_web_url), null);
-            url = NetworkUtils.cleanUrl(url);
-            String username = sharedPref.getString(context.getString(R.string.pref_connect_web_user), null);
-            String password = sharedPref.getString(context.getString(R.string.pref_connect_web_password), null);
-            init_web(url, username, password);
-        }
-    }
-
-    private void init_web(String url, String username, String password) {
-        Timber.v(" init_web called");
+    public void initWeb(String url, String username, String password) {
+        Timber.v(" initWeb called");
         String socketUrl;
         if (username != null && password != null && !username.isEmpty() && !password.isEmpty()) {
-            //cookie = NetworkUtils.getCookie(url, username, password);
 
             try {
                 username = URLEncoder.encode(username, "UTF-8");
@@ -95,7 +67,7 @@ public class WebService {
         createSocket(socketUrl);
     }
 
-    private void init_cloud(String username, String password) {
+    public void initCloud(String username, String password) {
         Timber.v(" init_cloud called");
         if (username != null && password != null) {
             cookie = NetworkUtils.getProCookie(username, password);
@@ -129,10 +101,10 @@ public class WebService {
         }
     }
 
-    public void on(String event, Emitter.Listener fn){
-        if(mSocket != null) {
+    public void on(String event, Emitter.Listener fn) {
+        if (mSocket != null) {
             mSocket.on(event, fn);
-        }else{
+        } else {
             Timber.w("socket is null");
         }
     }
@@ -155,7 +127,7 @@ public class WebService {
         }
     }
 
-    public void subscribe(final Object... args){
+    public void subscribe(final Object... args) {
         mSocket.emit("subscribe", args);
     }
 
@@ -181,7 +153,10 @@ public class WebService {
                     mSocket.emit("setState", id, bool);
                     break;
                 case "number":
-                    Float num = Float.parseFloat(val);
+                    Float num = null;
+                    if(val != null) {
+                        num = Float.parseFloat(val);
+                    }
                     mSocket.emit("setState", id, num);
                     break;
                 default:
@@ -191,7 +166,7 @@ public class WebService {
         }
     }
 
-    public void getEnumObjects(String key, String type, OnEnumReceived listener){
+    public void getEnumObjects(String key, String type, OnEnumReceived listener) {
         Timber.v("getEnumRooms called");
         if (isConnected()) {
             JSONObject json = new JSONObject();
@@ -206,7 +181,7 @@ public class WebService {
             mSocket.emit("getObjectView", "system", "enum", json, (Ack) args -> {
                 if (args[1] != null) {
                     trace.putMetric("length", args[1].toString().getBytes().length);
-                }else{
+                } else {
                     trace.putMetric("length", 0);
                 }
                 trace.stop();
@@ -225,7 +200,7 @@ public class WebService {
             mSocket.emit("getObjects", null, args -> {
                 if (args[1] != null) {
                     trace.putMetric("length", args[1].toString().getBytes().length);
-                }else{
+                } else {
                     trace.putMetric("length", 0);
                 }
                 trace.stop();
@@ -236,22 +211,34 @@ public class WebService {
         }
     }
 
-    public void getHistory(String id, Object args, Ack callback) {
+    public void getHistory(String id, String type, Object args, OnHistoryReceived listener) {
         Timber.v("getHistory called");
         if (isConnected()) {
-            mSocket.emit("getHistory", args, callback);
+            Trace trace = FirebasePerformance.getInstance().newTrace("WebService.getHistory");
+            trace.start();
+            mSocket.emit("getHistory", args, (Ack) args1 -> {
+                if (args1[1] != null) {
+                    trace.putMetric("length", args1[1].toString().getBytes().length);
+                } else {
+                    trace.putMetric("length", 0);
+                }
+                trace.stop();
+                if (args1[1] != null) {
+                    listener.onHistoryReceived(id, type, args1[1].toString());
+                }
+            });
         }
     }
 
-    public void getStates(Object args, OnStatesReceived listener){
+    public void getStates(Object args, OnStatesReceived listener) {
         Timber.v("getStates called");
-        if(isConnected()){
+        if (isConnected()) {
             Trace trace = FirebasePerformance.getInstance().newTrace("WebService.getStates");
             trace.start();
             mSocket.emit("getStates", args, (Ack) args1 -> {
                 if (args1[1] != null) {
                     trace.putMetric("length", args1[1].toString().getBytes().length);
-                }else{
+                } else {
                     trace.putMetric("length", 0);
                 }
                 trace.stop();

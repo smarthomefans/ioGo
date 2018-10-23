@@ -41,7 +41,10 @@ public class IoCommon {
     private IoCustom custom;
 
     public String getName() {
-        return name.toString();
+        if (name != null) {
+            return name.toString();
+        }
+        return "";
     }
 
     public void setName(IoName name) {
