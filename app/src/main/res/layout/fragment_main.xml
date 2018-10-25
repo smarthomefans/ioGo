@@ -42,7 +42,9 @@
             android:layout_height="@dimen/logo_w_h"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="30dp"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher"
+            android:contentDescription="the app logo"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/txtWelcome"

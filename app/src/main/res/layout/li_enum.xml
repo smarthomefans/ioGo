@@ -19,48 +19,47 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<de.nisnagel.iogo.ui.helper.SwipeRevealLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<de.nisnagel.iogo.ui.helper.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="72dp"
     android:layout_gravity="center_vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:dragFromEdge="right">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|end"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|end"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
 
-            <ImageButton
-                android:id="@+id/favorite_button"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/star"
-                android:background="@color/common_google_signin_btn_text_dark_disabled"
-                android:text="@string/main_star"/>
+        <ImageButton
+            android:id="@+id/favorite_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@color/common_google_signin_btn_text_dark_disabled"
+            android:contentDescription="@string/main_star"
+            android:src="@drawable/star"
+            android:text="@string/main_star" />
 
-            <ImageButton
-                android:id="@+id/hide_button"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/eye_off"
-                android:background="@color/common_google_signin_btn_text_dark_disabled"
-                android:text="@string/main_hide"/>
+        <ImageButton
+            android:id="@+id/hide_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@color/common_google_signin_btn_text_dark_disabled"
+            android:contentDescription="@string/main_hide"
+            android:src="@drawable/eye_off"
+            android:text="@string/main_hide" />
 
-        </LinearLayout>
-    </FrameLayout>
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <android.support.v7.widget.CardView
             android:id="@+id/card_view"
@@ -77,14 +76,16 @@
                 <View
                     android:id="@+id/color"
                     android:layout_width="4dp"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
 
                 <ImageView
                     android:id="@+id/icon"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="11dp"
-                    android:layout_marginTop="11dp" />
+                    android:layout_marginTop="11dp"
+                    android:contentDescription="custom enum icon"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/title"

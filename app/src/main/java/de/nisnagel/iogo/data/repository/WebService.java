@@ -211,12 +211,12 @@ public class WebService {
         }
     }
 
-    public void getHistory(String id, String type, Object args, OnHistoryReceived listener) {
+    public void getHistory(String id, String type, JSONObject args, OnHistoryReceived listener) {
         Timber.v("getHistory called");
         if (isConnected()) {
             Trace trace = FirebasePerformance.getInstance().newTrace("WebService.getHistory");
             trace.start();
-            mSocket.emit("getHistory", args, (Ack) args1 -> {
+            mSocket.emit("getHistory", id, args, (Ack) args1 -> {
                 if (args1[1] != null) {
                     trace.putMetric("length", args1[1].toString().getBytes().length);
                 } else {
@@ -224,7 +224,7 @@ public class WebService {
                 }
                 trace.stop();
                 if (args1[1] != null) {
-                    listener.onHistoryReceived(id, type, args1[1].toString());
+                    listener.onHistoryReceived(id, args1[1].toString(), type);
                 }
             });
         }
