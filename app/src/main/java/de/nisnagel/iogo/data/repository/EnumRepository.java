@@ -342,8 +342,8 @@ public class EnumRepository extends BaseRepository implements OnEnumReceived {
         if (bFirebase && dbEnumsRef != null) {
             dbEnumsRef.addListenerForSingleValueEvent(enumListener);
         } else if (bSocket) {
-            webService.getEnumObjects("enum.rooms", EnumRepository.TYPE_ROOM, this);
-            webService.getEnumObjects("enum.functions", EnumRepository.TYPE_FUNCTION, this);
+            webService.getEnumObjects("enum.rooms.", EnumRepository.TYPE_ROOM, this);
+            webService.getEnumObjects("enum.functions.", EnumRepository.TYPE_FUNCTION, this);
         }
     }
 }

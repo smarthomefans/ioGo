@@ -26,8 +26,8 @@ android {
         applicationId 'de.nisnagel.iogo'
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 10109
-        versionName "1.01.09"
+        versionCode 10110
+        versionName "1.01.10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -89,7 +89,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.0.4'
     implementation 'com.google.firebase:firebase-database:16.0.3'
     implementation 'com.google.firebase:firebase-perf:16.1.2'
-    //implementation 'com.firebaseui:firebase-ui-storage:4.1.0'
     implementation 'com.google.firebase:firebase-storage:16.0.3'
     // CRASHLYTICS
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
