@@ -26,8 +26,10 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -95,7 +97,16 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
         this.stateDao = stateDao;
         this.enumStateDao = enumStateDao;
 
-        SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = (sharedPreferences, key) -> {
+        sharedPref.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
+
+        stateEnumCache = new HashMap<>();
+
+        Timber.v("instance created");
+    }
+
+    private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (key.equals(context.getString(R.string.pref_device_name))) {
 
                 FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(executor, instanceIdResult -> {
@@ -113,13 +124,8 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
                     || key.equals(context.getString(R.string.pref_connect_iogo))) {
                 checkSettings(context, sharedPref);
             }
-        };
-        sharedPref.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
-
-        stateEnumCache = new HashMap<>();
-
-        Timber.v("instance created");
-    }
+        }
+    };
 
     void removeListener() {
         try {
@@ -246,15 +252,24 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if (user != null) {
                 addListener(user);
+                checkPro(user);
                 connected.postValue("iogo - connected");
             }
         };
 
         if (mAuth.getCurrentUser() != null) {
             addListener(mAuth.getCurrentUser());
+            checkPro(mAuth.getCurrentUser());
             connected.postValue("iogo - connected");
         }
         mAuth.addAuthStateListener(authListener);
+    }
+
+    private void checkPro(FirebaseUser user){
+        user.getIdToken(true).addOnSuccessListener(result -> {
+            Object isPro = result.getClaims().get("pro");
+
+        });
     }
 
     private void addListener(FirebaseUser user) {
@@ -405,7 +420,6 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
                 IoState ioState = new IoState();
                 ioState.setId(id);
                 ioState.setVal(val);
-                ioState.setFrom(FROM);
                 dbStateQueuesRef.push().setValue(ioState);
             }
         } else if (bSocket) {

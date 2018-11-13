@@ -24,6 +24,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -32,6 +33,9 @@ import android.support.v4.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -62,7 +66,7 @@ public class FCMService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Timber.d("Message received: " + remoteMessage.getNotification().getTitle());
 
-        boolean isEnabled = sharedPref.getBoolean("fcm_enabled", false);
+        boolean isEnabled = sharedPref.getBoolean(getString(R.string.pref_device_notification), false);
         if (isEnabled) {
             sendNotification(remoteMessage.getNotification().getTitle(),
                     remoteMessage.getNotification().getBody(), remoteMessage.getData());
@@ -73,7 +77,7 @@ public class FCMService extends FirebaseMessagingService {
     public void onNewToken(String s) {
         super.onNewToken(s);
 
-        String fcm_device = sharedPref.getString("fcm_device", null);
+        String fcm_device = sharedPref.getString(getString(R.string.pref_device_name), null);
         stateRepository.sendState("iogo.0." + fcm_device + ".token", s, "string");
         //for now we are displaying the token in the log
         //copy it as this method is called only when the new token is generated
@@ -97,6 +101,16 @@ public class FCMService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(notificationChannel);
         }
 
+        Bitmap bmp = null;
+        if(row.get("url") != null){
+            try {
+                InputStream in = new URL(row.get("url")).openStream();
+                bmp = BitmapFactory.decodeStream(in);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "main_channel")
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.test48))
                 .setSmallIcon(R.drawable.test48)
@@ -104,6 +118,8 @@ public class FCMService extends FirebaseMessagingService {
                 .setContentText(messageBody)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
+                .setStyle(new NotificationCompat.BigPictureStyle()
+                        .bigPicture(bmp))
                 .setContentIntent(contentIntent);
         notificationManager.notify(count, notificationBuilder.build());
         count++;

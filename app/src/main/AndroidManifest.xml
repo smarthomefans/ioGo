@@ -114,6 +114,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />
         </activity>
+        <activity
+            android:name=".ui.billing.BillingActivity"
+            android:parentActivityName=".ui.settings.SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.settings.SettingsActivity" />
+        </activity>
 
         <service
             android:name=".service.FCMService"

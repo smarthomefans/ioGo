@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ ioGo - android app to control ioBroker home automation server.
   ~
   ~ Copyright (C) 2018  Nis Nagel
@@ -17,22 +17,13 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <!--<dimen name="card_margin">5dp</dimen>-->
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/billing_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.billing.BillingActivity">
 
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="logo_w_h">100dp</dimen>
+    <include layout="@layout/toolbar" />
 
-    <dimen name="single_padding">8dp</dimen>
-    <dimen name="card_margin">8dp</dimen>
-    <dimen name="double_padding">16dp</dimen>
-    <dimen name="max_padding">24dp</dimen>
-    <dimen name="header_gap">8dp</dimen>
-    <dimen name="row_gap">1px</dimen>
-    <dimen name="button_width">150dp</dimen>
-    <dimen name="button_height">50dp</dimen>
-    <dimen name="sku_details_row_height">245dp</dimen>
-    <dimen name="sku_details_price_width">60dp</dimen>
-    <dimen name="sku_details_header_row_height">61dp</dimen>
-</resources>
+</android.support.design.widget.CoordinatorLayout>

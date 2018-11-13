@@ -27,4 +27,11 @@
     <color name="colorGray">#CCCCCC</color>
 
     <color name="white">#ffffff</color>
+
+    <color name="list_bg_color">#22eeee</color>
+    <color name="row_header_bg_color">#ffffff</color>
+    <color name="row_bg_color">#666666</color>
+
+    <color name="disabled_color">#90b1b0</color>
+    <color name="gold">#ffbf00</color>
 </resources>

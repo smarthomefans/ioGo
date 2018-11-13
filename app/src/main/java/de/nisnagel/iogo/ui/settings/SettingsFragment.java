@@ -53,6 +53,7 @@ public class SettingsFragment extends Fragment {
         list.add(new SettingsAdapter.SettingItem(R.drawable.television_guide,getString(R.string.settings_server_layout),getString(R.string.settings_server_layout_desc), SettingsMainActivity.intentLayout));
         list.add(new SettingsAdapter.SettingItem(R.drawable.cellphone_android,getString(R.string.settings_server_device),getString(R.string.settings_server_device_desc), SettingsMainActivity.intentDevice));
         list.add(new SettingsAdapter.SettingItem(R.drawable.bug,getString(R.string.settings_server_error),getString(R.string.settings_server_error_desc), SettingsMainActivity.intentError));
+        list.add(new SettingsAdapter.SettingItem(R.drawable.trophy_variant_outline,"Pro Features","Buy extra features", SettingsMainActivity.intentBilling));
         mAdapter = new SettingsAdapter(list);
         getActivity().runOnUiThread(() -> recyclerView.setAdapter(mAdapter));
 

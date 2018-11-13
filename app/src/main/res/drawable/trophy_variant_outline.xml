@@ -17,22 +17,11 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <!--<dimen name="card_margin">5dp</dimen>-->
-
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="logo_w_h">100dp</dimen>
-
-    <dimen name="single_padding">8dp</dimen>
-    <dimen name="card_margin">8dp</dimen>
-    <dimen name="double_padding">16dp</dimen>
-    <dimen name="max_padding">24dp</dimen>
-    <dimen name="header_gap">8dp</dimen>
-    <dimen name="row_gap">1px</dimen>
-    <dimen name="button_width">150dp</dimen>
-    <dimen name="button_height">50dp</dimen>
-    <dimen name="sku_details_row_height">245dp</dimen>
-    <dimen name="sku_details_price_width">60dp</dimen>
-    <dimen name="sku_details_header_row_height">61dp</dimen>
-</resources>
+<!-- drawable/trophy_variant_outline.xml -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="24dp"
+    android:width="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:fillColor="#FFF" android:pathData="M7,2V4H2V11C2,12 3,13 4,13H7.2C7.6,14.9 8.6,16.6 11,16.9V19C8,19.2 8,20.3 8,21.6V22H16V21.7C16,20.4 16,19.3 13,19.1V17C15.5,16.7 16.5,15 16.8,13.1H20C21,13.1 22,12.1 22,11.1V4H17V2H7M9,4H15V12A3,3 0 0,1 12,15C10,15 9,13.66 9,12V4M4,6H7V8L7,11H4V6M17,6H20V11H17V6Z" />
+</vector>

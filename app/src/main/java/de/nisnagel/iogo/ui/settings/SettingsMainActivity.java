@@ -34,6 +34,7 @@ import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.service.Constants;
 import de.nisnagel.iogo.ui.auth.UserProfilActivity;
 import de.nisnagel.iogo.ui.base.BaseActivity;
+import de.nisnagel.iogo.ui.billing.BillingActivity;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -56,6 +57,7 @@ public class SettingsMainActivity extends BaseActivity {
     public static final String intentLayout = "LAYOUT";
     public static final String intentDevice = "DEVICE";
     public static final String intentError = "ERROR";
+    public static final String intentBilling = "BILLING";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +99,11 @@ public class SettingsMainActivity extends BaseActivity {
 
                 case intentAccount:
                     startActivity(new Intent(SettingsMainActivity.this, UserProfilActivity.class));
+                    finish();
+                    break;
+
+                case intentBilling:
+                    startActivity(new Intent(SettingsMainActivity.this, BillingActivity.class));
                     finish();
                     break;
 

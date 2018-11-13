@@ -26,8 +26,8 @@ android {
         applicationId 'de.nisnagel.iogo'
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 10110
-        versionName "1.01.10"
+        versionCode 10200
+        versionName "1.02.00"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -103,7 +103,8 @@ dependencies {
     //Charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     //Billing
-    implementation 'com.android.billingclient:billing:1.1'
+    //implementation 'com.android.billingclient:billing:1.1'
+    implementation 'com.github.dimadake:billing:1.0.1'
 
 }
 
