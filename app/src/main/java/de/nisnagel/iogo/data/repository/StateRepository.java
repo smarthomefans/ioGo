@@ -266,9 +266,9 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
     }
 
     private void checkPro(FirebaseUser user){
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             Object isPro = result.getClaims().get("pro");
-
+            sharedPref.edit().putBoolean("pro", (Boolean) isPro).apply();
         });
     }
 

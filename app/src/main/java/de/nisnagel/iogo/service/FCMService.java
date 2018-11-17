@@ -28,29 +28,42 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
+import java.io.File;
 import java.util.Map;
 
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
 import de.nisnagel.iogo.R;
+import de.nisnagel.iogo.data.repository.MessageRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
 import timber.log.Timber;
 
 public class FCMService extends FirebaseMessagingService {
 
     private static int count = 0;
+    FirebaseStorage storage;
+    StorageReference messagesRef;
+    File localFile = null;
+    Bitmap bmp = null;
 
     @Inject
     public SharedPreferences sharedPref;
+
+    @Inject
+    public MessageRepository messageRepository;
 
     @Inject
     public StateRepository stateRepository;
@@ -60,6 +73,11 @@ public class FCMService extends FirebaseMessagingService {
         Timber.v(" onCreate called");
         AndroidInjection.inject(this);
         super.onCreate();
+        if (messageRepository.isPro()) {
+            storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference();
+            messagesRef = storageRef.child("messages").child(messageRepository.getFirebaseUid());
+        }
     }
 
     @Override
@@ -97,31 +115,71 @@ public class FCMService extends FirebaseMessagingService {
             notificationChannel.enableLights(true);
             notificationChannel.enableVibration(true);
             notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-
             notificationManager.createNotificationChannel(notificationChannel);
         }
 
-        Bitmap bmp = null;
-        if(row.get("url") != null){
-            try {
-                InputStream in = new URL(row.get("url")).openStream();
-                bmp = BitmapFactory.decodeStream(in);
-            } catch (IOException e) {
-                e.printStackTrace();
+
+        if (row.get("img") != null) {
+            localFile = generateFile("images", row.get("img"));
+            StorageReference fileRef = messagesRef.child(row.get("img"));
+            fileRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    bmp = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), "main_channel")
+                            .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.test48))
+                            .setSmallIcon(R.drawable.test48)
+                            .setContentTitle(messageTitle)
+                            .setContentText(messageBody)
+                            .setAutoCancel(true)
+                            .setSound(defaultSoundUri)
+                            .setStyle(new NotificationCompat.BigPictureStyle()
+                                    .bigPicture(bmp))
+                            .setContentIntent(contentIntent);
+                    notificationManager.notify(count, notificationBuilder.build());
+                    count++;
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                }
+            });
+        } else {
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "main_channel")
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.test48))
+                    .setSmallIcon(R.drawable.test48)
+                    .setContentTitle(messageTitle)
+                    .setContentText(messageBody)
+                    .setAutoCancel(true)
+                    .setSound(defaultSoundUri)
+                    .setStyle(new NotificationCompat.BigPictureStyle()
+                            .bigPicture(bmp))
+                    .setContentIntent(contentIntent);
+            notificationManager.notify(count, notificationBuilder.build());
+            count++;
+        }
+    }
+
+    private File generateFile(@NonNull String path, @NonNull String fileName) {
+        File file = null;
+        if (isExternalStorageAvailable()) {
+            File root = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_NOTIFICATIONS);
+
+            boolean dirExists = true;
+
+            if (!root.exists()) {
+                dirExists = root.mkdirs();
+            }
+
+            if (dirExists) {
+                file = new File(root, fileName);
             }
         }
+        return file;
+    }
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "main_channel")
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.test48))
-                .setSmallIcon(R.drawable.test48)
-                .setContentTitle(messageTitle)
-                .setContentText(messageBody)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setStyle(new NotificationCompat.BigPictureStyle()
-                        .bigPicture(bmp))
-                .setContentIntent(contentIntent);
-        notificationManager.notify(count, notificationBuilder.build());
-        count++;
+    private static boolean isExternalStorageAvailable() {
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 }

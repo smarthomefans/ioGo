@@ -27,6 +27,7 @@
     <string name="main_title_activity_home">Home</string>
     <string name="main_title_activity_room_list">Rooms</string>
     <string name="main_title_activity_function_list">Functions</string>
+    <string name="main_title_activity_message_list">Messages</string>
     <string name="main_w_e_l_c_o_m_e">W E L C O M E</string>
     <string name="main_thank_you_for_using_this_app">Thank you for using this app!</string>
     <string name="main_get_registered_now">Get registered now</string>
@@ -167,5 +168,6 @@
         integration with Play Store to study the New way of integration with Play Billing.
     </string>
     <string name="button_buy">Buy</string>
+    <string name="main_message_deleted">Message deleted</string>
 
 </resources>

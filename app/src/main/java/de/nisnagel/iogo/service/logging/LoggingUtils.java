@@ -35,9 +35,9 @@ public class LoggingUtils {
         if (sharedPref.getBoolean(context.getString(R.string.pref_error_logging), false)) {
             String priority = sharedPref.getString(context.getString(R.string.pref_error_logging_level), null);
             if (priority != null) {
-                Timber.plant(new TimberFileTree(Integer.parseInt(priority)));
+                Timber.plant(new TimberFileTree(Integer.parseInt(priority), context));
             } else {
-                Timber.plant(new TimberFileTree(Log.ERROR));
+                Timber.plant(new TimberFileTree(Log.ERROR, context));
             }
         } else {
             if (BuildConfig.DEBUG) {

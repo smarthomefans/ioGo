@@ -19,6 +19,7 @@
 
 package de.nisnagel.iogo.service.logging;
 
+import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -39,9 +40,11 @@ class TimberFileTree extends Timber.DebugTree {
 
     private static final String LOG_TAG = TimberFileTree.class.getSimpleName();
     private int priority;
+    private Context context;
 
-    public TimberFileTree(int priority) {
+    public TimberFileTree(int priority, Context context) {
         this.priority = priority;
+        this.context = context;
     }
 
     @Override
@@ -107,11 +110,10 @@ class TimberFileTree extends Timber.DebugTree {
 
     /*  Helper method to create file*/
     @Nullable
-    private static File generateFile(@NonNull String path, @NonNull String fileName) {
+    private File generateFile(@NonNull String path, @NonNull String fileName) {
         File file = null;
         if (isExternalStorageAvailable()) {
-            File root = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),
-                    BuildConfig.APPLICATION_ID + File.separator + path);
+            File root = context.getExternalFilesDir(null);
 
             boolean dirExists = true;
 

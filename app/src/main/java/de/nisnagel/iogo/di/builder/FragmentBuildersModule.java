@@ -27,6 +27,7 @@ import de.nisnagel.iogo.ui.info.InfoFragment;
 import de.nisnagel.iogo.ui.main.EnumFragment;
 import de.nisnagel.iogo.ui.main.FunctionFragment;
 import de.nisnagel.iogo.ui.main.HomeFragment;
+import de.nisnagel.iogo.ui.main.MessageFragment;
 import de.nisnagel.iogo.ui.main.RoomFragment;
 
 @Module
@@ -52,5 +53,8 @@ public abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract FunctionFragment contributeFunctionFragment();
+
+    @ContributesAndroidInjector
+    abstract MessageFragment contributeMessageFragment();
 
 }

@@ -29,6 +29,7 @@ import de.nisnagel.iogo.ui.detail.StateViewModel;
 import de.nisnagel.iogo.ui.history.HistoryViewModel;
 import de.nisnagel.iogo.ui.info.InfoViewModel;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
+import de.nisnagel.iogo.ui.main.MessageViewModel;
 import de.nisnagel.iogo.ui.settings.SettingsViewModel;
 
 @Singleton
@@ -38,14 +39,16 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     private InfoViewModel mInfoViewModel;
     private SettingsViewModel mSettingsViewModel;
     private HistoryViewModel mHistoryViewModel;
+    private MessageViewModel mMessageViewModel;
 
     @Inject
-    public ViewModelFactory(EnumViewModel mEnumViewModel, StateViewModel mStateViewModel, InfoViewModel mInfoViewModel, SettingsViewModel mSettingsViewModel, HistoryViewModel mHistoryViewModel) {
+    public ViewModelFactory(EnumViewModel mEnumViewModel, StateViewModel mStateViewModel, InfoViewModel mInfoViewModel, SettingsViewModel mSettingsViewModel, HistoryViewModel mHistoryViewModel, MessageViewModel mMessageViewModel) {
         this.mEnumViewModel = mEnumViewModel;
         this.mStateViewModel = mStateViewModel;
         this.mInfoViewModel = mInfoViewModel;
         this.mSettingsViewModel = mSettingsViewModel;
         this.mHistoryViewModel = mHistoryViewModel;
+        this.mMessageViewModel = mMessageViewModel;
     }
 
     @SuppressWarnings("unchecked")
@@ -65,6 +68,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         }
         if (modelClass.isAssignableFrom(HistoryViewModel.class)) {
             return (T) mHistoryViewModel;
+        }
+        if (modelClass.isAssignableFrom(MessageViewModel.class)) {
+            return (T) mMessageViewModel;
         }
         throw new IllegalArgumentException("Unknown class name");
     }

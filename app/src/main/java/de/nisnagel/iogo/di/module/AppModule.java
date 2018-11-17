@@ -38,9 +38,12 @@ import de.nisnagel.iogo.data.model.AppDatabase;
 import de.nisnagel.iogo.data.model.EnumDao;
 import de.nisnagel.iogo.data.model.EnumStateDao;
 import de.nisnagel.iogo.data.model.HistoryDatabase;
+import de.nisnagel.iogo.data.model.MessageDao;
+import de.nisnagel.iogo.data.model.MessageDatabase;
 import de.nisnagel.iogo.data.model.StateDao;
 import de.nisnagel.iogo.data.model.StateHistoryDao;
 import de.nisnagel.iogo.data.repository.EnumRepository;
+import de.nisnagel.iogo.data.repository.MessageRepository;
 import de.nisnagel.iogo.data.repository.StateHistoryRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
 import de.nisnagel.iogo.data.repository.WebService;
@@ -49,6 +52,7 @@ import de.nisnagel.iogo.ui.detail.StateViewModel;
 import de.nisnagel.iogo.ui.history.HistoryViewModel;
 import de.nisnagel.iogo.ui.info.InfoViewModel;
 import de.nisnagel.iogo.ui.main.EnumViewModel;
+import de.nisnagel.iogo.ui.main.MessageViewModel;
 import de.nisnagel.iogo.ui.settings.SettingsViewModel;
 
 /**
@@ -100,6 +104,11 @@ public class AppModule {
         return viewModel;
     }
 
+    @Provides
+    ViewModel provideMessageViewModel(MessageViewModel viewModel) {
+        return viewModel;
+    }
+
     @Singleton
     @Provides
     AppDatabase provideDb(App app) {
@@ -110,6 +119,12 @@ public class AppModule {
     @Provides
     HistoryDatabase provideHistoryDb(App app) {
         return Room.databaseBuilder(app, HistoryDatabase.class, "historyDatabase.db").fallbackToDestructiveMigration().build();
+    }
+
+    @Singleton
+    @Provides
+    MessageDatabase provideMessageDb(App app) {
+        return Room.databaseBuilder(app, MessageDatabase.class, "messageDatabase.db").fallbackToDestructiveMigration().build();
     }
 
     @Singleton
@@ -144,8 +159,20 @@ public class AppModule {
 
     @Singleton
     @Provides
+    MessageRepository provideMessageRepository(MessageDao messageDao, Executor executor, Context context, SharedPreferences sharedPref) {
+        return new MessageRepository(messageDao, executor, context, sharedPref);
+    }
+
+    @Singleton
+    @Provides
     StateDao provideStateDao(AppDatabase db) {
         return db.getStateDao();
+    }
+
+    @Singleton
+    @Provides
+    MessageDao provideMessageDao(MessageDatabase db) {
+        return db.getMessageDao();
     }
 
     @Singleton

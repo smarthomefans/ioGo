@@ -20,7 +20,6 @@
 package de.nisnagel.iogo.data.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -65,7 +64,7 @@ public class EnumRepository extends BaseRepository implements OnEnumReceived {
 
     public static final String TYPE_FUNCTION = "function";
     public static final String TYPE_ROOM = "room";
-    private static final String PATH_ENUMS = "enums/";
+    private static final String ENUMS = "enums/";
 
     private final EnumDao enumDao;
     private final EnumStateDao enumStateDao;
@@ -150,7 +149,7 @@ public class EnumRepository extends BaseRepository implements OnEnumReceived {
     }
 
     private void addListener(FirebaseUser user) {
-        dbEnumsRef = database.getReference(PATH_ENUMS + user.getUid());
+        dbEnumsRef = database.getReference(ENUMS + user.getUid());
         dbEnumsRef.addChildEventListener(enumChildListener);
     }
 

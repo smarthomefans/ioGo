@@ -182,69 +182,70 @@ public class HistoryFragment extends Fragment implements Injectable {
 
     @OnClick(R.id.btnDay)
     public void showDay() {
+        if(stateHistory != null) {
+            clearButtonStyles();
+            mDay.setTextColor(Color.WHITE);
 
-        clearButtonStyles();
-        mDay.setTextColor(Color.WHITE);
+            setDataChart(stateHistory.getDay());
 
-        setDataChart(stateHistory.getDay());
+            XAxis xAxis = mChart.getXAxis();
+            xAxis.setValueFormatter(new DayXAxisValueFormatter());
+            xAxis.setAxisMinimum(HistoryUtils.startOfDay);
 
-        XAxis xAxis = mChart.getXAxis();
-        xAxis.setValueFormatter(new DayXAxisValueFormatter());
-        xAxis.setAxisMinimum(HistoryUtils.startOfDay);
-
-        mChart.notifyDataSetChanged();
-        mChart.invalidate();
+            mChart.notifyDataSetChanged();
+            mChart.invalidate();
+        }
     }
 
     @OnClick(R.id.btnWeek)
     public void showWeek() {
+        if(stateHistory != null) {
+            clearButtonStyles();
+            mWeek.setTextColor(Color.WHITE);
 
-        clearButtonStyles();
-        mWeek.setTextColor(Color.WHITE);
+            setDataChart(stateHistory.getWeek());
 
-        setDataChart(stateHistory.getWeek());
+            XAxis xAxis = mChart.getXAxis();
+            xAxis.setValueFormatter(new WeekXAxisValueFormatter());
+            xAxis.setAxisMinimum(HistoryUtils.startOfWeek);
 
-        XAxis xAxis = mChart.getXAxis();
-        xAxis.setValueFormatter(new WeekXAxisValueFormatter());
-        xAxis.setAxisMinimum(HistoryUtils.startOfWeek);
-
-        mChart.notifyDataSetChanged();
-        mChart.invalidate();
-
+            mChart.notifyDataSetChanged();
+            mChart.invalidate();
+        }
     }
 
     @OnClick(R.id.btnMonth)
     public void showMonth() {
+        if(stateHistory != null) {
+            clearButtonStyles();
+            mMonth.setTextColor(Color.WHITE);
 
-        clearButtonStyles();
-        mMonth.setTextColor(Color.WHITE);
+            setDataChart(stateHistory.getMonth());
 
-        setDataChart(stateHistory.getMonth());
+            XAxis xAxis = mChart.getXAxis();
+            xAxis.setValueFormatter(new MonthXAxisValueFormatter());
+            xAxis.setAxisMinimum(HistoryUtils.startOfMonth);
 
-        XAxis xAxis = mChart.getXAxis();
-        xAxis.setValueFormatter(new MonthXAxisValueFormatter());
-        xAxis.setAxisMinimum(HistoryUtils.startOfMonth);
-
-        mChart.notifyDataSetChanged();
-        mChart.invalidate();
-
+            mChart.notifyDataSetChanged();
+            mChart.invalidate();
+        }
     }
 
     @OnClick(R.id.btnYear)
     public void showYear() {
+        if(stateHistory != null) {
+            clearButtonStyles();
+            mYear.setTextColor(Color.WHITE);
 
-        clearButtonStyles();
-        mYear.setTextColor(Color.WHITE);
+            setDataChart(stateHistory.getYear());
 
-        setDataChart(stateHistory.getYear());
+            XAxis xAxis = mChart.getXAxis();
+            xAxis.setValueFormatter(new YearXAxisValueFormatter());
+            xAxis.setAxisMinimum(HistoryUtils.startOfYear);
 
-        XAxis xAxis = mChart.getXAxis();
-        xAxis.setValueFormatter(new YearXAxisValueFormatter());
-        xAxis.setAxisMinimum(HistoryUtils.startOfYear);
-
-        mChart.notifyDataSetChanged();
-        mChart.invalidate();
-
+            mChart.notifyDataSetChanged();
+            mChart.invalidate();
+        }
     }
 
     @Override

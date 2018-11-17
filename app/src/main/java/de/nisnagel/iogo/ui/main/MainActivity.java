@@ -121,6 +121,11 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
                 fragment = new RoomFragment();
                 setTitle(R.string.main_title_activity_room_list);
                 break;
+
+            case R.id.showMessageList:
+                fragment = new MessageFragment();
+                setTitle(R.string.main_title_activity_message_list);
+                break;
         }
 
         return loadFragment(fragment);

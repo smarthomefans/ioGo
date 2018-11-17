@@ -38,5 +38,11 @@
         android:icon="@drawable/rooms"
         android:title="@string/main_title_activity_room_list"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/showMessageList"
+        android:enabled="true"
+        android:icon="@drawable/message_text"
+        android:title="@string/main_title_activity_message_list"
+        app:showAsAction="ifRoom" />
 
 </menu>
