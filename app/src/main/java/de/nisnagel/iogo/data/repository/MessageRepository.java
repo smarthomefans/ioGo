@@ -56,7 +56,6 @@ public class MessageRepository extends BaseRepository {
     public MessageRepository(MessageDao messageDao, Executor executor, Context context, SharedPreferences sharedPref) {
         super(executor, context, sharedPref, null);
         this.messageDao = messageDao;
-        initFirebase();
         Timber.v("instance created");
     }
 
@@ -146,6 +145,7 @@ public class MessageRepository extends BaseRepository {
             } catch (Throwable t) {
                 Timber.e(dataSnapshot.getKey(), t);
             }
+            dbMessagesRef.child(dataSnapshot.getKey()).removeValue();
         }
     }
 
