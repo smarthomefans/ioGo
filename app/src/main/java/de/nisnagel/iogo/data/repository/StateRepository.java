@@ -20,21 +20,17 @@
 package de.nisnagel.iogo.data.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
@@ -70,7 +66,6 @@ import timber.log.Timber;
 @Singleton
 public class StateRepository extends BaseRepository implements OnObjectsReceived, OnStatesReceived {
 
-    private static final String FROM = "app";
     private static final String STATE_QUEUES = "stateQueues/";
     private static final String STATES = "states/";
     private static final String OBJECT_QUEUES = "objectQueues/";
@@ -122,7 +117,7 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
             if (key.equals(context.getString(R.string.pref_connect_web))
                     || key.equals(context.getString(R.string.pref_connect_cloud))
                     || key.equals(context.getString(R.string.pref_connect_iogo))) {
-                checkSettings(context, sharedPref);
+                checkSettings(context, sharedPreferences);
             }
         }
     };
