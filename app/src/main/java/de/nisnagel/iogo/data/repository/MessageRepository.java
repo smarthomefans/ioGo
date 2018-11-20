@@ -46,7 +46,7 @@ import timber.log.Timber;
 @Singleton
 public class MessageRepository extends BaseRepository {
 
-    private static final String MESSAGES = "messages/";
+    private static final String MESSAGES = "messageQueues/";
 
     private final MessageDao messageDao;
     private DatabaseReference dbMessagesRef;

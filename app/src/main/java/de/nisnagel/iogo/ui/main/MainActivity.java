@@ -19,6 +19,7 @@
 
 package de.nisnagel.iogo.ui.main;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -49,6 +50,9 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
+    @Inject
+    SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
@@ -71,6 +75,10 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
 
         //getting bottom navigation view and attaching the listener
         bottombar.setOnNavigationItemSelectedListener(this);
+        if(!sharedPreferences.getBoolean("pro", false)){
+            bottombar.getMenu().removeItem(R.id.showMessageList);
+        }
+
 
         // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
         //MobileAds.initialize(this, "@string/ad_unit_id");
