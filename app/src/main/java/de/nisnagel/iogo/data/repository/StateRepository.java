@@ -25,8 +25,10 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -261,9 +263,16 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
     }
 
     private void checkPro(FirebaseUser user){
-        user.getIdToken(false).addOnSuccessListener(result -> {
-            Object isPro = result.getClaims().get("pro");
-            sharedPref.edit().putBoolean("pro", (Boolean) isPro).apply();
+        user.getIdToken(false).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+            @Override
+            public void onSuccess(GetTokenResult result) {
+                Object isPro = result.getClaims().get("pro");
+                if(isPro != null) {
+                    sharedPref.edit().putBoolean("pro", (boolean) isPro).apply();
+                }else{
+                    sharedPref.edit().putBoolean("pro", false).apply();
+                }
+            }
         });
     }
 
