@@ -20,6 +20,8 @@
 package de.nisnagel.iogo.ui.billing;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
@@ -32,6 +34,7 @@ import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -42,12 +45,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class BillingManager implements PurchasesUpdatedListener {
 
     private final BillingClient mBillingClient;
     private final Activity mActivity;
+    private final String mUid;
 
     // Defining SKU constants from Google Play Developer Console
     private static final HashMap<String, List<String>> SKUS;
@@ -58,9 +64,10 @@ public class BillingManager implements PurchasesUpdatedListener {
         SKUS.put(BillingClient.SkuType.SUBS, Arrays.asList("abo_pro_month", "abo_pro_year"));
     }
 
-    public BillingManager(Activity activity) {
+    public BillingManager(Activity activity, String uid) {
         mActivity = activity;
         mBillingClient = BillingClient.newBuilder(mActivity).setListener(this).build();
+        mUid = uid;
     }
 
     @Override
@@ -154,22 +161,27 @@ public class BillingManager implements PurchasesUpdatedListener {
     }
 
     //start the purchase.
-    public void startPurchaseFlow(final String skuId, final String billingType) {
+    public void startPurchaseFlow(final String skuId, final String billingType, final String uid) {
         // Specify a runnable to start when connection to Billing client is established
         Runnable executeOnConnectedService = new Runnable() {
+
             @Override
             public void run() {
                 BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder()
                         .setType(billingType)
                         .setSku(skuId)
-                        .setDeveloperPayload("PWymFluqjSPMAFGVxYKc2Olb7Pm1")
+                        .setDeveloperPayload(mUid)
                         .build();
                 mBillingClient.launchBillingFlow(mActivity, billingFlowParams);
             }
         };
 
         // If Billing client was disconnected, we retry 1 time and if success, execute the query
-        startServiceConnectionIfNeeded(executeOnConnectedService);
+        if(uid != null) {
+            startServiceConnectionIfNeeded(executeOnConnectedService);
+        }else{
+            Toast.makeText(mActivity,"Error: you are not logged in", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /*

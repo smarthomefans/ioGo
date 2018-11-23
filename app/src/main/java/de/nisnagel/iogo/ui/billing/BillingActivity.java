@@ -24,15 +24,21 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.ui.base.BaseActivity;
+import timber.log.Timber;
 
 public class BillingActivity extends BaseActivity implements BillingProvider {
 
     private BillingManager mBillingManager;
+    private String uid;
 
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
@@ -48,9 +54,17 @@ public class BillingActivity extends BaseActivity implements BillingProvider {
         getSupportActionBar().setTitle(R.string.billing_title_activity_billing);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null) {
+            uid = mAuth.getCurrentUser().getUid();
+        }else{
+            Toast.makeText(this, "You must be logged in", Toast.LENGTH_LONG).show();
+            NavUtils.navigateUpFromSameTask(this);
+        }
+
         // Create and initialize BillingManager which talks to BillingLibrary
         if(mBillingManager == null) {
-            mBillingManager = new BillingManager(this);
+            mBillingManager = new BillingManager(this, uid);
         }
 
         if (savedInstanceState == null) {

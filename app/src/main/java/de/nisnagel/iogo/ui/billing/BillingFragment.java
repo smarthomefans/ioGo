@@ -74,7 +74,7 @@ public class BillingFragment extends Fragment {
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             }
             //check for the products user purchased before load..
-            mBillingProvider.getBillingManager().checkPurchasedProducts(BillingClient.SkuType.INAPP);
+            mBillingProvider.getBillingManager().checkPurchasedProducts(BillingClient.SkuType.SUBS);
             loadUiData();
         }
 
@@ -118,10 +118,7 @@ public class BillingFragment extends Fragment {
         };
 
         // Start querying for in-app SKUs
-        List<String> skus = mBillingProvider.getBillingManager().getSkus(BillingClient.SkuType.INAPP);
-//        mBillingProvider.getBillingManager().querySkuDetailsAsync(BillingClient.SkuType.INAPP, skus, responseListener);
-        // Start querying for subscriptions SKUs
-        skus = mBillingProvider.getBillingManager().getSkus(BillingClient.SkuType.SUBS);
+        List<String> skus = mBillingProvider.getBillingManager().getSkus(BillingClient.SkuType.SUBS);
         mBillingProvider.getBillingManager().querySkuDetailsAsync(BillingClient.SkuType.SUBS, skus, responseListener);
 
     }
