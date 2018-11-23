@@ -38,6 +38,7 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.io.FMessage;
 import de.nisnagel.iogo.data.model.Message;
 import de.nisnagel.iogo.data.model.MessageDao;
@@ -46,7 +47,9 @@ import timber.log.Timber;
 @Singleton
 public class MessageRepository extends BaseRepository {
 
-    private static final String MESSAGES = "messageQueues/";
+    private static final String MESSAGES = "messageQueues";
+
+    private String deviceName;
 
     private final MessageDao messageDao;
     private DatabaseReference dbMessagesRef;
@@ -60,6 +63,7 @@ public class MessageRepository extends BaseRepository {
     }
 
     void initFirebase() {
+        this.deviceName = sharedPref.getString(context.getString(R.string.pref_device_name),null);
 
         messageChildListener = new ChildEventListener() {
             @Override
@@ -116,7 +120,7 @@ public class MessageRepository extends BaseRepository {
 
     private void addListener(FirebaseUser user) {
         if (dbMessagesRef == null) {
-            dbMessagesRef = database.getReference(MESSAGES + user.getUid());
+            dbMessagesRef = database.getReference(MESSAGES + '/' + user.getUid() + '/' + deviceName);
         }
         dbMessagesRef.removeEventListener(messageChildListener);
         dbMessagesRef.addChildEventListener(messageChildListener);

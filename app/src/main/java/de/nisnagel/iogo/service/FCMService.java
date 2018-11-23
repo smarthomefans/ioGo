@@ -153,8 +153,6 @@ public class FCMService extends FirebaseMessagingService {
                     .setContentText(messageBody)
                     .setAutoCancel(true)
                     .setSound(defaultSoundUri)
-                    .setStyle(new NotificationCompat.BigPictureStyle()
-                            .bigPicture(bmp))
                     .setContentIntent(contentIntent);
             notificationManager.notify(count, notificationBuilder.build());
             count++;
