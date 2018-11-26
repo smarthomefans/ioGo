@@ -96,6 +96,7 @@ public class FCMService extends FirebaseMessagingService {
         super.onNewToken(s);
 
         String fcm_device = sharedPref.getString(getString(R.string.pref_device_name), null);
+        sharedPref.edit().putString(getString(R.string.pref_device_token), s).apply();
         stateRepository.sendState("iogo.0." + fcm_device + ".token", s, "string");
         //for now we are displaying the token in the log
         //copy it as this method is called only when the new token is generated
@@ -120,7 +121,7 @@ public class FCMService extends FirebaseMessagingService {
 
 
         if (row.get("img") != null) {
-            localFile = generateFile("images", row.get("img"));
+            localFile = generateFile(row.get("img"));
             StorageReference fileRef = messagesRef.child(row.get("img"));
             fileRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
@@ -142,7 +143,7 @@ public class FCMService extends FirebaseMessagingService {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    // Handle any errors
+                   Timber.w(exception);
                 }
             });
         } else {
@@ -159,7 +160,7 @@ public class FCMService extends FirebaseMessagingService {
         }
     }
 
-    private File generateFile(@NonNull String path, @NonNull String fileName) {
+    private File generateFile(@NonNull String fileName) {
         File file = null;
         if (isExternalStorageAvailable()) {
             File root = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_NOTIFICATIONS);
