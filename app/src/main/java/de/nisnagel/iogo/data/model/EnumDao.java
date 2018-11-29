@@ -37,7 +37,10 @@ public interface EnumDao {
     LiveData<List<Enum>> getAllEnums();
 
     @Query("SELECT * FROM enum WHERE id = :id")
-    LiveData<Enum> getEnumById(String id);
+    Enum getEnumById(String id);
+
+    @Query("SELECT * FROM enum WHERE id = :id")
+    LiveData<Enum> getEnumById2(String id);
 
     @Query("SELECT * FROM enum WHERE type = :type")
     List<Enum> getEnumsByType(String type);

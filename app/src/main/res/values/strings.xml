@@ -122,7 +122,7 @@
     <string name="settings_connect_cloud_password_title">Password</string>
     <string name="settings_connect_web_summary">only with integrated socket-io</string>
     <string name="settings_connect_web_title">Use web adapter</string>
-    <string name="settings_connect_web_url_message">Please enter url and port from your web-adapter</string>
+    <string name="settings_connect_web_url_message">Please enter url and port from your web-adapter (http://192.178.1.39:8082)</string>
     <string name="settings_connect_web_url_title">Socket URL</string>
     <string name="settings_connect_web_url_summary">URL is: %s</string>
     <string name="settings_connect_web_user_title">Username (Optional)</string>

@@ -119,7 +119,7 @@
     <string name="settings_connect_cloud_password_title">Passwort</string>
     <string name="settings_connect_web_summary">nur mit integrierter socket-io Instanz</string>
     <string name="settings_connect_web_title">web Adapter nutzen</string>
-    <string name="settings_connect_web_url_message">Bitte die URL und den Port des web-Adapter eintragen</string>
+    <string name="settings_connect_web_url_message">Bitte die URL und den Port des web-Adapter eintragen (http://192.178.1.39:8082)</string>
     <string name="settings_connect_web_url_title">Socket URL</string>
     <string name="settings_connect_web_url_summary">URL ist: %s</string>
     <string name="settings_connect_web_user_title">Benutzer (Optional)</string>

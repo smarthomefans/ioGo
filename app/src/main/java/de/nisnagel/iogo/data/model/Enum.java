@@ -39,7 +39,13 @@ public class Enum {
     private Integer rank;
     private boolean hidden;
 
-    public Enum(@NonNull String id, String name, String type, boolean favorite, String color, String icon) {
+    public Enum(@NonNull String id) {
+        this.id = id;
+        this.favorite = false;
+        this.hidden = false;
+    }
+
+   /* public Enum(@NonNull String id, String name, String type, boolean favorite, String color, String icon) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -48,7 +54,7 @@ public class Enum {
         this.icon = icon;
         this.rank = 0;
         this.hidden = false;
-    }
+    }*/
 
     @NonNull
     public String getId() {

@@ -198,77 +198,98 @@ public class EnumRepository extends BaseRepository implements OnEnumReceived {
 
     private void saveEnums(String data, String type) {
         Timber.v("saveEnums called");
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
-        Gson gson = gsonBuilder.create();
-        Set<String> enumSet = new HashSet<>();
 
-        try {
-            IoEnum ioEnum = gson.fromJson(data, IoEnum.class);
-            for (IoRow ioRow : ioEnum.getRows()) {
-                IoValue ioValue = ioRow.getValue();
-                IoCommon ioCommon = ioValue.getCommon();
-                Enum anEnum = new Enum(ioValue.getId(), ioCommon.getName(), type, false, ioCommon.getColor(), ioCommon.getIcon());
-                insertEnum(anEnum);
-                deleteStateEnum(anEnum);
-                Timber.d("saveEnums: enum inserted enumId:" + anEnum.getId());
-                if (ioCommon.getMembers() != null) {
-                    for (int j = 0; j < ioCommon.getMembers().size(); j++) {
-                        EnumState enumState = new EnumState(anEnum.getId(), ioCommon.getMembers().get(j));
-                        insertEnumState(enumState);
-                        Timber.d("saveEnums: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
+        executor.execute(() -> {
+                    GsonBuilder gsonBuilder = new GsonBuilder();
+                    gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
+                    Gson gson = gsonBuilder.create();
+                    Set<String> enumSet = new HashSet<>();
+
+                    try {
+                        IoEnum ioEnum = gson.fromJson(data, IoEnum.class);
+                        for (IoRow ioRow : ioEnum.getRows()) {
+                            IoValue ioValue = ioRow.getValue();
+                            IoCommon ioCommon = ioValue.getCommon();
+                            Enum anEnum = enumDao.getEnumById(ioValue.getId());
+                            if (anEnum == null) {
+                                anEnum = new Enum(ioValue.getId());
+                            }
+                            anEnum.setName(ioCommon.getName());
+                            anEnum.setType(type);
+                            anEnum.setColor(ioCommon.getColor());
+                            anEnum.setIcon(ioCommon.getIcon());
+
+                            insertEnum(anEnum);
+                            deleteStateEnum(anEnum);
+                            Timber.d("saveEnums: enum inserted enumId:" + anEnum.getId());
+                            if (ioCommon.getMembers() != null) {
+                                for (int j = 0; j < ioCommon.getMembers().size(); j++) {
+                                    EnumState enumState = new EnumState(anEnum.getId(), ioCommon.getMembers().get(j));
+                                    insertEnumState(enumState);
+                                    Timber.d("saveEnums: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
+                                }
+                            } else {
+                                Timber.i("saveEnums: no members found for enumId:" + anEnum.getId());
+                            }
+                            enumSet.add(anEnum.getId());
+
+                            Timber.d("saveEnums: enum saved enumId:" + anEnum.getId());
+                        }
+
+                        List<Enum> enumList = enumDao.getEnumsByType(type);
+                        for (Enum anEnum : enumList) {
+                            if (!enumSet.contains(anEnum.getId())) {
+                                deleteStateEnum(anEnum);
+                                deleteEnum(anEnum);
+                                Timber.d("saveEnums: enum deleted enumId:" + anEnum.getId());
+                            }
+                        }
+
+                    } catch (Throwable e) {
+                        Timber.e(e);
                     }
-                } else {
-                    Timber.i("saveEnums: no members found for enumId:" + anEnum.getId());
-                }
-                enumSet.add(anEnum.getId());
-
-                Timber.d("saveEnums: enum saved enumId:" + anEnum.getId());
-            }
-
-            List<Enum> enumList = enumDao.getEnumsByType(type);
-            for (Enum anEnum : enumList) {
-                if (!enumSet.contains(anEnum.getId())) {
-                    deleteStateEnum(anEnum);
-                    deleteEnum(anEnum);
-                    Timber.d("saveEnums: enum deleted enumId:" + anEnum.getId());
-                }
-            }
-
-        } catch (Throwable e) {
-            Timber.e(e);
-        }
+                });
 
         Timber.v("saveEnums finished");
     }
 
     private void saveEnums(DataSnapshot dataSnapshot) {
         if (dataSnapshot.getValue() != null) {
-            try {
-                FEnum fEnum = dataSnapshot.getValue(FEnum.class);
-                String type;
-                if (dataSnapshot.getKey().contains(TYPE_ROOM)) {
-                    type = TYPE_ROOM;
-                } else {
-                    type = TYPE_FUNCTION;
+            executor.execute(() -> {
+                try {
+                    FEnum fEnum = dataSnapshot.getValue(FEnum.class);
+                    String type;
+                    if (dataSnapshot.getKey().contains(TYPE_ROOM)) {
+                        type = TYPE_ROOM;
+                    } else {
+                        type = TYPE_FUNCTION;
+                    }
+                    Enum anEnum = enumDao.getEnumById(fEnum.getId());
+                    if (anEnum == null) {
+                        anEnum = new Enum(fEnum.getId());
+                    }
+                    anEnum.setName(fEnum.getName());
+                    anEnum.setType(type);
+                    anEnum.setColor(fEnum.getColor());
+                    anEnum.setIcon(fEnum.getIcon());
+
+                    insertEnum(anEnum);
+                    deleteStateEnum(anEnum);
+                    for (String member : fEnum.getMembers()) {
+                        EnumState enumState = new EnumState(anEnum.getId(), member);
+                        insertEnumState(enumState);
+                        Timber.d("saveEnums: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
+                    }
+                } catch (Throwable t) {
+                    Timber.e(dataSnapshot.getKey(), t);
                 }
-                Enum anEnum = new Enum(fEnum.getId(), fEnum.getName(), type, false, fEnum.getColor(), fEnum.getIcon());
-                insertEnum(anEnum);
-                deleteStateEnum(anEnum);
-                for (String member : fEnum.getMembers()) {
-                    EnumState enumState = new EnumState(anEnum.getId(), member);
-                    insertEnumState(enumState);
-                    Timber.d("saveEnums: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
-                }
-            } catch (Throwable t) {
-                Timber.e(dataSnapshot.getKey(), t);
-            }
+            });
         }
     }
 
     public LiveData<Enum> getEnum(String enumId) {
         Timber.v("getEnum called");
-        return enumDao.getEnumById(enumId);
+        return enumDao.getEnumById2(enumId);
     }
 
     public LiveData<List<Enum>> getFunctionEnums() {
