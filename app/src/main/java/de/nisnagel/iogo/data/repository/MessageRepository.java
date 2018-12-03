@@ -22,16 +22,23 @@ package de.nisnagel.iogo.data.repository;
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -54,6 +61,8 @@ public class MessageRepository extends BaseRepository {
     private final MessageDao messageDao;
     private DatabaseReference dbMessagesRef;
     private ChildEventListener messageChildListener;
+    FirebaseStorage storage;
+    StorageReference messagesRef;
 
     @Inject
     public MessageRepository(MessageDao messageDao, Executor executor, Context context, SharedPreferences sharedPref) {
@@ -88,6 +97,8 @@ public class MessageRepository extends BaseRepository {
             }
         };
 
+        storage = FirebaseStorage.getInstance();
+
         FirebaseAuth.AuthStateListener authListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if (user != null) {
@@ -101,6 +112,9 @@ public class MessageRepository extends BaseRepository {
             addListener(mAuth.getCurrentUser());
         }
         mAuth.addAuthStateListener(authListener);
+
+
+
     }
 
     public String getFirebaseUid() {
@@ -124,6 +138,9 @@ public class MessageRepository extends BaseRepository {
         }
         dbMessagesRef.removeEventListener(messageChildListener);
         dbMessagesRef.addChildEventListener(messageChildListener);
+        if(messagesRef == null) {
+            messagesRef = storage.getReference().child("messages/" + user.getUid() + '/' + deviceName);
+        }
     }
 
     @Override
@@ -145,12 +162,52 @@ public class MessageRepository extends BaseRepository {
             try {
                 FMessage fMessagge = dataSnapshot.getValue(FMessage.class);
                 Message message = new Message(dataSnapshot.getKey(), fMessagge.getTitle(), fMessagge.getText(), fMessagge.getImg(), fMessagge.getTs());
+
+                if(message.getImage() != null) {
+                    StorageReference imageRef = messagesRef.child(message.getImage());
+                    File localFile = generateFile(message.getImage());
+                    imageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            imageRef.delete();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Timber.w(exception);
+                        }
+                    });
+
+                }
+
                 insertMessage(message);
             } catch (Throwable t) {
                 Timber.e(dataSnapshot.getKey(), t);
             }
             dbMessagesRef.child(dataSnapshot.getKey()).removeValue();
         }
+    }
+
+    private File generateFile(@NonNull String fileName) {
+        File file = null;
+        if (isExternalStorageAvailable()) {
+            File root = context.getExternalFilesDir(Environment.DIRECTORY_NOTIFICATIONS);
+
+            boolean dirExists = true;
+
+            if (!root.exists()) {
+                dirExists = root.mkdirs();
+            }
+
+            if (dirExists) {
+                file = new File(root, fileName);
+            }
+        }
+        return file;
+    }
+
+    private static boolean isExternalStorageAvailable() {
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 
     public LiveData<List<Message>> getMessages() {

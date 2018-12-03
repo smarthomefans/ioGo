@@ -47,6 +47,7 @@ import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
 import de.nisnagel.iogo.R;
+import de.nisnagel.iogo.data.model.Message;
 import de.nisnagel.iogo.data.repository.MessageRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
 import timber.log.Timber;
@@ -122,8 +123,8 @@ public class FCMService extends FirebaseMessagingService {
 
         if (row.get("img") != null) {
             localFile = generateFile(row.get("img"));
-            StorageReference fileRef = messagesRef.child(row.get("img"));
-            fileRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            StorageReference imageRef = messagesRef.child(row.get("img"));
+            imageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                     bmp = BitmapFactory.decodeFile(localFile.getAbsolutePath());
@@ -138,6 +139,7 @@ public class FCMService extends FirebaseMessagingService {
                                     .bigPicture(bmp))
                             .setContentIntent(contentIntent);
                     notificationManager.notify(count, notificationBuilder.build());
+                    imageRef.delete();
                     count++;
                 }
             }).addOnFailureListener(new OnFailureListener() {
