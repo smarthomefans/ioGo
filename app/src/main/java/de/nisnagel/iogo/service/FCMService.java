@@ -83,12 +83,12 @@ public class FCMService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Timber.d("Message received: " + remoteMessage.getNotification().getTitle());
+        Timber.d("Message received");
 
         boolean isEnabled = sharedPref.getBoolean(getString(R.string.pref_device_notification), false);
         if (isEnabled) {
-            sendNotification(remoteMessage.getNotification().getTitle(),
-                    remoteMessage.getNotification().getBody(), remoteMessage.getData());
+            Map<String, String> data = remoteMessage.getData();
+            sendNotification(data.get("title"), data.get("body"), data.get("img"));
         }
     }
 
@@ -106,7 +106,7 @@ public class FCMService extends FirebaseMessagingService {
     }
 
     //This method is only generating push notification
-    private void sendNotification(String messageTitle, String messageBody, Map<String, String> row) {
+    private void sendNotification(String messageTitle, String messageBody, String filname) {
         PendingIntent contentIntent = null;
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
@@ -121,9 +121,9 @@ public class FCMService extends FirebaseMessagingService {
         }
 
 
-        if (row.get("img") != null) {
-            localFile = generateFile(row.get("img"));
-            StorageReference imageRef = messagesRef.child(row.get("img"));
+        if (filname != null) {
+            localFile = generateFile(filname);
+            StorageReference imageRef = messagesRef.child(filname);
             imageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
@@ -145,7 +145,7 @@ public class FCMService extends FirebaseMessagingService {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                   Timber.w(exception);
+                    Timber.w(exception);
                 }
             });
         } else {
