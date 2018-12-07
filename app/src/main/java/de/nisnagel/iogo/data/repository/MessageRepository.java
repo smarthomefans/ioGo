@@ -170,17 +170,18 @@ public class MessageRepository extends BaseRepository {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                             imageRef.delete();
+                            insertMessage(message);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
                             Timber.w(exception);
+                            insertMessage(message);
                         }
                     });
-
+                }else{
+                    insertMessage(message);
                 }
-
-                insertMessage(message);
             } catch (Throwable t) {
                 Timber.e(dataSnapshot.getKey(), t);
             }

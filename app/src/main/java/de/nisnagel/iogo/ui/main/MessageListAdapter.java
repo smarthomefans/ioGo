@@ -122,6 +122,9 @@ public class MessageListAdapter
                 File file = new File(root, anMessage.getImage());
                 Bitmap bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
                 mImage.setImageBitmap(bmp);
+                mImage.setVisibility(View.VISIBLE);
+            } else {
+                mImage.setVisibility(View.GONE);
             }
         }
     }
