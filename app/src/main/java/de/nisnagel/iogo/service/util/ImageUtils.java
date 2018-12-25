@@ -50,13 +50,15 @@ public class ImageUtils {
                 return R.drawable.lan_connect;
             case Constants.ROLE_INDICATOR_LOWBAT:
                 return R.drawable.battery_10;
+            case Constants.ROLE_INDICATOR_MOTION:
+                return R.drawable.run_fast;
             case Constants.ROLE_LEVEL_DIMMER:
                 return R.drawable.lightbulb;
             case Constants.ROLE_LEVEL_BLIND:
                 return R.drawable.blinds;
             case Constants.ROLE_LEVEL_TEMPERATURE:
                 return R.drawable.thermometer;
-            case Constants.ROLE_VALVE:
+            case Constants.ROLE_LEVEL_VALVE:
                 return R.drawable.ship_wheel;
             case Constants.ROLE_LEVEL_COLOR_RED:
                 return R.drawable.palette;

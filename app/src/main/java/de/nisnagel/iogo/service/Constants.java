@@ -54,12 +54,13 @@ public class Constants {
     //Indicator
     public static final String ROLE_INDICATOR_LOWBAT = "indicator.lowbat";
     public static final String ROLE_INDICATOR_CONNECTED = "indicator.connected";
+    public static final String ROLE_INDICATOR_MOTION = "indicator.motion";
 
     //Level
     public static final String ROLE_LEVEL_DIMMER = "level.dimmer";
     public static final String ROLE_LEVEL_BLIND = "level.blind";
     public static final String ROLE_LEVEL_TEMPERATURE = "level.temperature";
-    public static final String ROLE_VALVE = "level.valve";
+    public static final String ROLE_LEVEL_VALVE = "level.valve";
     public static final String ROLE_LEVEL_COLOR_RED = "level.color.red";
     public static final String ROLE_LEVEL_COLOR_GREEN = "level.color.green";
     public static final String ROLE_LEVEL_COLOR_BLUE = "level.color.blue";

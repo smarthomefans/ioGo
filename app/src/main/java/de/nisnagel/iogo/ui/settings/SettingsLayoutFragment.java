@@ -41,10 +41,10 @@ public class SettingsLayoutFragment extends PreferenceFragmentCompat {
         if(stateSubtitle.getEntry() == null){
             stateSubtitle.setSummary(getString(R.string.settings_layout_state_subtitle_summary, "Nothing"));
         }else {
-            stateSubtitle.setSummary(getString(R.string.settings_layout_state_subtitle_summary, stateSubtitle.getEntry()));
+            stateSubtitle.setSummary(getString(R.string.settings_layout_state_subtitle_summary, "'" + stateSubtitle.getEntry() + "'"));
         }
         stateSubtitle.setOnPreferenceChangeListener((preference, newValue) -> {
-            stateSubtitle.setSummary(getString(R.string.settings_layout_state_subtitle_summary, newValue));
+            stateSubtitle.setSummary(getString(R.string.settings_layout_state_subtitle_summary, "'" + newValue + "'"));
             return true;
         });
     }

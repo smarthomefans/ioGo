@@ -36,8 +36,8 @@
     <string name="main_value_tilted">gekippt</string>
     <string name="main_loading_date">lade Daten</string>
     <string name="main_syncing_data">synchronisiere &#8230;</string>
-    <string name="main_unstarred">unstarred</string>
-    <string name="main_starred">starred</string>
+    <string name="main_unstarred">Favorit entfernt</string>
+    <string name="main_starred">Als Favorit markiert</string>
     <string name="main_new_value">Neuer Wert :</string>
     <string name="main_home">Home</string>
     <string name="main_click">klick</string>

@@ -95,15 +95,7 @@ public class InfoFragment extends Fragment implements Injectable {
 
         mAuthListener = firebaseAuth -> {
             FirebaseUser mUser = firebaseAuth.getCurrentUser();
-            if(mUser != null) {
-                if (mUser.isAnonymous()) {
-                    mAccountState.setText(R.string.info_account_state_anonymous);
-                } else if (mUser.isEmailVerified()) {
-                    mAccountState.setText(R.string.info_account_state_logged_in);
-                } else if (mUser.isEmailVerified()) {
-                    mAccountState.setText(R.string.info_account_state_not_verified);
-                }
-            }
+            showUser(mUser);
         };
 
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(InfoViewModel.class);
@@ -148,6 +140,9 @@ public class InfoFragment extends Fragment implements Injectable {
 
     public void onStart(){
         super.onStart();
+        if (mAuth.getCurrentUser() != null) {
+            showUser(mAuth.getCurrentUser());
+        }
         mAuth.addAuthStateListener(mAuthListener);
     }
 
@@ -156,6 +151,18 @@ public class InfoFragment extends Fragment implements Injectable {
         super.onStop();
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
+
+    private void showUser(FirebaseUser user){
+        if(user != null) {
+            if (user.isAnonymous()) {
+                mAccountState.setText(R.string.info_account_state_anonymous);
+            } else if (user.isEmailVerified()) {
+                mAccountState.setText(R.string.info_account_state_logged_in);
+            } else if (user.isEmailVerified()) {
+                mAccountState.setText(R.string.info_account_state_not_verified);
+            }
         }
     }
 
