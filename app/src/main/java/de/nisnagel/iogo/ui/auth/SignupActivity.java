@@ -73,6 +73,7 @@ public class SignupActivity extends BaseActivity {
     @OnClick(R.id.sign_in_button)
     public void onClickSignin() {
         finish();
+        startActivity(new Intent(SignupActivity.this, LoginActivity.class));
     }
 
     @OnClick(R.id.sign_up_button)
