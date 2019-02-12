@@ -179,13 +179,13 @@ public class WebService {
             Trace trace = FirebasePerformance.getInstance().newTrace("WebService.getEnumObjects");
             trace.start();
             mSocket.emit("getObjectView", "system", "enum", json, (Ack) args -> {
-                if (args[1] != null) {
+                if (args != null && args[1] != null) {
                     trace.putMetric("length", args[1].toString().getBytes().length);
                 } else {
                     trace.putMetric("length", 0);
                 }
                 trace.stop();
-                if (args[1] != null) {
+                if (args != null && args[1] != null) {
                     listener.onEnumReceived(args[1].toString(), type);
                 }
             });
@@ -198,13 +198,13 @@ public class WebService {
             Trace trace = FirebasePerformance.getInstance().newTrace("WebService.getObjects");
             trace.start();
             mSocket.emit("getObjects", null, args -> {
-                if (args[1] != null) {
+                if (args != null && args[1] != null) {
                     trace.putMetric("length", args[1].toString().getBytes().length);
                 } else {
                     trace.putMetric("length", 0);
                 }
                 trace.stop();
-                if (args[1] != null) {
+                if (args != null && args[1] != null) {
                     listener.onObjectsReceived(args[1].toString());
                 }
             });
@@ -217,13 +217,13 @@ public class WebService {
             Trace trace = FirebasePerformance.getInstance().newTrace("WebService.getHistory");
             trace.start();
             mSocket.emit("getHistory", id, args, (Ack) args1 -> {
-                if (args1[1] != null) {
+                if (args != null && args1[1] != null) {
                     trace.putMetric("length", args1[1].toString().getBytes().length);
                 } else {
                     trace.putMetric("length", 0);
                 }
                 trace.stop();
-                if (args1[1] != null) {
+                if (args != null && args1[1] != null) {
                     listener.onHistoryReceived(id, args1[1].toString(), type);
                 }
             });

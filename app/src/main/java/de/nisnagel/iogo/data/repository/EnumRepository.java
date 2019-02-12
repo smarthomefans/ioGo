@@ -71,7 +71,6 @@ public class EnumRepository extends BaseRepository implements OnEnumReceived {
 
 
     private DatabaseReference dbEnumsRef;
-    private ValueEventListener enumListener;
     private ChildEventListener enumChildListener;
 
     @Inject
@@ -86,42 +85,6 @@ public class EnumRepository extends BaseRepository implements OnEnumReceived {
     }
 
     void initFirebase() {
-        enumListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    saveEnums(postSnapshot);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        };
-
-        enumChildListener = new ChildEventListener() {
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                saveEnums(dataSnapshot);
-            }
-
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        };
 
         FirebaseAuth.AuthStateListener authListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -140,7 +103,6 @@ public class EnumRepository extends BaseRepository implements OnEnumReceived {
     void removeListener() {
         try {
             if (dbEnumsRef != null) {
-                dbEnumsRef.removeEventListener(enumListener);
                 dbEnumsRef.removeEventListener(enumChildListener);
             }
         } catch (Throwable t) {
@@ -149,8 +111,37 @@ public class EnumRepository extends BaseRepository implements OnEnumReceived {
     }
 
     private void addListener(FirebaseUser user) {
-        dbEnumsRef = database.getReference(ENUMS + user.getUid());
-        dbEnumsRef.addChildEventListener(enumChildListener);
+        if (dbEnumsRef == null) {
+            dbEnumsRef = database.getReference(ENUMS + user.getUid());
+        }
+        if(enumChildListener == null){
+            enumChildListener = new ChildEventListener() {
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    saveEnums(dataSnapshot);
+                }
+
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    saveEnums(dataSnapshot);
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                    deleteEnums(dataSnapshot);
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            };
+            dbEnumsRef.addChildEventListener(enumChildListener);
+
+        }
     }
 
     void initWeb() {
@@ -253,6 +244,24 @@ public class EnumRepository extends BaseRepository implements OnEnumReceived {
         Timber.v("saveEnums finished");
     }
 
+    private void deleteEnums(DataSnapshot dataSnapshot){
+        if (dataSnapshot.getValue() != null) {
+            executor.execute(() -> {
+                try {
+                    FEnum fEnum = dataSnapshot.getValue(FEnum.class);
+                    Enum anEnum = enumDao.getEnumById(fEnum.getId());
+
+                    if(anEnum != null) {
+                        deleteEnum(anEnum);
+                        deleteStateEnum(anEnum);
+                    }
+                } catch (Throwable t) {
+                    Timber.e(dataSnapshot.getKey(), t);
+                }
+            });
+        }
+    }
+
     private void saveEnums(DataSnapshot dataSnapshot) {
         if (dataSnapshot.getValue() != null) {
             executor.execute(() -> {
@@ -275,10 +284,12 @@ public class EnumRepository extends BaseRepository implements OnEnumReceived {
 
                     insertEnum(anEnum);
                     deleteStateEnum(anEnum);
-                    for (String member : fEnum.getMembers()) {
-                        EnumState enumState = new EnumState(anEnum.getId(), member);
-                        insertEnumState(enumState);
-                        Timber.d("saveEnums: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
+                    if(fEnum.getMembers() != null) {
+                        for (String member : fEnum.getMembers()) {
+                            EnumState enumState = new EnumState(anEnum.getId(), member);
+                            insertEnumState(enumState);
+                            Timber.d("saveEnums: enum linked to state enumId:" + enumState.getEnumId() + " stateId:" + enumState.getStateId());
+                        }
                     }
                 } catch (Throwable t) {
                     Timber.e(dataSnapshot.getKey(), t);
@@ -360,7 +371,24 @@ public class EnumRepository extends BaseRepository implements OnEnumReceived {
 
     public void syncObjects() {
         if (bFirebase && dbEnumsRef != null) {
-            dbEnumsRef.addListenerForSingleValueEvent(enumListener);
+            executor.execute(() -> {
+                enumDao.deleteAll();
+                ValueEventListener enumListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            saveEnums(postSnapshot);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                    }
+                };
+                dbEnumsRef.addListenerForSingleValueEvent(enumListener);
+            });
+
         } else if (bSocket) {
             webService.getEnumObjects("enum.rooms.", EnumRepository.TYPE_ROOM, this);
             webService.getEnumObjects("enum.functions.", EnumRepository.TYPE_FUNCTION, this);
