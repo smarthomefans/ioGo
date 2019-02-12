@@ -160,39 +160,6 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
             }
         };
 
-        objectChildListener = new ChildEventListener() {
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.getValue() != null) {
-                    GsonBuilder gsonBuilder = new GsonBuilder();
-                    gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
-                    Gson gson = gsonBuilder.create();
-                    try {
-                        IoObject ioObject = gson.fromJson(dataSnapshot.getValue().toString(), IoObject.class);
-                        syncObject(ioObject.getId(), ioObject);
-                    } catch (Throwable t) {
-                        Timber.e(dataSnapshot.getKey(), t);
-                    }
-                }
-            }
-
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        };
-
         stateListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -209,37 +176,6 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Timber.e("Database read error: " + databaseError.getCode());
-            }
-        };
-
-        stateChildListener = new ChildEventListener() {
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Timber.w("onChildChanged: state deleted stateId:" + dataSnapshot.getKey());
-                if (dataSnapshot.getValue() != null) {
-                    try {
-                        IoState ioState = dataSnapshot.getValue(IoState.class);
-                        syncState(ioState.getId(), ioState);
-                    } catch (Throwable t) {
-                        Timber.e(dataSnapshot.getKey(), t);
-                    }
-                }
-            }
-
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         };
 
@@ -278,12 +214,100 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
 
     private void addListener(FirebaseUser user) {
         this.saveSocketState(context.getString(R.string.pref_connect_iogo));
-        dbObjectsRef = database.getReference(OBJECTS + user.getUid());
-        dbObjectsRef.addChildEventListener(objectChildListener);
-        dbObjectQueuesRef = database.getReference(OBJECT_QUEUES + user.getUid());
-        dbStatesRef = database.getReference(STATES + user.getUid());
+        if(dbObjectsRef == null) dbObjectsRef = database.getReference(OBJECTS + user.getUid());
+
+        if(objectChildListener == null) {
+            objectChildListener = new ChildEventListener() {
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    if (dataSnapshot.getValue() != null) {
+                        GsonBuilder gsonBuilder = new GsonBuilder();
+                        gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
+                        Gson gson = gsonBuilder.create();
+                        try {
+                            IoObject ioObject = gson.fromJson(dataSnapshot.getValue().toString(), IoObject.class);
+                            syncObject(ioObject.getId(), ioObject);
+                        } catch (Throwable t) {
+                            Timber.e(dataSnapshot.getKey(), t);
+                        }
+                    }
+                }
+
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    if (dataSnapshot.getValue() != null) {
+                        GsonBuilder gsonBuilder = new GsonBuilder();
+                        gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
+                        Gson gson = gsonBuilder.create();
+                        try {
+                            IoObject ioObject = gson.fromJson(dataSnapshot.getValue().toString(), IoObject.class);
+                            syncObject(ioObject.getId(), ioObject);
+                        } catch (Throwable t) {
+                            Timber.e(dataSnapshot.getKey(), t);
+                        }
+                    }
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            };
+            dbObjectsRef.addChildEventListener(objectChildListener);
+        }
+
+        if(dbObjectQueuesRef == null) dbObjectQueuesRef = database.getReference(OBJECT_QUEUES + user.getUid());
+
+        if(dbStatesRef == null) dbStatesRef = database.getReference(STATES + user.getUid());
+
         dbStatesRef.addListenerForSingleValueEvent(stateListener);
-        dbStatesRef.addChildEventListener(stateChildListener);
+        if(stateChildListener == null) {
+            stateChildListener = new ChildEventListener() {
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    if (dataSnapshot.getValue() != null) {
+                        try {
+                            IoState ioState = dataSnapshot.getValue(IoState.class);
+                            syncState(ioState.getId(), ioState);
+                        } catch (Throwable t) {
+                            Timber.e(dataSnapshot.getKey(), t);
+                        }
+                    }
+                }
+
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    if (dataSnapshot.getValue() != null) {
+                        try {
+                            IoState ioState = dataSnapshot.getValue(IoState.class);
+                            syncState(ioState.getId(), ioState);
+                        } catch (Throwable t) {
+                            Timber.e(dataSnapshot.getKey(), t);
+                        }
+                    }
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            };
+            dbStatesRef.addChildEventListener(stateChildListener);
+        }
         dbStateQueuesRef = database.getReference(STATE_QUEUES + user.getUid());
     }
 
