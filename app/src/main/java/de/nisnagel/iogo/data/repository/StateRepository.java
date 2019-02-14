@@ -250,6 +250,17 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
 
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null) {
+                        GsonBuilder gsonBuilder = new GsonBuilder();
+                        gsonBuilder.registerTypeAdapter(IoName.class, IoName.getDeserializer());
+                        Gson gson = gsonBuilder.create();
+                        try {
+                            IoObject ioObject = gson.fromJson(dataSnapshot.getValue().toString(), IoObject.class);
+                            deleteState(ioObject.getId());
+                        } catch (Throwable t) {
+                            Timber.e(dataSnapshot.getKey(), t);
+                        }
+                    }
                 }
 
                 @Override
@@ -296,6 +307,14 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
 
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null) {
+                        try {
+                            IoState ioState = dataSnapshot.getValue(IoState.class);
+                            deleteState(ioState.getId());
+                        } catch (Throwable t) {
+                            Timber.e(dataSnapshot.getKey(), t);
+                        }
+                    }
                 }
 
                 @Override
@@ -560,6 +579,16 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
         Timber.v("saveState called");
         executor.execute(() -> stateDao.update(state));
     }
+
+    private void deleteState(String id) {
+        Timber.v("deleteState called");
+        executor.execute(() -> {
+                    State state = stateDao.getStateById(id);
+                    if(state != null) stateDao.delete(state);
+                }
+        );
+    }
+
 
     private void deleteState(State state) {
         Timber.v("deleteState called");
