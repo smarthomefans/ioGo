@@ -134,13 +134,15 @@ public class WebService {
     private Emitter.Listener onTransport = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Transport transport = (Transport) args[0];
+            if(args != null && args[0] != null) {
+                Transport transport = (Transport) args[0];
 
-            transport.on(Transport.EVENT_REQUEST_HEADERS, args1 -> {
-                @SuppressWarnings("unchecked")
-                Map<String, List<String>> headers = (Map<String, List<String>>) args1[0];
-                headers.put("Cookie", Collections.singletonList(cookie));
-            });
+                transport.on(Transport.EVENT_REQUEST_HEADERS, args1 -> {
+                    @SuppressWarnings("unchecked")
+                    Map<String, List<String>> headers = (Map<String, List<String>>) args1[0];
+                    headers.put("Cookie", Collections.singletonList(cookie));
+                });
+            }
         }
     };
 
@@ -179,13 +181,13 @@ public class WebService {
             Trace trace = FirebasePerformance.getInstance().newTrace("WebService.getEnumObjects");
             trace.start();
             mSocket.emit("getObjectView", "system", "enum", json, (Ack) args -> {
-                if (args != null && args[1] != null) {
+                if (args != null && args.length > 1 && args[1] != null) {
                     trace.putMetric("length", args[1].toString().getBytes().length);
                 } else {
                     trace.putMetric("length", 0);
                 }
                 trace.stop();
-                if (args != null && args[1] != null) {
+                if (args != null && args.length > 1 && args[1] != null) {
                     listener.onEnumReceived(args[1].toString(), type);
                 }
             });
@@ -198,13 +200,13 @@ public class WebService {
             Trace trace = FirebasePerformance.getInstance().newTrace("WebService.getObjects");
             trace.start();
             mSocket.emit("getObjects", null, args -> {
-                if (args != null && args[1] != null) {
+                if (args != null && args.length > 1 && args[1] != null) {
                     trace.putMetric("length", args[1].toString().getBytes().length);
                 } else {
                     trace.putMetric("length", 0);
                 }
                 trace.stop();
-                if (args != null && args[1] != null) {
+                if (args != null && args.length > 1 && args[1] != null) {
                     listener.onObjectsReceived(args[1].toString());
                 }
             });
@@ -217,13 +219,13 @@ public class WebService {
             Trace trace = FirebasePerformance.getInstance().newTrace("WebService.getHistory");
             trace.start();
             mSocket.emit("getHistory", id, args, (Ack) args1 -> {
-                if (args != null && args1[1] != null) {
+                if (args1 != null && args1.length > 1 && args1[1] != null) {
                     trace.putMetric("length", args1[1].toString().getBytes().length);
                 } else {
                     trace.putMetric("length", 0);
                 }
                 trace.stop();
-                if (args != null && args1[1] != null) {
+                if (args1 != null && args1.length > 1 && args1[1] != null) {
                     listener.onHistoryReceived(id, args1[1].toString(), type);
                 }
             });
@@ -236,13 +238,13 @@ public class WebService {
             Trace trace = FirebasePerformance.getInstance().newTrace("WebService.getStates");
             trace.start();
             mSocket.emit("getStates", args, (Ack) args1 -> {
-                if (args1[1] != null) {
+                if (args1 != null && args1.length > 1 && args1[1] != null) {
                     trace.putMetric("length", args1[1].toString().getBytes().length);
                 } else {
                     trace.putMetric("length", 0);
                 }
                 trace.stop();
-                if (args1[1] != null) {
+                if (args1 != null && args1.length > 1 && args1[1] != null) {
                     listener.onStatesReceived(args1[1].toString());
                 }
             });
@@ -323,29 +325,5 @@ public class WebService {
     public boolean isConnected() {
         return (mSocket != null && mSocket.connected());
     }
-
-    /*
-    public void addUser(final Events.User event) {
-        Timber.v("addUser called");
-        if (isConnected()) {
-            JSONObject json = new JSONObject();
-            JSONObject common = new JSONObject();
-            try {
-                json.put("type", "state");
-                common.put("read", "true");
-                common.put("write", "true");
-                common.put("desc", "nur ein test");
-                common.put("role", "app.token");
-                json.put("common", common);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            mSocket.emit("setObject", "iogo.0." + event.name + ".token", json, (Ack) args -> {
-                Timber.i("setObject: receiving data");
-            });
-            setState(new Events.SetState("iogo.0." + event.name + ".token", event.token, "string"));
-        }
-    }
-    */
 
 }

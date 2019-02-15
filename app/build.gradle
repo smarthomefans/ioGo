@@ -26,8 +26,8 @@ android {
         applicationId 'de.nisnagel.iogo'
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 10214
-        versionName "1.02.14"
+        versionCode 10215
+        versionName "1.02.15"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -91,7 +91,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-perf:16.2.3'
     implementation 'com.google.firebase:firebase-storage:16.0.5'
     // CRASHLYTICS
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
     //TIMBER Logging
     implementation 'com.jakewharton.timber:timber:4.5.1'
     // testing
