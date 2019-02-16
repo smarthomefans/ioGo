@@ -138,6 +138,7 @@ public class InfoFragment extends Fragment implements Injectable {
         return rootView;
     }
 
+    @Override
     public void onStart(){
         super.onStart();
         if (mAuth.getCurrentUser() != null) {
@@ -160,7 +161,7 @@ public class InfoFragment extends Fragment implements Injectable {
                 mAccountState.setText(R.string.info_account_state_anonymous);
             } else if (user.isEmailVerified()) {
                 mAccountState.setText(R.string.info_account_state_logged_in);
-            } else if (user.isEmailVerified()) {
+            } else if (!user.isEmailVerified()) {
                 mAccountState.setText(R.string.info_account_state_not_verified);
             }
         }

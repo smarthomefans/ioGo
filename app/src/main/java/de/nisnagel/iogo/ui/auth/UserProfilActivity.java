@@ -21,8 +21,10 @@ package de.nisnagel.iogo.ui.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +32,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -178,21 +182,9 @@ public class UserProfilActivity extends BaseActivity {
 
     @OnClick(R.id.sending_pass_reset_button)
     public void onClickSendResetEmail() {
-        oldEmail.setVisibility(View.VISIBLE);
-        newEmail.setVisibility(View.GONE);
-        password.setVisibility(View.GONE);
-        newPassword.setVisibility(View.GONE);
-        changeEmail.setVisibility(View.GONE);
-        changePassword.setVisibility(View.GONE);
-        sendEmail.setVisibility(View.VISIBLE);
-        remove.setVisibility(View.GONE);
-    }
-
-    @OnClick(R.id.send)
-    public void onClickSendEmail() {
         progressBar.setVisibility(View.VISIBLE);
-        if (!oldEmail.getText().toString().trim().equals("")) {
-            mAuth.sendPasswordResetEmail(oldEmail.getText().toString().trim())
+        if (!mAuth.getCurrentUser().getEmail().trim().equals("")) {
+            mAuth.sendPasswordResetEmail(mAuth.getCurrentUser().getEmail())
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(UserProfilActivity.this, "Reset password email is sent!", Toast.LENGTH_SHORT).show();
@@ -202,9 +194,26 @@ public class UserProfilActivity extends BaseActivity {
                             progressBar.setVisibility(View.GONE);
                         }
                     });
-        } else {
-            oldEmail.setError("Enter email");
-            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick(R.id.sending_verification_button)
+    public void onClickSendVerificationEmail() {
+        progressBar.setVisibility(View.VISIBLE);
+        if (!mAuth.getCurrentUser().getEmail().trim().equals("")) {
+            mAuth.getCurrentUser().sendEmailVerification()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(UserProfilActivity.this, "Verification email is sent!", Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
+                            } else {
+                                Toast.makeText(UserProfilActivity.this, "Failed to send verification email!", Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
+                            }
+                        }
+                    });
         }
     }
 

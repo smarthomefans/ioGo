@@ -78,6 +78,7 @@
     <string name="change_email">Change Email</string>
     <string name="change_password">Change Password</string>
     <string name="send_password_reset_email">Send Password reset email</string>
+    <string name="send_verification_email">Send verification email</string>
     <string name="remove_user">Remove user</string>
     <string name="new_pass">New Password</string>
     <string name="hint_email">Email</string>
