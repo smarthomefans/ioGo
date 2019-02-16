@@ -50,7 +50,7 @@
         <EditText
             android:id="@+id/new_email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:hint="@string/hint_new_email"
             android:inputType="textEmailAddress"
             android:maxLines="1"
@@ -59,7 +59,7 @@
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:focusableInTouchMode="true"
             android:hint="@string/hint_password"
             android:imeActionId="6"
@@ -71,7 +71,7 @@
         <EditText
             android:id="@+id/newPassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:focusableInTouchMode="true"
             android:hint="@string/new_pass"
             android:imeActionId="6"

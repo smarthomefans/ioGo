@@ -44,17 +44,17 @@
     <string name="main_new_value">New Value :</string>
     <string name="main_home">Home</string>
     <string name="main_click">click</string>
+    <string name="main_enum_list_desc">Please add some enums to your system</string>
 
     <!-- info activity -->
     <string name="info_title_activity_info">Information</string>
     <string name="info_count_states">Number of states:</string>
     <string name="info_count_funktions">Number of functions:</string>
     <string name="info_count_rooms">Number of rooms:</string>
-    <string name="info_connect_status">Status:</string>
+    <string name="info_connect_status">Server:</string>
     <string name="info_app_version">App Version:</string>
-    <string name="info_account_state">Status:</string>
-    <string name="info_account_lbl">Account:</string>
-    <string name="info_connect_lbl">Server:</string>
+    <string name="info_account_state">Account:</string>
+    <string name="info_connect_lbl">Coonections:</string>
     <string name="info_database_lbl">Database:</string>
     <string name="info_app_lbl">App:</string>
     <string name="info_account_state_unknown">unknown</string>

@@ -35,37 +35,6 @@
         app:layout_constraintGuide_percent="0.5"/>
 
     <TextView
-        android:id="@+id/labelAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:text="@string/info_account_lbl"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:gravity="center_vertical"
-        android:text="@string/info_account_state"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelAccount" />
-
-    <TextView
-        android:id="@+id/account_state"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:gravity="center_vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelAccount" />
-
-    <TextView
         android:id="@+id/labelConnectivity"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
@@ -75,7 +44,27 @@
         android:text="@string/info_connect_lbl"
         android:textColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/account_state" />
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/lbl_account_state"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:gravity="center_vertical"
+        android:text="@string/info_account_state"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelConnectivity" />
+
+    <TextView
+        android:id="@+id/account_state"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelConnectivity" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -84,7 +73,7 @@
         android:gravity="center_vertical"
         android:text="@string/info_connect_status"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelConnectivity" />
+        app:layout_constraintTop_toBottomOf="@+id/lbl_account_state" />
 
     <TextView
         android:id="@+id/socketState"
@@ -94,7 +83,7 @@
         android:ems="10"
         android:gravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelConnectivity" />
+        app:layout_constraintTop_toBottomOf="@+id/lbl_account_state" />
 
     <TextView
         android:id="@+id/labelDatabase"

@@ -126,14 +126,14 @@ public class HomeFragment extends Fragment implements Injectable {
                 });
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
+/*
         if (mAuth.getCurrentUser() != null) {
             mRegister.setVisibility(View.GONE);
         }
 
         if(mViewModel.hasConnection()){
             mConnect.setVisibility(View.GONE);
-        }
+        }*/
 
         return rootView;
     }
