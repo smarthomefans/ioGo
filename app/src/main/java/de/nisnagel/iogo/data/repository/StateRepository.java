@@ -19,13 +19,8 @@
 
 package de.nisnagel.iogo.data.repository;
 
-import androidx.lifecycle.LiveData;
-
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,10 +35,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.livequery.ParseLiveQueryClient;
-import com.parse.livequery.SubscriptionHandling;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,6 +48,9 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.data.io.FCommon;
 import de.nisnagel.iogo.data.io.FObject;
@@ -64,7 +58,6 @@ import de.nisnagel.iogo.data.io.IoName;
 import de.nisnagel.iogo.data.io.IoObject;
 import de.nisnagel.iogo.data.io.IoState;
 import de.nisnagel.iogo.data.model.EnumStateDao;
-import de.nisnagel.iogo.data.model.ParseObjectState;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.model.StateDao;
 import de.nisnagel.iogo.service.util.NetworkUtils;
@@ -94,7 +87,6 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
     private ChildEventListener objectChildListener;
     private ValueEventListener stateListener;
     private ChildEventListener stateChildListener;
-    private ParseLiveQueryClient parseLiveQueryClient;
 
     @Inject
     public StateRepository(StateDao stateDao, EnumStateDao enumStateDao, Executor executor, Context context, SharedPreferences sharedPref, WebService webService) {
@@ -338,19 +330,6 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
         }
         dbStateQueuesRef = database.getReference(STATE_QUEUES + user.getUid());
 
-        if (parseLiveQueryClient == null) {
-            parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
-            ParseQuery<ParseObjectState> parseQuery = ParseQuery.getQuery(ParseObjectState.class);
-
-            SubscriptionHandling<ParseObjectState> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
-
-            subscriptionHandling.handleEvents(new SubscriptionHandling.HandleEventsCallback<ParseObjectState>() {
-                @Override
-                public void onEvents(ParseQuery<ParseObjectState> query, SubscriptionHandling.Event event, ParseObjectState object) {
-                    Timber.d("onEvent");
-                }
-            });
-        }
     }
 
     void initWeb() {
@@ -496,10 +475,6 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
             webService.setState(id, val, type);
         }
 
-        ParseObject state = ParseObject.create("state");
-        state.put("id", id);
-        state.put("val", val);
-        state.saveInBackground();
     }
 
     public LiveData<State> getState(String stateId) {
