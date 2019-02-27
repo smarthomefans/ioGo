@@ -228,7 +228,7 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
                             IoObject ioObject = gson.fromJson(dataSnapshot.getValue().toString(), IoObject.class);
                             syncObject(ioObject.getId(), ioObject);
                         } catch (Throwable t) {
-                            Timber.e(dataSnapshot.getKey(), t);
+                            Timber.e(t, dataSnapshot.getKey());
                         }
                     }
                 }
@@ -243,7 +243,7 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
                             IoObject ioObject = gson.fromJson(dataSnapshot.getValue().toString(), IoObject.class);
                             syncObject(ioObject.getId(), ioObject);
                         } catch (Throwable t) {
-                            Timber.e(dataSnapshot.getKey(), t);
+                            Timber.e(t, dataSnapshot.getKey());
                         }
                     }
                 }
@@ -258,7 +258,7 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
                             IoObject ioObject = gson.fromJson(dataSnapshot.getValue().toString(), IoObject.class);
                             deleteState(ioObject.getId());
                         } catch (Throwable t) {
-                            Timber.e(dataSnapshot.getKey(), t);
+                            Timber.e(t, dataSnapshot.getKey());
                         }
                     }
                 }
@@ -289,7 +289,7 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
                             IoState ioState = dataSnapshot.getValue(IoState.class);
                             syncState(ioState.getId(), ioState);
                         } catch (Throwable t) {
-                            Timber.e(dataSnapshot.getKey(), t);
+                            Timber.e(t, dataSnapshot.getKey());
                         }
                     }
                 }
@@ -301,7 +301,7 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
                             IoState ioState = dataSnapshot.getValue(IoState.class);
                             syncState(ioState.getId(), ioState);
                         } catch (Throwable t) {
-                            Timber.e(dataSnapshot.getKey(), t);
+                            Timber.e(t, dataSnapshot.getKey());
                         }
                     }
                 }
@@ -313,7 +313,7 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
                             IoState ioState = dataSnapshot.getValue(IoState.class);
                             deleteState(ioState.getId());
                         } catch (Throwable t) {
-                            Timber.e(dataSnapshot.getKey(), t);
+                            Timber.e(t, dataSnapshot.getKey());
                         }
                     }
                 }
