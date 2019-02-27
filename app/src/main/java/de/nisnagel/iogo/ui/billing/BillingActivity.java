@@ -20,20 +20,17 @@
 package de.nisnagel.iogo.ui.billing;
 
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v7.widget.Toolbar;
+import androidx.core.app.NavUtils;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.ui.base.BaseActivity;
-import timber.log.Timber;
 
 public class BillingActivity extends BaseActivity implements BillingProvider {
 

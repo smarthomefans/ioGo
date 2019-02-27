@@ -19,16 +19,16 @@
 
 package de.nisnagel.iogo.ui.main;
 
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,11 +41,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 import de.nisnagel.iogo.R;
-import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.Message;
-import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.di.Injectable;
-import de.nisnagel.iogo.ui.helper.SimpleItemTouchHelperCallback;
 
 
 public class MessageFragment extends Fragment implements Injectable {

@@ -19,7 +19,7 @@
 
 package de.nisnagel.iogo.ui.helper;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 public interface ItemTouchHelperAdapter {
     /**

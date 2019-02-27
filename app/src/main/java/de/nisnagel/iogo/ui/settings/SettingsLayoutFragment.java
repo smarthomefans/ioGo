@@ -22,8 +22,8 @@ package de.nisnagel.iogo.ui.settings;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.PreferenceFragmentCompat;
+import androidx.preference.ListPreference;
+import androidx.preference.PreferenceFragmentCompat;
 
 import de.nisnagel.iogo.R;
 

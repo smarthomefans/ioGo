@@ -21,8 +21,8 @@ package de.nisnagel.iogo.service.logging;
 
 import android.content.Context;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -33,7 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import de.nisnagel.iogo.BuildConfig;
 import timber.log.Timber;
 
 class TimberFileTree extends Timber.DebugTree {

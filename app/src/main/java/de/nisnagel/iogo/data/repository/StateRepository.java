@@ -19,11 +19,13 @@
 
 package de.nisnagel.iogo.data.repository;
 
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
+
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +40,10 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.livequery.ParseLiveQueryClient;
+import com.parse.livequery.SubscriptionHandling;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,6 +64,7 @@ import de.nisnagel.iogo.data.io.IoName;
 import de.nisnagel.iogo.data.io.IoObject;
 import de.nisnagel.iogo.data.io.IoState;
 import de.nisnagel.iogo.data.model.EnumStateDao;
+import de.nisnagel.iogo.data.model.ParseObjectState;
 import de.nisnagel.iogo.data.model.State;
 import de.nisnagel.iogo.data.model.StateDao;
 import de.nisnagel.iogo.service.util.NetworkUtils;
@@ -87,10 +94,11 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
     private ChildEventListener objectChildListener;
     private ValueEventListener stateListener;
     private ChildEventListener stateChildListener;
+    private ParseLiveQueryClient parseLiveQueryClient;
 
     @Inject
     public StateRepository(StateDao stateDao, EnumStateDao enumStateDao, Executor executor, Context context, SharedPreferences sharedPref, WebService webService) {
-        super(executor,context,sharedPref,webService);
+        super(executor, context, sharedPref, webService);
         this.stateDao = stateDao;
         this.enumStateDao = enumStateDao;
 
@@ -198,14 +206,14 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
         mAuth.addAuthStateListener(authListener);
     }
 
-    private void checkPro(FirebaseUser user){
+    private void checkPro(FirebaseUser user) {
         user.getIdToken(false).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
             @Override
             public void onSuccess(GetTokenResult result) {
                 Object isPro = result.getClaims().get("pro");
-                if(isPro != null) {
+                if (isPro != null) {
                     sharedPref.edit().putBoolean("pro", (boolean) isPro).apply();
-                }else{
+                } else {
                     sharedPref.edit().putBoolean("pro", false).apply();
                 }
             }
@@ -214,9 +222,9 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
 
     private void addListener(FirebaseUser user) {
         this.saveSocketState(context.getString(R.string.pref_connect_iogo));
-        if(dbObjectsRef == null) dbObjectsRef = database.getReference(OBJECTS + user.getUid());
+        if (dbObjectsRef == null) dbObjectsRef = database.getReference(OBJECTS + user.getUid());
 
-        if(objectChildListener == null) {
+        if (objectChildListener == null) {
             objectChildListener = new ChildEventListener() {
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -274,12 +282,13 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
             dbObjectsRef.addChildEventListener(objectChildListener);
         }
 
-        if(dbObjectQueuesRef == null) dbObjectQueuesRef = database.getReference(OBJECT_QUEUES + user.getUid());
+        if (dbObjectQueuesRef == null)
+            dbObjectQueuesRef = database.getReference(OBJECT_QUEUES + user.getUid());
 
-        if(dbStatesRef == null) dbStatesRef = database.getReference(STATES + user.getUid());
+        if (dbStatesRef == null) dbStatesRef = database.getReference(STATES + user.getUid());
 
         dbStatesRef.addListenerForSingleValueEvent(stateListener);
-        if(stateChildListener == null) {
+        if (stateChildListener == null) {
             stateChildListener = new ChildEventListener() {
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -328,6 +337,20 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
             dbStatesRef.addChildEventListener(stateChildListener);
         }
         dbStateQueuesRef = database.getReference(STATE_QUEUES + user.getUid());
+
+        if (parseLiveQueryClient == null) {
+            parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+            ParseQuery<ParseObjectState> parseQuery = ParseQuery.getQuery(ParseObjectState.class);
+
+            SubscriptionHandling<ParseObjectState> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
+
+            subscriptionHandling.handleEvents(new SubscriptionHandling.HandleEventsCallback<ParseObjectState>() {
+                @Override
+                public void onEvents(ParseQuery<ParseObjectState> query, SubscriptionHandling.Event event, ParseObjectState object) {
+                    Timber.d("onEvent");
+                }
+            });
+        }
     }
 
     void initWeb() {
@@ -344,7 +367,7 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
                 webService.on("stateChange", onStateChange);
                 webService.start();
             });
-        }else{
+        } else {
             connected.postValue("web - connected");
         }
     }
@@ -361,7 +384,7 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
                 webService.on("stateChange", onStateChange);
                 webService.start();
             });
-        }else{
+        } else {
             connected.postValue("cloud - connected");
         }
     }
@@ -369,9 +392,9 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            if(bWeb) {
+            if (bWeb) {
                 connected.postValue("web - connected");
-            }else if (bCloud){
+            } else if (bCloud) {
                 connected.postValue("cloud - connected");
             }
             requestStates();
@@ -380,9 +403,9 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
 
     private Emitter.Listener onDisconnect = args -> {
         setSyncFalseAll();
-        if(bWeb) {
+        if (bWeb) {
             connected.postValue("web - disconnected");
-        }else if (bCloud){
+        } else if (bCloud) {
             connected.postValue("cloud - disconnected");
         }
         Timber.i("disconnected");
@@ -472,6 +495,11 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
         } else if (bSocket) {
             webService.setState(id, val, type);
         }
+
+        ParseObject state = ParseObject.create("state");
+        state.put("id", id);
+        state.put("val", val);
+        state.saveInBackground();
     }
 
     public LiveData<State> getState(String stateId) {
@@ -584,7 +612,7 @@ public class StateRepository extends BaseRepository implements OnObjectsReceived
         Timber.v("deleteState called");
         executor.execute(() -> {
                     State state = stateDao.getStateById(id);
-                    if(state != null) stateDao.delete(state);
+                    if (state != null) stateDao.delete(state);
                 }
         );
     }

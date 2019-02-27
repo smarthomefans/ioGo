@@ -29,8 +29,8 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,7 +47,6 @@ import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
 import de.nisnagel.iogo.R;
-import de.nisnagel.iogo.data.model.Message;
 import de.nisnagel.iogo.data.repository.MessageRepository;
 import de.nisnagel.iogo.data.repository.StateRepository;
 import timber.log.Timber;

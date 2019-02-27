@@ -19,12 +19,12 @@
 
 package de.nisnagel.iogo.di.module;
 
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.persistence.room.Room;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.room.Room;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;

@@ -20,8 +20,8 @@
 package de.nisnagel.iogo.ui.auth;
 
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v7.widget.Toolbar;
+import androidx.core.app.NavUtils;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;

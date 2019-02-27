@@ -20,20 +20,16 @@
 package de.nisnagel.iogo.ui.main;
 
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 import android.content.SharedPreferences;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import de.nisnagel.iogo.data.model.Enum;
 import de.nisnagel.iogo.data.model.Message;
-import de.nisnagel.iogo.data.model.State;
-import de.nisnagel.iogo.data.repository.EnumRepository;
 import de.nisnagel.iogo.data.repository.MessageRepository;
-import de.nisnagel.iogo.data.repository.StateRepository;
 
 public class MessageViewModel extends ViewModel {
 

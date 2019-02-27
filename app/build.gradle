@@ -26,9 +26,9 @@ android {
         applicationId 'de.nisnagel.iogo'
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 10218
-        versionName "1.02.18"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        versionCode 10300
+        versionName "1.03.00"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -42,8 +42,8 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     productFlavors {
     }
@@ -53,36 +53,36 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     // android support libraries
     //nonspection GradleCompatible
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
-    implementation 'com.android.support:preference-v7:28.0.0'
-    implementation 'com.android.support:preference-v14:28.0.0'
-    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.preference:preference:1.0.0'
+    implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
     // view model
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
-    implementation 'com.android.support:support-annotations:28.0.0'
-    annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation 'androidx.annotation:annotation:1.0.1'
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.0.0'
     // ROOM
-    implementation 'android.arch.persistence.room:runtime:1.1.1'
-    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+    implementation 'androidx.room:room-runtime:2.0.0'
+    annotationProcessor 'androidx.room:room-compiler:2.0.0'
     // GSON
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
     // SOCKET IO
     implementation('io.socket:socket.io-client:0.8.3') {
         exclude group: 'org.json', module: 'json'
     }
     // DAGGER
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
-    implementation 'com.google.dagger:dagger:2.15'
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.14.1'
-    implementation 'com.google.dagger:dagger-android-support:2.14.1'
-    implementation 'com.google.dagger:dagger-android:2.15'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.21'
+    implementation 'com.google.dagger:dagger:2.21'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.21'
+    implementation 'com.google.dagger:dagger-android-support:2.21'
+    implementation 'com.google.dagger:dagger-android:2.21'
     // BUTTERKNIFE
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
     // FIREBASE
     implementation 'com.google.firebase:firebase-core:16.0.7'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
@@ -93,7 +93,7 @@ dependencies {
     // CRASHLYTICS
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
     //TIMBER Logging
-    implementation 'com.jakewharton.timber:timber:4.5.1'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
     // testing
     //testImplementation 'junit:junit:4.12'
     //androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -101,11 +101,13 @@ dependencies {
     //SVG
     implementation 'com.pixplicity.sharp:library:1.1.0'
     //Charts
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
     //Billing
     //implementation 'com.android.billingclient:billing:1.1'
     implementation 'com.github.dimadake:billing:1.0.1'
-
+    //Parse
+    implementation 'com.github.parse-community.Parse-SDK-Android:parse:1.19.0'
+    implementation 'com.github.parse-community:ParseLiveQuery-Android:1.1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

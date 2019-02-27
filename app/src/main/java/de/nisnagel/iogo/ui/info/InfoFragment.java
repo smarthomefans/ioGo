@@ -19,15 +19,14 @@
 
 package de.nisnagel.iogo.ui.info;
 
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,6 @@ import butterknife.OnClick;
 import dagger.android.support.AndroidSupportInjection;
 import de.nisnagel.iogo.R;
 import de.nisnagel.iogo.di.Injectable;
-import de.nisnagel.iogo.ui.auth.SignupActivity;
 
 /**
  * A placeholder fragment containing a simple view.

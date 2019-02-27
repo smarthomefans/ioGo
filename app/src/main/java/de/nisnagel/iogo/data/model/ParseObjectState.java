@@ -19,33 +19,32 @@
 
 package de.nisnagel.iogo.data.model;
 
-import androidx.lifecycle.LiveData;
-import androidx.room.Dao;
-import androidx.room.Delete;
-import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
-import androidx.room.Query;
-import androidx.room.TypeConverters;
-import androidx.room.Update;
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
 
-import java.util.List;
+@ParseClassName("state")
+public class ParseObjectState extends ParseObject {
 
-@Dao
-public interface MessageDao {
+    // Ensure that your subclass has a public default constructor
 
-    @Query("SELECT * FROM message ORDER BY timestamp DESC")
-    LiveData<List<Message>> getAllMessages();
+    public ParseObjectState() {
+        super();
+    }
 
-    @Query("SELECT * FROM message WHERE id = :id")
-    LiveData<Message> getMessageById(String id);
+    public String getId() {
+        return getString("id");
+    }
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Message... messages);
+    public String getVal() {
+        return getString("val");
+    }
 
-    @Update
-    void update(Message... messages);
+    public void setId(String id) {
+        put("id", id);
+    }
 
-    @Delete
-    void delete(Message... messages);
+    public void setVal(String val) {
+        put("val", val);
+    }
 
 }

@@ -21,8 +21,8 @@ package de.nisnagel.iogo.ui.base.viewholder;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ImageView;

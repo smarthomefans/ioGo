@@ -20,7 +20,7 @@
 package de.nisnagel.iogo.ui.base;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import de.nisnagel.iogo.R;

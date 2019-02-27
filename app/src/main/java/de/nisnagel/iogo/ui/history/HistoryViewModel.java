@@ -19,8 +19,8 @@
 
 package de.nisnagel.iogo.ui.history;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 
 import javax.inject.Inject;
 

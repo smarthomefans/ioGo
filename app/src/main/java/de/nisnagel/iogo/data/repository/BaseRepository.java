@@ -19,7 +19,7 @@
 
 package de.nisnagel.iogo.data.repository;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
 
