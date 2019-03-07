@@ -19,88 +19,52 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<de.nisnagel.iogo.ui.helper.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:layout_gravity="center_vertical"
-    app:dragFromEdge="right">
+    android:layout_height="72dp">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|end"
-        android:orientation="horizontal"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
-
-        <ImageButton
-            android:id="@+id/favorite_button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@color/common_google_signin_btn_text_dark_disabled"
-            android:contentDescription="@string/main_star"
-            android:src="@drawable/star"
-            android:text="@string/main_star" />
-
-        <ImageButton
-            android:id="@+id/hide_button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@color/common_google_signin_btn_text_dark_disabled"
-            android:contentDescription="@string/main_hide"
-            android:src="@drawable/eye_off"
-            android:text="@string/main_hide" />
-
-    </LinearLayout>
-
-    <FrameLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:clickable="true"
-        android:focusable="true">
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:elevation="2dp">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_view"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/card_margin"
-            android:elevation="2dp">
+            android:layout_height="match_parent">
 
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <View
+                android:id="@+id/color"
+                android:layout_width="4dp"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="11dp"
+                android:contentDescription="custom enum icon"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="67dp"
+                android:layout_marginTop="18dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@android:color/primary_text_dark"
+                android:textSize="20sp" />
 
-                <View
-                    android:id="@+id/color"
-                    android:layout_width="4dp"
-                    android:layout_height="match_parent" />
+        </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/icon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="11dp"
-                    android:layout_marginTop="11dp"
-                    android:contentDescription="custom enum icon"
-                    tools:ignore="HardcodedText" />
+    </androidx.cardview.widget.CardView>
 
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="67dp"
-                    android:layout_marginTop="18dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textColor="@android:color/primary_text_dark"
-                    android:textSize="20dp" />
-
-            </RelativeLayout>
-
-        </androidx.cardview.widget.CardView>
-
-    </FrameLayout>
-</de.nisnagel.iogo.ui.helper.SwipeRevealLayout>
+</LinearLayout>

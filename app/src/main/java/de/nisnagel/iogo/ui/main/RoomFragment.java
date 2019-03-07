@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -57,6 +58,8 @@ public class RoomFragment extends Fragment implements Injectable {
 
     @BindView(R.id.enum_list)
     RecyclerView recyclerView;
+    @BindView(R.id.txtName)
+    TextView txtName;
 
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
@@ -77,6 +80,8 @@ public class RoomFragment extends Fragment implements Injectable {
 
         mAdapter = new EnumListAdapter(list, mViewModel);
         getActivity().runOnUiThread(() -> recyclerView.setAdapter(mAdapter));
+
+        txtName.setText("R O O M S");
 
         mViewModel.getEnums(EnumRepository.TYPE_ROOM)
                 .observe(this, newList -> {

@@ -114,28 +114,6 @@ public class EnumListAdapter
         holder.bindEnum(mValues.get(position));
         holder.mCard.setTag(mValues.get(position));
         holder.mCard.setOnClickListener(mOnClickListener);
-        holder.favoriteButton.setOnClickListener(v -> {
-            Enum item = mValues.get(position);
-            if (item != null) {
-                if (item.isFavorite()) {
-                    item.setFavorite(false);
-                    Toast.makeText(v.getContext(), "unstarred", Toast.LENGTH_SHORT).show();
-                } else {
-                    item.setFavorite(true);
-                    Toast.makeText(v.getContext(), "starred", Toast.LENGTH_SHORT).show();
-                }
-                mViewModel.saveEnum(item);
-            }
-        });
-        holder.hideButton.setOnClickListener((View v) -> {
-            Enum item = mValues.remove(position);
-            if (item != null) {
-                item.setHidden(!item.isHidden());
-                mViewModel.saveEnum(item);
-                notifyItemRemoved(position);
-                Toast.makeText(v.getContext(), "hidden", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
@@ -154,10 +132,6 @@ public class EnumListAdapter
         ImageView mIcon;
         @BindView(R.id.color)
         View mColor;
-        @BindView(R.id.favorite_button)
-        ImageButton favoriteButton;
-        @BindView(R.id.hide_button)
-        ImageButton hideButton;
 
         ViewHolder(View view) {
             super(view);
@@ -171,9 +145,6 @@ public class EnumListAdapter
             }
             if (anEnum.isHidden()) {
                 mTitle.setTextColor(Color.BLACK);
-                hideButton.setImageResource(R.drawable.eye_off);
-            } else {
-                hideButton.setImageResource(R.drawable.eye);
             }
             if (anEnum.getIcon() != null) {
                 if (anEnum.getIcon().contains("svg+xml")) {
@@ -184,11 +155,6 @@ public class EnumListAdapter
                 } else {
                     mIcon.setImageBitmap(ImageUtils.convertToBitmap(anEnum.getIcon()));
                 }
-            }
-            if (anEnum.isFavorite()) {
-                favoriteButton.setImageResource(R.drawable.starred);
-            } else {
-                favoriteButton.setImageResource(R.drawable.unstarred);
             }
         }
 

@@ -70,7 +70,8 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
         PreferenceManager.setDefaultValues(this, R.xml.settings_device, false);
 
         //loading the default fragment
-        setTitle(R.string.main_title_activity_home);
+        //setTitle(R.string.main_title_activity_home);
+        setTitle("S M A R T H O M E");
         loadFragment(new HomeFragment());
 
         //getting bottom navigation view and attaching the listener
@@ -117,22 +118,22 @@ public class MainActivity extends BaseActivity implements HasSupportFragmentInje
         switch (item.getItemId()) {
             case R.id.showHome:
                 fragment = new HomeFragment();
-                setTitle(R.string.main_title_activity_home);
+                //setTitle(R.string.main_title_activity_home);
                 break;
 
             case R.id.showFunctionList:
                 fragment = new FunctionFragment();
-                setTitle(R.string.main_title_activity_function_list);
+                //setTitle(R.string.main_title_activity_function_list);
                 break;
 
             case R.id.showRoomList:
                 fragment = new RoomFragment();
-                setTitle(R.string.main_title_activity_room_list);
+                //setTitle(R.string.main_title_activity_room_list);
                 break;
 
             case R.id.showMessageList:
                 fragment = new MessageFragment();
-                setTitle(R.string.main_title_activity_message_list);
+                //setTitle(R.string.main_title_activity_message_list);
                 break;
         }
 
